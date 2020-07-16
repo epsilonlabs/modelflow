@@ -1,0 +1,45 @@
+import "util.eol";
+
+rule component transform c : Component {
+
+	guard : not c.isFilter() and c.components.size() > 0
+
+	template : "template/reactive/component.egl"
+
+	parameters {
+		var path = "";
+		if (c.container <> null){
+			path =  c.closure(c|c.container).collect(c|c.name).invert().concat("/").toLowerCase() ;
+		} 
+		return Map {
+			"name" = c.name,
+			"path" = path.replace("/", ".")
+		};
+	}
+
+	target : "reactive/" + path + "/" + c.name + ".java"
+}
+/*
+rule sensor transform s: Port {
+	guard : s.hasOutgoing() and (not s.hasIncoming())
+	template : "template/reactive/sensor.egl"
+	
+	parameters : Map {
+		"name" = s.name
+	}
+
+	target : "reactive/sensor/" + s.name.firstToUpperCase() + "Sensor.java"
+}
+
+rule sink transform s: Port {
+	
+	guard : s.hasIncoming() and (not s.hasOutgoing())
+	template : "template/reactive/sink.egl"
+	
+	parameters : Map{
+		"name" = s.name
+	}
+
+	target : "reactive/sink/" + s.name.firstToUpperCase() + "Sink.java"
+}
+*/

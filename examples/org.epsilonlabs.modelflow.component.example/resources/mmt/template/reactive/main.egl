@@ -1,0 +1,61 @@
+[% import "../../util.eol"; %]
+package reactive;
+
+[%= out.startPreserve("/*", "*/", "imports", true) %]	
+[%= out.stopPreserve() %]
+import java.util.function.Consumer;
+
+import reactive.component.*;
+import reactive.sensor.*;
+import reactive.sink.*;
+import reactive.connector.*;
+
+public class [%= m.name.firstToUpperCase()%]Reactive {
+	
+	[% for (s in m.ports){ %]
+	protected [%=s.name.firstToUpperCase() + s.qualifier() %] [%=s.name.firstToLowerCase() + s.qualifier() %];
+	[% } %]
+	
+	public [%= m.name.firstToUpperCase()%]Reactive(){
+		[% for (c in m.connectors){ %]
+		IConnector [%=connectorName(c).firstToLowerCase() %] = new QueueConnector();
+		[% } %]
+		[% for (s in m.ports.select(p|p.isSensor())){ %]
+		this.[%=s.name.firstToLowerCase() %]Sensor = new [%=s.name.firstToUpperCase() %]Sensor([%= connectorName(s.outgoing).firstToLowerCase() %]);
+		[% } %]
+		[% for (s in m.components){ %]
+		new [% if (not s.isFilter()){%][%=s.name.firstToUpperCase() %][% } else { %]Filter[%}%]([%
+		if (s.isFilter()){%][%= s.value %]d,[%}%][%
+		for (p in s.ports){
+		var connector : Connector;
+		if (p.isInport()){
+			connector = p.incoming;
+		} else {
+			connector = p.outgoing;
+		} %][%= connectorName(connector).firstToLowerCase() %][% if(hasMore) { %], [% } } %]);
+		[% } %]
+		[% for (s in m.ports.select(p|p.isSink())){ %]
+		this.[%=s.name.firstToLowerCase() %]Sink =  new [%=s.name.firstToUpperCase() %]Sink([%= connectorName(s.incoming).firstToLowerCase() %]);
+		[% } %]
+	}
+	
+	[% for (inport in m.ports.select(p|p.isSensor())){ %]
+	public void set[%= inport.name.firstToUpperCase() %](Double [%= inport.name.firstToLowerCase() %]){
+		this.[%= inport.name.firstToLowerCase() %]Sensor.onNext([%= inport.name.firstToLowerCase() %]);
+	}
+	[% } %]
+	[% for (outport in m.ports.select(p|p.isSink())){ %]
+	public Double get[%= outport.name.firstToUpperCase() %](){
+		return this.[%= outport.name.firstToLowerCase() %]Sink.getValue();
+	}
+	[% } %]
+	public void onResult(Consumer<Double> action){
+		[% for (s in m.ports.select(p|p.isSink())){ %]
+		this.[%=s.name.firstToLowerCase() %]Sink.doOnNext(action);
+		[% } %]
+	}
+	
+	[%= out.startPreserve("/*", "*/", "main", true) %]
+	[%= out.stopPreserve() %]
+	
+}

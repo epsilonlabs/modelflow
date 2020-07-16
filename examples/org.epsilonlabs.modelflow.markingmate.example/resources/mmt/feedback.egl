@@ -1,0 +1,13 @@
+[% /* Original file from https://github.com/kolovos/markingmate */ %]
+[%for (question in Question.all) { 
+var answer = student.answers.selectOne(a|a.question = question);
+%]
+[%if (answer.isDefined()){%]
+[%=question.title%] [%if(question.marks>0){%] ([%=answer.marks%]/[%=question.marks%])[%}%]: 
+[%=answer.feedback%]
+
+[%}else{%]
+[%=question.title%] [%if(question.marks>0){%] (0/[%=question.marks%])[%}%]: Not answered.
+
+[%}%]
+[%}%]

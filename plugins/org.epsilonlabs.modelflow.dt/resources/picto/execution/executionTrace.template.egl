@@ -1,0 +1,11 @@
+strict digraph G {
+[%for (e in ExecutionTrace.all.first().executions){
+	var execNum = loopCount;%]
+[%for (t in e.tasks){%] 
+ "Execution[%= execNum %]" [fillcolor=bisque3, style=filled]
+ "Execution[%= execNum %][%=t.task.name%]" [shape=rectangle, fillcolor=darkolivegreen1, style=filled] 
+ "[%=t.endState%]" [fillcolor=darkgoldenrod1, style=filled]
+ "Execution[%= execNum %][%=t.task.name%]" [label="[%=t.task.name%]"]
+ "Execution[%= execNum %]" -> "Execution[%= execNum %][%=t.task.name%]" 
+ "Execution[%= execNum %][%=t.task.name%]" -> "[%=t.endState%]" [% }} %]
+}

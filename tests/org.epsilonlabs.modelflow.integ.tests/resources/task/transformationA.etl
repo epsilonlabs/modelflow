@@ -1,0 +1,33 @@
+rule EntityToEntity 
+	transform s : A!Entity
+	to t : AB!Entity {
+	
+	t.name = s.name;
+	t.inDomain = false;
+}
+
+
+rule Entity2True
+	transform s : A!Entity
+	to t : AB!Entity {
+	
+	t.name = "Extra" + s.name;
+	t.inDomain = true;
+	
+}
+
+rule Vocab2Entity
+	transform s : B!Term
+	to t : AB!Entity {
+	
+	t.name = "Vocab" + s.name;
+	t.inDomain = true;
+	
+}
+
+rule System2System
+	transform s : A!System
+	to t : AB!System {
+	
+	t.entity := s.entity;
+}

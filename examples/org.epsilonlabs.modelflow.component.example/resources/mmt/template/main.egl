@@ -1,0 +1,23 @@
+import component.*;
+
+public class [%= m.name.firstToUpperCase()%] {
+	
+	public static Integer compute([%for (inport in m.sensors.select(p | p.type.name == "IN")){
+	%]Integer [%= inport.name %][%if(hasMore){%], [% } } %]) {
+		[% for (comp in m.components){ %]
+		Integer [%=comp.name.firstToLowerCase() %]Result = [%= comp.name.firstToUpperCase()%].compute([%
+		for (inport in comp.ports.select(p | p.type.name == "IN")){
+		%][%if (inport.incoming.from.type.name == "IN") { 
+		%][%= inport.incoming.from.name %][% }
+		else {%][%= inport.incoming.from.container.name.firstToLowerCase()%]Result[%}
+		if(hasMore){
+		%], [% 
+		} } %]);
+		[% } %] 
+		return [%= m.sinks.first().incoming.from.container.name.firstToLowerCase() %]Result;
+	}
+	
+	[%= out.startPreserve("/*", "*/", "main", true) %]
+	
+	[%= out.stopPreserve() %]
+}

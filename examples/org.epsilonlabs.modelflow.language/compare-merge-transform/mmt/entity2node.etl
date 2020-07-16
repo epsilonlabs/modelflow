@@ -1,0 +1,24 @@
+pre {
+	 new Graph!Graph;
+}
+rule EntityToNode 
+	transform e : Target!Entity
+	to n : Graph!Node {
+	
+	n.name = e.name;
+    Graph!Graph.allInstances.first().nodes.add(n);
+}
+
+rule Tree2Node 
+	transform t : Tree!Tree
+	to n : Graph!Node {
+	
+	n.name = t.label;
+	if (t.parent.isDefined()) {
+		var e : new Graph!Edge;
+		e.source ::= t.parent;
+		e.target = n;
+	}
+    // add node to graph
+    Graph!Graph.allInstances.first().nodes.add(n);
+}

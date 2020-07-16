@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow Epsilon Tests
+Bundle-SymbolicName: org.epsilonlabs.modelflow.mmc.epsilon.tests
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.epsilon.tests
+Require-Bundle: org.epsilonlabs.modelflow.dependencies,
+ org.epsilonlabs.modelflow.engine,
+ org.junit,
+ org.epsilonlabs.modelflow.mmc.epsilon,
+ org.mockito,
+ org.epsilonlabs.modelflow.tests,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.epsilonlabs.modelflow.mmc.epsilon.tests,
+ org.epsilonlabs.modelflow.mmc.epsilon.tests.common.workflow,
+ org.epsilonlabs.modelflow.mmc.epsilon.tests.integ,
+ org.epsilonlabs.modelflow.mmc.epsilon.tests.unit
+Import-Package: org.slf4j;version="1.7.2",
+ org.slf4j.spi;version="1.7.2"

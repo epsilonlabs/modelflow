@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rx:Component xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:rx="http://rx" name="ComponentSystem">
+  <components name="SineWavePort">
+    <ports name="temperature1Port" portType="OUT" outgoing="//@connectors.0"/>
+    <ports name="temperature2Port" portType="OUT" outgoing="//@connectors.3"/>
+    <ports name="temperature3Port" portType="OUT" outgoing="//@connectors.6"/>
+    <ports name="temperature4Port" portType="OUT" outgoing="//@connectors.9"/>
+    <ports name="temperature5Port" portType="OUT" outgoing="//@connectors.12"/>
+    <ports name="temperature6Port" portType="OUT" outgoing="//@connectors.15"/>
+    <ports name="temperature7Port" portType="OUT" outgoing="//@connectors.18"/>
+    <ports name="temperature8Port" portType="OUT" outgoing="//@connectors.21"/>
+    <ports name="temperature9Port" portType="OUT" outgoing="//@connectors.24"/>
+    <ports name="temperature10Port" portType="OUT" outgoing="//@connectors.27"/>
+  </components>
+  <components name="ScopePort">
+    <ports name="boiler1ActionPort" incoming="//@connectors.2"/>
+    <ports name="boiler2ActionPort" incoming="//@connectors.5"/>
+    <ports name="boiler3ActionPort" incoming="//@connectors.8"/>
+    <ports name="boiler4ActionPort" incoming="//@connectors.11"/>
+    <ports name="boiler5ActionPort" incoming="//@connectors.14"/>
+    <ports name="boiler6ActionPort" incoming="//@connectors.17"/>
+    <ports name="boiler7ActionPort" incoming="//@connectors.20"/>
+    <ports name="boiler8ActionPort" incoming="//@connectors.23"/>
+    <ports name="boiler9ActionPort" incoming="//@connectors.26"/>
+    <ports name="boiler10ActionPort" incoming="//@connectors.29"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.1"/>
+  </components>
+  <components name="Boiler1">
+    <ports name="tempPort" incoming="//@connectors.0" outgoing="//@components.3/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.1" outgoing="//@components.3/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.3/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.3/@connectors.4" outgoing="//@connectors.2"/>
+    <components name="Boiler1TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.3/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.3/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.3/@connectors.2"/>
+    </components>
+    <components name="Boiler1BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.3/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.3/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.3/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.3/@ports.0" to="//@components.3/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.3/@ports.1" to="//@components.3/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.3/@components.0/@ports.2" to="//@components.3/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.3/@ports.2" to="//@components.3/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.3/@components.1/@ports.2" to="//@components.3/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.4"/>
+  </components>
+  <components name="Boiler2">
+    <ports name="tempPort" incoming="//@connectors.3" outgoing="//@components.5/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.4" outgoing="//@components.5/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.5/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.5/@connectors.4" outgoing="//@connectors.5"/>
+    <components name="Boiler2TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.5/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.5/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.5/@connectors.2"/>
+    </components>
+    <components name="Boiler2BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.5/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.5/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.5/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.5/@ports.0" to="//@components.5/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.5/@ports.1" to="//@components.5/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.5/@components.0/@ports.2" to="//@components.5/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.5/@ports.2" to="//@components.5/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.5/@components.1/@ports.2" to="//@components.5/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.7"/>
+  </components>
+  <components name="Boiler3">
+    <ports name="tempPort" incoming="//@connectors.6" outgoing="//@components.7/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.7" outgoing="//@components.7/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.7/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.7/@connectors.4" outgoing="//@connectors.8"/>
+    <components name="Boiler3TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.7/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.7/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.7/@connectors.2"/>
+    </components>
+    <components name="Boiler3BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.7/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.7/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.7/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.7/@ports.0" to="//@components.7/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.7/@ports.1" to="//@components.7/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.7/@components.0/@ports.2" to="//@components.7/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.7/@ports.2" to="//@components.7/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.7/@components.1/@ports.2" to="//@components.7/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.10"/>
+  </components>
+  <components name="Boiler4">
+    <ports name="tempPort" incoming="//@connectors.9" outgoing="//@components.9/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.10" outgoing="//@components.9/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.9/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.9/@connectors.4" outgoing="//@connectors.11"/>
+    <components name="Boiler4TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.9/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.9/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.9/@connectors.2"/>
+    </components>
+    <components name="Boiler4BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.9/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.9/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.9/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.9/@ports.0" to="//@components.9/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.9/@ports.1" to="//@components.9/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.9/@components.0/@ports.2" to="//@components.9/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.9/@ports.2" to="//@components.9/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.9/@components.1/@ports.2" to="//@components.9/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.13"/>
+  </components>
+  <components name="Boiler5">
+    <ports name="tempPort" incoming="//@connectors.12" outgoing="//@components.11/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.13" outgoing="//@components.11/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.11/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.11/@connectors.4" outgoing="//@connectors.14"/>
+    <components name="Boiler5TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.11/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.11/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.11/@connectors.2"/>
+    </components>
+    <components name="Boiler5BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.11/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.11/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.11/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.11/@ports.0" to="//@components.11/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.11/@ports.1" to="//@components.11/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.11/@components.0/@ports.2" to="//@components.11/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.11/@ports.2" to="//@components.11/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.11/@components.1/@ports.2" to="//@components.11/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.16"/>
+  </components>
+  <components name="Boiler6">
+    <ports name="tempPort" incoming="//@connectors.15" outgoing="//@components.13/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.16" outgoing="//@components.13/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.13/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.13/@connectors.4" outgoing="//@connectors.17"/>
+    <components name="Boiler6TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.13/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.13/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.13/@connectors.2"/>
+    </components>
+    <components name="Boiler6BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.13/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.13/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.13/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.13/@ports.0" to="//@components.13/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.13/@ports.1" to="//@components.13/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.13/@components.0/@ports.2" to="//@components.13/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.13/@ports.2" to="//@components.13/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.13/@components.1/@ports.2" to="//@components.13/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.19"/>
+  </components>
+  <components name="Boiler7">
+    <ports name="tempPort" incoming="//@connectors.18" outgoing="//@components.15/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.19" outgoing="//@components.15/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.15/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.15/@connectors.4" outgoing="//@connectors.20"/>
+    <components name="Boiler7TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.15/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.15/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.15/@connectors.2"/>
+    </components>
+    <components name="Boiler7BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.15/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.15/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.15/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.15/@ports.0" to="//@components.15/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.15/@ports.1" to="//@components.15/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.15/@components.0/@ports.2" to="//@components.15/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.15/@ports.2" to="//@components.15/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.15/@components.1/@ports.2" to="//@components.15/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.22"/>
+  </components>
+  <components name="Boiler8">
+    <ports name="tempPort" incoming="//@connectors.21" outgoing="//@components.17/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.22" outgoing="//@components.17/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.17/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.17/@connectors.4" outgoing="//@connectors.23"/>
+    <components name="Boiler8TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.17/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.17/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.17/@connectors.2"/>
+    </components>
+    <components name="Boiler8BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.17/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.17/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.17/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.17/@ports.0" to="//@components.17/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.17/@ports.1" to="//@components.17/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.17/@components.0/@ports.2" to="//@components.17/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.17/@ports.2" to="//@components.17/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.17/@components.1/@ports.2" to="//@components.17/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.25"/>
+  </components>
+  <components name="Boiler9">
+    <ports name="tempPort" incoming="//@connectors.24" outgoing="//@components.19/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.25" outgoing="//@components.19/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.19/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.19/@connectors.4" outgoing="//@connectors.26"/>
+    <components name="Boiler9TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.19/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.19/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.19/@connectors.2"/>
+    </components>
+    <components name="Boiler9BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.19/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.19/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.19/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.19/@ports.0" to="//@components.19/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.19/@ports.1" to="//@components.19/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.19/@components.0/@ports.2" to="//@components.19/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.19/@ports.2" to="//@components.19/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.19/@components.1/@ports.2" to="//@components.19/@ports.3"/>
+  </components>
+  <components name="Constant">
+    <ports name="setPointPort" portType="OUT" outgoing="//@connectors.28"/>
+  </components>
+  <components name="Boiler10">
+    <ports name="tempPort" incoming="//@connectors.27" outgoing="//@components.21/@connectors.0"/>
+    <ports name="targetTempPort" incoming="//@connectors.28" outgoing="//@components.21/@connectors.1"/>
+    <ports name="boilerStatusPort" outgoing="//@components.21/@connectors.3"/>
+    <ports name="actionPort" portType="OUT" incoming="//@components.21/@connectors.4" outgoing="//@connectors.29"/>
+    <components name="Boiler10TemperatureComparator">
+      <ports name="compTempPort" incoming="//@components.21/@connectors.0"/>
+      <ports name="compTargetTempPort" incoming="//@components.21/@connectors.1"/>
+      <ports name="differencePort" portType="OUT" outgoing="//@components.21/@connectors.2"/>
+    </components>
+    <components name="Boiler10BoilerActuator">
+      <ports name="actuatorDiffPort" incoming="//@components.21/@connectors.2"/>
+      <ports name="actuatorStatusPort" incoming="//@components.21/@connectors.3"/>
+      <ports name="actuatorActionPort" portType="OUT" outgoing="//@components.21/@connectors.4"/>
+    </components>
+    <connectors name="tempPort-compTempPort" from="//@components.21/@ports.0" to="//@components.21/@components.0/@ports.0"/>
+    <connectors name="targetTempPort-compTargetTempPort" from="//@components.21/@ports.1" to="//@components.21/@components.0/@ports.1"/>
+    <connectors name="differencePort-actuatorDiffPort" from="//@components.21/@components.0/@ports.2" to="//@components.21/@components.1/@ports.0"/>
+    <connectors name="boilerStatusPort-actuatorStatusPort" from="//@components.21/@ports.2" to="//@components.21/@components.1/@ports.1"/>
+    <connectors name="actuatorActionPort-actionPort" from="//@components.21/@components.1/@ports.2" to="//@components.21/@ports.3"/>
+  </components>
+  <connectors name="temperature1Port-tempPort" from="//@components.0/@ports.0" to="//@components.3/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.2/@ports.0" to="//@components.3/@ports.1"/>
+  <connectors name="actionPort-boiler1ActionPort" from="//@components.3/@ports.3" to="//@components.1/@ports.0"/>
+  <connectors name="temperature2Port-tempPort" from="//@components.0/@ports.1" to="//@components.5/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.4/@ports.0" to="//@components.5/@ports.1"/>
+  <connectors name="actionPort-boiler2ActionPort" from="//@components.5/@ports.3" to="//@components.1/@ports.1"/>
+  <connectors name="temperature3Port-tempPort" from="//@components.0/@ports.2" to="//@components.7/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.6/@ports.0" to="//@components.7/@ports.1"/>
+  <connectors name="actionPort-boiler3ActionPort" from="//@components.7/@ports.3" to="//@components.1/@ports.2"/>
+  <connectors name="temperature4Port-tempPort" from="//@components.0/@ports.3" to="//@components.9/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.8/@ports.0" to="//@components.9/@ports.1"/>
+  <connectors name="actionPort-boiler4ActionPort" from="//@components.9/@ports.3" to="//@components.1/@ports.3"/>
+  <connectors name="temperature5Port-tempPort" from="//@components.0/@ports.4" to="//@components.11/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.10/@ports.0" to="//@components.11/@ports.1"/>
+  <connectors name="actionPort-boiler5ActionPort" from="//@components.11/@ports.3" to="//@components.1/@ports.4"/>
+  <connectors name="temperature6Port-tempPort" from="//@components.0/@ports.5" to="//@components.13/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.12/@ports.0" to="//@components.13/@ports.1"/>
+  <connectors name="actionPort-boiler6ActionPort" from="//@components.13/@ports.3" to="//@components.1/@ports.5"/>
+  <connectors name="temperature7Port-tempPort" from="//@components.0/@ports.6" to="//@components.15/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.14/@ports.0" to="//@components.15/@ports.1"/>
+  <connectors name="actionPort-boiler7ActionPort" from="//@components.15/@ports.3" to="//@components.1/@ports.6"/>
+  <connectors name="temperature8Port-tempPort" from="//@components.0/@ports.7" to="//@components.17/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.16/@ports.0" to="//@components.17/@ports.1"/>
+  <connectors name="actionPort-boiler8ActionPort" from="//@components.17/@ports.3" to="//@components.1/@ports.7"/>
+  <connectors name="temperature9Port-tempPort" from="//@components.0/@ports.8" to="//@components.19/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.18/@ports.0" to="//@components.19/@ports.1"/>
+  <connectors name="actionPort-boiler9ActionPort" from="//@components.19/@ports.3" to="//@components.1/@ports.8"/>
+  <connectors name="temperature10Port-tempPort" from="//@components.0/@ports.9" to="//@components.21/@ports.0"/>
+  <connectors name="setPointPort-targetTempPort" from="//@components.20/@ports.0" to="//@components.21/@ports.1"/>
+  <connectors name="actionPort-boiler10ActionPort" from="//@components.21/@ports.3" to="//@components.1/@ports.9"/>
+</rx:Component>

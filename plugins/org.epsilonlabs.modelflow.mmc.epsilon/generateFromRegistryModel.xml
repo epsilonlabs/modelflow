@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<project name="modelflow" default="trace" basedir=".">
+
+	<property name="registryMM" 
+		value="../org.epsilonlabs.modelflow.engine/src/org/eclipse/epsilon/modelflow/registry/registry"/>
+	
+	<target name="trace">
+			
+		<epsilon.emf.register file="${registryMM}.ecore" />
+		<epsilon.emf.loadModel
+		      name="registry"
+		      read="true"
+		      store="false"
+		      metamodeluri="http://eclipse.org/epsilon/modelflow/registry/1.0"
+		      modelfile="resources/models/registry.registry"
+		    />
+
+		<epsilon.egl src="resources/management/orchestrate.egx" failonerrors="true">
+	      	<model ref="registry" />
+	    </epsilon.egl>
+	</target>
+	
+	<eclipse.refreshLocal resource="${basedir}" depth="infinite" />
+	<eclipse.refreshLocal resource="../org.epsilonlabs.modelflow.mmc.epsilon" depth="infinite" />
+</project> 

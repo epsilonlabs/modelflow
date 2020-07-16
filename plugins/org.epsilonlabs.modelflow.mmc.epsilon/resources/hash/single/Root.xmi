@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test:Root xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:test="http://test/">
+  <elements name="3"/>
+  <elements name="4"/>
+  <elements href="A1.xmi#/"/>
+  <elements href="A2.xmi#/"/>
+</test:Root>

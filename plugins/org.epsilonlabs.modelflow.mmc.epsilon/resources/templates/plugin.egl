@@ -1,0 +1,38 @@
+package org.epsilonlabs.modelflow.contributors.plugin;
+[%=out.startPreserve("/*", "*/", "imports", false)%]
+
+import org.epsilonlabs.modelflow.contributors.resource.*;
+import org.epsilonlabs.modelflow.contributors.task.*;
+
+[%=out.stopPreserve()%] 
+
+import org.epsilonlabs.modelflow.registry.IResourceFactory;
+import org.epsilonlabs.modelflow.registry.ITaskFactory;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.multibindings.Multibinder;
+
+public class [%= p.shortId.firstToUpperCase() %]Plugin extends AbstractModule {
+
+	@Override
+	protected void configure() {
+		configureTaskFactories();
+		configureResourceFactories();
+	}
+
+	private void configureResourceFactories() {
+		Multibinder<IResourceFactory> resourceBinder = Multibinder.newSetBinder(binder(), IResourceFactory.class);
+		[% for (r in p.resourceDefinitions) { %][% if (not r.isTypeOf(ModelDefinition)){ %]
+		//[% } %]
+		resourceBinder.addBinding().to([%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]ModelResource.Factory.class);
+		[% } %]
+	}
+
+	private void configureTaskFactories() {
+		Multibinder<ITaskFactory> taskBinder = Multibinder.newSetBinder(binder(), ITaskFactory.class);
+		[% for (t in p.taskDefinitions) { %]
+		taskBinder.addBinding().to([%= t.parent.shortId.firstToUpperCase() %][%= t.shortId.firstToUpperCase() %]Task.Factory.class);
+		[% } %]
+		
+	}
+}

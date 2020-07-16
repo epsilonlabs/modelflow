@@ -1,0 +1,47 @@
+[% import "../../util.eol"; %]
+package reactive[% if (not path.isEmpty()) {%].[%= path %][% } %];
+
+import reactive.connector.IConnector;
+import reactive.connector.QueueConnector;
+public class [%= name.firstToUpperCase() %] {
+	
+	[% for (p in c.ports){ %]
+	private Double [%= p.name.firstToLowerCase() %]; 
+	[% } 
+	for (p in c.ports){ %]
+	private IConnector [%= p.name.firstToLowerCase() %]Connector; 
+	[% } %]
+	
+	public [%= name.firstToUpperCase() %]([%
+	for (p in c.ports){ %]IConnector [%= p.name.firstToLowerCase() %]Connector[% if(hasMore) { %], [% } } %]) {
+	[%for (p in c.ports){ %]
+		this.[%= p.name.firstToLowerCase() %]Connector = [%= p.name.firstToLowerCase() %]Connector;
+		[%if (p.isInport()){%]
+		this.[%= p.name.firstToLowerCase() %]Connector.doOnNext(this::set[%= p.name.firstToUpperCase() %]);
+		[% } } %]
+	}
+	
+	[% for (p in c.ports.select(p | p.isInport())){%]
+	public void set[%= p.name.firstToUpperCase() %](Double next){
+		this.[%= p.name.firstToLowerCase() %] = next;
+		System.out.println("[%= p.container.name + '.' + p.name.firstToLowerCase() %]:" + this.[%= p.name.firstToLowerCase() %]);
+		this.compute();
+	}
+	[% } %]
+	
+		
+	private void compute() {
+		[% var inports = c.ports.select(p|p.isInport()); %]
+		[% if (inports.size()>0){ %]if ([% for (p in c.ports.select(p|p.isInport())){ %]this.[%= p.name.firstToLowerCase() %] != null[% 
+		if(hasMore) { %] && [% } } %]) { [%}%]
+			[%= out.startPreserve("/*", "*/", "compute", true) %]
+			// TODO logic			
+			[%= out.stopPreserve() %]
+		[% if (inports.size()>0){ %]}[%}%]
+	}
+	
+	
+	[%= out.startPreserve("/*", "*/", "main", true) %]
+	
+	[%= out.stopPreserve() %]
+}

@@ -1,0 +1,64 @@
+package org.epsilonlabs.modelflow.contributors.resource;
+[% 
+var types = new Set;  
+for (p in r.properties) {
+	if (not p.ignore.isDefined() or not p.ignore) { 
+		types.add(p.type.name); 
+	}
+} 
+for (t in types.asSet()) {%]
+import [%=t%];
+[%}%]
+
+import org.epsilonlabs.modelflow.dom.api.AbstractResource;
+import org.epsilonlabs.modelflow.registry.AbstractResourceFactory;
+
+public class [%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]ModelResource extends AbstractResource {
+
+	[%for (p in r.properties) {%]
+	[%if (not p.ignore.isDefined() or not p.ignore) { %]
+	private [%= p.type.simpleName %] [%= p.key %];
+	[% } %]
+	[% } %]
+	public String getType() {
+		return "[%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]Model";
+	}
+	
+	[%for (p in r.properties) {%]
+	[%if (not p.ignore.isDefined() or not p.ignore) { %]
+	public [%= p.type.simpleName %] get[%= p.key.firstToUpperCase() %](){
+		[%= out.startPreserve("/*", "*/", p.key.firstToUpperCase(), true)%]
+		return [%= p.key %];
+		[%= out.stopPreserve()%]
+	}
+	
+	public void set[%= p.key.firstToUpperCase() %]([%= p.type.simpleName %] [%= p.key %]){
+		[%= out.startPreserve("/*", "*/", 'set' + p.key.firstToUpperCase(), true)%]
+		this.[%= p.key %] = [%= p.key %];
+		[%= out.stopPreserve()%]
+	}
+	[% } %]
+	[% } %]
+	
+	@Override
+	public String toString(){
+		return "";//return getResourceId();
+	}
+	
+	public static class Factory extends AbstractResourceFactory {
+
+		public Factory() {
+			super([%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]ModelResource.class);
+		}
+
+		@Override
+		public String getType() {
+			return "[%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]";
+		}
+		
+		public String[] getProperties(){
+			return new String[]{[% for (p in r.properties) { %]"[%= p.key %]"[% if (hasMore){ %], [% } %][% } %]};
+		}
+	}
+
+}

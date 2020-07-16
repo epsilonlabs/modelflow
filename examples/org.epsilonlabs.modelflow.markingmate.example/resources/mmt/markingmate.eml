@@ -1,0 +1,67 @@
+// Original file from https://github.com/kolovos/markingmate
+//target merge
+//left, right =  alice, bob
+//source is alias for left and right
+rule Exam 
+	merge l : LEFT!Exam
+	with r : RIGHT!Exam
+	into t : MARKED!Exam {
+	
+	t.questions ::= l.questions;
+	t.students ::= l.students;
+}
+
+rule Question 
+	merge l : LEFT!Question
+	with r : RIGHT!Question
+	into t : MARKED!Question {
+	
+	t.title = l.title;
+	t.description = l.description;
+	t.marks = l.marks;
+}
+
+rule Student 
+	merge l : LEFT!Student
+	with r : RIGHT!Student
+	into t : MARKED!Student {
+	
+	t.number = l.number;
+	
+}
+
+rule Answer 
+	merge l : LEFT!Answer
+	with r : RIGHT!Answer
+	into t : MARKED!Answer {
+	
+	if (l.marks <> 0 and r.marks <> 0) {
+		throw "Different marks found for answer " +
+			l.question.title + " of student " + l.student.number + ": " + l.marks + " <-> " + r.marks;		
+	}
+	else {
+		t.marks = Sequence{l.marks, r.marks}.max();
+		if (l.feedback.isDefined()) {
+			t.feedback = l.feedback;
+		}
+		else {
+			t.feedback = r.feedback;
+		}
+	}
+	
+	t.question = l.question.equivalent();
+	t.student = l.student.equivalent();
+	
+}
+
+rule Answer 
+	transform s : SOURCE!Answer
+	to t : MARKED!Answer {
+	
+	t.marks = s.marks;
+	t.feedback = s.feedback;
+	
+	t.question = s.question.equivalent();
+	t.student = s.student.equivalent();
+	
+}

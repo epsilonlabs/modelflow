@@ -1,0 +1,21 @@
+rule Main{ 
+	template: "managementTrace.template.egl"
+	parameters {
+		return Map {
+			"path" = Sequence{"Management Trace"},
+			"icon" = "diagram-ff0000",
+			"format" = "graphviz-dot"
+		};
+	}
+}
+
+rule exec transform tt : TaskTrace { 
+	template: "managementTrace.task.template.egl"
+	parameters {
+		return Map {
+			"path" = Sequence{"Tasks", tt.task.name},
+			"icon" = "diagram-ff0000",
+			"format" = "graphviz-dot"//circo
+		};
+	}
+}

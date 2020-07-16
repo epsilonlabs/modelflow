@@ -1,0 +1,34 @@
+operation getColor(p : String) : String{
+	if ( not colors.containsKey(p)){
+		var col = defColors.at(0);
+		colors.put(p, col);
+		defColors.remove(col);
+	}
+	return colors.get(p);
+}
+operation idOf(p : Any) : String{
+	if (p.isTypeOf(ModelElementProperty)){
+		return p.container.name + "::" + p.elementId + "::" + p.property;
+	} else if (p.isTypeOf(FileElement)){
+		return p.container.name.split("/").last() + "+" + p.region.offset + "::" + p.region.length;
+	} else if (p.isTypeOf(ModelElement)){
+		return p.container.name + "::" + p.elementId;
+	}
+}
+operation labelOf(p : Any) : String{
+	if (p.isTypeOf(ModelElementProperty)){
+		return p.property;
+	} else if (p.isTypeOf(FileElement)){
+		return p.region.offset + "::" + p.region.length;
+	} else if (p.isTypeOf(ModelElement)){
+		return p.elementId;
+	}
+}
+operation simpleName(e : FileElement) : String{
+	var split = e.container.name.split("/");
+	if (split.size()>0){
+		return split.last();
+	} else {
+	return e.container.name;
+	}
+}

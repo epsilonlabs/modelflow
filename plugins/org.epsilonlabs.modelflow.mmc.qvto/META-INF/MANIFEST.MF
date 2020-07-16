@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow Qvto Model Management Connectivity
+Bundle-SymbolicName: org.epsilonlabs.modelflow.mmc.qvto;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.epsilonlabs.modelflow.engine,
+ com.google.inject,
+ org.epsilonlabs.modelflow.dependencies,
+ org.apache.commons.io
+Export-Package: org.epsilonlabs.modelflow.mmc.qvto.plugin
+Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.qvto

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ASCII"?>
+<registry:Registry xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:registry="http://eclipse.org/epsilon/modelflow/registry/1.0">
+  <plugins fullyQualifiedId="org.eclipse.epsilon" shortId="epsilon" readableName="Epsilon">
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="eol" readableName="Epsilon Object Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="eol" readableName="Epsilon Comparison Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="evl" readableName="Epsilon Validation Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="etl" readableName="Epsilon Transformation Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="egl" readableName="Epsilon Genration Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="egx" readableName="Epsilon Generation Execution Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="epl" readableName="Epsilon Pattern Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="eml" readableName="Epsilon Merge Language"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="eunit" readableName="Epsilon Unit Testing Framework"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="flock" readableName="Epsilon Flock Language for Model Migration"/>
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="emg" readableName="Epsilon Model Generation Language"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="simulink" technology="simulink"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="ptcim"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="uml"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="emf" technology="emf"/>
+    <resourceDefinitions xsi:type="registry:MetamodelDefinition" shortId="ecore" technology="ecore">
+      <properties key="expand" type="java.lang.Boolean" required="false"/>
+    </resourceDefinitions>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="xml"/>
+    <resourceDefinitions xsi:type="registry:MetamodelDefinition" shortId="xsd"/>
+  </plugins>
+  <plugins fullyQualifiedId="org.eclipse.atl" shortId="atl" readableName="ATLAS Transformation Language">
+    <taskDefinitions xsi:type="registry:ProgramTaskDefinition" shortId="atl" readableName="ATLAS Transformation Language"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="emf" technology="emf"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="ecore" technology="ecore"/>
+  </plugins>
+  <plugins fullyQualifiedId="org.eclipse.emf" shortId="emf" readableName="Eclipse Modeling Framework">
+    <taskDefinitions shortId="ecore2java" readableName="Generate Java Code from Ecore-based models"/>
+    <taskDefinitions shortId="java2java" readableName="Generate Java Code from Java-annotated models"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="emf" technology="emf"/>
+    <resourceDefinitions xsi:type="registry:MetamodelDefinition" shortId="ecore" technology="ecore"/>
+  </plugins>
+  <plugins fullyQualifiedId="org.eclipse.gmf" shortId="gmf" readableName="Graphical Modeling Framework">
+    <taskDefinitions shortId="map2gen" readableName="Generate GmfGen from GmfMap"/>
+    <taskDefinitions shortId="codegen" readableName="Generate code from GmfGen"/>
+  </plugins>
+  <plugins fullyQualifiedId="org.eclipse.emfatic" shortId="emfatic" readableName="Emfatic">
+    <taskDefinitions shortId="ecoreGenerator" readableName="Generate Ecore from Emfatic"/>
+    <resourceDefinitions xsi:type="registry:MetamodelDefinition" shortId="emfatic"/>
+  </plugins>
+  <plugins fullyQualifiedId="hu.bme.mit.massif" shortId="massif" readableName="Matlab Simulink Integration Framework for Eclipse">
+    <taskDefinitions shortId="import" readableName="Simulink to EMF"/>
+    <taskDefinitions shortId="export" readableName="EMF to Simulink"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="simulink" technology="simulink"/>
+    <resourceDefinitions xsi:type="registry:ModelDefinition" shortId="emf" technology="emf" requiresMetamodel="false"/>
+  </plugins>
+  <technologies xsi:type="registry:ModelTechnologyDefinition" identifier="simulink" requiresMetamodel="false">
+    <properties key="src" type="java.io.File" required="true"/>
+    <properties key="matlabroot" type="java.io.File" required="true"/>
+  </technologies>
+  <technologies xsi:type="registry:MetamodelTechnologyDefinition" identifier="ecore"/>
+  <technologies xsi:type="registry:ModelTechnologyDefinition" identifier="emf" requiresMetamodel="true" metamodel="ecore"/>
+</registry:Registry>

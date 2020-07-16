@@ -1,0 +1,19 @@
+@namespace(uri="http://eclipse.org/epsilon/modelflow/generator/1.0", prefix="generator")
+package generator;
+
+class Contributor {
+	val Clazz[*] entries;
+	
+}
+
+class Clazz {
+	attr Class<?> clazz;
+	attr Type type;
+	attr String shortId;
+	attr String readableName;
+	attr String pluginFullyQualifiedId;
+} 
+
+enum Type {
+	TASK; PROGRAM; RESOURCE; MODEL; METAMODEL;
+}

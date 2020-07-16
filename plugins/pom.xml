@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>org.epsilonlabs.modelflow.plugins</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>==Bundles==</name>
+
+	<parent>
+		<groupId>org.epsilonlabs.modelflow</groupId>
+		<artifactId>parent</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<modules>
+	    <module>org.epsilonlabs.modelflow.engine</module>
+	    <module>org.epsilonlabs.modelflow.dt</module>
+	    <module>org.epsilonlabs.modelflow.mmc.core</module>
+	    <module>org.epsilonlabs.modelflow.mmc.emf</module>
+	    <module>org.epsilonlabs.modelflow.mmc.gmf</module>
+	    <module>org.epsilonlabs.modelflow.mmc.epsilon</module>
+	    <module>org.epsilonlabs.modelflow.mmc.acceleo</module>
+	    <module>org.epsilonlabs.modelflow.mmc.atl</module>
+	    <module>org.epsilonlabs.modelflow.mmc.qvto</module>
+	    <module>org.epsilonlabs.modelflow.mmc.xtext</module>
+	</modules>
+	
+</project>

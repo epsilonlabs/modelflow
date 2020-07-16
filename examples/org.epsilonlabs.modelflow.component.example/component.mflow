@@ -1,0 +1,43 @@
+pre SetupVariables {
+	var mBasedir : String = "resources/m/";
+	var mmBasedir : String = "resources/mm/";
+	var tBasedir : String = "resources/mmt/";
+}
+model config is epsilon:emf {
+	src: mBasedir + "config.model"
+	metamodelFile: mmBasedir + "configuration.ecore"
+}
+model comp is epsilon:emf {
+	src: mBasedir + "component.model"
+	metamodelFile: mmBasedir + "component.ecore"
+}
+model exten is epsilon:emf{
+	src: mBasedir + "extended.model"
+	metamodelFile: mmBasedir + "component.ecore"
+}	
+task validate is epsilon:evl
+	in config 
+		and comp as component {
+	src: tBasedir + "validate.evl"
+}
+
+task m2m is epsilon:etl
+	in config and comp
+	out exten as extended
+	dependsOn validate
+{ 
+	src: tBasedir + "addTolerances.etl"
+}
+task m2t is epsilon:egx 
+	in exten as extended
+{
+	src: tBasedir + "generateReactive.egx"
+	outputRoot: "src-gen/"
+}
+
+post Done {
+	var tasks = trace.tasks;
+	tasks.`task`.name.println("Traced Tasks: ");
+	var traces = tasks.traces.flatten().collect(t|t.link.println());
+	"done".println();
+}

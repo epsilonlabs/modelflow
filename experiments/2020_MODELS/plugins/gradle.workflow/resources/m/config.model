@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ASCII"?>
+<tolerance:Configurations xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tolerance="tolerance">
+  <tolerances port="Boiler1.tempPort" value="14"/>
+  <tolerances port="Boiler2.tempPort" value="15"/>
+  <tolerances port="Boiler3.tempPort" value="16"/>
+  <tolerances port="Boiler4.tempPort" value="17"/>
+  <tolerances port="Boiler5.tempPort" value="18"/>
+  <tolerances port="Boiler6.tempPort" value="19"/>
+  <tolerances port="Boiler7.tempPort" value="20"/>
+  <tolerances port="Boiler8.tempPort" value="21"/>
+  <tolerances port="Boiler9.tempPort" value="22"/>
+  <tolerances port="Boiler10.tempPort" value="23"/>
+</tolerance:Configurations>

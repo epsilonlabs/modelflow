@@ -1,0 +1,86 @@
+param mBasedir : String;
+param tBasedir : String;
+param mm : String;
+
+/* Models */
+
+model SEPR is epsilon:emf {
+	src: mBasedir + "sepr.model"
+	metamodelFile: mm
+}
+model BOB is epsilon:emf {
+	src: mBasedir + "sepr-bob.model"
+	metamodelFile: mm
+}			
+model ALICE is epsilon:emf {
+	src: mBasedir + "sepr-alice.model"
+	metamodelFile: mm
+}	
+model MARKED is epsilon:emf {
+	src: mBasedir + "sepr-marked.model"
+	metamodelFile: mm
+}
+
+/* Tasks */
+task produce is epsilon:eol
+	out SEPR
+{
+	src: tBasedir + "generateModel.eol"
+}
+task validateSetup is epsilon:evl
+	in SEPR 
+{ 
+	src: tBasedir + "validateSetup.evl"
+	failOnError: true
+}
+task splitAlice is epsilon:etl 
+	in SEPR
+	out ALICE as Reviewer 
+	dependsOn validateSetup 
+{
+	src: tBasedir + "split.etl"
+	params {
+		var m = new Map;
+		m.put("questions", Sequence{0..1});
+		return m;
+	}
+}
+task splitBob is epsilon:etl 
+	in SEPR
+	out BOB as Reviewer 
+	dependsOn validateSetup 
+{
+	src: tBasedir + "split.etl"
+	params {
+		var m = new Map;
+		m.put("questions", Sequence{2..3});
+		return m;
+	}
+}
+task validateMarking is epsilon:evl 
+	in ALICE as Reviewer, LEFT 
+		and BOB as Reviewer, RIGHT {
+	src: tBasedir + "validateMarking.evl"
+	failOnError : true
+}
+task compare is epsilon:ecl 
+	in ALICE and BOB 
+	dependsOn validateMarking 
+{
+	src: tBasedir + "markingmate.ecl"
+}
+task merge is epsilon:eml 
+	in ALICE as LEFT, SOURCE
+		and BOB as RIGHT, SOURCE
+		and compare.comparison 
+	out MARKED
+{
+	src: tBasedir + "markingmate.eml"
+}
+task csv is epsilon:egx 
+	in MARKED {
+	src: tBasedir + "feedback.egx"
+}
+post Done {
+	"done".println();
+}

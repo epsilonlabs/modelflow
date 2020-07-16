@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ASCII"?>
+<dom:Workflow xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dom="http://eclipse.org/epsilon/modelflow/1.0" name="EuGENia">
+  <tasks name="emfatic2ecore" produces="//@resources.1" consumes="//@resources.0">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#ecoreGenerator"/>
+  </tasks>
+  <tasks name="validateEcoreForGenModel" consumes="//@resources.1">
+    <properties key="src" value="ecore2genmodel.evl"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#evl"/>
+  </tasks>
+  <tasks name="ecore2genmodel" produces="//@resources.7" consumes="//@resources.1">
+    <properties key="src" value="ecore2genmodel.etl"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#etl"/>
+  </tasks>
+  <tasks name="fixGenmodel" consumes="//@resources.1" modifies="//@resources.7">
+    <properties key="src" value="fixGenmodel.eol"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="polishGenmodel" produces="//@resources.7" consumes="//@resources.1">
+    <properties key="src" value="polishGenmodel.eol" optional="true"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="generateDomainModelCode" produces="//@resources.12" consumes="//@resources.7">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#ecore2java"/>
+  </tasks>
+  <tasks name="validateEcoreForGMFToolGraphMap" consumes="//@resources.1">
+    <properties key="src" value="ecore2GMF.evl"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#evl"/>
+  </tasks>
+  <tasks name="ecore2gmf" produces="//@resources.9 //@resources.10 //@resources.11" consumes="//@resources.1">
+    <properties key="src" value="ecore2GMF.eol"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="polishGmf" consumes="//@resources.1" modifies="//@resources.9 //@resources.10 //@resources.11">
+    <properties key="src" value="polish/ecore2GMF.eol" optional="true"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="map2gen" produces="//@resources.8" consumes="//@resources.1 //@resources.9 //@resources.7">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#map2gen"/>
+  </tasks>
+  <tasks name="fixGmfgen" consumes="//@resources.1 //@resources.9 //@resources.10 //@resources.11 //@resources.7" modifies="//@resources.8">
+    <properties key="src" value="fixGmfgen.eol"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="polishGmfgen" consumes="//@resources.1 //@resources.9 //@resources.10 //@resources.11 //@resources.7" modifies="//@resources.8">
+    <properties key="src" value="fixGmfgen.eol" optional="true"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#eol"/>
+  </tasks>
+  <tasks name="generateDiagramCode" produces="//@resources.13" consumes="//@resources.8">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#codegen"/>
+  </tasks>
+  <resources xsi:type="dom:MetamodeResource" name="emfatic">
+    <properties key="file" value="dsl.emfatic" optional="true"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="ecore">
+    <properties key="file" value="dsl.ecore"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="genmodelEcore">
+    <properties key="uri" value="http://www.eclipse.org/emf/2002/GenModel"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="gmfgenEcore">
+    <properties key="uri" value="http://www.eclipse.org/gmf/2009/GenModel"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="gmfmapEcore">
+    <properties key="uri" value="http://www.eclipse.org/gmf/2008/mappings"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="gmftoolEcore">
+    <properties key="uri" value="http://www.eclipse.org/gmf/2005/ToolDefinition"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:MetamodeResource" name="gmfgraphEcore">
+    <properties key="uri" value="http://www.eclipse.org/gmf/2006/GraphicalDefinition"/>
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.4"/>
+  </resources>
+  <resources xsi:type="dom:ModelResource" name="genmodel" conformsTo="//@resources.2">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.3"/>
+  </resources>
+  <resources xsi:type="dom:ModelResource" name="gmfgen" conformsTo="//@resources.3">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.3"/>
+  </resources>
+  <resources xsi:type="dom:ModelResource" name="gmfmap" conformsTo="//@resources.4">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.3"/>
+  </resources>
+  <resources xsi:type="dom:ModelResource" name="gmftool" conformsTo="//@resources.5">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.3"/>
+  </resources>
+  <resources xsi:type="dom:ModelResource" name="gmfgraph" conformsTo="//@resources.6">
+    <definition href="../org.epsilonlabs.modelflow.contributors/resources/models/registry.registry#//@plugins.0/@resourceDefinitions.3"/>
+  </resources>
+  <resources name="emfsources"/>
+  <resources name="gmfsources"/>
+  <taskDependencies type="depends" source="//@tasks.10" target="//@tasks.11"/>
+</dom:Workflow>

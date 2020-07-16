@@ -1,0 +1,16 @@
+constraint NotMarkingTheSame {
+	check {
+		var alices = ALICE!Question.all.`title`.asSet();
+		var bobs = BOB!Question.all.`title`.asSet();
+		return alices.excludesAll(bobs) and bobs.excludesAll(alices);
+	}
+	message: "Either bob or alice are marking the same question"
+}
+context Answer{
+	constraint HasFeedback {
+		check: self.feedback.isDefined()	
+	}
+	constraint IsMarked {
+		check: self.marks > 0	
+	}
+}

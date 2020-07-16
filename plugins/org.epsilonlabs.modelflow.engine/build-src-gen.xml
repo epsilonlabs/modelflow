@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project name="modelflow" default="trace" basedir=".">
+	<import file="./build-epsilon-parser-macro.xml"/>
+
+	<property name="domLocation" 
+		value="src/org/epsilonlabs/modelflow/dom/modelflow"/>	
+	<property name="traceLocation" 
+		value="src/org/epsilonlabs/modelflow/execution/trace/executionTrace"/>
+	<property name="managementTraceLocation" 
+			value="src/org/epsilonlabs/modelflow/management/trace/managementTrace"/>
+	<property name="parserOutput" 
+		value="src-gen/org/epsilonlabs/modelflow/parse"/>
+	<property name="srcGen" 
+			value="src-gen"/>
+	
+	<target name="trace">
+		
+		<!--delete>
+		  <fileset dir="${srcGen}" includes="**/*.java **/*.tokens"/>
+		</delete
+		
+		<epsilon.eugenia src="${domLocation}.emf" firstStep="ecore" lastStep="ecore"/>
+		<epsilon.emf.register file="${domLocation}.ecore" />
+		<emf.Ecore2Java 
+			model="${domLocation}.ecore" 
+			genModel="${domLocation}.genmodel" 
+			generateModelProject="false" 
+			autoBuild="false" 
+			generateEditorProject="false" 
+			generateEditProject="false" 
+			generateJavaCode="false" 
+			validateModel="true" 
+			reconcileGenModel="keep" />
+						
+
+		<epsilon.eugenia src="${traceLocation}.emf" firstStep="ecore" lastStep="ecore"/>		
+		<epsilon.emf.register file="${traceLocation}.ecore" />
+		<emf.Ecore2Java 
+			model="${traceLocation}.ecore"
+			genModel="${traceLocation}.genmodel" 
+			generateModelProject="true" 
+			generateJavaCode="true" 
+			autoBuild="false" 
+			generateEditorProject="false" 
+			generateEditProject="false" 
+			reconcileGenModel="keep">
+				<model file="${domLocation}.ecore" />
+				<model file="${traceLocation}.ecore" />
+				<arg line="-importOrganizing"/>
+		</emf.Ecore2Java>
+		
+		
+		<epsilon.eugenia src="${managementTraceLocation}.emf" firstStep="ecore" lastStep="ecore"/>
+		<epsilon.emf.register file="${managementTraceLocation}.ecore" />
+		<emf.Ecore2Java 
+			model="${managementTraceLocation}.ecore" 
+			genModel="${managementTraceLocation}.genmodel" 
+			generateModelProject="false" 
+			autoBuild="false" 
+			generateEditorProject="false" 
+			generateEditProject="false" 
+			generateJavaCode="false" 
+			validateModel="true" 
+			reconcileGenModel="keep" />
+			
+-->
+		<buildEpsilonParser lang="modelflow"  languppercase="ModelFlow"/>
+		
+		<!--<eclipse.refreshLocal resource="${basedir}" depth="infinite" />-->
+
+	</target>
+	
+</project> 

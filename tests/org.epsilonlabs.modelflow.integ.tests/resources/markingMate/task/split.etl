@@ -1,0 +1,79 @@
+rule Exam2ExamAlice
+	transform s : SEPR!Exam
+  	to t : ALICE!Exam {
+	t.students = s.students.equivalent("Student2StudentAlice").println();
+
+	var q1 = s.questions.at(0).equivalent("QuestionsAlice");
+	var q2 = s.questions.at(1).equivalent("QuestionsAlice");
+	t.questions.add(q1);
+	t.questions.add(q2);
+}
+@lazy
+rule Student2StudentAlice
+	transform s : SEPR!Student
+	to t : ALICE!Student {
+  
+	t.number = s.number;  
+	
+	var a1 = s.answers.at(0).equivalent("AnswerAlice");
+	var a2 = s.answers.at(1).equivalent("AnswerAlice");
+	t.answers.add(a1);
+	t.answers.add(a2);
+}
+@lazy
+rule AnswerAlice
+	transform s : SEPR!Answer
+  	to t : ALICE!Answer {
+  
+    t.question = s.question.equivalent("QuestionsAlice");
+    t.student = s.student.equivalent("Student2StudentAlice");  
+}
+@lazy
+rule QuestionsAlice
+	transform s : SEPR!Question
+  	to t : ALICE!Question {
+  
+    t.title = s.title;
+    t.description = s.description;
+}
+
+rule Exam2ExamBob
+	transform s : SEPR!Exam
+  	to t : BOB!Exam {
+
+	t.students = s.students.equivalent("Student2StudentBob").println();
+
+	var q3 = s.questions.at(2).equivalent("QuestionsBob");
+	var q4 = s.questions.at(3).equivalent("QuestionsBob");
+	t.questions.add(q3);
+	t.questions.add(q4);
+	
+}
+@lazy
+rule Student2StudentBob
+	transform s : SEPR!Student
+  	to t : BOB!Student {
+  
+    t.number = s.number;  
+	
+	var a3 := s.answers.at(2).equivalent("AnswerBob");
+	var a4 := s.answers.at(3).equivalent("AnswerBob");
+	t.answers.add(a3);
+	t.answers.add(a4);
+}
+@lazy
+rule AnswerBob
+	transform s : SEPR!Answer
+  	to t : BOB!Answer {
+  
+    t.question := s.question.equivalent("QuestionsBob");
+    t.student := s.student.equivalent("Student2StudentBob");  
+}
+@lazy
+rule QuestionsBob
+	transform s : SEPR!Question
+  	to t : BOB!Question {
+  
+    t.title = s.title;
+    t.description = s.description;
+}

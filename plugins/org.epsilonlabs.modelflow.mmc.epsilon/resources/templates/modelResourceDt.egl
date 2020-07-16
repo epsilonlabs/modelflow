@@ -1,0 +1,17 @@
+package org.epsilonlabs.modelflow.contributors.dt.resource;
+
+public class [%= r.parent.shortId.firstToUpperCase() %][%= r.shortId.firstToUpperCase() %]UiModelResource  {
+
+	void beforeExecution(){
+		[%=out.startPreserve("/*", "*/", "before", true)%]
+		//TODO
+		[%=out.stopPreserve()%]
+	}
+	
+	void afterExecution(){
+		[%=out.startPreserve("/*", "*/", "after", true)%]
+		//TODO
+		[%=out.stopPreserve()%]
+	}
+
+}

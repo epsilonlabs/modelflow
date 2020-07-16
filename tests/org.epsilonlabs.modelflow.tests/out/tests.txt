@@ -1,0 +1,34 @@
+// we use emf before "model" 
+emf model "gmfmap" {
+	src: "file.gmfmap"
+}
+// ...as we use simulink before "model"
+simulink model "car" {
+	src: "file.slx"
+	matlabroot: "user.dir/MATLAB2019/"
+}
+// ...because we need to specify basic parameters
+
+// ...That later on a specific tehcnology will use to load the model
+epsilon:emf model "epsilonGmfmap" extends gmfmap {
+	expand: true
+}
+epsilon:simulink model "car2" {
+	src: "file2.slx"
+	followLinks: true
+	matlabroot: "user.dir/MATLAB2019/"
+}
+massif:simulink model "mcar" extends "car" {
+	path: "..."
+}
+epsilon:simulink model "epsilonSimulink" extends "car";
+
+task ecore2gmf with eol {
+	out : gmfmap as epsilon:emf {
+		expand: true
+	}
+	// OR 
+	out : epsilonGmfmap 
+}
+
+task massifx with massif:import in massif:simulink

@@ -1,0 +1,45 @@
+digraph G {
+[%for (p in Element.all){%]
+ "[%= idOf(p) %]" [label="[%= labelOf(p) %]"]
+[%} for (t in Trace.all){%]
+[%for (so in t.sources){%]
+[%for (ta in t.targets){%]
+  [% if (so.isKindOf(ModelElement)){ %]
+  "[%= so.container.name %]" -> "[%= so.container.name + "::" + so.elementId %]" [ label = "[%= so.role%]"]
+  [% } if (ta.isKindOf(ModelElement)){ %]
+  "[%= ta.container.name %]" -> "[%= ta.container.name + "::" + ta.elementId %]" [ label = "[%= ta.role%]"]
+  [% } 
+  if (so.isTypeOf(ModelElementProperty)){ %]
+  "[%= so.container.name + "::" + so.elementId %]" -> "[%= idOf(so) %]"
+  [% } if (ta.isTypeOf(ModelElementProperty)){ %]
+  "[%= ta.container.name + "::" + ta.elementId %]" -> "[%= idOf(ta) %]"
+  [% } 
+  if (so.isTypeOf(FileElement)){ %]
+  "[%= so.container.name %]" -> "[%= idOf(so) %]" 
+  [% } if (ta.isTypeOf(FileElement)){ %]
+   "[%= ta.container.name %]" -> "[%= idOf(ta) %]" 
+  [% } %]
+   "[%= idOf(so) %]" -> "[%= idOf(ta) %]" [label="[%= t.link.link%]"]
+[% }}} %]
+}
+
+[%
+operation idOf(p : Any ) : String{
+	if (p.isTypeOf(ModelElementProperty)){
+		return p.container.name + "::" + p.elementId + "::" + p.property;
+	} else if (p.isTypeOf(FileElement)){
+		return p.container.name + "+" + p.region.offset + "::" + p.region.length;
+	} else if (p.isTypeOf(ModelElement)){
+		return p.container.name + "::" + p.elementId;
+	}
+}
+operation labelOf(p : Any ) : String{
+	if (p.isTypeOf(ModelElementProperty)){
+		return p.property;
+	} else if (p.isTypeOf(FileElement)){
+		return p.region.offset + "::" + p.region.length;
+	} else if (p.isTypeOf(ModelElement)){
+		return p.elementId;
+	}
+}
+%]

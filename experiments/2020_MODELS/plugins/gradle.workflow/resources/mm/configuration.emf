@@ -1,0 +1,13 @@
+@namespace(uri="tolerance", prefix="tolerance")
+package tolerance;
+
+//import "http://rx";
+
+class Configurations {
+	val Tolerance[*] tolerances;
+}
+
+class Tolerance {
+   attr String port;
+   attr Integer value;
+}

@@ -1,0 +1,25 @@
+strict digraph G {
+graph [splines=polyline]
+[%for (t in e.tasks){%] 
+ "[%=t.task.name%]" [label="[%=t.task.name%]"]
+ "[%=t.task.name%]" [shape=rectangle, fillcolor=darkolivegreen1, style=filled]
+ "[%=t.endState%]" [fillcolor=darkgoldenrod1, style=filled]
+ "[%=t.task.name%]" -> "[%=t.endState%]"
+ [%for (i in t.inputModels) {%]
+ "[%=name(i.resource)%]" [fillcolor="darkslategray2", style=filled]
+ "[%=name(i.resource)%]" -> "[%=t.task.name%]"
+ [% } %]
+ [%for (i in t.outputModels) {%]
+ "[%=name(i.resource)%]" [fillcolor="darkslategray2", style=filled]
+ "[%=t.task.name%]" -> "[%=name(i.resource)%]"
+ [% } %]
+ [% } %]
+}
+[%operation name(obj : Any) : String {
+	var name = obj.name;
+	if (name.startsWith("/")){
+		var list = name.split("/");
+		return list.last();
+	} 
+	return name;
+}%]

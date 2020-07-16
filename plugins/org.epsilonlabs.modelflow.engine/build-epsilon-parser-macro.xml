@@ -1,0 +1,42 @@
+<!--modified copy -->
+<project>
+	<macrodef name="buildEpsilonParser">
+		<attribute name="lang" />
+		<attribute name="langUpperCase" />
+		<attribute name="extends" default="erl" />
+
+		<sequential>
+			<property name="project_loc" location="${basedir}" />
+			<property name="epsilon-antlr-dev" location="${epsilonlabs_antlr_loc}/org.eclipse.epsilon.antlr.dev" />
+			<property name="epsilon_plugins_loc" location="${epsilon_plugins_loc}" />
+			
+			<property name="lang_parse_loc" location="${project_loc}/src/org/epsilonlabs/@{lang}/parse"/>
+			<property name="lang_parse_output" location="${project_loc}/src-gen/org/epsilonlabs/@{lang}/parse"/>
+			<property name="extends_parse_loc" location="${epsilon_plugins_loc}/org.eclipse.epsilon.@{extends}.engine/src/org/eclipse/epsilon/@{extends}/parse"/>
+			<property name="eol_parse_loc" location="${epsilon_plugins_loc}/org.eclipse.epsilon.eol.engine/src/org/eclipse/epsilon/eol/parse"/>
+			<property name="erl_parse_loc" location="${epsilon_plugins_loc}/org.eclipse.epsilon.erl.engine/src/org/eclipse/epsilon/erl/parse"/>
+
+			<echo message="Generating @{langUpperCase} parser..."/>
+
+			<java classname="org.eclipse.epsilon.antlr.dev.Tool">
+
+				<classpath>
+					<pathelement location="${epsilon-antlr-dev}/org.eclipse.epsilon.antlr.dev.jar"/>
+    				<pathelement location="${epsilon-antlr-dev}/lib/antlr-2.7.7.jar"/>
+    				<pathelement location="${epsilon-antlr-dev}/lib/antlr-3.1b1.jar"/>
+    				<pathelement location="${epsilon-antlr-dev}/lib/stringtemplate-3.2.1.jar"/>
+				</classpath>
+
+				<arg value="-package" />
+				<arg value="org.epsilonlabs.@{lang}.parse" />
+				<arg value="-lib" />
+				<arg value="${lang_parse_loc};${extends_parse_loc};${eol_parse_loc};${erl_parse_loc}" />
+				<arg value="-o" />
+				<arg value="${lang_parse_output}" />
+				<arg value="${lang_parse_loc}/@{langUpperCase}.g" />
+			</java>
+			
+		</sequential>
+	</macrodef>
+
+</project>

@@ -1,0 +1,98 @@
+@namespace(uri="http://eclipse.org/epsilon/modelflow/1.0", prefix="dom")
+package dom;
+
+class Workflow extends Task {
+  val Task[*] tasks;
+  val AbstractResource[*] resources;
+  val TaskDependency[*] taskDependencies;
+  val ResourceDependency[*] resourceDependencies;
+}
+
+abstract class Named {
+  attr String name;
+}
+
+abstract class AbstractResource extends Named {
+}
+
+abstract class AbstractTask extends Named {
+}
+
+@exeed(classIcon="operation", label="return self.name +' ('+  self.definition.parent.shortId + ':' + self.definition.shortId + ')';")
+class Task extends AbstractTask {
+  val ResourceReference[*] produces;
+  val ResourceReference[*] consumes;
+  val ResourceReference[*] modifies;
+  val Property[*] properties;
+  ref TaskDependency[*]#before dependencies;
+  attr EJavaObject guard;
+  attr String definition;
+  attr Boolean enabled = "true";
+  attr Boolean traceable = "true";
+}
+
+class ResourceReference {
+  ref AbstractResource resource;
+  attr String[*] aliases;
+}
+
+@exeed(classIcon="model", label="return 'Resource ' + self.name;")
+class Resource extends AbstractResource {
+  val Property[*] properties;
+  attr String definition;
+  attr Boolean declared = "true";
+}
+
+@exeed(classIcon="text", label="return 'Derived resource ' + self.name;")
+class DerivedResource extends AbstractResource {
+  ref Resource reference;
+  attr Boolean declared = "false";
+}
+
+@exeed(classIcon="model", label="
+var l = 'Model ' + self.name; 
+if (self.definition.isDefined()){
+	l = l +' ('+  self.definition.parent.shortId + ':' + self.definition.shortId +')'; 
+}
+if (self.conformsTo.isDefined()){
+	l = l + ' conforms to ' + self.conformsTo.name;
+	/*if (self.conformsTo.parent.isDefined()){
+		l = l +'(' + self.conformsTo.definition.parent.shortId + ':' + self.conformsTo.definition.shortId + ')';
+	} */
+}
+return l;
+")
+class ModelResource extends Resource {
+}
+
+@exeed(classIcon="emfmodel", label="return 'Metamodel ' + self.name;")
+class MetamodeResource extends Resource {
+}
+
+@exeed(classIcon="transition", label="return self.before.name + ' depends ' + self.after.name;")
+class TaskDependency {
+  attr String type;
+  ref Task#dependencies before;
+  ref Task after;
+}
+
+@exeed(classIcon="transition", label="return self.source.name + ' depends ' + self.target.name;")
+class ResourceDependency {
+  attr String type;
+  ref AbstractResource source;
+  ref AbstractResource target;
+}
+
+@exeed(classIcon="parameter", label="
+var optional = '';
+if (self.optional){
+	optional = '?';
+} 
+return self.key + optional +' : ' + self.value;
+")
+class Property {
+  attr String key;
+  transient attr EJavaObject value;
+  attr EJavaObject evaluatedValue;
+}
+

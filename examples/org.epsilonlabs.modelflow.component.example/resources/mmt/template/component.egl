@@ -1,0 +1,12 @@
+package component;
+
+public class [%= name.firstToUpperCase() %] {
+	
+	public static Integer compute([%
+	for (inport in c.ports.select(p | p.type.name == "IN")){%]Integer [%= inport.name %][%if(hasMore){%], [% } } %]) {
+		[%= out.startPreserve("/*", "*/", "compute", true) %]
+		return null;
+		[%= out.stopPreserve() %]
+	}
+	
+}

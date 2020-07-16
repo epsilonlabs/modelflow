@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow GMF Tests
+Bundle-SymbolicName: org.epsilonlabs.modelflow.mmc.gmf.tests
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.gmf.tests
+Require-Bundle: org.epsilonlabs.modelflow.dependencies,
+ org.eclipse.gmf.codegen,
+ org.eclipse.gmf.map,
+ org.junit,
+ org.epsilonlabs.modelflow.mmc.gmf,
+ org.mockito,
+ org.epsilonlabs.modelflow.tests,
+ org.epsilonlabs.modelflow.engine,
+ org.eclipse.gmf.validate,
+ org.epsilonlabs.modelflow.mmc.epsilon
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: org.epsilonlabs.modelflow.mmc.gmf.tests,
+ org.epsilonlabs.modelflow.mmc.gmf.tests.common.workflow,
+ org.epsilonlabs.modelflow.mmc.gmf.tests.integ,
+ org.epsilonlabs.modelflow.mmc.gmf.tests.unit

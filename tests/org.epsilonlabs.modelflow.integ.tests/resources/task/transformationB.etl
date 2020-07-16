@@ -1,0 +1,25 @@
+pre {
+    new ABC!Graph;
+}
+rule Tree2Node 
+	transform t : C!Tree
+	to n : ABC!Node {
+	
+	n.name = t.label;
+	if (t.parent.isDefined()) {
+		var e : new ABC!Edge;
+		e.source ::= t.parent;
+		e.target = n;
+	}
+
+    // add node to graph
+    ABC!Graph.allInstances.first().nodes.add(n);
+}
+
+rule EntityToNode 
+	transform e : AB!Entity
+	to n : ABC!Node {
+	
+	n.name = e.name;
+    ABC!Graph.allInstances.first().nodes.add(n);
+}

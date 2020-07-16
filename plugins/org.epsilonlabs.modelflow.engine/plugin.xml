@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+   <extension-point id="taskExtension" name="Task Extension" schema="schema/taskExtension.exsd"/>
+   <extension-point id="resourceExtension" name="Resource Extension" schema="schema/resourceExtension.exsd"/>
+   <extension-point id="pluginExtension" name="Plugin Extension" schema="schema/pluginExtension.exsd"/>
+   
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated managementTrace -->
+      <package
+            uri="http://eclipse.org/epsilon/modelflow/management/trace/1.0"
+            class="org.epsilonlabs.modelflow.management.trace.ManagementTracePackage"
+            genModel="src/org/epsilonlabs/modelflow/management/trace/managementTrace.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated executionTrace -->
+      <package
+            uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.0"
+            class="org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage"
+            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated executionTrace -->
+      <package
+            uri="http://eclipse.org/epsilon/modelflow/1.0"
+            class="org.epsilonlabs.modelflow.dom.DomPackage"
+            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+   </extension>
+
+</plugin>

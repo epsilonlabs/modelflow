@@ -1,0 +1,19 @@
+var exam = new SEPR!Exam;
+
+for (i in Sequence{1..4}){
+	var q = new SEPR!Question;
+	q.title = "Question " + i.asString();
+	q.description = "Description of Question " + i.asString();
+	exam.questions.add(q);
+}
+
+for (i in Sequence{1..20}){
+	var student = new SEPR!Student;
+	student.number = i.asString().pad(4,"0",false);
+	for (q in exam.questions){
+		var a = new SEPR!Answer;
+		a.question = q;
+		student.answers.add(a);
+	}
+	exam.students.add(student);
+}

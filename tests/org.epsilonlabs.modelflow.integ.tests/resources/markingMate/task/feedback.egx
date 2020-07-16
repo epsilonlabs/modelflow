@@ -1,0 +1,26 @@
+// Original file from https://github.com/kolovos/markingmate
+rule Exam2CSV
+	transform exam : Exam {
+	
+	template : "csv.egl"
+	
+	target : "result.csv"	
+}
+
+/*
+rule Exam2HTML
+	transform exam : Exam {
+	
+	template : "all-feedback.egl"
+	
+	target : "all-feedback.html"
+}
+
+rule Feedback2File
+	transform student : Student {
+	
+	template : "feedback.egl"
+	
+	target: student.number + ".txt"
+		
+}*/

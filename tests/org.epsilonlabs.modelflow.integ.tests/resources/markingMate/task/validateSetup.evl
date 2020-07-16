@@ -1,0 +1,11 @@
+context Question {
+	constraint HasTitle {
+		check : self.`title`.isDefined()
+	}
+	constraint ExpectedAnswers {
+		check : self.answers.size()==Student.all().size()
+	}
+	constraint InExam {
+		check : Exam.all.first().questions.contains(self)
+	}	
+}

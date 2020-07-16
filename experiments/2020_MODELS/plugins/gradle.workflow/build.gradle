@@ -1,0 +1,41 @@
+plugins {
+	id "org.epsilonlabs.core" version "1.5.1"
+	id "org.epsilonlabs.emf" version "1.5.1"
+}
+epsilon {
+	models {
+		config(EMF){
+			modelFile = file('resources/m/config.model')
+			metamodelFile =  file('resources/mm/configuration.ecore')
+		}
+		component(EMF){
+			modelFile = file('resources/m/component.model')
+			metamodelFile =  file('resources/mm/component.ecore')
+		}
+		variant(EMF){
+			modelFile = file('resources/m/variant.model')
+			metamodelFile =  file('resources/mm/component.ecore')
+		}
+	}
+}
+task validate (type: EVL) { 
+	src = file('resources/mmt/validation.evl')
+	input = 'config'
+	input = 'component'
+}
+task m2m(type: ETL){
+	dependsOn validate
+	src = file('resources/mmt/variant.etl')
+	input = 'config'
+	input = 'component'
+	output = 'variant'
+}
+task m2t(type: EGX) {
+	src = file('resources/mmt/generate.egx')
+	outputRoot = file('src-gen')
+	input = 'variant'
+}
+task workflow {
+	group = "samples"
+	dependsOn m2m,m2t,validate
+}

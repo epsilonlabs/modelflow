@@ -1,0 +1,17 @@
+rule component transform c : Component {
+
+	template : "template/component.egl"
+
+	parameters : Map{
+		"name" = c.name
+	}
+
+	target : "component/" + c.name + ".java"
+}
+
+rule main transform m : Model {
+
+	template : "template/main.egl"
+
+	target : m.name.firstToUpperCase() + ".java"
+}

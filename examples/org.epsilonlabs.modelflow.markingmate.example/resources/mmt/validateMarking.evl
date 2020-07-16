@@ -1,0 +1,16 @@
+constraint NotMarkingTheSame {
+	check {
+		var left = LEFT!Question.all.`title`.asSet();
+		var right = RIGHT!Question.all.`title`.asSet();
+		return left.excludesAll(right) and right.excludesAll(left);
+	}
+	message: "Either bob or alice are marking the same question"
+}
+context Reviewer!Answer{
+	constraint HasFeedback {
+		check: self.feedback.isDefined()	
+	}
+	constraint IsMarked {
+		check: self.marks > 0	
+	}
+}

@@ -1,0 +1,88 @@
+"starting".println();
+var iterations = 10 ;
+
+var system = new component!Component();
+system.name = "ComponentSystem";
+
+var sinewave = new component!Component();
+sinewave.name = "SineWavePort";
+system.components.add(sinewave);
+
+var scope = new component!Component();
+scope.name = "ScopePort";
+system.components.add(scope);
+
+var conf = new config!Configurations();
+
+for (i in Sequence{1..iterations}){
+	var const = new component!Component();
+	const.name = "Constant";
+	system.components.add(const);
+	
+	var boiler = boiler(i);
+	
+	system.connect(sinewave.addOutport("temperature" + i + "Port"), boiler.ports.selectOne(p|p.name == "tempPort"));
+	system.connect(const.addOutport("setPointPort"), boiler.ports.selectOne(p|p.name== "targetTempPort"));
+	system.connect(boiler.ports.selectOne(p|p.name == "actionPort"), scope.addInport("boiler"+ i+ "ActionPort") );
+	
+	system.components.add(boiler);
+	
+	var tol = new config!Tolerance();
+	tol.port = boiler.name + "." + "tempPort"; 	
+	var constVal : Real = (13.0 + ((10.0/iterations.asReal())*i.asReal())).asReal(); 
+	tol.value = constVal.asInteger(); 
+	conf.tolerances.add(tol);
+	
+}
+
+"done".println();
+
+
+operation boiler(count : Integer) : Component {
+	var boiler = new component!Component();
+	var temperatureComparator = new component!Component();
+	var boilerActuator = new component!Component();
+	
+	boiler.name = "Boiler" + count;
+	temperatureComparator.name = "Boiler" + count + "TemperatureComparator" ;
+	boilerActuator.name = "Boiler" + count + "BoilerActuator";
+	
+	boiler.components.add(temperatureComparator);
+	boiler.components.add(boilerActuator);
+
+	boiler.connect(boiler.addInport("tempPort"), temperatureComparator.addInport("compTempPort"));
+	boiler.connect(boiler.addInport("targetTempPort"), temperatureComparator.addInport("compTargetTempPort"));
+	boiler.connect(temperatureComparator.addOutport("differencePort"), boilerActuator.addInport("actuatorDiffPort"));
+	boiler.connect(boiler.addInport("boilerStatusPort"), boilerActuator.addInport("actuatorStatusPort"));
+	boiler.connect(boilerActuator.addOutport("actuatorActionPort"), boiler.addOutport("actionPort"));	
+	
+	return boiler;
+}
+
+operation Component connect(source : Port, target : Port) : Connector {
+	var connect = new component!Connector;
+	connect.from = source;
+	connect.`to` = target; 
+	connect.name = source.name + "-" + target.name;
+	self.connectors.add(connect);
+	return connect;
+}
+
+operation Component addInport(name : String) : Port{
+	var port = self.port(name);
+	port.portType = PortType#IN;
+	return port;
+}
+
+operation Component addOutport(name : String) : Port {
+	var port = self.port(name);
+	port.portType = PortType#OUT;
+	return port;
+}
+
+operation Component port(name : String) : Port{
+	var port = new component!Port;
+	port.name = name;
+	self.ports.add(port);
+	return port;
+}

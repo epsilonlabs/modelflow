@@ -1,0 +1,56 @@
+@namespace(uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.0", prefix="executionTrace")
+package trace;
+
+import "http://eclipse.org/epsilon/modelflow/1.0";
+
+@exeed(classIcon="clock")
+class ExecutionTrace {
+	ordered val WorkflowExecution[*] executions;
+	val ResourceSnapshot[*] latest;
+	attr String file;
+}
+
+abstract class Stateful {
+	attr String endState;
+}
+
+abstract class Timed {
+	attr long start;
+	attr long end;
+}
+
+abstract class Snapshot {
+	attr Object stamp;
+	attr Long timestamp;
+}
+
+@exeed(classIcon="model", label="return self.resource.name + '(' + self.stamp +')';" )
+class ResourceSnapshot extends Snapshot {
+	val dom.Resource resource;
+}
+
+@exeed(classIcon="parameter", label="return self.key + '=' + self.stamp;")
+class PropertySnapshot extends Snapshot {
+	attr String key;
+}
+
+@exeed(classIcon="operation", 
+label="return 'Workflow' 
++ ' (' + self.endState +') ' 
++ ((self.end-self.start)/1000)+ 's';")
+class WorkflowExecution extends Stateful, Timed {
+	val TaskExecution[*] tasks;
+	val dom.Workflow workflow;
+}
+
+@exeed(classIcon="operation",
+label="return self.task.name 
++ ' (' + self.endState +') ' 
++ (self.end-self.start) + 'ms';")
+class TaskExecution extends Stateful, Timed {
+  	val ResourceSnapshot[*] inputModels;
+	val ResourceSnapshot[*] outputModels;
+	val PropertySnapshot[*] inputProperties;
+	val PropertySnapshot[*] outputProperties;
+	val dom.Task task;
+}

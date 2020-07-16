@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow Developer Tools
+Bundle-SymbolicName: org.epsilonlabs.modelflow.dt;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: org.epsilonlabs.modelflow.dt
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.epsilonlabs.modelflow.engine,
+ org.eclipse.epsilon.erl.dt,
+ org.eclipse.text,
+ org.eclipse.jface.text,
+ org.eclipse.epsilon.dt.exeed,
+ org.eclipse.epsilon.picto,
+ org.eclipse.epsilon.common.dt
+Bundle-Vendor: epsilonlabs
+Export-Package: org.epsilonlabs.modelflow.dt,
+ org.epsilonlabs.modelflow.dt.editor,
+ org.epsilonlabs.modelflow.dt.editor.outline,
+ org.epsilonlabs.modelflow.dt.launch,
+ org.epsilonlabs.modelflow.dt.launch.tabs,
+ org.epsilonlabs.modelflow.dt.picto,
+ org.epsilonlabs.modelflow.dt.preferences,
+ org.epsilonlabs.modelflow.dt.validator,
+ org.epsilonlabs.modelflow.dt.wizard
+Bundle-Activator: org.epsilonlabs.modelflow.dt.ModelFlowPlugin
+Bundle-ActivationPolicy: lazy

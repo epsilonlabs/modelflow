@@ -1,0 +1,83 @@
+package org.epsilonlabs.modelflow.contributors.task;
+
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
+
+import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.execution.exception.ModelFlowExecutionException;
+import org.epsilonlabs.modelflow.registry.AbstractTaskFactory;
+
+//@Task(type="[%= t.shortId %]")
+public class [%= t.parent.shortId.firstToUpperCase() %][%= t.shortId.firstToUpperCase() %]Task extends AbstractTask {
+	
+	/** ATTRIBUTES */
+	
+	private File source;
+	
+	/** CONSTRUCTOR */
+	public [%= t.parent.shortId.firstToUpperCase() %][%= t.shortId.firstToUpperCase() %]Task(){
+		super();
+	}
+	
+	/** ATTRIBUTE METHODS */
+	
+	@Input
+	public File getSource(){
+		return source;
+	}
+	
+	public void setSource(File source){
+		this.source = source;
+	}
+	
+	[%for (p in t.properties) {%]
+	[%= p.type %] get[%= p.key.firstToUpperCase() %](){
+		[%= out.startPreserve("/*", "*/", p.key.firstToUpperCase(), true)%]
+		[%= out.stopPreserve()%]
+	}
+	[% } %]
+	
+	/** EXECUTION METHODS */
+		
+	public void prepareExecution() throws ModelFlowExecutionException {
+		/* protected region prepare on begin */
+		/* protected region prepare end */
+	}	
+		
+	public void execute() throws ModelFlowExecutionException {
+		[%=out.startPreserve("/*", "*/", "execution", true)%]
+		[%=out.stopPreserve()%]
+	}
+	
+	/** FACTORY */
+	
+	public static class Factory extends AbstractTaskFactory {
+
+		public Factory() {
+			super([%= t.parent.shortId.firstToUpperCase() %][%= t.shortId.firstToUpperCase() %]Task.class);
+		}
+		
+		@Override
+		public String getType() {
+			return "[%= t.shortId.toLowerCase() %]";
+		}
+		
+		@Override
+		public String getPlugin() {
+			return "[%= t.parent.shortId.toLowerCase() %]";
+		}
+		
+		@Override
+		public Collection<String> getOutputProperties() {
+			return Arrays.asList(new String[]{[% for (p in t.properties.select(pr|pr.output)) {%]"[%= p.key %]"[% if (hasMore){ %], [% }} %]});
+		}
+
+		@Override
+		public Collection<String> getInputProperties() {
+			return Arrays.asList(new String[]{[% for (p in t.properties.select(pr|pr.input)) {%]"[%= p.key %]"[% if (hasMore){ %], [% }} %]});
+		}
+
+	}
+}

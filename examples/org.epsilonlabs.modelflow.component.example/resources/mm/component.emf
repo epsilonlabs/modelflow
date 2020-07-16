@@ -1,0 +1,55 @@
+@namespace(uri="http://rx", prefix="rx")
+package rx;
+
+@gmf.diagram
+@gmf.node(label="name")
+class Component {
+   attr String name;
+   @gmf.affixed
+   val Port[*]#container ports;
+   ref Component#components container;
+   val Component[*]#container components;
+   val Connector[*]#container connectors;
+}
+
+@gmf.link(source="from", target="to", label="name", target.decoration="arrow")
+@exeed(label="
+if (self.from <> null and self.to <> null){
+	var from = '';
+	if (self.from.container <> null){
+		from = from + self.from.container.name + '.'; 
+	}
+	from = from + self.from.name;
+	var to = '';
+	if (self.to.container <> null){
+		to = to + self.to.container.name + '.'; 
+	}
+	to = to + self.to.name;	
+	return from + ' -> ' + to;
+}
+return self.name;
+")
+class Connector {
+   id attr String name;
+   ref Component#connectors container;
+   ref Port#outgoing from;
+   ref Port#incoming to;
+}
+
+@gmf.node(figure="ellipse", size="15,15",  label.icon="false", label.placement="external", label="name")
+class Port {
+   attr String name;
+   attr PortType portType;
+   ref Component#ports container;
+   ref Connector#to incoming;   
+   ref Connector#from outgoing;
+}
+
+class Filter extends Component {
+	attr Float value;
+}
+
+enum PortType {
+	IN = 1;
+	OUT = 2;
+}

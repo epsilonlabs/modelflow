@@ -1,0 +1,23 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow Epsilon Integration Tests
+Bundle-SymbolicName: org.epsilonlabs.modelflow.integ.tests
+Bundle-Version: 0.0.1.qualifier
+Automatic-Module-Name: org.epsilonlabs.modelflow.integ.tests
+Require-Bundle: org.epsilonlabs.modelflow.dependencies,
+ org.epsilonlabs.modelflow.engine,
+ org.epsilonlabs.modelflow.mmc.epsilon,
+ org.epsilonlabs.modelflow.tests,
+ org.epsilonlabs.modelflow.mmc.core,
+ org.epsilonlabs.modelflow.mmc.emf,
+ org.epsilonlabs.modelflow.mmc.gmf,
+ org.eclipse.emf.codegen.ecore,
+ org.eclipse.gmf.map,
+ org.eclipse.gmf.codegen,
+ org.apache.commons.io,
+ com.google.guava,
+ com.google.inject.multibindings.source,
+ org.apache.commons.csv,
+ org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: gradle.modelflow

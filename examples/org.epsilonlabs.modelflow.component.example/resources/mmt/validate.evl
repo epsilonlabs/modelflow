@@ -1,0 +1,41 @@
+import "util.eol";
+
+context config!Tolerance {	 
+	constraint PositiveValue  {
+		check : self.value > 0
+		message : "Tolerance does not have a positive value"
+	}
+	
+	constraint HasValue  {
+		check : self.value <> null
+		message : "Tolerance  does not have a value"
+	}
+	
+	constraint HasReference  {
+		check : self.port <> null
+		message : "Port is not assigned for this tolerance"
+	}
+	
+	constraint HasValidName  {
+		check : self.port <> null and self.port.contains(".")
+		message : "Port name is not valid"
+	}
+}
+
+context component!Port {	 
+	constraint ValidName {
+		check : valid(self.name) 
+		message : "Port name is invalid"
+	}
+}
+
+context component!Component {	 
+	constraint OnlyOneOutput {
+		check : self.ports.select(p|p.portType.name== "OUT").size()<=1 
+		message : "More outputs that allowed"
+	}
+}
+
+operation valid(name: String) : Boolean {
+	return true;
+}

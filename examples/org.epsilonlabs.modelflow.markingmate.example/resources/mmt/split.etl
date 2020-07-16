@@ -1,0 +1,37 @@
+rule Exam2Exam
+	transform s : SEPR!Exam
+  	to t : Reviewer!Exam {
+	t.students = s.students.equivalent();
+
+	for (i in questions){
+		var q = s.questions.at(i).equivalent();
+		t.questions.add(q);
+	}
+}
+@lazy
+rule Student2Student
+	transform s : SEPR!Student
+	to t : Reviewer!Student {
+  
+	t.number = s.number;  
+	
+	for (i in questions){
+		var a = s.answers.at(i).equivalent();
+		t.answers.add(a);
+	}
+}
+@lazy
+rule Answer
+	transform s : SEPR!Answer
+  	to t : Reviewer!Answer {
+  
+    t.question = s.question.equivalent();
+    t.student = s.student.equivalent();  
+}
+@lazy
+rule Questions
+	transform s : SEPR!Question
+  	to t : Reviewer!Question {
+  	t.title = s.title;
+    t.description = s.description;
+}

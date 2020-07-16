@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="ASCII"?>
+<rx:Component xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:rx="http://rx" xmi:id="_QqRpkEDeEeqGKIb7azTxtQ" name="BoilerController">
+  <ports xmi:id="_h3zFgEDeEeqGKIb7azTxtQ" name="temperature" outgoing="_wXtrsEDeEeqGKIb7azTxtQ"/>
+  <ports xmi:id="_j9owoEDeEeqGKIb7azTxtQ" name="targetTemperature" outgoing="_nNtaQEDeEeqGKIb7azTxtQ"/>
+  <ports xmi:id="_2VM90EDeEeqGKIb7azTxtQ" name="boilerStatus" outgoing="_3o4zQEDeEeqGKIb7azTxtQ"/>
+  <ports xmi:id="_54jIwEDeEeqGKIb7azTxtQ" name="action" incoming="_5S8hUEDeEeqGKIb7azTxtQ"/>
+  <components xmi:id="_UsHuYEDeEeqGKIb7azTxtQ" name="TemperatureComparator">
+    <ports xmi:id="_Xrr20EDeEeqGKIb7azTxtQ" name="temperature" incoming="_wXtrsEDeEeqGKIb7azTxtQ"/>
+    <ports xmi:id="_Z5t0oEDeEeqGKIb7azTxtQ" name="targetTemperature" incoming="_nNtaQEDeEeqGKIb7azTxtQ"/>
+    <ports xmi:id="_gQiz0EDeEeqGKIb7azTxtQ" name="difference" portType="OUT" outgoing="_0czRwEDeEeqGKIb7azTxtQ"/>
+  </components>
+  <components xmi:id="_Vq5q0EDeEeqGKIb7azTxtQ" name="BoilerActuator">
+    <ports xmi:id="_blkScEDeEeqGKIb7azTxtQ" name="diff" incoming="_0czRwEDeEeqGKIb7azTxtQ"/>
+    <ports xmi:id="_dMM5EEDeEeqGKIb7azTxtQ" name="boilerStatus" incoming="_3o4zQEDeEeqGKIb7azTxtQ"/>
+    <ports xmi:id="_fAlAwEDeEeqGKIb7azTxtQ" name="action" portType="OUT" outgoing="_5S8hUEDeEeqGKIb7azTxtQ"/>
+  </components>
+  <connectors xmi:id="_wXtrsEDeEeqGKIb7azTxtQ" name="x-x" from="_h3zFgEDeEeqGKIb7azTxtQ" to="_Xrr20EDeEeqGKIb7azTxtQ"/>
+  <connectors xmi:id="_nNtaQEDeEeqGKIb7azTxtQ" name="y-y" from="_j9owoEDeEeqGKIb7azTxtQ" to="_Z5t0oEDeEeqGKIb7azTxtQ"/>
+  <connectors xmi:id="_3o4zQEDeEeqGKIb7azTxtQ" name="z-y" from="_2VM90EDeEeqGKIb7azTxtQ" to="_dMM5EEDeEeqGKIb7azTxtQ"/>
+  <connectors xmi:id="_0czRwEDeEeqGKIb7azTxtQ" name="adder-multiplierX" from="_gQiz0EDeEeqGKIb7azTxtQ" to="_blkScEDeEeqGKIb7azTxtQ"/>
+  <connectors xmi:id="_5S8hUEDeEeqGKIb7azTxtQ" name="multiplier-sink" from="_fAlAwEDeEeqGKIb7azTxtQ" to="_54jIwEDeEeqGKIb7azTxtQ"/>
+</rx:Component>

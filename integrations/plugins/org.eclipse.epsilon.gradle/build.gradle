@@ -1,0 +1,134 @@
+plugins {
+    id 'java-gradle-plugin'
+//    id 'java'
+//   	id 'com.gradle.plugin-publish' version '0.10.0'
+    id 'com.jfrog.bintray' version '1.8.4'
+    id 'maven-publish'
+}
+
+repositories {
+    maven { // Standalone 
+    	url 'https://oss.jfrog.org/artifactory/libs-snapshot'
+    }
+    /*maven { // Epsilon Interim 
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }*/
+   /* flatDir {
+   		dirs '/Users/bea/.p2/pool/plugins/'
+		classpath fileTree(dir: '/Users/bea/.p2/pool/plugins/', include: ['*gmf*.jar','*1.6.0.202003012257.jar'])
+   		
+	}*/
+	//mavenCentral()
+    //mavenLocal()
+    jcenter()
+}
+
+dependencies {
+	compile gradleApi()
+    //compile fileTree(dir: '/Users/bea/.p2/pool/plugins/', include: ['*.jar'])
+	//compile fileTree(dir: '/Users/bea/.m2/repository/p2/osgi/bundle', include: ['**/**/*1.6.0.202001152013.jar', '**/**/*eclipse.emf*.jar','**/**/*genmodel*.jar', '**/**/*eclipse*.jar','**/**/*eclipse.core.runtime*.jar','**/**/*osgi*.java'])    
+	compile fileTree(dir: '/Users/bea/.m2/repository/p2/osgi/bundle', include: ['**/**/*.jar'], exclude: ['org.eclipse.epsilon.*/1.6.0.202001152013/'])    
+		
+ //   compile group: 'org.eclipse.epsilon', name: 'epsilon-core', version: '1.5.1'
+  //  compile group: 'org.eclipse.epsilon', name: 'epsilon-emf', version: '1.5.1'
+   // compile group: 'org.eclipse.epsilon', name: 'epsilon-simulink', version: '1.5.1'
+  	//implementation group: 'org.eclipse.epsilon', name: 'epsilon-spreadsheets', version: 'latest.integration', changing: true
+    
+	compile group: 'commons-io', name: 'commons-io', version: '2.6'	
+    compile group: 'com.google.collections', name: 'google-collections', version: '1.0'
+    compile group: 'log4j', name: 'log4j', version: '1.2.15', ext: 'jar'
+    
+ 	testCompile gradleTestKit()    
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+group 'org.epsilonlabs'
+version '1.5.1' 
+
+project.ext.name 		= 'Epsilon Gradle'
+project.ext.artifactId  = 'epsilon-gradle'
+project.ext.vcs			= 'https://github.com/beatrizsanchez/epsilon.reactive.workflow.git'
+project.ext.url         = 'https://github.com/beatrizsanchez/epsilon.reactive.workflow'
+project.ext.tags		= ['epsilonlabs', 'epsilon', 'gradle', 'model', 'management']
+
+gradlePlugin {
+    plugins {
+    	// Core Plugin
+        epsilonPlugin { 
+            id = group + '.core'
+            description = coreDescription
+            implementationClass = corePluginImpl
+        }
+        // Model Plugins
+        emfPlugin {
+            id = group + '.emf'
+            description =  'EMF ' + modelDescription
+            implementationClass	= emfPluginImpl
+        }/*
+        simulinkPlugin {
+            id = group + '.simulink'
+            description =  'Simulink ' + modelDescription
+            implementationClass	= simulinkPluginImpl
+        }*/
+    }
+}
+/*
+pluginBundle {
+    description = project.description
+    website = project.url
+    vcsUrl = project.vcs
+    tags = project.tags
+
+	plugins {
+    	// Core Plugin
+        epsilonPlugin {
+            displayName = 'Epsilon Gradle'
+            description = coreDescription
+            id          = corePluginImpl
+        }
+        // Model Plugins
+        emfPlugin {
+            displayName = 'Epsilon EMF Plugin'
+            description = 'EMF' + modelDescription
+            id          = emfPluginImpl
+        }
+    }
+} 
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['epsilonJar']
+    publish = true
+    override = true
+    pkg {
+        repo = bintrayRepo
+        userOrg = bintrayOrg
+        licenses = ['EPL']
+        labels = project.tags
+        vcsUrl = project.vcs
+    } 
+}*/
+
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+		}
+	}
+	/*repositories {
+    	maven {
+      		name 	'bintray'
+      		url 	uri(bintrayURI) 
+      	}
+    } */  
+}
+
+test {
+    testLogging { 
+        events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+    }
+}
+
+tasks.withType(Javadoc).all { enabled = false }

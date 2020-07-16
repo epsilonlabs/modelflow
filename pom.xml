@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.epsilonlabs.modelflow</groupId>
+  <artifactId>parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>ModelFlow</name>
+
+  <properties>
+    <!-- PROJECt -->
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <code.coverage>1%</code.coverage>
+    <eclipse-repo.url>http://download.eclipse.org/releases/2018-12</eclipse-repo.url>
+    <!-- DEPENDENCIES -->
+    <javadoc.opts>-Xdoclint:none</javadoc.opts>
+    <tycho.version>1.7.0</tycho.version>
+    <jacoco.version>0.8.5</jacoco.version>
+    <maven.javadoc.version>3.2.0</maven.javadoc.version>
+  </properties>
+
+  <modules>
+    <module>setup</module>
+    <module>plugins</module>
+    <module>tests</module>
+    <module>features</module>
+    <module>releng</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.jacoco</groupId>
+      <artifactId>jacoco-maven-plugin</artifactId>
+      <version>${jacoco.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-maven-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-source-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <executions>
+          <execution>
+            <id>plugin-source</id>
+            <goals>
+              <goal>plugin-source</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>target/**</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>tycho-packaging-plugin</artifactId>
+        <version>${tycho.version}</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <id>package-feature</id>
+            <configuration>
+              <finalName>${project.artifactId}_${unqualifiedVersion}.${buildQualifier}</finalName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.eclipse.tycho</groupId>
+        <artifactId>target-platform-configuration</artifactId>
+        <version>${tycho.version}</version>
+        <configuration>
+          <executionEnvironment>JavaSE-1.8</executionEnvironment>
+          <target>
+            <artifact>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>org.epsilonlabs.modelflow.targetplatform</artifactId>
+              <version>0.0.1-SNAPSHOT</version>
+            </artifact>
+          </target>
+          <environments>
+            <environment>
+              <os>linux</os>
+              <ws>gtk</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>win32</os>
+              <ws>win32</ws>
+              <arch>x86_64</arch>
+            </environment>
+            <environment>
+              <os>macosx</os>
+              <ws>cocoa</ws>
+              <arch>x86_64</arch>
+            </environment>
+          </environments>
+        </configuration>
+      </plugin>
+
+    <!--<plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
+      <version>0.8.3</version> <executions> <execution> <id>coverage-initialize</id> 
+      <goals> <goal>prepare-agent</goal> </goals> </execution> <execution> <id>coverage-report</id> 
+      <phase>post-integration-test</phase> <goals> <goal>report-aggregate</goal> 
+      </goals> </execution> <execution> <id>coverage-check</id> <goals> <goal>check</goal> 
+      </goals> <configuration> <rules> <rule> <element>CLASS</element> <includes> 
+      <include>org.epsilonlabs.modelflow.*</include> </includes> <excludes> <exclude>org.epsilonlabs.modelflow.tests.*</exclude> 
+      <exclude>org.epsilonlabs.modelflow.*.tests.*</exclude> </excludes> <limits> 
+      <limit> <counter>LINE</counter> <value>COVEREDRATIO</value> <minimum>${code.coverage}</minimum> 
+      </limit> </limits> </rule> </rules> </configuration> </execution> </executions> 
+      </plugin> -->
+
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>javadocs</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven.javadoc.version}</version>
+            <executions>
+              <execution>
+                <id>Javadocs</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>aggregate</goal>
+                </goals>
+                <configuration>
+                  <additionalparam>${javadoc.opts}</additionalparam>
+                  <doctitle>ModelFlow</doctitle>
+                  <failOnError>false</failOnError>
+                  <doclint>none</doclint>
+                  <skippedModules>org.epsilonlabs.modelflow.releng,org.epsilonlabs.modelflow.tests,org.epsilonlabs.modelflow.features,org.epsilonlabs.modelflow.setup</skippedModules>
+                  <sourceFileIncludes>
+                    <sourceFileInclude>org/epsilonlabs/modelflow/**/*.java</sourceFileInclude>
+                  </sourceFileIncludes>
+                  <tags>
+                    <tag>
+                      <name>generated</name>
+                      <placement>a</placement>
+                      <head>Generated:</head>
+                    </tag>
+                    <tag>
+                      <name>ordered</name>
+                      <placement>f</placement>
+                      <head>Ordered:</head>
+                    </tag>
+                    <tag>
+                      <name>model</name>
+                      <placement>t</placement>
+                      <head>Model:</head>
+                    </tag>
+                  </tags>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin> 
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+</project>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="rx" nsURI="http://rx" nsPrefix="rx">
+  <eClassifiers xsi:type="ecore:EClass" name="Component">
+    <eAnnotations source="gmf.diagram"/>
+    <eAnnotations source="gmf.node">
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
+        eType="#//Port" containment="true" eOpposite="#//Port/container">
+      <eAnnotations source="gmf.affixed"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Component"
+        eOpposite="#//Component/components"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//Component" containment="true" eOpposite="#//Component/container"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="connectors" upperBound="-1"
+        eType="#//Connector" containment="true" eOpposite="#//Connector/container"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Connector">
+    <eAnnotations source="gmf.link">
+      <details key="source" value="from"/>
+      <details key="target" value="to"/>
+      <details key="label" value="name"/>
+      <details key="target.decoration" value="arrow"/>
+    </eAnnotations>
+    <eAnnotations source="exeed">
+      <details key="label" value="&#xA;if (self.from &lt;> null and self.to &lt;> null){&#xA;&#x9;var from = '';&#xA;&#x9;if (self.from.container &lt;> null){&#xD;&#xA;&#x9;&#x9;from = from + self.from.container.name + '.'; &#xA;&#x9;}&#xA;&#x9;from = from + self.from.name;&#xA;&#x9;var to = '';&#xA;&#x9;if (self.to.container &lt;> null){&#xA;&#x9;&#x9;to = to + self.to.container.name + '.'; &#xA;&#x9;}&#xA;&#x9;to = to + self.to.name;&#x9;&#xD;&#xA;&#x9;return from + ' -> ' + to;&#xD;&#xA;}&#xA;return self.name;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Component"
+        eOpposite="#//Component/connectors"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="from" eType="#//Port" eOpposite="#//Port/outgoing"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="to" eType="#//Port" eOpposite="#//Port/incoming"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Port">
+    <eAnnotations source="gmf.node">
+      <details key="figure" value="ellipse"/>
+      <details key="size" value="15,15"/>
+      <details key="label.icon" value="false"/>
+      <details key="label.placement" value="external"/>
+      <details key="label" value="name"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portType" eType="#//PortType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="#//Component"
+        eOpposite="#//Component/ports"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="incoming" eType="#//Connector"
+        eOpposite="#//Connector/to"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outgoing" eType="#//Connector"
+        eOpposite="#//Connector/from"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Filter" eSuperTypes="#//Component">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloatObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="PortType">
+    <eLiterals name="IN" value="1"/>
+    <eLiterals name="OUT" value="2"/>
+  </eClassifiers>
+</ecore:EPackage>

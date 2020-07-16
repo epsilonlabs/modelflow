@@ -1,0 +1,76 @@
+pre {
+"inside etl".println();
+}
+rule connector2connector 
+	transform i : component!Connector
+	to o : extended!Connector {
+	o.name = i.name;
+	o.`to` ::= i.`to`;
+	o.container ::= i.container;
+}
+rule component2component 
+	transform i : component!Component
+	to o : extended!Component {
+	o.name = i.name;
+	o.container ::= i.container;
+	o.ports ::= i.ports;	
+	o.components ::= i.components;	
+} 
+rule port2port 
+	transform i : component!Port
+	to o : extended!Port {
+	o.name = i.name;
+	o.portType = i.portType;
+	o.outgoing ::= i.outgoing;
+}
+rule tolerance2component 
+	transform i : config!Tolerance
+	to o : extended!Filter {
+	var root = extended!Component.all.selectOne(c|c.container == null);
+	
+	var p ::= port(i.port);
+
+	root.components.add(o);
+	o.name = p.name.firstToUpperCase() + "ToleranceFilter";
+	o.value = i.value;
+	
+	var inport = new extended!Port();
+	inport.name = "filter";
+	inport.portType = extended!PortType#IN;
+	o.ports.add(inport);
+	
+	var outport = new extended!Port();
+	outport.name = "result";
+	outport.portType = extended!PortType#OUT;
+	o.ports.add(outport);
+	
+	var connector = new extended!Connector();
+	if (p.outgoing <> null){
+		connector.from = outport;
+		connector.`to` = p.outgoing.`to`; 
+		p.outgoing.`to` = inport;
+		connector.setContainer();
+	} else {
+		//TODO
+	}
+}
+
+operation extended!Connector setContainer() {
+	var fromContainer = self.from.container.container;
+	var toContainer = self.`to`.container.container;
+	if (fromContainer == toContainer){
+		self.container = fromContainer;
+	} else {
+		if (self.from.container.contains(self.`to`.container)){
+			self.container = self.from.container;
+		} else {
+			self.container = self.`to`.container;
+		}
+	}	
+}
+
+operation port(name : String) : component!Port {
+	var spli = name.split("\\.");
+	return component!Component.all.selectOne(c| c.name== spli.at(0))
+		.ports.selectOne(s| s.name == spli.at(1));	
+}

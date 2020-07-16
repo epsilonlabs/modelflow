@@ -1,0 +1,67 @@
+import "util.eol";
+
+context config!Tolerance {
+	constraint HasValue {
+		check : self.value.isDefined()
+		message : "Tolerance  does not have a value"
+	}
+
+	constraint PositiveValue {
+		guard : self.satisfies("HasValue")
+		check : self.value > 0
+		message : "Tolerance does not have a positive value"
+	}	
+
+	constraint HasValidName {
+		check : self.port <> null and self.port.contains(".")
+		message : "Port name is not valid"
+	}
+
+	constraint HasReference {
+		guard: self.satisfies("HasValidName")
+		check : self.port <> null and port(self.port).isDefined()
+		message : "Port is not assigned for this tolerance"
+	}
+	
+}
+
+context component!Port {	 
+	constraint HasName {
+		check : self.name.isDefined() 
+		message : "Port has no name"
+	}
+	constraint ValidName {
+		guard : self.satisfies("HasName")
+		check : self.name.endsWith("Port") 
+		message : "Port name is invalid: " + self.name
+	}
+	critique IsConnected {
+		check : self.incoming.size()>0 or self.outgoing.size()>0 
+		message : "Port is not connected"
+	}
+}
+
+context component!Connector {	 
+	constraint HasSource {
+		check : self.from.isDefined() 
+		message : self.name + " has no source"
+	}
+	constraint HasTarget {
+		check : self.to.isDefined() 
+		message : self.name + " has no target"
+	}
+}
+
+context component!Component {	 
+	constraint HasPorts {
+		guard : self.container <> null
+		check : self.ports.size()> 0 
+		message : "Has Ports"
+	}
+}
+
+operation port(name : String) : component!Port {
+	var spli = name.split("\\.");
+	return component!Component.all.selectOne(c| c.name== spli.at(0))
+		.ports.selectOne(s| s.name == spli.at(1));	
+}

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ModelFlow Examples
+Bundle-SymbolicName: gradle.workflow
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: epsilonlabs
+Require-Bundle: org.epsilonlabs.modelflow.dependencies;bundle-version="0.0.1",
+ org.epsilonlabs.modelflow.engine;bundle-version="0.0.1"
+Automatic-Module-Name: org.eclipse.epsilon.modelflow.examples
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8

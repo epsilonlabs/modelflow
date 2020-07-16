@@ -1,0 +1,28 @@
+rule Main{ 
+	template: "executionTrace.template.egl"
+	parameters {
+		return Map {
+			"path" = Sequence{"Execution Trace"},
+			"icon" = "diagram-ff0000",
+			"format" = "graphviz-dot"
+		};
+	}
+}
+
+rule exec transform e : WorkflowExecution { 
+	template: "executionTrace.one.template.egl"
+	parameters {
+		var count = "";
+		for (ex in WorkflowExecution.all){
+			if (ex == e){
+				count = loopCount;
+			}
+		}
+		return Map {
+			"path" = Sequence{"Executions", "Execution " + count},
+			"icon" = "diagram-ff0000",
+			"format" = "graphviz-dot"
+		};
+	}
+}
+

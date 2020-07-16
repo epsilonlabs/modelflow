@@ -1,0 +1,202 @@
+param base;
+param copyrightStatement;
+
+model ECore is epsilon:emf {
+	src : base + ".ecore"
+	metamodelUri : "http://www.eclipse.org/emf/2002/Ecore"
+}
+model GenModel is epsilon:emf {
+	src : base + ".genmodel"
+	metamodelUri : "http://www.eclipse.org/emf/2002/GenModel"
+}
+
+model GmfGen is epsilon:emf {
+	src : base + ".gmfgen"
+	metamodelUri : "http://www.eclipse.org/gmf/2009/GenModel"
+}
+
+model GmfMap is epsilon:emf {
+	src :  base + ".gmfmap"
+	metamodelUri : "http://www.eclipse.org/gmf/2008/mappings"
+}
+
+model GmfTool is epsilon:emf {
+	src : base + ".gmftool"
+	metamodelUri : "http://www.eclipse.org/gmf/2005/ToolDefinition"
+}
+
+model GmfGraph is epsilon:emf {
+	src : base + ".gmfgraph"
+	metamodelUri : "http://www.eclipse.org/gmf/2006/GraphicalDefinition"
+}
+
+/* ======== Tasks ======== */
+
+// GenPackages
+task genPackages is epsilon:eol
+	in ECore
+{
+ 	src : "resources/task/genPackages.eol"
+}
+
+// copyright 
+task copyright is core:fileReader
+	in ECore as Ecore
+{
+	guard: copyrightStatement.isDefined()
+ 	src {
+ 		if (copyrightStatement.isDefined()){
+ 			return copyrightStatement;
+ 	 	} else {
+ 	 		return "";
+ 	 	}
+ 	 }
+}
+
+// Emfatic2Ecore
+
+task Emfatic2Ecore is emf:emfatic2ecore
+	in ECore  as Ecore
+{
+ 	src : base + ".emf"	 
+}
+
+// ValidateEcoreForGenModel
+task ValidateEcoreForGenModel is epsilon:evl
+	in ECore  as Ecore
+{
+ 	src : "resources/task/Ecore2GenModel.evl"
+}
+
+// Ecore2GenModel
+task Ecore2GenModel is epsilon:etl
+	in ECore as Ecore
+	out GenModel 
+	dependsOn ValidateEcoreForGenModel
+{
+ 	src : "resources/task/Ecore2GenModel.etl"
+ 	params {
+ 		var map = new Map;
+ 		map.put("pluginName", "org.epsilonlabs.modelflow.test.filesystem");
+		map.put("foreignModel", "Ecore2GenModel");
+		map.put("usedGenPackages", genPackages.result);
+		if (copyrightStatement.isDefined()){
+			map.put("copyright", copyright.result);
+		} else {
+			map.put("copyright", "");
+		}	
+		return map;
+ 	}
+}
+
+// FixGenModel 
+task FixGenModel is epsilon:eol
+	in ECore as Ecore
+	inout GenModel
+{
+ 	src : "resources/task/FixGenModel.eol"
+ 	params {
+ 		var map = new Map;
+		if (copyrightStatement.isDefined()){
+			map.put("copyright", copyright.result);
+		} else {
+			map.put("copyright", "");
+		}
+		return map;
+ 	}
+}
+
+// PolishGenModel 
+
+task PolishGenModel is epsilon:eol
+	in ECore inout GenModel dependsOn FixGenModel
+{
+ 	guard : self.src.exists()
+ 	src : "resources/task/polish/FixGenModel.eol"
+ 	params {
+ 		var map = new Map;
+		if (copyrightStatement.isDefined()){
+			map.put("copyright", copyright.result);
+		} else {
+			map.put("copyright", "");
+		}
+		return map;
+ 	}
+}
+
+// ValidateEcoreForGMFToolGraphMap 
+task ValidateEcoreForGMFToolGraphMap is epsilon:evl
+	in ECore as Ecore
+{
+ 	src : "resources/task/ECore2GMF.evl"
+}
+
+//Ecore2GMFToolGraphMap
+task Ecore2GMFToolGraphMap is epsilon:eol
+	in ECore as Ecore
+	out GmfMap and GmfGraph and GmfTool
+	dependsOn ValidateEcoreForGMFToolGraphMap
+{
+ 	src : "resources/task/ECore2GMF.eol"
+}
+
+//PolishGMFToolGraphMap
+task PolishGMFToolGraphMap is epsilon:eol
+	in ECore 
+	inout GmfMap and GmfGraph and GmfTool
+	dependsOn Ecore2GMFToolGraphMap
+{
+ 	guard : self.src.exists()
+ 	src : "resources/task/polish/ECore2GMF.eol"
+}
+
+// FixGmfGen 
+task FixGmfGen is epsilon:eol
+	in ECore as Ecore
+		and GenModel
+		and GmfMap
+		and GmfGraph
+		and GmfTool
+		and GmfGen
+{
+ 	guard : self.src.exists()
+ 	src : "resources/task/FixGMFGen.eol"
+ 	params { 
+ 		var map = new Map;
+		if (copyrightStatement.isDefined()){
+			map.put("copyright", copyright.result);
+		} else {
+			map.put("copyright", "");
+		}
+		return map;
+	}
+}
+
+// PolishGmfGen
+task PolishGmfGen is epsilon:eol
+	in ECore as Ecore
+		and GenModel 
+		and GmfMap 
+		and GmfGraph 
+		and GmfTool 
+		and GmfGen
+	dependsOn FixGmfGen
+{
+ 	guard : self.src.exists()
+ 	src : "resources/task/polish/FixGMFGen.eol"
+}
+
+// GenerateDomainModelCode 
+task GenerateDomainModelCode is emf:genCode
+	in GenModel;
+
+// GmfMap2GmfGen 
+task GmfMap2GmfGen is gmf:gmfMap2gmfGen
+	in ECore as Ecore 
+		and GmfMap 
+		and GenModel 
+	out GmfGen;
+
+// GenerateDiagramCode
+task GenerateDiagramCode is gmf:genDiagram
+	in GmfGen;

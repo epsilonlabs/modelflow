@@ -1,0 +1,49 @@
+import "util.eol";
+
+rule component transform c : Component {
+
+	guard : c.components.isEmpty() and (not c.isFilter())
+
+	template : "template/reactive/component.egl"
+
+	parameters : Map {
+		"name" = c.name
+	}
+
+	target : "reactive/component/" + c.name + ".java"
+}
+
+rule sensor transform s: Port {
+	guard : s.hasOutgoing() and s.container.isRoot()
+	template : "template/reactive/sensor.egl"
+	
+	parameters : Map {
+		"name" = s.name
+	}
+
+	target : "reactive/sensor/" + s.name.firstToUpperCase() + "Sensor.java"
+}
+
+rule sink transform s: Port {
+	
+	guard : s.hasIncoming() and s.container.isRoot()
+	template : "template/reactive/sink.egl"
+	
+	parameters : Map{
+		"name" = s.name
+	}
+
+	target : "reactive/sink/" + s.name.firstToUpperCase() + "Sink.java"
+}
+
+rule main transform m : Component {
+
+	guard : not m.components.isEmpty()
+	template : "template/reactive/main.egl"
+	
+	parameters : Map{
+		"name" = m.name
+	}
+
+	target : "reactive/" + m.name.firstToUpperCase() + "Reactive.java"
+}

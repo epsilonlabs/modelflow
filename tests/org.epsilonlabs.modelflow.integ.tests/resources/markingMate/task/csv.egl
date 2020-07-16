@@ -1,0 +1,5 @@
+[% /* Original file from https://github.com/kolovos/markingmate */ %]
+,[%=exam.questions.collect(q|q.title).concat(",")%],Total
+[%for (student in Student.all){%]
+[%=student.number%],[%=exam.questions.collect(q|student.answers.selectOne(a|a.question = q).marks).concat(",")%],[%=student.answers.marks.sum()%]
+[%}%]

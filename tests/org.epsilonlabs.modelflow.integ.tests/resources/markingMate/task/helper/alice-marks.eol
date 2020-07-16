@@ -1,0 +1,4 @@
+for (a in Answer.all){ 
+  a.feedback = "Poor";
+  a.marks = 70;
+}

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="trace" nsURI="http://eclipse.org/epsilon/modelflow/exec/trace/1.0"
+    nsPrefix="executionTrace">
+  <eClassifiers xsi:type="ecore:EClass" name="ExecutionTrace">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="clock"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="executions" upperBound="-1"
+        eType="#//WorkflowExecution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="latest" upperBound="-1"
+        eType="#//ResourceSnapshot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="file" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Stateful" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="endState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Timed" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Snapshot" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceSnapshot" eSuperTypes="#//Snapshot">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="model"/>
+      <details key="label" value="return self.resource.name + '(' + self.stamp +')';"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Resource"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PropertySnapshot" eSuperTypes="#//Snapshot">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="parameter"/>
+      <details key="label" value="return self.key + '=' + self.stamp;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="WorkflowExecution" eSuperTypes="#//Stateful #//Timed">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="operation"/>
+      <details key="label" value="return 'Workflow' &#xA;+ ' (' + self.endState +') ' &#xA;+ ((self.end-self.start)/1000)+ 's';"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//TaskExecution" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Workflow"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskExecution" eSuperTypes="#//Stateful #//Timed">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="operation"/>
+      <details key="label" value="return self.task.name &#xA;+ ' (' + self.endState +') ' &#xA;+ (self.end-self.start) + 'ms';"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputModels" upperBound="-1"
+        eType="#//ResourceSnapshot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputModels" upperBound="-1"
+        eType="#//ResourceSnapshot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputProperties" upperBound="-1"
+        eType="#//PropertySnapshot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputProperties" upperBound="-1"
+        eType="#//PropertySnapshot" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Task"
+        containment="true"/>
+  </eClassifiers>
+</ecore:EPackage>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ASCII"?>
+<generator:Contributor xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:generator="http://eclipse.org/epsilon/modelflow/generator/1.0">
+  <entries clazz="org.eclipse.epsilon.eol.EolModule" type="PROGRAM" shortId="eol" readableName="Epsilon Object Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.ecl.EclModule" type="PROGRAM" shortId="ecl" readableName="Epsilon Comparison Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.evl.EvlModule" type="PROGRAM" shortId="evl" readableName="Epsilon Validation Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.etl.EtlModule" type="PROGRAM" shortId="etl" readableName="Epsilon Transformation Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="PROGRAM" shortId="egl" readableName="Epsilon Genration Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.egl.EgxModule" type="PROGRAM" shortId="egx" readableName="Epsilon Generation Execution Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.epl.EplModule" type="PROGRAM" shortId="epl" readableName="Epsilon Pattern Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.eml.EmlModule" type="PROGRAM" shortId="eml" readableName="Epsilon Merge Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="PROGRAM" shortId="eunit" readableName="Epsilon Unit Testing Framework" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="PROGRAM" shortId="flock" readableName="Epsilon Flock Language for Model Migration" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="PROGRAM" shortId="emg" readableName="Epsilon Model Generation Language" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.emc.simulink.model.SimulinkModel" type="MODEL" shortId="simulink" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="MODEL" shortId="ptcim" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.emc.uml.UmlModel" type="MODEL" shortId="uml" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.emc.emf.EmfModel" type="MODEL" shortId="emf" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="METAMODEL" shortId="ecore" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries clazz="org.eclipse.epsilon.emc.emf.xml.XmlModel" type="MODEL" shortId="xml" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="METAMODEL" shortId="xsd" pluginFullyQualifiedId="org.eclipse.epsilon"/>
+  <entries type="PROGRAM" shortId="atl" readableName="ATLAS Transformation Language" pluginFullyQualifiedId="org.eclipse.atl"/>
+  <entries type="MODEL" shortId="emf" pluginFullyQualifiedId="org.eclipse.atl"/>
+  <entries type="MODEL" shortId="ecore" pluginFullyQualifiedId="org.eclipse.atl"/>
+  <entries shortId="ecore2java" readableName="Generate Java Code from Ecore-based models" pluginFullyQualifiedId="org.eclipse.emf"/>
+  <entries shortId="java2java" readableName="Generate Java Code from Java-annotated models" pluginFullyQualifiedId="org.eclipse.emf"/>
+  <entries type="MODEL" shortId="emf" pluginFullyQualifiedId="org.eclipse.emf"/>
+  <entries type="METAMODEL" shortId="ecore" pluginFullyQualifiedId="org.eclipse.emf"/>
+  <entries shortId="map2gen" readableName="Generate GmfGen from GmfMap" pluginFullyQualifiedId="org.eclipse.gmf"/>
+  <entries shortId="codegen" readableName="Generate code from GmfGen" pluginFullyQualifiedId="org.eclipse.gmf"/>
+  <entries shortId="ecoreGenerator" readableName="Generate Ecore from Emfatic" pluginFullyQualifiedId="org.eclipse.emfatic"/>
+  <entries type="METAMODEL" shortId="emfatic" pluginFullyQualifiedId="org.eclipse.emfatic"/>
+  <entries shortId="import" readableName="Simulink to EMF" pluginFullyQualifiedId="hu.bme.mit.massif"/>
+  <entries shortId="export" readableName="EMF to Simulink" pluginFullyQualifiedId="hu.bme.mit.massif"/>
+  <entries type="MODEL" shortId="simulink" pluginFullyQualifiedId="hu.bme.mit.massif"/>
+  <entries type="MODEL" shortId="emf" pluginFullyQualifiedId="hu.bme.mit.massif"/>
+</generator:Contributor>

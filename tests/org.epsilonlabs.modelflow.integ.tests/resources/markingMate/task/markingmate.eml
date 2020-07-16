@@ -1,0 +1,79 @@
+// Original file from https://github.com/kolovos/markingmate
+//target merge
+//left, right =  alice, bob
+//source is alias for left and right
+rule Exam 
+	merge l : ALICE!Exam
+	with r : BOB!Exam
+	into t : MARKED!Exam {
+	
+	t.questions ::= l.questions;
+	t.students ::= l.students;
+}
+
+rule Question 
+	merge l : ALICE!Question
+	with r : BOB!Question
+	into t : MARKED!Question {
+	
+	t.title = l.title;
+	t.description = l.description;
+	t.marks = l.marks;
+}
+
+rule Student 
+	merge l : ALICE!Student
+	with r : BOB!Student
+	into t : MARKED!Student {
+	
+	t.number = l.number;
+	
+}
+
+rule Answer 
+	merge l : ALICE!Answer
+	with r : BOB!Answer
+	into t : MARKED!Answer {
+	
+	if (l.marks <> 0 and r.marks <> 0) {
+		throw "Different marks found for answer " +
+			l.question.title + " of student " + l.student.number + ": " + l.marks + " <-> " + r.marks;		
+	}
+	else {
+		t.marks = Sequence{l.marks, r.marks}.max();
+		if (l.feedback.isDefined()) {
+			t.feedback = l.feedback;
+		}
+		else {
+			t.feedback = r.feedback;
+		}
+	}
+	
+	t.question = l.question.equivalent();
+	t.student = l.student.equivalent();
+	
+}
+
+rule Answer 
+	transform s : BOB!Answer
+	to t : MARKED!Answer {
+	
+	t.marks = s.marks;
+	t.feedback = s.feedback;
+	
+	t.question = s.question.equivalent();
+	t.student = s.student.equivalent();
+	
+}
+
+rule Answer2 
+	transform s : ALICE!Answer
+	to t : MARKED!Answer {
+	
+	t.marks = s.marks;
+	t.feedback = s.feedback;
+	
+	t.question = s.question.equivalent();
+	t.student = s.student.equivalent();
+	
+}

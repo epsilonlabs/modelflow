@@ -1,0 +1,40 @@
+pre {
+	("Setting up transformation").println;
+	var src : String = "../../src/org/eclipse/epsilon/modelflow/contributors/";
+	var srcGen : String = "../../src-gen/org/eclipse/epsilon/modelflow/contributors/";
+	var dtSrcGen : String = "../../../org.epsilonlabs.modelflow.contributors.dt/src-gen/org/eclipse/epsilon/modelflow/contributors/dt/";
+	
+	Plugin.all.size().println("plugins:");
+	(srcGen + "plugin/"  + "Plugin.java").println();
+	("Starting Transformation").println;
+}
+rule plugins
+	transform p : Plugin {
+	template : "../templates/plugin.egl"
+	target : srcGen + "plugin/" + p.shortId.firstToUpperCase() + "Plugin.java"
+}
+rule tasks
+	transform t : TaskDefinition {
+	template : "../templates/task.egl"
+	target : src + "task/" + t.parent.shortId.firstToUpperCase() + t.shortId.firstToUpperCase() + "Task.java"
+}
+rule program
+	transform t : ProgramTaskDefinition {
+	template : "../templates/task.egl"
+	target : src + "task/" + t.parent.shortId.firstToUpperCase() + t.shortId.firstToUpperCase() + "Task.java"
+}
+rule resources
+	transform r : ModelDefinition {
+	template : "../templates/modelResource.egl"
+	target : src + "resource/" + r.parent.shortId.firstToUpperCase() + r.shortId.firstToUpperCase() + "ModelResource.java"
+}
+
+rule resourcesDt
+	transform r : ModelDefinition {
+	template : "../templates/modelResourceDt.egl"
+	target : dtSrcGen + "resource/" + r.parent.shortId.firstToUpperCase() + r.shortId.firstToUpperCase() + "UiModelResource.java"
+}
+
+post { 
+	("Generation done").println(); 
+}

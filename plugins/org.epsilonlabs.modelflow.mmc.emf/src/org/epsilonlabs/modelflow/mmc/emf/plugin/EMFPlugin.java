@@ -1,0 +1,45 @@
+package org.epsilonlabs.modelflow.mmc.emf.plugin;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
+import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.mmc.emf.task.Emfatic2EcoreTask;
+import org.epsilonlabs.modelflow.mmc.emf.task.GenerateModelCodeTask;
+
+public class EMFPlugin extends AbstractPlugin {
+
+	@Override
+	public String setFullyQualifiedId() {
+		return "org.eclipse.gmf";
+	}
+
+	@Override
+	public String getReadableName() {
+		return "EMF";
+	}
+
+	@Override
+	public String getVersion() {
+		return "1.6.0";
+	}
+
+	@Override
+	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
+		return Arrays.asList();
+	}
+
+	@Override
+	public List<Class<? extends ITaskFactory>> getTaskFactories() {
+		return Arrays.asList(Emfatic2EcoreTask.Factory.class, GenerateModelCodeTask.Factory.class);
+	}
+
+	@Override
+	public List<Class<?>> getResourceInterfaces() {
+		return Collections.emptyList();
+	}
+
+}

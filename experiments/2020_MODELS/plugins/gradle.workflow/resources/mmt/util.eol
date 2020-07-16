@@ -1,0 +1,50 @@
+operation connectorName(c: Connector) : String {
+	var result : String = "";
+	if (c.from.container == null){
+	 	result = result + "Sensor";
+	} else{
+		result = result + c.from.container.name.firstToUpperCase();	
+	}
+	result = result + c.from.name.firstToUpperCase();
+	result = result + "To";
+	if (not c.`to`.container.isDefined()){
+		result = result + "Sink";
+	} else {
+		result = result + c.`to`.container.name.firstToUpperCase();		
+	}
+	result = result + c.`to`.name.firstToUpperCase();
+	return result;
+}
+
+operation Component isRoot() : Boolean{
+	return Component.all.selectOne(c|c.container == null) == self;
+}
+operation Port hasIncoming() : Boolean {
+	return self.incoming <> null;
+}
+operation Port hasOutgoing() : Boolean {
+	return self.outgoing <> null;
+}
+operation Port isInport() : Boolean {
+	return self.portType.name == "IN";
+}
+operation Port isOutport() : Boolean {
+	return self.portType.name == "OUT";
+}
+operation Port isSink() : Boolean {
+	return self.hasIncoming() and self.container.components.contains(self.incoming.from.container);	
+}
+operation Port isSensor() : Boolean {
+	return self.hasOutgoing() and self.container.components.contains(self.outgoing.`to`.container);
+}
+operation Port qualifier() : String {
+	if (self.isSink()){
+		return "Sink";
+	} else if (self.isSensor()){
+		return "Sensor";
+	}
+}
+
+operation Component isFilter() : Boolean {
+	return self.name.endsWith("ToleranceFilter");
+}

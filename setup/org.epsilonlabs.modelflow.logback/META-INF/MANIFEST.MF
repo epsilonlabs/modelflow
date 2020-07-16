@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Modelflow Logback Configuration
+Bundle-SymbolicName: org.epsilonlabs.modelflow.logback;singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Activator: org.epsilonlabs.modelflow.logback.Activator
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Eclipse-BundleShape: dir
+Automatic-Module-Name: org.epsilonlabs.modelflow.logback
+Require-Bundle: org.eclipse.core.runtime,
+ ch.qos.logback.classic;visibility:=reexport,
+ ch.qos.logback.core;visibility:=reexport
+Export-Package: org.epsilonlabs.modelflow.logback
+Import-Package: org.slf4j;version="1.7.2",
+ org.slf4j.spi;version="1.7.2"
+Bundle-Activator: org.epsilonlabs.modelflow.logback.Activator

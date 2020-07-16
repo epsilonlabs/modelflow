@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="ASCII"?>
+<tolerance:Configurations xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:tolerance="tolerance" xmi:id="_gChU8EQKEeqz5PXwrucKkg">
+  <tolerances xmi:id="_glp3MEQKEeqz5PXwrucKkg" port="BoilerController.temperature" value="0.5"/>
+</tolerance:Configurations>

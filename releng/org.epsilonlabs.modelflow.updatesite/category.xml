@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description name="ModelFlow" url="https://github.com/beatrizsanchez/ModelFlow">
+      Modelflow: Model Management Build Tools
+   </description>
+   <feature url="features/org.epsilonlabs.modelflow.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.feature" version="0.0.1.qualifier">
+      <category name="org.epsilonlabs.modelflow"/>
+   </feature>
+   <bundle id="org.epsilonlabs.modelflow.mmc.acceleo">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.atl">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.emf">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.epsilon">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.gmf">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.qvto">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <bundle id="org.epsilonlabs.modelflow.mmc.xtext">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </bundle>
+   <category-def name="org.epsilonlabs.modelflow" label="ModelfFlow">
+      <description>
+         Parser and execution engines for ModelFlow.
+      </description>
+   </category-def>
+   <category-def name="org.epsilonlabs.modelflow.mmc" label="ModelFlow Connectors">
+      <description>
+         Model Management Tasks and Model Types
+      </description>
+   </category-def>
+   <repository-reference location="http://download.eclipse.org/emfatic/update" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/epsilon/updates/" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/hawk/2.0.0/updates/" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/mmt/qvto/updates/releases" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/releases/2020-03" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/tools/orbit/downloads/drops/R20200529191137/repository" enabled="true" />
+</site>

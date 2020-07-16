@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="dom" nsURI="http://eclipse.org/epsilon/modelflow/1.0" nsPrefix="dom">
+  <eClassifiers xsi:type="ecore:EClass" name="Workflow" eSuperTypes="#//Task">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
+        eType="#//Task" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resources" upperBound="-1"
+        eType="#//AbstractResource" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taskDependencies" upperBound="-1"
+        eType="#//TaskDependency" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resourceDependencies" upperBound="-1"
+        eType="#//ResourceDependency" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Named" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractResource" abstract="true" eSuperTypes="#//Named"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractTask" abstract="true" eSuperTypes="#//Named"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//AbstractTask">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="operation"/>
+      <details key="label" value="return self.name +' ('+  self.definition.parent.shortId + ':' + self.definition.shortId + ')';"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="produces" upperBound="-1"
+        eType="#//ResourceReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consumes" upperBound="-1"
+        eType="#//ResourceReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="modifies" upperBound="-1"
+        eType="#//ResourceReference" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="guard" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="enabled" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="traceable" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="dependencies" upperBound="-1"
+        eType="#//TaskDependency" eOpposite="#//TaskDependency/before"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceReference">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resource" eType="#//AbstractResource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="aliases" upperBound="-1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//AbstractResource">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="model"/>
+      <details key="label" value="return 'Resource ' + self.name;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="definition" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="declared" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DerivedResource" eSuperTypes="#//AbstractResource">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="text"/>
+      <details key="label" value="return 'Derived resource ' + self.name;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="reference" eType="#//Resource"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="declared" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBooleanObject"
+        defaultValueLiteral="false"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ModelResource" eSuperTypes="#//Resource">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="model"/>
+      <details key="label" value="&#xA;var l = 'Model ' + self.name; &#xA;if (self.definition.isDefined()){&#xD;&#xA;&#x9;l = l +' ('+  self.definition.parent.shortId + ':' + self.definition.shortId +')'; &#xD;&#xA;}&#xA;if (self.conformsTo.isDefined()){&#xD;&#xA;&#x9;l = l + ' conforms to ' + self.conformsTo.name;&#xA;&#x9;/*if (self.conformsTo.parent.isDefined()){&#xD;&#xA;&#x9;&#x9;l = l +'(' + self.conformsTo.definition.parent.shortId + ':' + self.conformsTo.definition.shortId + ')';&#xD;&#xA;&#x9;} */&#xD;&#xA;}&#xA;return l;&#xA;"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MetamodeResource" eSuperTypes="#//Resource">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="emfmodel"/>
+      <details key="label" value="return 'Metamodel ' + self.name;"/>
+    </eAnnotations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaskDependency">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="transition"/>
+      <details key="label" value="return self.before.name + ' depends ' + self.after.name;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="before" eType="#//Task"
+        eOpposite="#//Task/dependencies"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="after" eType="#//Task"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ResourceDependency">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="transition"/>
+      <details key="label" value="return self.source.name + ' depends ' + self.target.name;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//AbstractResource"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="#//AbstractResource"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Property">
+    <eAnnotations source="exeed">
+      <details key="classIcon" value="parameter"/>
+      <details key="label" value="&#xA;var optional = '';&#xA;if (self.optional){&#xD;&#xA;&#x9;optional = '?';&#xD;&#xA;} &#xA;return self.key + optional +' : ' + self.value;&#xA;"/>
+    </eAnnotations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="evaluatedValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
+  </eClassifiers>
+</ecore:EPackage>
