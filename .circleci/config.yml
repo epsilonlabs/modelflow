@@ -10,9 +10,7 @@ jobs:
     steps:
       - run: 
           command: |
-            cd ./setup/org.epsilonlabs.modelflow.dependencies/
-            ./download-dependencies.sh
-            cd ../..
+            cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
     
 workflows:
   modelflow:
