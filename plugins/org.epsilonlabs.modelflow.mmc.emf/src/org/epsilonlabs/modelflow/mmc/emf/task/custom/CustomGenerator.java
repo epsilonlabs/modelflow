@@ -201,7 +201,7 @@ public class CustomGenerator extends Generator {
 		EObject eObject = (EObject) currentObject;
 		String id = eObject.eResource().getURIFragment(eObject);
 		Trace trace = new ManagementTraceBuilder().addSourceModelElement(id, this.resource, null)
-				.addTargetElement(workspacePath.toString(), null, null)
+				.addTargetElement(workspacePath.toString(), -1, -1)
 				.managementLink("generate", currentProjectType.toString()).build();
 		traces.add(trace);
 		generatedOutputs.add(workspacePath);

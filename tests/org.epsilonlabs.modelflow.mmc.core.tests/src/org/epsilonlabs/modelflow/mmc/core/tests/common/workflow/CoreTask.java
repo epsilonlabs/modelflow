@@ -8,7 +8,7 @@
 package org.epsilonlabs.modelflow.mmc.core.tests.common.workflow;
 
 
-import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopy;
+import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopyToTestDir;
 
 import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
@@ -19,7 +19,7 @@ public class CoreTask {
 		return new WorkflowBuilder()
 			
 			.addTask("copyright", "core:fileReader")
-			.addProperty("src", locateAndCopy("copyright.txt"))
+			.addProperty("src", locateAndCopyToTestDir("copyright.txt"))
 			
 			.build();
 	}
@@ -29,6 +29,26 @@ public class CoreTask {
 			
 			.addTask("hi", "core:print")
 			.addProperty("text", "Hello")
+			
+			.build();
+	}	
+	
+	public static Workflow getSleepTask() {
+		return new WorkflowBuilder()
+			
+			.addTask("sleep", "core:sleep")
+			.addProperty("timeout", 3)
+			.addProperty("unit", "seconds")
+			
+			.build();
+	}	
+	
+	public static Workflow getXsdTask() {
+		return new WorkflowBuilder()
+			
+			.addTask("valdiate", "core:xsdValidate")
+			.addProperty("xsd", locateAndCopyToTestDir("students.xsd"))
+			.addProperty("xml", locateAndCopyToTestDir("students.xml"))
 			
 			.build();
 	}	

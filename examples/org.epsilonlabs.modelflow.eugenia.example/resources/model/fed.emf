@@ -1,0 +1,31 @@
+@emf.gen(basePackage="org.eclipse.epsilon.eugenia.examples")
+@namespace(uri="fed", prefix="")
+package fed;
+
+@gmf.diagram
+class Configuration {
+	val Feature[*] features;
+	val Plugin[*] plugins;
+}
+
+@gmf.node(label="name")
+abstract class NamedElement {
+	attr String name;
+}
+
+class Feature extends NamedElement {
+
+	@gmf.compartment(layout="free")
+	val Plugin[*] plugins;
+
+	@gmf.link(target.decoration="arrow", style="solid")
+	ref Feature[*] depends;
+
+	@gmf.link(target.decoration="arrow", source.decoration="filledrhomb")
+	ref Feature[*] includes;
+	ref Plugin[*] pluginDependencies;
+}
+
+class Plugin extends NamedElement {
+}
+

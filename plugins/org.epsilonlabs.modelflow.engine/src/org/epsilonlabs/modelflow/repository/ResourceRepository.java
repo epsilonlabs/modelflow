@@ -7,10 +7,11 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.repository;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.dom.api.IResource;
@@ -27,14 +28,14 @@ public class ResourceRepository {
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceRepository.class);
 
 	protected ResourceFactoryRegistry factoryRegistry;
-	protected Map<String, Object> /* <ResourceIdentity, Resource> */ derivedResources;
-	protected Map<String, IResource<?>> /* <ResourceIdentity, Resource> */ resources;
-	protected Map<String, String> /* <ResourceIdentity, Resource> */ hashes;
+	protected Map<String, Object> derivedResources;
+	protected Map<String, IResource<?>> resources;
+	protected Map<String, String> hashes;
 	
 	public ResourceRepository(ResourceFactoryRegistry registry) {
 		factoryRegistry = registry;
-		resources = new HashMap<>();
-		derivedResources = new HashMap<>();
+		resources = new ConcurrentHashMap<>(); // ConcurrentHashMap
+		derivedResources = new ConcurrentHashMap<>();
 	}
 
 	public void addDerived(DerivedResourceNode node, Object resource) {
@@ -74,6 +75,7 @@ public class ResourceRepository {
 
 	public void clear() {
 		LOG.info("Clearing Resource Repository");
+		this.resources.values().stream().forEach(IResource::dispose);
 		this.resources.clear();
 		this.derivedResources.clear();
 	}
@@ -83,18 +85,27 @@ public class ResourceRepository {
 	}
 	
 	public void clearNonInputModels() {
-		Set<String> keys = this.resources.entrySet().stream().filter(e->e.getValue().getKind().isInput()).map(e->e.getKey()).collect(Collectors.toSet());
-		for (String k : keys) {
-			this.resources.remove(k);
-		}
+		Set<String> keys = this.resources.entrySet().stream()
+				.peek(System.out::println)
+				// A null kind would indicate that the resource was never loaded, a task may have been skipped
+				.filter(e -> e.getValue().getKind()!= null)
+				// Filter those that are non input models
+				.filter(e-> !e.getValue().getKind().isInput())
+				// Dispose those that are loaded
+				.peek(e-> {
+					if (e.getValue().isLoaded()) {						
+						e.getValue().dispose();
+					}
+				})
+				.map(Entry::getKey)
+				.collect(Collectors.toSet());
+		
+		keys.forEach(resources::remove);
 	}
-
-	/**
-	 * 
-	 */
+	
 	public void flush() {
 		clearDerived();
 		clearNonInputModels();		
 	}	
-
+	
 }

@@ -13,18 +13,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonResourceFactory;
-import org.epsilonlabs.modelflow.mmc.epsilon.resource.wip.EmfHashUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EmfHashUtil;
 
 public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
-
-	private static final Logger LOG = LoggerFactory.getLogger(EpsilonEmfModelResource.class);
 
 	protected List<File> metamodelFiles = new ArrayList<>();
 	protected List<String> metamodelUris = new ArrayList<>();
@@ -36,24 +30,10 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 		super();
 	}
 	
-	protected static ResourceSet rs = null;
-	
-	/**
-	 * @return the rs
-	 */
-	public static ResourceSet getResourceSet() {
-		return rs;
-	}
-	
 	@Override
 	public EmfModel getModel() {
 		if (model == null) {
-			this.model = new EmfModel() {
-				@Override
-				protected ResourceSet createResourceSet() {
-					return rs;
-				}
-			};
+			this.model = new EmfModel();
 		}
 		return (EmfModel) this.model;
 	}
@@ -130,16 +110,41 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 
 		@Override
 		public void beforeWorkflow() {
-			
+			// Do nothing
 		}
 
 		@Override
 		public void afterWorkflow() {
-			
+			// Do nothing
 		}
 		
 	}	
 	
+	@Override
+	public Object loadedHash(){
+		return EmfHashUtil.hash(getModel().getResource(), getModelFile(), getExpand());
+	}
+	
+	@Override
+	public Object unloadedHash(Object trace){
+		return EmfHashUtil.hash(trace, getModelFile(), getExpand());
+	}
+	
+	@Override
+	public void beforeTask() {
+		// Do nothing
+	}
+
+	@Override
+	public void afterTask() {
+		// Do nothing
+	}
+	
+	@Override
+	public void disposeImpl() {
+		super.disposeImpl();
+	}
+
 	/*
 	@Override
 	public void register(IModelIndexer indexer) throws Exception {
@@ -175,31 +180,5 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 		indexer.requestImmediateSync();
 	}
 	*/
-	 
 	
-	@Override
-	public Object loadedHash(){
-		return EmfHashUtil.hash(getModel().getResource(), getModelFile(), getExpand());
-	}
-	
-	@Override
-	public Object unloadedHash(Object trace){
-		return EmfHashUtil.hash(trace, getModelFile(), getExpand());
-	}
-
-	@Override
-	public void beforeTask() {
-		 if (rs == null) {
-			 rs = new ResourceSetImpl();
-		 }
-		 if (getModel().getResource() != null) {			 
-			 rs.getResources().add(getModel().getResource());
-		 }
-	}
-
-	@Override
-	public void afterTask() {
-		rs = null;
-	}
-
 }

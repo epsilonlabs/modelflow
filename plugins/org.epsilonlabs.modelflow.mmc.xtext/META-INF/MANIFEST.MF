@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ModelFlow Xtext Model Management Connectivity
+Bundle-Name: ModelFlow Xtext MMC
 Bundle-SymbolicName: org.epsilonlabs.modelflow.mmc.xtext;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

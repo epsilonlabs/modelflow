@@ -9,40 +9,28 @@ package org.epsilonlabs.modelflow.execution.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.exception.MFExecutionGraphExeption;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge.Kind;
 import org.epsilonlabs.modelflow.execution.graph.edge.ExecutionEdge;
-import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
-import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
-import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.Graphs;
 import org.jgrapht.alg.shortestpath.AllDirectedPaths;
-import org.jgrapht.graph.DirectedAcyclicGraph;
+import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ExecutionGraph implements IExecutionGraph {
+public class ExecutionGraph extends AbstractExecutionGraph {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ExecutionGraph.class);
 
-	protected DirectedAcyclicGraph<ITaskNode, ExecutionEdge> graph;
-	protected Map<String, ITaskNode> tasks = new HashMap<>();
-	protected GraphState state;
-		
 	public ExecutionGraph() {
-		this.graph = new DirectedAcyclicGraph<>(ExecutionEdge.class);
+		this.graph = new SimpleDirectedGraph<>(ExecutionEdge.class);
 		setState(GraphState.CREATED);
 	}
 	
@@ -50,11 +38,9 @@ public class ExecutionGraph implements IExecutionGraph {
 	 * Builds the execution graph for a given dependency graph extracted from the context
 	 */
 	@Override
-	public IExecutionGraph build(IModelFlowContext ctx) throws MFExecutionGraphExeption {
+	public IExecutionGraph buildImpl(IModelFlowContext ctx) throws MFExecutionGraphExeption {
 		IDependencyGraph dg = ctx.getDependencyGraph();
-		
-		// TODO Manage changed resources
-		
+				
 		// Add Task Nodes
 		addTaskNodes(dg);
 		// Add Edges from Task Dependencies
@@ -70,64 +56,6 @@ public class ExecutionGraph implements IExecutionGraph {
 		LOG.info("ExecutionGraph populated: \n{}", this);
 		return this;
 
-	}
-	
-	@Override
-	public List<ITaskNode> getTasks() {
-		return getGraph().vertexSet().parallelStream()
-				.filter(r -> r instanceof ITaskNode)
-				.map(n -> n)
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public String toString() {
-		GraphizPrinter<ITaskNode, ExecutionEdge> printer = new GraphizPrinter<>(this.graph);
-		return printer.toDot().toString();
-	}
-	
-	@Override
-	public Graph<ITaskNode, ExecutionEdge> getGraph() {
-		return this.graph;
-	}
-	
-	@Override
-	public List<ITaskNode> getPredecessorTasks(ITaskNode task){
-		if (this.getState().isPopulated()) {
-			return Graphs.predecessorListOf(this.graph, task);	
-		}
-		throw new IllegalStateException("Execution Graph has not been populated yet");
-	}
-	
-	@Override
-	public List<ITaskNode> getSuccessorTasks(ITaskNode task){
-		if (this.getState().isPopulated()) {
-			return Graphs.successorListOf(this.graph, task);	
-		}
-		throw new IllegalStateException("Execution Graph has not been populated yet");
-	}
-	
-	// FIXME check algorithm to detect if last time use of resource. 
-	// It should consider potential parallel executions as well.
-	
-	/**
-	 *  Looks for tasks that use this resource and checks whether they are in the process of being executed
-	 *  that is, their execute method has been called and therefore this is the last use.
-	 *  
-	 *  FIXME: this could be a bug as it could be that in a process of asking a few moments after we could have 
-	 *  seen that another task instantiated the resource.
-	 *  It should not be calculated based on states but rather on the execution graph
-	 *  
-	 *  The final disposal of the resource should take into account tasks that have not yet been executed, 
-	 *  or those which are executing or have been executed to determine whether it can be safely disposed.   
-	 */
-	
-	@Override
-	public 	boolean isLastUseOf(IAbstractResourceNode resourceNode, ITaskNode here, IDependencyGraph dg){
-		return new DependencyGraphHelper(dg).usedBy(resourceNode).parallelStream()
-				.filter(tn -> !tn.equals(here)).allMatch(tn-> 
-					tn.getState().getVal() >= TaskState.INITIALIZED.getVal()
-				);
 	}
 	
 	protected void addTaskNodes(IDependencyGraph dg) {
@@ -174,7 +102,7 @@ public class ExecutionGraph implements IExecutionGraph {
 	protected ExecutionEdge addEdge(ITaskNode sourceVertex, ITaskNode targetVertex) {
 		LOG.debug("Adding edge : {} -> {}", sourceVertex.getName(), targetVertex.getName());
 		// Only allow one edge per source/target node combination
-		if (getGraph().getAllEdges(sourceVertex, targetVertex).isEmpty()) {
+		if (getGraph().getAllEdges(sourceVertex, targetVertex).isEmpty() && getGraph().getAllEdges(targetVertex, sourceVertex).isEmpty()) {
 			return this.graph.addEdge(sourceVertex, targetVertex);
 		} 
 		Optional<ExecutionEdge> findFirst = getGraph().getAllEdges(sourceVertex, targetVertex).stream().findFirst();
@@ -208,34 +136,6 @@ public class ExecutionGraph implements IExecutionGraph {
 			getGraph().removeAllEdges(edgesToRemove);
 		}
 	}
-	
-	/**
-	 * --------------------- GRAPH WRAPPING UTILS ---------------------
-	 */
-	
-	protected void addEdge(ITaskNode source, ITaskNode target, ExecutionEdge dependencyEdge) {
-		try {
-			this.graph.addEdge(source, target, dependencyEdge);
-		} catch (Exception e) {
-			String msg = String.format("Unable to create edge : %s -- %s", source.getName(), target.getName());
-			LOG.error(msg, e);
-		}
-	}
 
-	@Override
-	public synchronized GraphState getState() {
-		return this.state;
-	}
-
-	protected synchronized void setState(GraphState state){
-		this.state = state;
-	}
-
-	@Override
-	public void reset() {
-		this.graph = new DirectedAcyclicGraph<>(ExecutionEdge.class);
-		setState(GraphState.CREATED);
-		this.tasks.clear();
-	}
 	
 }

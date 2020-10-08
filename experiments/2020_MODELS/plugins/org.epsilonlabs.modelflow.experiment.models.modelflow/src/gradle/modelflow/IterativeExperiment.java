@@ -96,16 +96,12 @@ public abstract class IterativeExperiment {
 		prepareResultFile(getResultsFile(), getHeaders());
 	}
 	
-	
 	@Before
 	public void setup() throws Exception{
 		System.out.println(name.getMethodName());
 		
-		
 		/** Prepare */
 		beforeTestExecution();
-
-		
 	}
 	
 	protected void writeResults(File file, Object... record) throws IOException {

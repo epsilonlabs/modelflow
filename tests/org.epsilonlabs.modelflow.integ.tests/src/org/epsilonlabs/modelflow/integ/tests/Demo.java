@@ -11,14 +11,14 @@ import java.util.Scanner;
 
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.dom.Workflow;
-import org.epsilonlabs.modelflow.execution.IPublisher;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
-import org.epsilonlabs.modelflow.tests.common.WorkflowBuilderTest;
+import org.epsilonlabs.modelflow.tests.common.ExecutionHelper;
 import org.junit.Test;
 
 import com.google.inject.Guice;
@@ -47,7 +47,8 @@ public class Demo {
 					System.out.println("Executing");
 					try{
 						module.execute();
-						WorkflowBuilderTest.saveModels(module, module.getWorkflow().getName());
+						String name = module.getWorkflow().getName();
+						new ExecutionHelper(module).saveGraphs(name);
 					} catch (Exception e) {
 						e.printStackTrace();
 						System.err.println("Exception caught, please: reset.");
@@ -69,7 +70,7 @@ public class Demo {
 		module.setTaskFactoryRegistry(taskFactoryRegistry);
 		module.setResFactoryRegistry(resFactoryRegistry);
 		
-		IPublisher publisher = module.getContext().getPublisher();
+		IModelFlowPublisher publisher = module.getContext().getPublisher();
 		publisher.forTasks().filter(t->t.getState().equals(TaskState.EXECUTED) || t.getState().equals(TaskState.SKIPPED)).subscribe(t-> {
 			System.out.println(t.getName() + ": " + t.getState().name());
 		});

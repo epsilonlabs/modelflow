@@ -7,5 +7,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ ParsingTest.class, CompileTest.class, /*ExecutionTraceTest.class*/})
-public class ModelFlowUnitTestSuite {}
+@SuiteClasses({ ParsingTest.class, CompileTest.class, /*ExecutionTraceTest.class*/ })
+public class ModelFlowUnitTestSuite {
+}

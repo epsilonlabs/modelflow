@@ -20,5 +20,5 @@ package org.epsilonlabs.modelflow.dom;
  * @model abstract="true"
  * @generated
  */
-public interface AbstractResource extends Named {
+public interface AbstractResource extends Configurable {
 } // AbstractResource

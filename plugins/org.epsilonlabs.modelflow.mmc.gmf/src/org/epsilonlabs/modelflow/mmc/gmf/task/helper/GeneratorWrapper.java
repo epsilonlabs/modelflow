@@ -116,6 +116,7 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper implements Runnab
 		return super.createMergeService();
 	}
 
+	@Override
 	protected void customRun() throws InterruptedException, UnexpectedBehaviourException {
 		final Path pluginDirectory = new Path(myEditorGen.getPluginDirectory());
 		initializeEditorProject(pluginDirectory, guessProjectLocation(pluginDirectory.segment(0)),
@@ -1012,7 +1013,7 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper implements Runnab
 			generateGroupIcon(new Path(iconPath));
 		}
 	}
-
+	
 	// property sheet
 
 	protected void generatePropertySheetSections() throws UnexpectedBehaviourException, InterruptedException {
@@ -1404,6 +1405,7 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper implements Runnab
 		return guessNewProjectLocation(modelProjectPath, projectName);
 	}
 
+	@Override
 	protected void setupProgressMonitor() {
 		Counter c = new Counter();
 		c.registerFactor(GMFGenPackage.eINSTANCE.getGenNode(), 7);

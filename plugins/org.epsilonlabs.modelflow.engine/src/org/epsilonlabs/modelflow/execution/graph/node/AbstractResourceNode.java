@@ -8,7 +8,7 @@
 package org.epsilonlabs.modelflow.execution.graph.node;
 
 import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.execution.IPublisher;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 
 import io.reactivex.subjects.PublishSubject;
 
@@ -36,7 +36,7 @@ public abstract class AbstractResourceNode<T extends AbstractResource> implement
 	}
 	
 	@Override
-	public void subscribe(IPublisher pub) {
+	public void subscribe(IModelFlowPublisher pub) {
 		statusUpdater.subscribe(state -> pub.resourceState(this.getInternal().getName(), state));
 	}
 

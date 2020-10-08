@@ -78,6 +78,7 @@ public class DomSwitch<T> extends Switch<T> {
 				T result = caseWorkflow(workflow);
 				if (result == null) result = caseTask(workflow);
 				if (result == null) result = caseAbstractTask(workflow);
+				if (result == null) result = caseConfigurable(workflow);
 				if (result == null) result = caseNamed(workflow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -88,9 +89,17 @@ public class DomSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case DomPackage.CONFIGURABLE: {
+				Configurable configurable = (Configurable)theEObject;
+				T result = caseConfigurable(configurable);
+				if (result == null) result = caseNamed(configurable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case DomPackage.ABSTRACT_RESOURCE: {
 				AbstractResource abstractResource = (AbstractResource)theEObject;
 				T result = caseAbstractResource(abstractResource);
+				if (result == null) result = caseConfigurable(abstractResource);
 				if (result == null) result = caseNamed(abstractResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -98,6 +107,7 @@ public class DomSwitch<T> extends Switch<T> {
 			case DomPackage.ABSTRACT_TASK: {
 				AbstractTask abstractTask = (AbstractTask)theEObject;
 				T result = caseAbstractTask(abstractTask);
+				if (result == null) result = caseConfigurable(abstractTask);
 				if (result == null) result = caseNamed(abstractTask);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -106,6 +116,7 @@ public class DomSwitch<T> extends Switch<T> {
 				Task task = (Task)theEObject;
 				T result = caseTask(task);
 				if (result == null) result = caseAbstractTask(task);
+				if (result == null) result = caseConfigurable(task);
 				if (result == null) result = caseNamed(task);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -120,6 +131,7 @@ public class DomSwitch<T> extends Switch<T> {
 				Resource resource = (Resource)theEObject;
 				T result = caseResource(resource);
 				if (result == null) result = caseAbstractResource(resource);
+				if (result == null) result = caseConfigurable(resource);
 				if (result == null) result = caseNamed(resource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -128,6 +140,7 @@ public class DomSwitch<T> extends Switch<T> {
 				DerivedResource derivedResource = (DerivedResource)theEObject;
 				T result = caseDerivedResource(derivedResource);
 				if (result == null) result = caseAbstractResource(derivedResource);
+				if (result == null) result = caseConfigurable(derivedResource);
 				if (result == null) result = caseNamed(derivedResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -137,6 +150,7 @@ public class DomSwitch<T> extends Switch<T> {
 				T result = caseModelResource(modelResource);
 				if (result == null) result = caseResource(modelResource);
 				if (result == null) result = caseAbstractResource(modelResource);
+				if (result == null) result = caseConfigurable(modelResource);
 				if (result == null) result = caseNamed(modelResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -146,6 +160,7 @@ public class DomSwitch<T> extends Switch<T> {
 				T result = caseMetamodeResource(metamodeResource);
 				if (result == null) result = caseResource(metamodeResource);
 				if (result == null) result = caseAbstractResource(metamodeResource);
+				if (result == null) result = caseConfigurable(metamodeResource);
 				if (result == null) result = caseNamed(metamodeResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -199,6 +214,21 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNamed(Named object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurable(Configurable object) {
 		return null;
 	}
 

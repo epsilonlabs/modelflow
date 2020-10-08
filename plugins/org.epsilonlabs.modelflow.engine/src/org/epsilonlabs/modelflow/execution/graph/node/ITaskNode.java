@@ -14,6 +14,8 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
 import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
 
+import io.reactivex.Completable;
+
 /**
  * The Interface ITaskNode.
  */
@@ -69,5 +71,11 @@ public interface ITaskNode extends IGraphNode {
 	 * @return the output params
 	 */
 	TaskOutputPropertyHandler getOutputParams();
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	Completable getObservable();
+	
 }

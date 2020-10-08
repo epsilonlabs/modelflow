@@ -15,9 +15,13 @@ import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.epsilon.common.module.ModuleElement;
+import org.epsilonlabs.modelflow.dom.AbstractResource;
+import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.dom.Resource;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementHandler;
 import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
@@ -38,11 +42,11 @@ public class ExecutionTraceUpdater {
 		return trace;
 	}
 	
-	public WorkflowExecution getCurrentWorkflowExecution(){
+	public synchronized WorkflowExecution getCurrentWorkflowExecution(){
 		return trace.getExecutions().get(trace.getExecutions().size()-1);
 	}
 	
-	public Optional<WorkflowExecution> getPreviousWorkflowExecution(){
+	public synchronized Optional<WorkflowExecution> getPreviousWorkflowExecution(){
 		EList<WorkflowExecution> executions = trace.getExecutions();
 		if (executions.size()>1) {			
 			return Optional.of(executions.get(executions.size()-2));
@@ -51,8 +55,7 @@ public class ExecutionTraceUpdater {
 		}
 	}
 	
-		
-	public TaskExecution getCurrentTaskExecution(ITaskNode task){
+	public synchronized TaskExecution getCurrentTaskExecution(ITaskNode task){
 		for (TaskExecution t: getCurrentWorkflowExecution().getTasks()) {
 			if (t.getTask().getName().equals(task.getTaskDefinition().getName())) {
 				return t;
@@ -61,7 +64,7 @@ public class ExecutionTraceUpdater {
 		throw new IllegalStateException("A TaskExecution record should be accessible");
 	}
 	
-	public Optional<TaskExecution> getPreviousTaskExecution(ITaskNode task){
+	public synchronized Optional<TaskExecution> getPreviousTaskExecution(ITaskNode task){
 		Optional<WorkflowExecution> previousWorkflowExecution = getPreviousWorkflowExecution();
 		if (previousWorkflowExecution.isPresent()) {
 			WorkflowExecution workflowExecution = previousWorkflowExecution.get();
@@ -70,14 +73,13 @@ public class ExecutionTraceUpdater {
 					return Optional.of(t);
 				} 
 			}
-			throw new IllegalStateException("A TaskExecution record should be accessible");
-		} else {
-			return Optional.empty();
-		}
+		} 
+		return Optional.empty();	
 	}
 	
-	public WorkflowExecution createWorkflowExecution(Workflow w) {
+	public synchronized WorkflowExecution createWorkflowExecution(Workflow w) {
 		Workflow copy = EcoreUtil.copy(w);
+		serializableCopy(copy);
 		
 		WorkflowExecution currentWorkflowExecution = ExecutionTraceFactoryImpl.eINSTANCE.createWorkflowExecution();
 		currentWorkflowExecution.setWorkflow(copy);
@@ -86,8 +88,9 @@ public class ExecutionTraceUpdater {
 	}
 	
 
-	public TaskExecution createTaskExecution(Task task) {
+	public synchronized TaskExecution createTaskExecution(Task task) {
 		Task copy = EcoreUtil.copy(task);
+		serializableCopy(copy);
 
 		TaskExecution exec = ExecutionTraceFactory.eINSTANCE.createTaskExecution();
 		exec.setTask(copy);
@@ -95,9 +98,49 @@ public class ExecutionTraceUpdater {
 		getCurrentWorkflowExecution().getTasks().add(exec);
 		return exec;
 	}
+	
+	protected synchronized void serializableCopy(Task task) {
+		Object guard = task.getGuard();
+		if (guard instanceof ModuleElement) {
+			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)guard);
+			task.setGuard(wrapper);
+		}
+		for (Property p : task.getProperties()) {
+			serializableCopy(p);
+		}
+	}
+	
+	protected synchronized void serializableCopy(Resource resource) {
+		for (Property p : resource.getProperties()) {
+			serializableCopy(p);
+		}
+	}
+	
+	protected synchronized void serializableCopy(Property p) {
+		Object value = p.getValue();
+		if (value instanceof ModuleElement) {
+			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)value);
+			p.setValue(wrapper);
+		}
+	}
+	
+	protected synchronized void serializableCopy(Workflow w) {
+		for (Task t : w.getTasks()) {
+			serializableCopy(t);
+		}
+		for (AbstractResource r : w.getResources()) {
+			if (r instanceof Resource) {				
+				serializableCopy((Resource) r);
+			}
+		}
+		for (Property p : w.getProperties()) {
+			serializableCopy(p);
+		}		
+	}
 
-	public ResourceSnapshot createResourceSnapshot(Resource res, Object stamp) {
+	public synchronized ResourceSnapshot createResourceSnapshot(Resource res, Object stamp) {
 		Resource copy = EcoreUtil.copy(res);
+		serializableCopy(copy);
 
 		ResourceSnapshot snapshot = ExecutionTraceFactory.eINSTANCE.createResourceSnapshot();
 		snapshot.setResource(copy);
@@ -107,7 +150,7 @@ public class ExecutionTraceUpdater {
 		return snapshot;
 	}
 	
-	public void addResourceToLatest(ResourceSnapshot snapshot){
+	public synchronized void addResourceToLatest(ResourceSnapshot snapshot){
 		// Find the resource with same identifier 
 		List<ResourceSnapshot> toRemove=new ArrayList<>();
 		trace.getLatest()
@@ -121,7 +164,7 @@ public class ExecutionTraceUpdater {
 		trace.getLatest().add(copy);
 	}
 		
-	public void addTaskInputProperties(ITaskNode node, Map<String, Object> map){
+	public synchronized void addTaskInputProperties(ITaskNode node, Map<String, Object> map){
 		TaskExecution taskExecution = getCurrentTaskExecution(node);
 		taskExecution.getInputProperties().clear();
 		for (Entry<String, Object> pair : map.entrySet()) {
@@ -130,7 +173,7 @@ public class ExecutionTraceUpdater {
 		}
 	}
 	
-	public Optional<ResourceSnapshot> getPastInputResource(ITaskNode task, IResourceNode resource){
+	public synchronized Optional<ResourceSnapshot> getPastInputResource(ITaskNode task, IResourceNode resource){
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot inputModel : taskExecution.get().getInputModels()) {
@@ -142,7 +185,7 @@ public class ExecutionTraceUpdater {
 		return Optional.empty();
 	}
 	
-	public Optional<ResourceSnapshot> getPastOutputResource(ITaskNode task, IResourceNode resource){
+	public synchronized Optional<ResourceSnapshot> getPastOutputResource(ITaskNode task, IResourceNode resource){
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot outputModel : taskExecution.get().getOutputModels()) {
@@ -154,7 +197,7 @@ public class ExecutionTraceUpdater {
 		return Optional.empty();
 	}
 
-	public void addTaskOutputProperties(ITaskNode node, Map<String, Object> map){
+	public synchronized void addTaskOutputProperties(ITaskNode node, Map<String, Object> map){
 		TaskExecution taskExecution = getCurrentTaskExecution(node);
 		taskExecution.getOutputProperties().clear();
 		for (Entry<String, Object> pair : map.entrySet()) {
@@ -163,7 +206,7 @@ public class ExecutionTraceUpdater {
 		}
 	}
 
-	protected PropertySnapshot createPropertySnapshot(Entry<String, Object> pair){
+	protected synchronized PropertySnapshot createPropertySnapshot(Entry<String, Object> pair){
 		PropertySnapshot propSnapshot = ExecutionTraceFactory.eINSTANCE.createPropertySnapshot();
 		propSnapshot.setTimestamp(System.nanoTime());
 		propSnapshot.setKey(pair.getKey());
@@ -171,11 +214,11 @@ public class ExecutionTraceUpdater {
 		return propSnapshot;
 	}
 	
-	protected boolean hasChanged(ITaskNode task){
+	protected synchronized boolean hasChanged(ITaskNode task){
 		return taskPropertiesHaveChanged(task);
 	}
 	
-	protected boolean taskPropertiesHaveChanged(ITaskNode task){
+	protected synchronized boolean taskPropertiesHaveChanged(ITaskNode task){
 		Optional<TaskExecution> previousTaskExecution = getPreviousTaskExecution(task);
 		if (previousTaskExecution.isPresent()) {
 			TaskExecution current = getCurrentTaskExecution(task);

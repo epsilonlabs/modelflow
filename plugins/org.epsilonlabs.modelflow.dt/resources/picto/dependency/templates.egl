@@ -1,0 +1,6 @@
+[%
+import "utils.eol";
+@template
+operation Resource node(){ %]
+[%= self.name() %] [shape=parallelogram, margin=0, esep=0, sep=0, fillcolor="bisque1", label=<[%=self.label()%]>]
+[% } %]

@@ -7,12 +7,14 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.emf.tests.integ;
 
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
 import org.epsilonlabs.modelflow.mmc.emf.tests.common.workflow.EmfTask;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.WorkflowBuilderTest;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -29,14 +31,16 @@ public class EmfTaskTests extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 	
+	protected Workflow w;
+	
 	@Test 
 	public void test_emfatic2ecoreWithOutput() {
-		execute(EmfTask.getEmfatic2EcoreWithModelWorkflow());	
+		w = EmfTask.getEmfatic2EcoreWithModelWorkflow();	
 	}
 	
 	@Test 
 	public void test_emfatic2ecore() {
-		execute(EmfTask.getEmfatic2EcoreWorkflow());	
+		w = EmfTask.getEmfatic2EcoreWorkflow();	
 	}
 	
 	/** 
@@ -85,7 +89,17 @@ java.lang.NullPointerException
 	@Ignore
 	@Test 
 	public void test_genCode() {
-		execute(EmfTask.genCodeWorkflow());	
+		w = EmfTask.genCodeWorkflow();	
 	}
 	
+	@After
+	public void exec() throws Exception {
+		execute();
+	}
+
+	@Override
+	protected void setupSource() {
+		module.setWorkflow(w);
+	}
+		
 }

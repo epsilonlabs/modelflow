@@ -12,6 +12,7 @@ import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 public abstract class AbstractTask implements ITask {
 
 	protected ITaskNode node;
+	protected boolean alwaysExecute = false;
 		
 	@Override
 	public void configure(ITaskNode task) {
@@ -19,6 +20,7 @@ public abstract class AbstractTask implements ITask {
 		task.getTaskDefinition().getProperties();
 	}
 	
+	@Override
 	public ITaskNode getTaskNode() {
 		return node;
 	}   
@@ -28,10 +30,9 @@ public abstract class AbstractTask implements ITask {
 		return this.node.getTaskDefinition().getName();
 	}
 	
-	protected String getBasedir() {
-		//TODO should be given at instantiation;
-		throw new UnsupportedOperationException("Not yet implemented");
+	@Override
+	public boolean isAlwaysExecute() {
+		return alwaysExecute;
 	}
-
 	
 }

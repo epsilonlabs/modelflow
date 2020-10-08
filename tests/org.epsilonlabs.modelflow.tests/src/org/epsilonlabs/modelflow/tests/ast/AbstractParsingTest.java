@@ -132,6 +132,12 @@ public abstract class AbstractParsingTest {
 				+ "task Task1 is EOL inout ModelA;";
 	}
 	
+	public void testTaskForEachSequence() {
+		code = 	" task A is EOL forEach b in : Sequence{1..5}{\n"
+				+ "	  src: b + '.eol' \n"
+				+ "}";
+	}
+	
 	public void testParamNoType() {
 		code = "param tada;";
 	}

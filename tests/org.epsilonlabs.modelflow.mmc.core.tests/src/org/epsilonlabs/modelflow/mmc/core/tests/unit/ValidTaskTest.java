@@ -16,6 +16,8 @@ import org.epsilonlabs.modelflow.dom.api.AbstractTask;
 import org.epsilonlabs.modelflow.dom.api.TaskDefinitionValidator;
 import org.epsilonlabs.modelflow.mmc.core.task.FileReaderTask;
 import org.epsilonlabs.modelflow.mmc.core.task.PrintTask;
+import org.epsilonlabs.modelflow.mmc.core.task.SleepTask;
+import org.epsilonlabs.modelflow.mmc.core.task.XsdValidationTask;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,7 +29,7 @@ public class ValidTaskTest {
     @Parameters( name = "{index}: validate({0})" )
     public static Collection<Class<? extends AbstractTask>> data() {
         return Arrays.asList(
-        		FileReaderTask.class, PrintTask.class
+        		FileReaderTask.class, PrintTask.class, XsdValidationTask.class, SleepTask.class
     		);
     }
 

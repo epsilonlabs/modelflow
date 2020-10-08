@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.mmc.epsilon.resource;
 
 import org.eclipse.epsilon.emc.emf.AbstractEmfModel;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
+import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 
 public abstract class AbstractEpsilonEmfModelResource extends AbstractEpsilonCachedModelResource {
 
@@ -41,8 +42,16 @@ public abstract class AbstractEpsilonEmfModelResource extends AbstractEpsilonCac
 	protected AbstractEmfModel getModel() {
 		return getModel();
 	}
-
-	//TODO add : @Param(key="saveAs")
+	
+	@Override
+	public void loadImpl() throws MFRuntimeException {
+		super.loadImpl();
+		/* FIXME: This seems to be a bug in the CachedResourceSet of Epsilon EmfModel which is ignoring the flag
+		isReadOnLoad and is loading the model anyway.*/
+		if (!this.read.get()) {
+			getModel().getResource().getContents().clear();
+		}
+	}
 	
 	@Override
 	public void configure() {

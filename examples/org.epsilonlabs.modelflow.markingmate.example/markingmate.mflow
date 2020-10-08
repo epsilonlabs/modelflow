@@ -22,11 +22,7 @@ model MARKED is epsilon:emf {
 }
 
 /* Tasks */
-task produce is epsilon:eol
-	out SEPR
-{
-	src: tBasedir + "generateModel.eol"
-}
+
 task validateSetup is epsilon:evl
 	in SEPR 
 { 
@@ -52,34 +48,36 @@ task splitBob is epsilon:etl
 {
 	src: tBasedir + "split.etl"
 	params {
-		var m = new Map;
-		m.put("questions", Sequence{2..3});
-		return m;
+		var m2 = new Map;
+		m2.put("questions", Sequence{2..3});
+		return m2;
 	}
 }
 task validateMarking is epsilon:evl 
-	in ALICE as Reviewer, LEFT 
-		and BOB as Reviewer, RIGHT {
+	in ALICE as Left,Reviewer
+		and BOB as Right,Reviewer {
 	src: tBasedir + "validateMarking.evl"
 	failOnError : true
 }
+@always
 task compare is epsilon:ecl 
-	in ALICE and BOB 
+	in ALICE as Left and BOB as Right 
 	dependsOn validateMarking 
 {
 	src: tBasedir + "markingmate.ecl"
 }
 task merge is epsilon:eml 
-	in ALICE as LEFT, SOURCE
-		and BOB as RIGHT, SOURCE
-		and compare.comparison 
-	out MARKED
+	in ALICE as Left, Source
+		and BOB as Right, Source
+		and compare.comparison as matchTrace
+	out MARKED as Target
 {
 	src: tBasedir + "markingmate.eml"
 }
 task csv is epsilon:egx 
 	in MARKED {
 	src: tBasedir + "feedback.egx"
+	outputRoot: "output"
 }
 post Done {
 	"done".println();

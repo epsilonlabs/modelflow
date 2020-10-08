@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileWriter;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
@@ -29,7 +30,6 @@ import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 	/** Validation/Modification Helpers */
 
 	protected void fileModifier(String file) {
-		String fileName = System.getProperty("user.dir") + "/target/" + file;
+		String fileName = DIR + file;
 		File file2 = new File(fileName);
 		assertTrue("File not found", file2.exists());
 		String hash1 = Hasher.computeHashForFile(file2);
@@ -65,13 +65,14 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 		assertNotEquals("hashes are the same", hash1, hash2);
 	}
 	
-	/** TESTING PROCESS */
+	/** TESTING PROCESS */	
 
-	@Before
-	public void prepareWorkflow() {
-		w = EcoreUtil.copy(ExampleWorkflows.getTwoTransformationsComponent());
+	@Override
+	protected void setupSource() {
+		Workflow w = EcoreUtil.copy(ExampleWorkflows.getTwoTransformationsComponent());
+		module.setWorkflow(w);
 	}
-
+	
 	/** TESTS */
 
 	@Test
@@ -123,6 +124,7 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 		TaskStateValidator z = new TaskStateValidator(TaskState.EXECUTED, "Z");
 		second = new CompositeValidator(y, x, z);
 	}
+
 
 	/*
 

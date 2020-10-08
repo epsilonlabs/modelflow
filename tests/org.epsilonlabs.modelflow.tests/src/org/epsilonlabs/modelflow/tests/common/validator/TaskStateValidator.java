@@ -3,7 +3,7 @@ package org.epsilonlabs.modelflow.tests.common.validator;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
-import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceAnalyser;
+import org.epsilonlabs.modelflow.tests.common.ExecutionTraceAnalyser;
 
 public class TaskStateValidator implements IValidate {
 

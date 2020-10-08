@@ -7,9 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.compile.context;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.eclipse.epsilon.common.module.ModuleElement;
+import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.dom.Resource;
 import org.epsilonlabs.modelflow.dom.Task;
@@ -22,63 +23,30 @@ import org.epsilonlabs.modelflow.dom.ast.TaskRule;
  *
  * @author Betty Sanchez
  */
-public interface IModelFlowCompilationContext {
+public interface IModelFlowCompilationContext extends IEolCompilationContext {
 
-	/*
-	 * List<ModuleMarker> getMarkers();
-	 * 
-	 * void setRuntimeContext(IEolContext context);
-	 * 
-	 * void addWarningMarker(AbstractModuleElement element, String message);
-	 * 
-	 * void addErrorMarker(AbstractModuleElement element, String message);
-	 * 
-	 * FrameStack getFrameStack();
-	 * 
-	 * IModelFactory getModelFactory();
-	 * 
-	 * void setModelFactory(IModelFactory modelFactory);
-	 * 
-	 * IRelativePathResolver getRelativePathResolver();
-	 * 
-	 * void setRelativePathResolver(IRelativePathResolver relativePathResolver);
-	 * 
-	 * void setModelDeclarations(List<ModelDeclaration> modelDeclarations);
-	 * 
-	 * List<ModelDeclaration> getModelDeclarations();
-	 * 
-	 * EolModelElementType getModelElementType(String modelAndType);
-	 */
-	//
-
-	/**
-	 * Adds the resource declaration.
-	 *
-	 * @param resourceDeclarations the resource declarations
-	 */
-	void addResourceDeclaration(ResourceRule resourceDeclarations);
-
+	
 	/**
 	 * Gets the resource declarations.
 	 *
 	 * @return the resource declarations
 	 */
-	List<ResourceRule> getResourceDeclarations();
+	Collection<ResourceRule> getResourceDeclarations();
 
 	/**
 	 * Gets the task declarations.
 	 *
 	 * @return the task declarations
 	 */
-	List<TaskRule> getTaskDeclarations();
+	Collection<TaskRule> getTaskDeclarations();
 	
 	/**
-	 * Adds the task declaration.
+	 * Gets the parameter declarations.
 	 *
-	 * @param taskRule the task rule
+	 * @return the parameter declarations
 	 */
-	void addTaskDeclaration(TaskRule taskRule);
-
+	Collection<ParameterDeclaration> getParameterDeclarations();
+	
 	/**
 	 * Gets the module.
 	 *
@@ -118,14 +86,7 @@ public interface IModelFlowCompilationContext {
 	 */
 	ModuleElement getResourceModuleElement(Resource resource);
 
-	/**
-	 * @return
-	 */
-	List<ParameterDeclaration> getParameterDeclarations();
 
-	/**
-	 * @param parameterDeclaration
-	 */
-	void addParameterDeclaration(ParameterDeclaration parameterDeclaration);
+
 
 }

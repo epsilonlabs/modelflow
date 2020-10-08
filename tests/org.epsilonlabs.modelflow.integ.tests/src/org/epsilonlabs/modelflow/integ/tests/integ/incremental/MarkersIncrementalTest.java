@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests.integ.incremental;
 
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
@@ -14,7 +15,6 @@ import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -35,9 +35,10 @@ public class MarkersIncrementalTest extends IncrementalTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 	
-	@Before
-	public void prepareWorkflow() {
-		w = ExampleWorkflows.getMarkersWorkflow();
+	@Override
+	protected void setupSource() {
+		Workflow w = ExampleWorkflows.getMarkersWorkflow();
+		module.setWorkflow(w);
 	}
 	
 	@Ignore

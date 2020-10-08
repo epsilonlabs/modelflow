@@ -14,11 +14,6 @@ abstract class Stateful {
 	attr String endState;
 }
 
-abstract class Timed {
-	attr long start;
-	attr long end;
-}
-
 abstract class Snapshot {
 	attr Object stamp;
 	attr Long timestamp;
@@ -36,18 +31,16 @@ class PropertySnapshot extends Snapshot {
 
 @exeed(classIcon="operation", 
 label="return 'Workflow' 
-+ ' (' + self.endState +') ' 
-+ ((self.end-self.start)/1000)+ 's';")
-class WorkflowExecution extends Stateful, Timed {
++ ' (' + self.endState +') ';")
+class WorkflowExecution extends Stateful {
 	val TaskExecution[*] tasks;
 	val dom.Workflow workflow;
 }
 
 @exeed(classIcon="operation",
 label="return self.task.name 
-+ ' (' + self.endState +') ' 
-+ (self.end-self.start) + 'ms';")
-class TaskExecution extends Stateful, Timed {
++ ' (' + self.endState +') ';")
+class TaskExecution extends Stateful {
   	val ResourceSnapshot[*] inputModels;
 	val ResourceSnapshot[*] outputModels;
 	val PropertySnapshot[*] inputProperties;

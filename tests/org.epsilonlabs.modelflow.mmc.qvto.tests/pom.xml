@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>org.epsilonlabs.modelflow.mmc.qvto.tests</artifactId>
-	<name>Modelflow Qvto Model Management Connectivity Tests</name>
+	<name>Modelflow Qvto MMC Tests</name>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>

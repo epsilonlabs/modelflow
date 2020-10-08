@@ -9,16 +9,20 @@
 package org.epsilonlabs.modelflow.execution.graph;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.jgrapht.Graph;
-import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import io.reactivex.subjects.PublishSubject;
 
@@ -30,9 +34,21 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 
 	protected PublishSubject<GraphState> statusUpdater = PublishSubject.create();
 	protected GraphState status = null;
-	protected SimpleDirectedWeightedGraph<IGraphNode, DependencyEdge> graph;
-	protected Map<String, ITaskNode> tasks = new HashMap<>();
-	protected Map<String, IAbstractResourceNode> resources = new HashMap<>();
+	protected Graph<IGraphNode, DependencyEdge> graph;
+	protected Map<String, ITaskNode> tasks = new ConcurrentHashMap<>();
+	protected Map<String, IAbstractResourceNode> resources = new ConcurrentHashMap<>();
+	
+	
+	@Override
+	public DependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
+		IModelFlowProfiler profiler = ctx.getProfiler();
+		profiler.start(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
+		DependencyGraph dg = buildImpl(ctx);
+		profiler.stop(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
+		return dg;
+	}
+	
+	protected abstract DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException;
 	
 	@Override
 	public Collection<IAbstractResourceNode> getResourceNodes() {
@@ -79,6 +95,11 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	@Override
 	public Graph<IGraphNode, DependencyEdge> getGraph() {
 		return graph;
+	}
+	
+	@Override
+	public void subscribe(IModelFlowPublisher publisher) {
+		statusUpdater.subscribe(state -> publisher.dependencyGraph(getState()));
 	}
 
 }

@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -59,6 +60,7 @@ import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
+import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfDiagramTrace;
 
 @SuppressWarnings({ "restriction", "deprecation" })
 public abstract class AbstractGeneratorWrapper implements Runnable {
@@ -277,7 +279,15 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 			EclipseUtil.findOrCreateContainer(containerPath, false, (IPath) null, new SubProgressMonitor(pm, 1));
 			String genText = emitter.generate(new SubProgressMonitor(pm, 1), param);
 			IFile f = myDestProject.getFile(filePath);
-			newFile(f);
+
+			// <!-- ModelFlow Tracing -->
+			GmfDiagramTrace gmfDiagramTrace = new GmfDiagramTrace();
+			gmfDiagramTrace.setLabel(rule);
+			gmfDiagramTrace.addOutput(newFile(f));
+			gmfDiagramTrace.setSources(param);
+			traces.add(gmfDiagramTrace);
+			// <-- End -->
+			
 			final boolean propertyFile = "properties".equals(filePath.getFileExtension());
 			String charset = propertyFile ? "ISO-8859-1" : "UTF-8";
 			if (propertyFile) {
@@ -312,16 +322,24 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 	}
 	
 	protected String rule;
-	protected Set<File> files = new HashSet<File>();
-	
-	protected void newFile(IFile f){
-		newFile(f.getFullPath());
+	protected Set<File> files = new HashSet<>();
+	protected List<GmfDiagramTrace> traces = new ArrayList<>();
+
+	protected File newFile(IFile f){
+		IPath fullPath = f.getFullPath();
+		return newFile(fullPath);
 	}
-	protected void newFile(IPath f){
-		this.files.add(f.toFile());
+	protected File newFile(IPath f){
+		File absoluteFile = f.toFile().getAbsoluteFile();
+		this.files.add(absoluteFile);
+		return absoluteFile;
 	}
 	public Set<File> getFiles() {
 		return files;
+	}
+	
+	public List<GmfDiagramTrace> getTraces() {
+		return traces;
 	}
 
 	/**
@@ -400,7 +418,13 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 			String genText = emitter.generate(new SubProgressMonitor(pm, 2), input);
 			IPackageFragment pf = myDestRoot.createPackageFragment(packageName, true, new SubProgressMonitor(pm, 1));
 			ICompilationUnit cu = pf.getCompilationUnit(className + ".java"); //$NON-NLS-1$
-			newFile(cu.getPath());
+			// <!-- ModelFlow Tracing -->
+			GmfDiagramTrace gmfDiagramTrace = new GmfDiagramTrace();
+			gmfDiagramTrace.setLabel(rule);
+			gmfDiagramTrace.addOutput(newFile(cu.getPath()));
+			gmfDiagramTrace.setSources(input);
+			traces.add(gmfDiagramTrace);
+			// <-- End -->
 			if (cu.exists()) {
 				ICompilationUnit workingCopy = null;
 				try {
@@ -461,7 +485,15 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 		IProgressMonitor pm = getNextStepMonitor();
 		setProgressTaskName(outputPath.lastSegment());
 		IFile f = getDestProject().getFile(outputPath);
-		newFile(f);
+
+		// <!-- ModelFlow Tracing -->
+		GmfDiagramTrace gmfDiagramTrace = new GmfDiagramTrace();
+		gmfDiagramTrace.setLabel(rule);
+		gmfDiagramTrace.addOutput(newFile(f));
+		gmfDiagramTrace.setSources(params);
+		traces.add(gmfDiagramTrace);
+		// <-- End -->
+		
 		if (f.exists()) {
 			// Follow EMF's policy and do not overwrite file if exists
 			return;

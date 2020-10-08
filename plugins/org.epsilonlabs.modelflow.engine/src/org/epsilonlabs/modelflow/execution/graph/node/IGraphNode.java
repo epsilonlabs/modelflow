@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.execution.IPublisher;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 
 /**
  *  
@@ -34,6 +34,6 @@ public interface IGraphNode {
 	 *
 	 * @param pub the pub
 	 */
-	void subscribe(IPublisher pub);
+	void subscribe(IModelFlowPublisher pub);
 	
 }

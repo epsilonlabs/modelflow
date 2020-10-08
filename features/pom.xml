@@ -17,5 +17,11 @@
 
 	<modules>
 	    <module>org.epsilonlabs.modelflow.feature</module>
+	    <module>org.epsilonlabs.modelflow.emf.feature</module>
+	    <module>org.epsilonlabs.modelflow.epsilon.feature</module>
+	    <module>org.epsilonlabs.modelflow.acceleo.feature</module>
+	    <module>org.epsilonlabs.modelflow.atl.feature</module>
+	    <module>org.epsilonlabs.modelflow.qvto.feature</module>
+	    <module>org.epsilonlabs.modelflow.xtext.feature</module>
 	</modules>
 </project>

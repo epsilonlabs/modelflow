@@ -5,15 +5,16 @@ import static org.junit.Assert.fail;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
-import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
-import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
@@ -55,6 +56,7 @@ public class ModelflowPerformanceExperiment extends IterativeExperiment {
 		/** Module Workflow */
 		module = new ModelFlowModule();
 		Workflow workflow = EcoreUtil.copy(getComponentWorkflow());
+		module.getContext().setProfilingEnabled(true);
 		module.setWorkflow(workflow);
 		module.setTaskFactoryRegistry(taskFactoryRegistry);
 		module.setResFactoryRegistry(resFactoryRegistry);
@@ -83,16 +85,12 @@ public class ModelflowPerformanceExperiment extends IterativeExperiment {
 		/** First Execution */
 		execute();
 		
+		IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
 		if (scenarioId == 1) {
-			WorkflowExecution workflowExecution = module.getContext().getExecutionTrace().getExecutions().get(0);
-			duration = workflowExecution.getEnd()-workflowExecution.getStart();
-			EList<TaskExecution> tasks = workflowExecution.getTasks();
-			TaskExecution t = tasks.get(0);
-			evl = t.getEnd()-t.getStart();
-			t = tasks.get(1);
-			etl = t.getEnd()-t.getStart();
-			t = tasks.get(2);
-			egx = t.getEnd()-t.getStart();
+			evl = deltaNanoTime("evl", profiler);
+			etl = deltaNanoTime("etl", profiler);
+			egx = deltaNanoTime("egx", profiler);
+			duration = evl + etl + egx;
 			
 		}
 		/** Invoke Scenario Modifications */
@@ -101,16 +99,18 @@ public class ModelflowPerformanceExperiment extends IterativeExperiment {
 		/** Second Execution */
 		execute();
 		if (scenarioId != 1) {
-			WorkflowExecution workflowExecution = module.getContext().getExecutionTrace().getExecutions().get(1);
-			duration = workflowExecution.getEnd()-workflowExecution.getStart();
-			EList<TaskExecution> tasks = workflowExecution.getTasks();
-			TaskExecution t = tasks.get(0);
-			evl = t.getEnd()-t.getStart();
-			t = tasks.get(1);
-			etl = t.getEnd()-t.getStart();
-			t = tasks.get(2);
-			egx = t.getEnd()-t.getStart();
+			evl = deltaNanoTime("evl", profiler);
+			etl = deltaNanoTime("etl", profiler);
+			egx = deltaNanoTime("egx", profiler);
+			duration = evl + etl + egx;
+
 		}
+	}
+	
+	protected Long deltaNanoTime(String name, IModelFlowExecutionProfiler profiler) {
+		final AtomicLong result = new AtomicLong();
+		profiler.getByStage(Stage.EXECUTION_PROCESS).getByNode(name).values().stream().findFirst().ifPresent(p-> result.set(p.delta().getTime(TimeUnit.NANOSECONDS)));
+		return result.get();
 	}
 			
 	public static Workflow getComponentWorkflow() {

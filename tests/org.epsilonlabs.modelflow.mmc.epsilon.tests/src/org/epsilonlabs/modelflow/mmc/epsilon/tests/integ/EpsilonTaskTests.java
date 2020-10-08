@@ -7,11 +7,15 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.epsilon.tests.integ;
 
+import static org.junit.Assert.fail;
+
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.tests.common.workflow.EpsilonTask;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.WorkflowBuilderTest;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,72 +32,95 @@ public class EpsilonTaskTests extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 
+	protected Workflow w;
+
 	@Test
-	@Ignore //FIXME
+	@Ignore //FIXME it takes very long
 	public void testFlock() {
-		execute(EpsilonTask.getFlockWorkflow());
+		w = EpsilonTask.getFlockWorkflow();
 	}
-	
+
 	@Test
 	public void testEpl() {
-		execute(EpsilonTask.getEplWorkflow());
+		w = EpsilonTask.getEplWorkflow();
 	}
-	
+
 	@Test
 	public void testGenPackagesEOL() {
-		execute(EpsilonTask.getEolGenpackagesWorkflow());
+		w = EpsilonTask.getEolGenpackagesWorkflow();
 	}
-	
+
 	@Test
 	public void testEtl() {
-		execute(EpsilonTask.getEtlWorkflow());
+		w = EpsilonTask.getEtlWorkflow();
 	}
-	
+
 	@Test
 	public void testEtlWithAlias() {
-		execute(EpsilonTask.getEtlWorkflowWithAlias());
+		w = EpsilonTask.getEtlWorkflowWithAlias();
 	}
 
 	@Test
 	public void testEvl() {
-		execute(EpsilonTask.getEvlWorkflow());
+		w = EpsilonTask.getEvlWorkflow();
 	}
-	
+
 	@Test
 	public void testEol() {
-		execute(EpsilonTask.getEolLibrary());
+		w = EpsilonTask.getEolLibrary();
 	}
-	
+
 	@Test
 	public void testEgx() {
-		execute(EpsilonTask.getEgxWorkflow());
-	}	
-	
+		w = EpsilonTask.getEgxWorkflow();
+	}
+
 	@Test
 	public void testEgl() {
-		execute(EpsilonTask.getEglWorkflow());
-	}	
-	
+		w = EpsilonTask.getEglWorkflow();
+	}
+
 	@Test
 	public void testEcl() {
-		execute(EpsilonTask.getEclWorkflow());	
+		w = EpsilonTask.getEclWorkflow();
 	}
 	
+	@Test
+	public void testSimulink() {
+		w = EpsilonTask.getSimulinkWorkflow();
+	}
+
 	@Ignore
 	@Test
 	public void testEUnitWithModel() {
-		execute(EpsilonTask.getEUnitWithModelWorkflow());
+		w = EpsilonTask.getEUnitWithModelWorkflow();
 	}
-	
+
 	@Ignore
 	@Test
 	public void testEUnitWithData() {
-		execute(EpsilonTask.getEUnitWithDataWorkflow());
+		w = EpsilonTask.getEUnitWithDataWorkflow();
 	}
-	
+
 	@Test
 	public void testEUnit() {
-		execute(EpsilonTask.getEUnitWorkflow());
+		w = EpsilonTask.getEUnitWorkflow();
 	}
-	
+
+	@After
+	public void exec() {
+		try {
+			execute();
+		} catch (Exception e) {
+			cleanup();
+			e.printStackTrace();
+			fail("Execution error");
+		}
+	}
+
+	@Override
+	protected void setupSource() {
+		module.setWorkflow(w);
+	}
+
 }

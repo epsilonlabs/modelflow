@@ -17,7 +17,7 @@ import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 public class EmfTask {
 
 	private static String location(String name) {
-		return ResourceLocator.locateAndCopy("filesystem." + name);
+		return ResourceLocator.locateAndCopyToTestDir("filesystem." + name);
 	}
 	
 	public static Workflow getEmfatic2EcoreWithModelWorkflow() {

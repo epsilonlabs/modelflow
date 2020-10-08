@@ -1,20 +1,49 @@
 operation getColor(p : String) : String{
-	if ( not colors.containsKey(p)){
-		var col = defColors.at(0);
-		colors.put(p, col);
-		defColors.remove(col);
+	if (not colors.containsKey(p)){
+		var color = getRandomColor();
+		while(defColors.contains(color)){
+			color = getRandomColor();
+		}
+		defColors.add(color);
+		colors.put(p, color);
 	}
 	return colors.get(p);
 }
+operation getRandomColor() : String{
+	var chars = 5.to(9);
+	chars.addAll(Sequence{"a","b","c","d","f"});
+	var color = "#";
+	for (i in 1.to(6)){
+		color = color + chars.random();
+	}
+	return color;
+}
+
 operation idOf(p : Any) : String{
 	if (p.isTypeOf(ModelElementProperty)){
-		return p.container.name + "::" + p.elementId + "::" + p.property;
+		return p.container.name.safe() + "::" + p.elementId.safe() + "::" + p.property.safe();
 	} else if (p.isTypeOf(FileElement)){
-		return p.container.name.split("/").last() + "+" + p.region.offset + "::" + p.region.length;
+		var id = p.container.name.split("/").last().safe() ;
+		if (p.hasValidRegion()){
+			id = id + "+" + p.region.offset + "::" + p.region.length;
+		}
+		return id;
 	} else if (p.isTypeOf(ModelElement)){
-		return p.container.name + "::" + p.elementId;
+		return p.container.name.safe() + "::" + p.elementId.safe();
 	}
 }
+
+operation FileElement hasValidRegion() : Boolean {
+	return self.region <> null and self.region.offset >= 0 and self.region.length>0;
+}
+
+operation String safe() : String {
+	if (self == null){
+		return "";
+	}
+	return self.replace("\\.","_").replace("@","__");
+}
+
 operation labelOf(p : Any) : String{
 	if (p.isTypeOf(ModelElementProperty)){
 		return p.property;

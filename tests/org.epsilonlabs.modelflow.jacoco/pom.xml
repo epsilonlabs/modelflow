@@ -1,0 +1,102 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.epsilonlabs.modelflow</groupId>
+		<artifactId>tests</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>org.epsilonlabs.modelflow.jacoco</artifactId>
+	<name>Modelflow Coverage</name>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>aggregate-coverage-report</id>
+						<goals>
+							<goal>report-aggregate</goal>
+						</goals>
+						<phase>verify</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- TESTED PLUGINS -->
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.engine</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.epsilon</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.emf</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- TEST PLUGINS -->
+		<!-- <module>org.epsilonlabs.modelflow.mmc.acceleo.tests</module> <module>org.epsilonlabs.modelflow.mmc.atl.tests</module> 
+			<module>org.epsilonlabs.modelflow.mmc.qvto.tests</module> <module>org.epsilonlabs.modelflow.mmc.xtext.tests</module> 
+			<module>org.epsilonlabs.modelflow.mmc.gmf.tests</module> -->
+
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.tests</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.integ.tests</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.epsilon.tests</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.core.tests</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.emf.tests</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

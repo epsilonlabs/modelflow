@@ -2,7 +2,7 @@ package org.epsilonlabs.modelflow.dom.ast;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
-import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
+import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.Expression;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.dom.TypeExpression;
@@ -35,7 +35,7 @@ public class ParameterDeclaration extends Expression {
 	}
 
 	@Override
-	public void compile(EolCompilationContext context) {
+	public void compile(IEolCompilationContext context) {
 		EolType type;
 		
 		if (typeExpression != null) {

@@ -19,7 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.epsilonlabs.modelflow.dom.api.factory.AbstractTaskFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.TaskFactoryImpl;
 import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +37,7 @@ public class WorkflowBuilder {
 	protected Collection<Task> tasks;
 	protected Collection<TaskDependency> taskDependencies;
 
-	private static final Pattern PATTERN = Pattern.compile(AbstractTaskFactory.REFERENCE_VARIABLE);
+	private static final Pattern PATTERN = TaskFactoryImpl.REF_VAR_PATTERN;
 
 	public static void main(String[] args) {
 		Workflow workflow = new WorkflowBuilder()

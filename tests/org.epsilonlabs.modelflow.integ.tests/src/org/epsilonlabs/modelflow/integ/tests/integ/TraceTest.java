@@ -7,6 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests.integ;
 
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +22,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
+import org.epsilonlabs.modelflow.tests.common.ExecutionHelper;
 import org.epsilonlabs.modelflow.tests.common.WorkflowBuilderTest;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -77,15 +80,33 @@ public class TraceTest extends WorkflowBuilderTest {
 	@Test
 	public void test() {
 		System.out.println(">>>>>>>>>>>>>EXECUTION 1");
-		execute(this.workflow);
+		try {
+			execute();
+		} catch (Exception e) {
+			cleanup();
+			e.printStackTrace();
+			fail("Execution error");
+		}
 		int count = times - 1;
 		while (count>0) {
 			System.out.println(">>>>>>>>>>>>>EXECUTION " + (this.times-count+1));
-			reExecute();
+			try {
+				reExecute();
+			} catch (Exception e) {
+				cleanup();
+				e.printStackTrace();
+				fail("Execution error");
+			}
 			count -= 1;
 		}
 		
-		saveModels(module, this.name + this.times);
+		String traceName = this.name + this.times;
+		new ExecutionHelper(module).saveModels(traceName);
+	}
+	
+	@Override
+	protected void setupSource() {
+		module.setWorkflow(workflow);
 	}
 
 }

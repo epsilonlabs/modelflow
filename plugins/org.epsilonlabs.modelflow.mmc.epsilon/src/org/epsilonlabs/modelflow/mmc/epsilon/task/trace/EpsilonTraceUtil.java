@@ -30,7 +30,7 @@ public class EpsilonTraceUtil {
 		ModelRepository modelRepository = task.getModule().getContext().getModelRepository();
 		IModel model = modelRepository.getOwningModel(element);
 		for (IModelWrapper r : task.getResources()) {
-			if (r.getModel().equals(model)) {
+			if (model.equals(r.getModel())) {
 				return r.getResource();
 			}
 		}

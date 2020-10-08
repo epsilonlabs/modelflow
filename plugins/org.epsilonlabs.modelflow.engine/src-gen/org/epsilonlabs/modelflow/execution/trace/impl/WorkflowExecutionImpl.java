@@ -28,7 +28,6 @@ import org.epsilonlabs.modelflow.dom.Workflow;
 
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
-import org.epsilonlabs.modelflow.execution.trace.Timed;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
 
 /**
@@ -39,8 +38,6 @@ import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getStart <em>Start</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getEnd <em>End</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getTasks <em>Tasks</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getWorkflow <em>Workflow</em>}</li>
  * </ul>
@@ -48,46 +45,6 @@ import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
  * @generated
  */
 public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecution {
-	/**
-	 * The default value of the '{@link #getStart() <em>Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long START_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getStart() <em>Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected long start = START_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEnd()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long END_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEnd()
-	 * @generated
-	 * @ordered
-	 */
-	protected long end = END_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getTasks() <em>Tasks</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -125,52 +82,6 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	protected EClass eStaticClass() {
 		return ExecutionTracePackage.Literals.WORKFLOW_EXECUTION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getStart() {
-		return start;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStart(long newStart) {
-		long oldStart = start;
-		start = newStart;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__START, oldStart, start));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getEnd() {
-		return end;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEnd(long newEnd) {
-		long oldEnd = end;
-		end = newEnd;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__END, oldEnd, end));
 	}
 
 	/**
@@ -255,10 +166,6 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__START:
-				return getStart();
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__END:
-				return getEnd();
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				return getTasks();
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
@@ -276,12 +183,6 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__START:
-				setStart((Long)newValue);
-				return;
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__END:
-				setEnd((Long)newValue);
-				return;
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				getTasks().clear();
 				getTasks().addAll((Collection<? extends TaskExecution>)newValue);
@@ -301,12 +202,6 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__START:
-				setStart(START_EDEFAULT);
-				return;
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__END:
-				setEnd(END_EDEFAULT);
-				return;
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				getTasks().clear();
 				return;
@@ -325,68 +220,12 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__START:
-				return start != START_EDEFAULT;
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__END:
-				return end != END_EDEFAULT;
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				return tasks != null && !tasks.isEmpty();
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
 				return workflow != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == Timed.class) {
-			switch (derivedFeatureID) {
-				case ExecutionTracePackage.WORKFLOW_EXECUTION__START: return ExecutionTracePackage.TIMED__START;
-				case ExecutionTracePackage.WORKFLOW_EXECUTION__END: return ExecutionTracePackage.TIMED__END;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == Timed.class) {
-			switch (baseFeatureID) {
-				case ExecutionTracePackage.TIMED__START: return ExecutionTracePackage.WORKFLOW_EXECUTION__START;
-				case ExecutionTracePackage.TIMED__END: return ExecutionTracePackage.WORKFLOW_EXECUTION__END;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (start: ");
-		result.append(start);
-		result.append(", end: ");
-		result.append(end);
-		result.append(')');
-		return result.toString();
 	}
 
 } //WorkflowExecutionImpl

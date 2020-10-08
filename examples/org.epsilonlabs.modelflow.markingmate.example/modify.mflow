@@ -1,0 +1,23 @@
+param mBasedir : String;
+param tBasedir : String;
+param mm : String;
+
+model BOB is epsilon:emf {
+	src: mBasedir + "sepr-bob.model"
+	metamodelFile: mm
+}			
+model ALICE is epsilon:emf {
+	src: mBasedir + "sepr-alice.model"
+	metamodelFile: mm
+}	
+task mark is epsilon:eol
+	inout BOB
+{
+	src: tBasedir + "mark.eol"
+}
+
+task mark is epsilon:eol
+	inout ALICE
+{
+	src: tBasedir + "mark.eol"
+}

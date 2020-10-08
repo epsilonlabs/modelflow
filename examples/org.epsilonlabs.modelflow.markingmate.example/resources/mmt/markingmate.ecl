@@ -1,29 +1,29 @@
 // Original file from https://github.com/kolovos/markingmate
 rule Exam 
-	match l : ALICE!Exam
-	with r : BOB!Exam {
+	match l : Left!Exam
+	with r : Right!Exam {
 
 	compare : true
 }
 
 rule Question 
-	match l : ALICE!Question
-	with r : BOB!Question {
+	match l : Left!Question
+	with r : Right!Question {
 
 	compare : l.title = r.title
 }
 
 rule Answer 
-	match l : ALICE!Answer
-	with r : BOB!Answer {
+	match l : Left!Answer
+	with r : Right!Answer {
 
 	compare : l.question.matches(r.question) 
 		and l.student.matches(r.student)
 }
 
 rule Student 
-	match l : ALICE!Student
-	with r : BOB!Student {
+	match l : Left!Student
+	with r : Right!Student {
 
 	compare : l.number = r.number
 }

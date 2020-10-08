@@ -1,6 +1,7 @@
 package org.epsilonlabs.modelflow.mmc.gmf.task.helper;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,6 +14,7 @@ import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.codegen.util.CodegenEmitters;
 import org.eclipse.gmf.codegen.util.EmitterSource;
 import org.epsilonlabs.modelflow.mmc.gmf.task.GenerateDiagramCodeTask;
+import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfDiagramTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +52,6 @@ public class SimplifiedDiagramGenerator extends Job {
 	protected final GenEditorGenerator getGenModel() {
 		return myGenModel;
 	}
-	
 	
 	public  EmitterSource<GenEditorGenerator, CodegenEmitters> getEmitters() {
 		return emmiterSource;
@@ -90,6 +91,10 @@ public class SimplifiedDiagramGenerator extends Job {
 	public Set<File> getFiles(){
 		return generator.getFiles();
 	}
+	
+	public List<GmfDiagramTrace> getTraces(){
+		return generator.getTraces();
+	}
 
 	public SimplifiedDiagramGenerator(GenerateDiagramCodeTask task) {
 		super("gmf:genDiagram");
@@ -102,7 +107,6 @@ public class SimplifiedDiagramGenerator extends Job {
 //				unloadGenModel();
 				IStatus runStatus = event.getResult();
 				
-				task.setResult(runStatus);
 				if (runStatus.isOK()) {
 				} else if (runStatus.matches(IStatus.ERROR)) {
 					LOG.error(runStatus.getMessage(), runStatus.getException());

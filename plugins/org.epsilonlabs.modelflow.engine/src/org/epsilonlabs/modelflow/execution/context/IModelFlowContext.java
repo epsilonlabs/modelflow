@@ -10,8 +10,9 @@ package org.epsilonlabs.modelflow.execution.context;
 import org.eclipse.epsilon.erl.execute.context.IErlContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
-import org.epsilonlabs.modelflow.execution.IPublisher;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.IScheduler;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
@@ -23,7 +24,7 @@ import org.epsilonlabs.modelflow.repository.TaskRepository;
 /**
  * The Interface IModelFlowContext.
  */
-public interface IModelFlowContext extends IErlContext {
+public interface IModelFlowContext extends IErlContext{
 
 	/**
 	 * Gets the module.
@@ -125,14 +126,14 @@ public interface IModelFlowContext extends IErlContext {
 	 *
 	 * @return the publisher
 	 */
-	IPublisher getPublisher();
+	IModelFlowPublisher getPublisher();
 
 	/**
 	 * Sets the publisher.
 	 *
 	 * @param publisher the new publisher
 	 */
-	void setPublisher(IPublisher publisher); 	
+	void setPublisher(IModelFlowPublisher publisher); 	
 
 	/*
 	 * REPOSITORIES
@@ -227,5 +228,17 @@ public interface IModelFlowContext extends IErlContext {
 	 * @param enable the new protect resources
 	 */
 	void setProtectResources(Boolean enable);
+	
+	/**
+	 * Set the profiler
+	 * @param profiler
+	 */
+	void setProfiler(IModelFlowProfiler profiler);
+	
+	/**
+	 * Get the profiler
+	 * @param profiler
+	 */
+	IModelFlowProfiler getProfiler();
 
 }

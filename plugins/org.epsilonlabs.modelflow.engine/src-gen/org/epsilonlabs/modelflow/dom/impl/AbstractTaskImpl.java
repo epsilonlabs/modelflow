@@ -21,7 +21,7 @@ import org.epsilonlabs.modelflow.dom.DomPackage;
  *
  * @generated
  */
-public abstract class AbstractTaskImpl extends NamedImpl implements AbstractTask {
+public abstract class AbstractTaskImpl extends ConfigurableImpl implements AbstractTask {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

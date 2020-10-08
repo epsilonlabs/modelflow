@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
-import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
+import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.FeatureCallExpression;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
@@ -68,7 +68,7 @@ public class ModelCallExpression extends FeatureCallExpression implements IDomEl
 	 * @param context the context
 	 */
 	@Override
-	public void compile(EolCompilationContext context) {
+	public void compile(IEolCompilationContext context) {
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			// Create resource reference

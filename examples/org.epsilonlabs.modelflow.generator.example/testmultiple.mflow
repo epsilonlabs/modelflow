@@ -1,0 +1,12 @@
+task A is epsilon:eol 
+	forEach b in : Sequence{1..5}
+{
+  src: loopCount + '.eol' 
+}
+
+
+task B is epsilon:eol 
+	forEach b in : Sequence{"a","b"}
+{
+  src: b + '.eol' 
+}

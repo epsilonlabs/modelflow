@@ -1,0 +1,39 @@
+
+operation Named name() : String {
+	return self.name.replace("\\.","_").replace("@","__");
+}
+operation ResourceReference aliasLabel() : String {
+	var label = "[label=\"";
+	if (self.aliases.size()>0){
+		for (a in self.aliases){
+			label += a;
+			if (loopCount <> self.aliases.size()){
+				label += ", ";
+			}  
+		}
+	} else {
+		return "";
+	}
+	return label + "\"]";
+}
+
+operation Any label() : String {
+	var label = "<table cellspacing='0' cellborder='0' cellpadding='1' border='0'>";
+	//var javascript = "javascript:top.showView(['Model', 'Classes', '" + self.name + "'])";
+	var name = self.name;
+	if (not self.isTypeOf(DerivedResource)){
+		label += "<tr><td align='right' valign='middle'><img src='" + self.getIcon()+ "'></img></td>" + 
+				"<td align='left' valign='middle'>  " + self.definition + "  </td></tr>";
+	} else {
+		name = self.name.split("\\.").at(1);
+	}
+	label += "<tr><td colspan='2'><b>  " + name + "  </b></td>" +
+				"</tr></table>"; 	
+	return label;
+}
+operation Sequence edgeLabel(){
+	// TODOreturn self.name.replace("://", "-");
+}
+operation Any getIcon() {
+	return getImage("icons/" + self.definition.split(":").at(1) + ".png");
+}

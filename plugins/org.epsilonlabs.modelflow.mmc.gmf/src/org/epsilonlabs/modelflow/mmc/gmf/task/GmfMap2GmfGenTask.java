@@ -2,17 +2,21 @@ package org.epsilonlabs.modelflow.mmc.gmf.task;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
+import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
+import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
+import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
 import org.epsilonlabs.modelflow.dom.api.AbstractTask;
 import org.epsilonlabs.modelflow.dom.api.ITask;
@@ -26,6 +30,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.gmf.factory.AbstractGMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.gmf.task.helper.SimplifiedGmfMap2GmfGen;
 import org.epsilonlabs.modelflow.mmc.gmf.task.monitor.GmfMap2GmfGenMonitor;
+import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfMap2GmfGenTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +55,6 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	}
 
 	protected SimplifiedGmfMap2GmfGen transformation;
-	protected IStatus result;
 
 	protected URI genmodelLoc;
 	protected URI mappingLoc;
@@ -63,6 +67,7 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	protected boolean generateRCP = false;
 	protected boolean useMapMode = true;
 	protected boolean useRuntimeFigures = true;
+	protected Map<String, IModelWrapper> resources = new HashMap<>();
 	
 	private Resource output;
 
@@ -109,11 +114,9 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 		if (genmodelLoc == null || mappingLoc == null || gmfgenLoc == null) {
 			throw new MFExecutionException("Invalid models");
 		}
-
 		try {
 			// Caused by: java.lang.IllegalStateException: Target gmfgen URI should be specified
 			transformation.executeTransformation();
-			transformation.getQvtTrace();
 			transformation.getTrace();
 		} catch (Exception e) {
 			throw new MFExecutionException(e);
@@ -121,19 +124,13 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	}
 
 	@Override
-	public IStatus getResult() {
-		return result;
-	}
-
-	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		return Optional.empty();
-	}
+		return Optional.of(new GmfMap2GmfGenTrace(this, transformation).init().getTraces());
+	}	
 
 	@Override
 	public void processModelsAfterExecution() { }
 
-	
 	/** 
 	 * Can only execute for a specific model configuration:
 	 */
@@ -151,10 +148,11 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 					if (eObject instanceof GenModel) {
 						genmodelLoc = model.getModelFileUri();
 						genmodel = (GenModel) eObject;
+						resources.put(GenModelPackage.eNS_URI, m);
 					} else if (eObject instanceof Mapping) {
 						mappingLoc = model.getModelFileUri();
 						mapping = (Mapping) eObject;
-						
+						resources.put(GMFMapPackage.eNS_URI, m);
 					} else if (eObject instanceof GenEditorGenerator && isOutput) {
 						gmfgenLoc = model.getModelFileUri();
 						output = resource;
@@ -165,6 +163,7 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 						if (uri.toString().endsWith("gmfgen") && isOutput) {
 							gmfgenLoc = model.getModelFileUri();
 							output = resource;
+							resources.put(GMFGenPackage.eNS_URI, m);
 						}
 					}
 				}
@@ -177,6 +176,10 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 		transformation.setGmfGenResource(output);
 	}
 
+	public Map<String, IModelWrapper> getResources() {
+		return resources;
+	}
+	
 	@Override
 	public void afterExecute() {
 		LOG.debug("Reloading");

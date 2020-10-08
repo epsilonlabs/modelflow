@@ -1,11 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ModelFlow Atl Model Management Connectivity
+Bundle-Name: ModelFlow Atl MMC
 Bundle-SymbolicName: org.epsilonlabs.modelflow.mmc.atl;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.epsilonlabs.modelflow.engine,
  com.google.inject,
- org.apache.commons.io
-Export-Package: org.epsilonlabs.modelflow.mmc.atl.plugin
+ org.apache.commons.io,
+ org.eclipse.m2m.atl,
+ org.eclipse.m2m.atl.emftvm
+Export-Package: org.epsilonlabs.modelflow.mmc.atl.plugin,
+ org.epsilonlabs.modelflow.mmc.atl.resource,
+ org.epsilonlabs.modelflow.mmc.atl.task
 Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.atl

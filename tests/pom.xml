@@ -25,6 +25,7 @@
 	    <!--<module>org.epsilonlabs.modelflow.mmc.gmf.tests</module>-->
 	    <module>org.epsilonlabs.modelflow.mmc.epsilon.tests</module>
 	   	<module>org.epsilonlabs.modelflow.integ.tests</module>
+	   	<module>org.epsilonlabs.modelflow.jacoco</module>
 	</modules>
 	
 </project>

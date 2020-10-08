@@ -18,6 +18,7 @@ import java.util.Optional;
 import org.epsilonlabs.modelflow.dom.api.AbstractTask;
 import org.epsilonlabs.modelflow.dom.api.ITask;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
+import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
@@ -44,7 +45,7 @@ public class FileReaderTask extends AbstractTask implements ITask {
 	}
 
 	protected File file;
-	protected String result;
+	protected String contents;
 
 	@Param(key = "src")
 	public void setFile(File file) {
@@ -54,6 +55,11 @@ public class FileReaderTask extends AbstractTask implements ITask {
 	@Input(key="src")
 	public File getFile() {
 		return this.file;
+	}
+	
+	@Override
+	public boolean isAlwaysExecute() {
+		return true;
 	}
 
 	@Override
@@ -72,7 +78,7 @@ public class FileReaderTask extends AbstractTask implements ITask {
 				while ((line = bis.readLine()) != null) {
 					sb.append(line);
 				}
-				this.result = sb.toString();
+				this.contents = sb.toString();
 			} catch (Exception e) {
 				throw new MFExecutionException(e);
 			}
@@ -83,9 +89,9 @@ public class FileReaderTask extends AbstractTask implements ITask {
 		}
 	}
 
-	@Override
-	public Object getResult() {
-		return result;
+	@Output(key = "contents") 
+	public String getContents() {
+		return contents;
 	}
 
 	@Override

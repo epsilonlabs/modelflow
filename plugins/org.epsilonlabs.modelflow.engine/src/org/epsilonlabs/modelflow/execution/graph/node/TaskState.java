@@ -7,7 +7,16 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-public enum TaskState {
+/*
+ * 	SUCCESS, 
+	SUCCESS_WITH_RETRY, 
+	FAILED, 
+	FAILED_AND_SCHEDULING_FAILED, 
+	SCHEDULING_FAILED, 
+	NOT_RUN, 
+	MISSING_EXTERNAL_DEPENDENCIES;
+ */
+public enum TaskState { // FAILED?
 	CREATED(0), INITIALIZED(1), RESOLVED(2), EXECUTING(3), EXECUTED(4), SKIPPED(6);
 
 	private int val;

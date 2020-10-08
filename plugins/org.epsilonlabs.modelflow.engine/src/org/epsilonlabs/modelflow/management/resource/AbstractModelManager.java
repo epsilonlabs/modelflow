@@ -7,8 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.management.resource;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.epsilonlabs.modelflow.dom.Resource;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -20,8 +20,8 @@ public abstract class AbstractModelManager<M> implements IModelManager<M> {
 	protected Map<String, Resource> resources;
 	
 	protected AbstractModelManager() {
-		cachedModels = new HashMap<>();
-		resources = new HashMap<>();
+		cachedModels = new ConcurrentHashMap<>();
+		resources = new ConcurrentHashMap<>();
 	}
 	
 	@Override

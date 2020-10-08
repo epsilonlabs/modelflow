@@ -7,29 +7,54 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.api.factory;
 
+import java.io.Serializable;
+
 import org.eclipse.epsilon.common.module.ModuleElement;
+import org.epsilonlabs.modelflow.IModelFlowModule;
 
 /**
  * @author Betty Sanchez
  *
  */
-public class ModuleElementHandler {
+public class ModuleElementHandler implements Serializable {
 
-	private final ModuleElement e;
+	private static final long serialVersionUID = 6230895397012955951L;
+
+	private Integer identifier;
 	
-	public ModuleElementHandler(ModuleElement e ) {
-		this.e = e;
+	protected transient ModuleElement element; 
+	
+	public ModuleElementHandler(ModuleElement element){
+		this.element = element;
+		computeIdentifier();
 	}
-
-	public int getIdentifier() {
-		if (e.getParent() == null) {
-			return 1;
+	
+	public ModuleElementHandler(Integer identifier){
+		this.identifier = identifier;
+	}
+	
+	protected void computeIdentifier() {
+		if (element.getParent() == null) {
+			this.identifier = 1;
 		} else {
-			int indexOf = e.getParent().getChildren().indexOf(e) + 1;
-			ModuleElementHandler h = new ModuleElementHandler(e.getParent());
+			int indexOf = element.getParent().getChildren().indexOf(element) + 1;
+			ModuleElementHandler h = new ModuleElementHandler(element.getParent());
 			String newIdentifier = String.format("%d%d", h.getIdentifier(), indexOf);
-			return Integer.valueOf(newIdentifier);
+			this.identifier = Integer.valueOf(newIdentifier);
 		}
+	}
+	
+	public void resolveModuleElement(IModelFlowModule module){
+		// TODO fix
+		this.element = null;
+	}
+	
+	public Integer getIdentifier() {
+		return identifier;
+	}
+	
+	public ModuleElement getModuleElement(){
+		return element;
 	}
 
 }

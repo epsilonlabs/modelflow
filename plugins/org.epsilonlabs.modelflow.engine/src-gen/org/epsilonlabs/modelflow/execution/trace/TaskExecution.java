@@ -30,10 +30,10 @@ import org.epsilonlabs.modelflow.dom.Task;
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getTaskExecution()
- * @model annotation="exeed classIcon='operation' label='return self.task.name \n+ \' (\' + self.endState +\') \' \n+ (self.end-self.start) + \'ms\';'"
+ * @model annotation="exeed classIcon='operation' label='return self.task.name \n+ \' (\' + self.endState +\') \';'"
  * @generated
  */
-public interface TaskExecution extends Stateful, Timed {
+public interface TaskExecution extends Stateful {
 	/**
 	 * Returns the value of the '<em><b>Input Models</b></em>' containment reference list.
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot}.

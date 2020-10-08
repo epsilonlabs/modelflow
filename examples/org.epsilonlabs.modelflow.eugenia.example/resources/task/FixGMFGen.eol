@@ -2,6 +2,7 @@ import 'ECoreUtil.eol';
 
 var ePackage := ECore!EPackage.all.first();
 
+var genDiagram := GmfGen!GenDiagram.all.first();
 var genEditorGenerator := GmfGen!GenEditorGenerator.all.first();
 
 // Set copyright
@@ -27,14 +28,12 @@ if (diagramExtension.isDefined()) {
 // Set the units property
 var units := getDiagramClass().getAnnotationValue('gmf.diagram','units');
 
-var genDiagram := GmfGen!GenDiagram.all.first();
 if (units.isDefined()) {
 	genDiagram.units := units;
 }
 
-// Enable shortcuts // FIXME says genDiagram is undefined
-
-if (modelExtension <> null) {
+// Enable shortcuts
+if (modelExtension.isDefined()) {
 	genDiagram.containsShortcutsTo := Sequence{genEditorGenerator.domainFileExtension};
 	genDiagram.shortcutsProvidedFor := Sequence{genEditorGenerator.domainFileExtension};
 }
@@ -47,7 +46,6 @@ else {
 genDiagram.validationDecorators := true;
 genDiagram.validationEnabled := true;
 genDiagram.liveValidationUIFeedback := true;
-
 
 // Enable printing if not RCP
 if (getDiagramClass().getAnnotationValue("gmf.diagram", "rcp") <> "true") {

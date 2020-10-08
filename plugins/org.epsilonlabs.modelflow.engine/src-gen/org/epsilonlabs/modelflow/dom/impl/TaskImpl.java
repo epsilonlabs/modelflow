@@ -26,7 +26,6 @@ import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.epsilonlabs.modelflow.dom.DomPackage;
-import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.dom.ResourceReference;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.TaskDependency;
@@ -42,12 +41,12 @@ import org.epsilonlabs.modelflow.dom.TaskDependency;
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getProduces <em>Produces</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getConsumes <em>Consumes</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getModifies <em>Modifies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getProperties <em>Properties</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getGuard <em>Guard</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getTraceable <em>Traceable</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDependencies <em>Dependencies</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getAlwaysExecute <em>Always Execute</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getGuard <em>Guard</em>}</li>
  * </ul>
  *
  * @generated
@@ -84,34 +83,14 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	protected EList<ResourceReference> modifies;
 
 	/**
-	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
+	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getProperties()
+	 * @see #getDependencies()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<Property> properties;
-
-	/**
-	 * The default value of the '{@link #getGuard() <em>Guard</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getGuard()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final Object GUARD_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getGuard() <em>Guard</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getGuard()
-	 * @generated
-	 * @ordered
-	 */
-	protected Object guard = GUARD_EDEFAULT;
+	protected EList<TaskDependency> dependencies;
 
 	/**
 	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
@@ -174,14 +153,44 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	protected Boolean traceable = TRACEABLE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getDependencies() <em>Dependencies</em>}' reference list.
+	 * The default value of the '{@link #getAlwaysExecute() <em>Always Execute</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDependencies()
+	 * @see #getAlwaysExecute()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<TaskDependency> dependencies;
+	protected static final Boolean ALWAYS_EXECUTE_EDEFAULT = Boolean.FALSE;
+
+	/**
+	 * The cached value of the '{@link #getAlwaysExecute() <em>Always Execute</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAlwaysExecute()
+	 * @generated
+	 * @ordered
+	 */
+	protected Boolean alwaysExecute = ALWAYS_EXECUTE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getGuard() <em>Guard</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGuard()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Object GUARD_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getGuard() <em>Guard</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getGuard()
+	 * @generated
+	 * @ordered
+	 */
+	protected Object guard = GUARD_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -270,19 +279,6 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	 * @generated
 	 */
 	@Override
-	public EList<Property> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<Property>(Property.class, this, DomPackage.TASK__PROPERTIES);
-		}
-		return properties;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getDefinition() {
 		return definition;
 	}
@@ -352,6 +348,29 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	 * @generated
 	 */
 	@Override
+	public Boolean getAlwaysExecute() {
+		return alwaysExecute;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAlwaysExecute(Boolean newAlwaysExecute) {
+		Boolean oldAlwaysExecute = alwaysExecute;
+		alwaysExecute = newAlwaysExecute;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.TASK__ALWAYS_EXECUTE, oldAlwaysExecute, alwaysExecute));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<TaskDependency> getDependencies() {
 		if (dependencies == null) {
 			dependencies = new EObjectWithInverseResolvingEList<TaskDependency>(TaskDependency.class, this, DomPackage.TASK__DEPENDENCIES, DomPackage.TASK_DEPENDENCY__BEFORE);
@@ -388,8 +407,6 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return ((InternalEList<?>)getConsumes()).basicRemove(otherEnd, msgs);
 			case DomPackage.TASK__MODIFIES:
 				return ((InternalEList<?>)getModifies()).basicRemove(otherEnd, msgs);
-			case DomPackage.TASK__PROPERTIES:
-				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 			case DomPackage.TASK__DEPENDENCIES:
 				return ((InternalEList<?>)getDependencies()).basicRemove(otherEnd, msgs);
 		}
@@ -410,18 +427,18 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return getConsumes();
 			case DomPackage.TASK__MODIFIES:
 				return getModifies();
-			case DomPackage.TASK__PROPERTIES:
-				return getProperties();
-			case DomPackage.TASK__GUARD:
-				return getGuard();
+			case DomPackage.TASK__DEPENDENCIES:
+				return getDependencies();
 			case DomPackage.TASK__DEFINITION:
 				return getDefinition();
 			case DomPackage.TASK__ENABLED:
 				return getEnabled();
 			case DomPackage.TASK__TRACEABLE:
 				return getTraceable();
-			case DomPackage.TASK__DEPENDENCIES:
-				return getDependencies();
+			case DomPackage.TASK__ALWAYS_EXECUTE:
+				return getAlwaysExecute();
+			case DomPackage.TASK__GUARD:
+				return getGuard();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -447,12 +464,9 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				getModifies().clear();
 				getModifies().addAll((Collection<? extends ResourceReference>)newValue);
 				return;
-			case DomPackage.TASK__PROPERTIES:
-				getProperties().clear();
-				getProperties().addAll((Collection<? extends Property>)newValue);
-				return;
-			case DomPackage.TASK__GUARD:
-				setGuard(newValue);
+			case DomPackage.TASK__DEPENDENCIES:
+				getDependencies().clear();
+				getDependencies().addAll((Collection<? extends TaskDependency>)newValue);
 				return;
 			case DomPackage.TASK__DEFINITION:
 				setDefinition((String)newValue);
@@ -463,9 +477,11 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 			case DomPackage.TASK__TRACEABLE:
 				setTraceable((Boolean)newValue);
 				return;
-			case DomPackage.TASK__DEPENDENCIES:
-				getDependencies().clear();
-				getDependencies().addAll((Collection<? extends TaskDependency>)newValue);
+			case DomPackage.TASK__ALWAYS_EXECUTE:
+				setAlwaysExecute((Boolean)newValue);
+				return;
+			case DomPackage.TASK__GUARD:
+				setGuard(newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -488,11 +504,8 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 			case DomPackage.TASK__MODIFIES:
 				getModifies().clear();
 				return;
-			case DomPackage.TASK__PROPERTIES:
-				getProperties().clear();
-				return;
-			case DomPackage.TASK__GUARD:
-				setGuard(GUARD_EDEFAULT);
+			case DomPackage.TASK__DEPENDENCIES:
+				getDependencies().clear();
 				return;
 			case DomPackage.TASK__DEFINITION:
 				setDefinition(DEFINITION_EDEFAULT);
@@ -503,8 +516,11 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 			case DomPackage.TASK__TRACEABLE:
 				setTraceable(TRACEABLE_EDEFAULT);
 				return;
-			case DomPackage.TASK__DEPENDENCIES:
-				getDependencies().clear();
+			case DomPackage.TASK__ALWAYS_EXECUTE:
+				setAlwaysExecute(ALWAYS_EXECUTE_EDEFAULT);
+				return;
+			case DomPackage.TASK__GUARD:
+				setGuard(GUARD_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -524,18 +540,18 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return consumes != null && !consumes.isEmpty();
 			case DomPackage.TASK__MODIFIES:
 				return modifies != null && !modifies.isEmpty();
-			case DomPackage.TASK__PROPERTIES:
-				return properties != null && !properties.isEmpty();
-			case DomPackage.TASK__GUARD:
-				return GUARD_EDEFAULT == null ? guard != null : !GUARD_EDEFAULT.equals(guard);
+			case DomPackage.TASK__DEPENDENCIES:
+				return dependencies != null && !dependencies.isEmpty();
 			case DomPackage.TASK__DEFINITION:
 				return DEFINITION_EDEFAULT == null ? definition != null : !DEFINITION_EDEFAULT.equals(definition);
 			case DomPackage.TASK__ENABLED:
 				return ENABLED_EDEFAULT == null ? enabled != null : !ENABLED_EDEFAULT.equals(enabled);
 			case DomPackage.TASK__TRACEABLE:
 				return TRACEABLE_EDEFAULT == null ? traceable != null : !TRACEABLE_EDEFAULT.equals(traceable);
-			case DomPackage.TASK__DEPENDENCIES:
-				return dependencies != null && !dependencies.isEmpty();
+			case DomPackage.TASK__ALWAYS_EXECUTE:
+				return ALWAYS_EXECUTE_EDEFAULT == null ? alwaysExecute != null : !ALWAYS_EXECUTE_EDEFAULT.equals(alwaysExecute);
+			case DomPackage.TASK__GUARD:
+				return GUARD_EDEFAULT == null ? guard != null : !GUARD_EDEFAULT.equals(guard);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -550,14 +566,16 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (guard: ");
-		result.append(guard);
-		result.append(", definition: ");
+		result.append(" (definition: ");
 		result.append(definition);
 		result.append(", enabled: ");
 		result.append(enabled);
 		result.append(", traceable: ");
 		result.append(traceable);
+		result.append(", alwaysExecute: ");
+		result.append(alwaysExecute);
+		result.append(", guard: ");
+		result.append(guard);
 		result.append(')');
 		return result.toString();
 	}

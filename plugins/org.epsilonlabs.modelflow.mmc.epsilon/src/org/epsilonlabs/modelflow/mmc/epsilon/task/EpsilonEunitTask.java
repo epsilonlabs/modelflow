@@ -17,6 +17,7 @@ import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eunit.EUnitModule;
 import org.eclipse.epsilon.eunit.IEUnitModule;
 import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -112,12 +113,12 @@ public class EpsilonEunitTask extends AbstractEpsilonTask implements ITask {
 		}
 	}
 	
-	@Override
-	public Optional<Object> getResult() {
+	@Output(key = "result")
+	public Object getResult() {
 		try {
-			return Optional.of(getModule().getSuiteRoot().getResult());
+			return getModule().getSuiteRoot().getResult();
 		} catch (EolRuntimeException e) {
-			return Optional.empty();
+			return null;
 		}
 	}
 

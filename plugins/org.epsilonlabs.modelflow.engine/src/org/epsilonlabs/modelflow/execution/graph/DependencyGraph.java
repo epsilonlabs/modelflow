@@ -48,7 +48,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	}
 
 	@Override
-	public DependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
+	public DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException {
 		Workflow workflow = ctx.getModule().getWorkflow();
 		workflow.getResources().forEach(r -> this.addResource(r, ctx));
 		workflow.getTasks().forEach(t -> this.addTask(t, ctx));
@@ -81,7 +81,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	}
 
 	protected ITaskNode addTask(Task t, IModelFlowContext ctx) {
-		ITaskNode task = new TaskNode(t, this);
+		ITaskNode task = new TaskNode(t);
 		task.subscribe(ctx.getPublisher());
 		getGraph().addVertex(task);
 		this.tasks.put(task.getName(), task);

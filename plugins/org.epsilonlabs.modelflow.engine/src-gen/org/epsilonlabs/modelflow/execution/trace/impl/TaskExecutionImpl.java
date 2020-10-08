@@ -30,7 +30,6 @@ import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
-import org.epsilonlabs.modelflow.execution.trace.Timed;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,8 +39,6 @@ import org.epsilonlabs.modelflow.execution.trace.Timed;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getStart <em>Start</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getEnd <em>End</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getInputModels <em>Input Models</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getOutputModels <em>Output Models</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getInputProperties <em>Input Properties</em>}</li>
@@ -52,46 +49,6 @@ import org.epsilonlabs.modelflow.execution.trace.Timed;
  * @generated
  */
 public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
-	/**
-	 * The default value of the '{@link #getStart() <em>Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long START_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getStart() <em>Start</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStart()
-	 * @generated
-	 * @ordered
-	 */
-	protected long start = START_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEnd()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long END_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getEnd()
-	 * @generated
-	 * @ordered
-	 */
-	protected long end = END_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getInputModels() <em>Input Models</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -159,52 +116,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	protected EClass eStaticClass() {
 		return ExecutionTracePackage.Literals.TASK_EXECUTION;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getStart() {
-		return start;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setStart(long newStart) {
-		long oldStart = start;
-		start = newStart;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.TASK_EXECUTION__START, oldStart, start));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getEnd() {
-		return end;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setEnd(long newEnd) {
-		long oldEnd = end;
-		end = newEnd;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.TASK_EXECUTION__END, oldEnd, end));
 	}
 
 	/**
@@ -334,10 +245,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionTracePackage.TASK_EXECUTION__START:
-				return getStart();
-			case ExecutionTracePackage.TASK_EXECUTION__END:
-				return getEnd();
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				return getInputModels();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_MODELS:
@@ -361,12 +268,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionTracePackage.TASK_EXECUTION__START:
-				setStart((Long)newValue);
-				return;
-			case ExecutionTracePackage.TASK_EXECUTION__END:
-				setEnd((Long)newValue);
-				return;
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				getInputModels().clear();
 				getInputModels().addAll((Collection<? extends ResourceSnapshot>)newValue);
@@ -398,12 +299,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.TASK_EXECUTION__START:
-				setStart(START_EDEFAULT);
-				return;
-			case ExecutionTracePackage.TASK_EXECUTION__END:
-				setEnd(END_EDEFAULT);
-				return;
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				getInputModels().clear();
 				return;
@@ -431,10 +326,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.TASK_EXECUTION__START:
-				return start != START_EDEFAULT;
-			case ExecutionTracePackage.TASK_EXECUTION__END:
-				return end != END_EDEFAULT;
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				return inputModels != null && !inputModels.isEmpty();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_MODELS:
@@ -447,58 +338,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				return task != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == Timed.class) {
-			switch (derivedFeatureID) {
-				case ExecutionTracePackage.TASK_EXECUTION__START: return ExecutionTracePackage.TIMED__START;
-				case ExecutionTracePackage.TASK_EXECUTION__END: return ExecutionTracePackage.TIMED__END;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == Timed.class) {
-			switch (baseFeatureID) {
-				case ExecutionTracePackage.TIMED__START: return ExecutionTracePackage.TASK_EXECUTION__START;
-				case ExecutionTracePackage.TIMED__END: return ExecutionTracePackage.TASK_EXECUTION__END;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (start: ");
-		result.append(start);
-		result.append(", end: ");
-		result.append(end);
-		result.append(')');
-		return result.toString();
 	}
 
 } //TaskExecutionImpl

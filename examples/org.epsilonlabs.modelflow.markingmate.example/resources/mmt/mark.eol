@@ -1,0 +1,10 @@
+for (a in Answer.all){
+	var title = a.question.title;
+	if ((title.endsWith("3") or title.endsWith("4"))){
+		a.marks = 20;
+		a.feedback = "Excellent";
+	} else {
+		a.marks = 15;
+		a.feedback = "Average";
+	}
+}

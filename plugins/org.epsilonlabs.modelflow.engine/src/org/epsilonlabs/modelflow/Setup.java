@@ -15,16 +15,12 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
 public class Setup {
-
-	private static final Logger LOG = LoggerFactory.getLogger(Setup.class);
 
 	public static final String TASK_EP_ID = "org.epsilonlabs.modelflow.engine.taskExtension";
 	public static final String TASK_EP_ATTRIBUTE = "TaskFactoryModule";
@@ -88,49 +84,10 @@ public class Setup {
 				try {
 					exts.add((Module) i.createExecutableExtension(attribute));
 				} catch (CoreException e) {
-					LOG.error("Unable to find Extension", e);
+					e.printStackTrace();
+					System.err.println("Unable to find Extension");
 				}
 			}
-		} else {
-//			try {
-//				ClassLoader classLoader = ClassLoader.getSystemClassLoader();
-//				ClassPath from = ClassPath.from(classLoader);
-//				from.getAllClasses().forEach(c -> {
-//					try {
-//						Class<?> clazz = c.load();
-//						if (clazz.isAssignableFrom(Module.class)) {
-//							if (id == PLUGIN_EP_ID && clazz.isAssignableFrom(IPlugin.class)) {
-//								try {
-//									Module newInstance = (Module) clazz.newInstance();
-//									exts.add(newInstance);
-//								} catch (Exception e) {
-//								}
-//							} else if (id == TASK_EP_ID && clazz.isAssignableFrom(ITask.class)) {
-//								try {
-//									Module newInstance = (Module) clazz.newInstance();
-//									exts.add(newInstance);
-//								} catch (Exception e) {
-//								}
-//							} else if (id == RESOURCE_EP_ID && clazz.isAssignableFrom(IResource.class)) {
-//								try {
-//									Module newInstance = (Module) clazz.newInstance();
-//									exts.add(newInstance);
-//								} catch (Exception e) {
-//								}
-//							}
-//						}
-//					} catch (IllegalStateException e) {
-//					} catch (NoClassDefFoundError e) {
-//					} catch (RuntimeException e) {
-//					} catch (VerifyError e) {
-//					} catch (Error e) {
-//					}
-//
-//				});
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
-
 		}
 		return exts;
 	}

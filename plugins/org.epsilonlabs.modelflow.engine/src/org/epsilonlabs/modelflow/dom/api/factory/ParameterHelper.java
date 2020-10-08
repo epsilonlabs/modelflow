@@ -10,8 +10,6 @@ package org.epsilonlabs.modelflow.dom.api.factory;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import org.eclipse.epsilon.eol.dom.Expression;
-import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -32,13 +30,7 @@ public class ParameterHelper {
 	
 	public Object getEvaluatedValue() throws MFInstantiationException {
 		Object value = this.property.getValue();
-		if (value instanceof Expression) {
-			try {
-				return ((Expression) value).execute(ctx);
-			} catch (EolRuntimeException e) {
-				throw new MFInstantiationException("Unable to invoke expression", e);
-			}
-		} else if (value instanceof Callable) {
+		if (value instanceof Callable) {
 			try {
 				return ((Callable<?>) value).call();
 			} catch (Exception e) {

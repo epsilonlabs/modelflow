@@ -15,16 +15,16 @@ public class ResourceLocator {
 		}
 	}
 	
-	public static String locateInTarget(String location){
-		return System.getProperty("user.dir") + "/target/"+ location;
+	public static String locateInTestDir(String location){
+		return System.getProperty("user.dir") + "/testOutput/"+ location;
 	}
 
-	public static String locateAndCopy(String location) {
+	public static String locateAndCopyToTestDir(String location) {
 		String l = location;
 		if (location.startsWith("/")){
 			l = location.split("/resources/")[1];
 		}
-		String destination = System.getProperty("user.dir") + "/target/" +	l;
+		String destination = System.getProperty("user.dir") + "/testOutput/" +	l;
 		File target = new File(destination);
 		if (target.exists()) {
 			target.delete();

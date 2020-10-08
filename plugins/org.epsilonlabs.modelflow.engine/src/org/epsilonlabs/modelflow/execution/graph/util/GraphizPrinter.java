@@ -41,7 +41,7 @@ public class GraphizPrinter<N extends IGraphNode, E extends DefaultWeightedEdge>
 		if (dotString.isEmpty()) {
 			DOTExporter<N, E> exporter = new DOTExporter<>(
 					/* Node ID Provider */
-					N::getName, 
+					node -> node.getName().replace("://", "_").replace("@","__"), 
 					/* Node Label Provider */
 					node -> node.getName().replace("://", "-"),
 					/* Edge Label Provider */
@@ -74,11 +74,6 @@ public class GraphizPrinter<N extends IGraphNode, E extends DefaultWeightedEdge>
 		} else if (component instanceof TaskNode) {
 			map.put(DOTAttribute.SHAPE, StringAttribute.BOX);
 			map.put(DOTAttribute.COLOR, StringAttribute.TERTIARY_COLOR);
-			map.put(DOTAttribute.STYLE, StringAttribute.FILLED);
-		} else if (component.getClass().getSimpleName().endsWith("FlowNode")) {
-			map.put(DOTAttribute.SHAPE, StringAttribute.DIAMOND);
-			map.put(DOTAttribute.COLOR, StringAttribute.SECONDARY_COLOR);
-			map.put(DOTAttribute.FONTCOLOR, StringAttribute.PRIMARY_COLOR);
 			map.put(DOTAttribute.STYLE, StringAttribute.FILLED);
 		}
 		return map.entrySet().stream()

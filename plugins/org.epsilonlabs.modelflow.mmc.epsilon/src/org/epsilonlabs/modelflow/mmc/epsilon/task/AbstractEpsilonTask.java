@@ -47,7 +47,7 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 	protected Map<String, Object> params = new HashMap<>();
 
 	// Post-Execution
-	protected Object result = Optional.empty();
+	protected Object result;
 
 	private IModelWrapper[] resources = null;
 	protected List<Trace> traces = null; 
@@ -119,11 +119,7 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 	 * Post-Execution Methods
 	 * ------------------------------
 	 */
-	
-	@Override
-	public Object getResult(){
-		return this.result;
-	}
+
 	
 	@Override
 	public Optional<Collection<Trace>> getTrace(){
@@ -186,9 +182,9 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 			getModule().getContext().setProfilingEnabled(getProfile());
 		}
 		FrameStack frameStack = module.getContext().getFrameStack();
-		getParams().entrySet().forEach(e -> {
-			frameStack.putGlobal(Variable.createReadOnlyVariable(e));
-		});
+		getParams().entrySet().forEach(e -> 
+			frameStack.putGlobal(Variable.createReadOnlyVariable(e))
+		);
 	}
 	
 	protected void afterParse() throws MFExecutionException {

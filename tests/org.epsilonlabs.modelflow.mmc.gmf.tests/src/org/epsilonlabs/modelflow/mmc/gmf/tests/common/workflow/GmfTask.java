@@ -1,6 +1,6 @@
 package org.epsilonlabs.modelflow.mmc.gmf.tests.common.workflow;
 
-import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopy;
+import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopyToTestDir;
 
 import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -12,14 +12,14 @@ import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 public class GmfTask {
 
 	private static String location(String name) {
-		return locateAndCopy("filesystem." + name);
+		return locateAndCopyToTestDir("filesystem." + name);
 	}
 	
 	public static Workflow getGenDiagramWorkflow() {
 		return new WorkflowBuilder()
 			
 				.addModelResource("GmfGen", "epsilon:emf")
-				.addProperty("src", locateAndCopy("filesystemGmfGen.gmfgen"))
+				.addProperty("src", locateAndCopyToTestDir("filesystemGmfGen.gmfgen"))
 				.addProperty("metamodelUri", GMFGenPackage.eINSTANCE.getNsURI())
 				
 				.addTask("GenerateDiagramCode", "gmf:genDiagram")

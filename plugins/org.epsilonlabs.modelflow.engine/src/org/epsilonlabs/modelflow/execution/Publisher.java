@@ -7,25 +7,16 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution;
 
+import org.epsilonlabs.modelflow.execution.graph.GraphState;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 
 import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
-public class Publisher implements IPublisher {
+public class Publisher implements IModelFlowPublisher {
 
 	protected PublishSubject<TaskUpdate> tasks = PublishSubject.create();
 	
-	@Override
-	public Observable<TaskUpdate> forTasks() {
-		return tasks;
-	}
-	
-	@Override
-	public Observable<TaskUpdate> forTask(String name) {
-		return tasks.filter(t->t.getName().equalsIgnoreCase(name));
-	}
-
 	@Override
 	public void taskState(String taskName, TaskState state) {
 		this.tasks.onNext(new TaskUpdate() {
@@ -39,9 +30,32 @@ public class Publisher implements IPublisher {
 			}
 		});
 	}
+	
+	@Override
+	public Observable<TaskUpdate> forTasks() {
+		return tasks;
+	}
 
 	@Override
 	public void resourceState(String name, Object state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dependencyGraph(GraphState state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void executionGraph(GraphState state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void scheduler(GraphState state) {
 		// TODO Auto-generated method stub
 		
 	}

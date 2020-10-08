@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epsilon.common.module.ModuleMarker;
 import org.eclipse.epsilon.common.parse.problem.ParseProblem;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
@@ -27,8 +26,8 @@ import org.epsilonlabs.modelflow.dom.ResourceReference;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.TaskDependency;
 import org.epsilonlabs.modelflow.dom.Workflow;
-import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,34 +39,50 @@ import org.slf4j.LoggerFactory;
 public class CompileTest extends AbstractParsingTest {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CompileTest.class);
-	protected Workflow expectedWorkflow, producedWorkflow;
+	protected Workflow producedWorkflow;
 	protected Assertable result;
 
 	@Override
 	@Test
 	public void testMinimalModel() {
 		super.testMinimalModel();
-		expectedWorkflow = new WorkflowBuilder()
-				.addModelResource("ModelA", "EMF")
-				.build();
+		result = w -> {
+			assertEquals(1,w.getResources().size());
+			AbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof ModelResource);
+			assertEquals("ModelA", res.getName());
+			assertEquals("EMF", ((ModelResource)res).getDefinition());
+			return true;
+		};
 	}
 
 	@Override
 	@Test
 	public void testMinimalModelWithColonedType() {
 		super.testMinimalModelWithColonedType();
-		expectedWorkflow = new WorkflowBuilder()
-				.addModelResource("ModelA", "epsilon:emf")
-				.build();
+		result = w -> {
+			assertEquals(1,w.getResources().size());
+			AbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof ModelResource);
+			assertEquals("ModelA", res.getName());
+			assertEquals("epsilon:emf", ((ModelResource)res).getDefinition());
+			return true;
+		};
 	}
 
 	@Override
 	@Test
 	public void testMinimalModelWithColonEnd() {
 		super.testMinimalModelWithColonEnd();
-		expectedWorkflow = new WorkflowBuilder()
-				.addModelResource("ModelA", "EMF")
-				.build();
+		result = w -> {
+			assertEquals(1,w.getResources().size());
+			AbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof ModelResource);
+			assertEquals("ModelA", res.getName());
+			assertEquals("EMF", ((ModelResource)res).getDefinition());
+			return true;
+		};
+		
 	}
 	
 
@@ -137,9 +152,13 @@ public class CompileTest extends AbstractParsingTest {
 	@Test
 	public void testMinimalTask() {
 		super.testMinimalTask();
-		expectedWorkflow = new WorkflowBuilder()
-				.addTask("Task1", "EOL")
-				.build();
+		result = w -> {
+			assertEquals(1,w.getTasks().size());
+			Task task = w.getTasks().get(0);
+			assertEquals("Task1", task.getName());
+			assertEquals("EOL", task.getDefinition());
+			return true;
+		};
 	}
 	
 	@Override
@@ -177,9 +196,13 @@ public class CompileTest extends AbstractParsingTest {
 	@Test
 	public void testMinimalTaskWithColonEnd() {
 		super.testMinimalTaskWithColonEnd();
-		expectedWorkflow = new WorkflowBuilder()
-				.addTask("Task1", "EOL")
-				.build();
+		result = w -> {
+			assertEquals(1,w.getTasks().size());
+			Task task = w.getTasks().get(0);
+			assertEquals("Task1", task.getName());
+			assertEquals("EOL", task.getDefinition());
+			return true;
+		};
 	}
 
 	@Override
@@ -283,41 +306,39 @@ public class CompileTest extends AbstractParsingTest {
 	@Test
 	public void testTaskWithGuard() {
 		super.testTaskWithGuard();
-		result = new Assertable() {
-			@Override
-			public Boolean evaluate(Workflow w) {
-				Task task = w.getTasks().get(0);
-				assertTrue(task != null);
-				assertEquals("Invalid Task Name", "Task1", task.getName());
-				assertEquals("Invalid Task type", "EOL", task.getDefinition());
-				assertEquals("Invalid Number of properties", 1, task.getProperties().size());
-				Property prop = task.getProperties().get(0);
-				assertEquals("Invalid Parameter key", "src", prop.getKey());
-				Object value = prop.getValue();
-				assertTrue("Invalid property value type", value instanceof StringLiteral);
-				try {
-					String result = ((StringLiteral) value).execute(null);
-					assertEquals("Invalid expected property value", "eolFile.eol", result);
-				} catch (EolRuntimeException e) {
-					e.getMessage();
-					fail("Unable to get the property value from expression");
-				}
-				Object guard = task.getGuard();
-				assertTrue("Invalid guard type", guard instanceof ExecutableBlock);
-				try {
-					@SuppressWarnings("unchecked")
-					Boolean result = ((ExecutableBlock<Boolean>) guard).execute(new ModelFlowContext());
-					assertTrue("Invalid expected guard value", result);
-				} catch (EolRuntimeException e) {
-					e.getMessage();
-					fail("Unable to get the guard value from expression");
-				}
-
-				return true;
+		result = (w) -> {
+			Task task = w.getTasks().get(0);
+			assertTrue(task != null);
+			assertEquals("Invalid Task Name", "Task1", task.getName());
+			assertEquals("Invalid Task type", "EOL", task.getDefinition());
+			assertEquals("Invalid Number of properties", 1, task.getProperties().size());
+			Property prop = task.getProperties().get(0);
+			assertEquals("Invalid Parameter key", "src", prop.getKey());
+			Object value = prop.getValue();
+			assertTrue("Invalid property value type", value instanceof StringLiteral);
+			try {
+				String result = ((StringLiteral) value).execute(null);
+				assertEquals("Invalid expected property value", "eolFile.eol", result);
+			} catch (EolRuntimeException e) {
+				e.getMessage();
+				fail("Unable to get the property value from expression");
 			}
+			Object guard = task.getGuard();
+			assertTrue("Invalid guard type", guard instanceof ExecutableBlock);
+			try {
+				@SuppressWarnings("unchecked")
+				Boolean result = ((ExecutableBlock<Boolean>) guard).execute(new ModelFlowContext());
+				assertTrue("Invalid expected guard value", result);
+			} catch (EolRuntimeException e) {
+				e.getMessage();
+				fail("Unable to get the guard value from expression");
+			}
+
+			return true;
 		};
 	}
 
+	/*
 	@Override
 	@Test
 	public void testTaskWithOneInputModel() {
@@ -374,24 +395,42 @@ public class CompileTest extends AbstractParsingTest {
 				.addOutput("ModelA")
 				.build();
 	}
+	*/
 	
+	@Override
+	@Test
+	public void testTaskForEachSequence() {
+		super.testTaskForEachSequence();
+		result = w -> {
+			assertEquals(5, w.getTasks().size());
+			for (int i=1; i == 5; i++) {				
+				String name = String.format("A@%d", i);
+				Task task = w.getTasks().get(i-1);
+				assertEquals(name, task.getName());
+			}
+			return true;
+		};
+	}
+	
+	@Ignore
 	@Override
 	@Test
 	public void testParamNoType() {
 		super.testParamNoType();
 		// TODO decide how to include in the model
 		result = w -> {
-			return true;
+			return false;
 		};
 	}
 	
+	@Ignore
 	@Override
 	@Test
 	public void testParamWithType() {
 		super.testParamWithType();
 		// TODO decide how to include in the model
 		result = w -> {
-			return true;
+			return false;
 		};
 	}
 	
@@ -439,7 +478,6 @@ public class CompileTest extends AbstractParsingTest {
 	public void reset() {
 		super.reset();
 		result = null;
-		expectedWorkflow = null;
 		producedWorkflow = null;
 	}
 
@@ -470,9 +508,7 @@ public class CompileTest extends AbstractParsingTest {
 		}
 		
 		producedWorkflow = module.getWorkflow();
-		if (expectedWorkflow != null) {
-			assertTrue(EcoreUtil.equals(producedWorkflow, expectedWorkflow));
-		} else if (result != null) {
+		if (result != null) {
 			assertTrue(result.evaluate(producedWorkflow));
 		} else {
 			fail("No expected result was provided");

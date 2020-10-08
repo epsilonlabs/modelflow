@@ -1,0 +1,1 @@
+mvn help:describe -DgroupId=org.epsilonlabs.modelflow -DartifactId=modelflow-maven-plugin -Ddetail=true

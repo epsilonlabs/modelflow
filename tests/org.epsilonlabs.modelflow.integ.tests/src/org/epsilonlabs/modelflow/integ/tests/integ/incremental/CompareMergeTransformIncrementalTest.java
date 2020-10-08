@@ -15,6 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
@@ -28,7 +29,6 @@ import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 	/** Validation/Modification Helpers */
 
 	protected void fileModifier(String file) {
-		String fileName = System.getProperty("user.dir") + "/target/" + file;
+		String fileName = DIR + file;
 		File file2 = new File(fileName);
 		assertTrue("File not found", file2.exists());
 		String hash1 = Hasher.computeHashForFile(file2);
@@ -66,10 +66,11 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 	}
 	
 	/** TESTING PROCESS */
-
-	@Before
-	public void prepareWorkflow() {
-		w = ExampleWorkflows.getCompareMergeTransformComponent();
+	
+	@Override
+	protected void setupSource() {
+		Workflow w = ExampleWorkflows.getCompareMergeTransformComponent();
+		module.setWorkflow(w);
 	}
 
 	/** TESTS */

@@ -9,23 +9,10 @@
  */
 package org.epsilonlabs.modelflow.dom.impl;
 
-import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
-import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.epsilonlabs.modelflow.dom.DomPackage;
-import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.dom.Resource;
 
 /**
@@ -36,7 +23,6 @@ import org.epsilonlabs.modelflow.dom.Resource;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ResourceImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ResourceImpl#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ResourceImpl#getDeclared <em>Declared</em>}</li>
  * </ul>
@@ -44,16 +30,6 @@ import org.epsilonlabs.modelflow.dom.Resource;
  * @generated
  */
 public class ResourceImpl extends AbstractResourceImpl implements Resource {
-	/**
-	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getProperties()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Property> properties;
-
 	/**
 	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -119,19 +95,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	 * @generated
 	 */
 	@Override
-	public EList<Property> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<Property>(Property.class, this, DomPackage.RESOURCE__PROPERTIES);
-		}
-		return properties;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getDefinition() {
 		return definition;
 	}
@@ -178,24 +141,8 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DomPackage.RESOURCE__PROPERTIES:
-				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__PROPERTIES:
-				return getProperties();
 			case DomPackage.RESOURCE__DEFINITION:
 				return getDefinition();
 			case DomPackage.RESOURCE__DECLARED:
@@ -213,10 +160,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__PROPERTIES:
-				getProperties().clear();
-				getProperties().addAll((Collection<? extends Property>)newValue);
-				return;
 			case DomPackage.RESOURCE__DEFINITION:
 				setDefinition((String)newValue);
 				return;
@@ -235,9 +178,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__PROPERTIES:
-				getProperties().clear();
-				return;
 			case DomPackage.RESOURCE__DEFINITION:
 				setDefinition(DEFINITION_EDEFAULT);
 				return;
@@ -256,8 +196,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__PROPERTIES:
-				return properties != null && !properties.isEmpty();
 			case DomPackage.RESOURCE__DEFINITION:
 				return DEFINITION_EDEFAULT == null ? definition != null : !DEFINITION_EDEFAULT.equals(definition);
 			case DomPackage.RESOURCE__DECLARED:

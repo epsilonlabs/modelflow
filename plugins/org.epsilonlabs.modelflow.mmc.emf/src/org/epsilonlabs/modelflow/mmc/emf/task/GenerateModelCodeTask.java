@@ -55,12 +55,10 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 	protected Boolean generateEditor 	= false;
 	protected Boolean generateTests 	= false;
 	protected Set<String> outputs = new HashSet<String>();
-	protected Set<File> generatedOutputs = new HashSet<File>();
 	
 	protected IModelWrapper modelRes;
 	protected GenModel genModel;
 	protected CustomGenerator generator;
-	//protected File outputDir;
 
 	@Param(key = "generateModel")
 	public void setGenerateModelProject(Boolean generate) {
@@ -98,31 +96,10 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 		return generateTests;
 	}
 	
-	@Output(key="generatedFiles")
-	public Set<File> getGeneratedOutputs() {
-		return generatedOutputs;
-	}
-	
-	/*@Output(key="outputs", hasher = GeneratedNotHasher.class)
-	public CodegenOutputUtil getOutputs() {
-		return new CodegenOutputUtil(generator.getJavaOptions(),generator.getJdk(), 
-				outputs, generator.getTemplateDir(), generator.isDynamic(), generator.isFormatting());
-	}*/
 	@Output(key="outputs", hasher = FileHasher.class)
 	public Set<File> getOutputs() {
 		return outputs.parallelStream().map(f->new File(f)).collect(Collectors.toSet());
 	}
-	
-	/*	
-	@Param(key = "outputDir")
-	public void setOutputDir(File outputDir) {
-		this.outputDir = outputDir;
-	}
-
-	public File getOutputDir() {
-		return outputDir;
-	}
-	*/
 	
 	@Override
 	public void validateParameters() throws MFExecutionException {}
@@ -158,19 +135,10 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 	@Override
 	public void afterExecute() {
 		IPath workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation();
-		generator.getGeneratedOutputs().forEach(f->{
-			File file = workspace.append(new Path(f.toString())).toFile();
-			generatedOutputs.add(file);
-		});
 		generator.getOutputs().forEach(f->{
 			File file = workspace.append(new Path(f.toString())).toFile();
 			outputs.add(file.getAbsolutePath());
 		});
-	}
-	
-	@Override
-	public Object getResult() {
-		return null;//monitor.getResult();
 	}
 
 	@Override

@@ -63,7 +63,7 @@ public class EpsilonEmlTask extends AbstractEpsilonTask implements ITask {
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 		super.acceptModels(models);
 		Arrays.asList(models).stream()
-			.map(m -> m.getModel())
+			.map(IModelWrapper::getModel)
 			.filter(m -> m instanceof MatchTrace)
 			.map(m -> (MatchTrace) m)
 			.findFirst()

@@ -8,23 +8,26 @@
 package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map.Entry;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.epsilon.common.module.IModule;
-import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.common.util.AstUtil;
-import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
+import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.execute.context.EolContext;
+import org.eclipse.epsilon.eol.execute.context.FrameStack;
+import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
-import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Property;
+import org.eclipse.epsilon.eol.execute.context.Variable;
+import org.eclipse.epsilon.eol.types.EolAnyType;
+import org.eclipse.epsilon.eol.types.EolPrimitiveType;
+import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
 import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
@@ -33,13 +36,16 @@ import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 /**
  * The Class TaskRule.
  */
-public class TaskRule extends ParametrisedRule<Task> {
+public class TaskRule extends ConfigurableRule<Task> {
 
 	/** The task. */
-	protected Task task;
+	protected Collection<Task> tasks = new ArrayList<>();
 
 	/** The guard. */
 	protected ExecutableBlock<Boolean> guard;
+	
+	/** For Each */
+	protected ForEachModuleElement forEach;
 
 	/** The inputs. */
 	protected List<ModelCallExpression> inputs = new ArrayList<>();
@@ -52,9 +58,9 @@ public class TaskRule extends ParametrisedRule<Task> {
 
 	protected boolean enabled = true;
 	
+	protected boolean alwaysExecute = false;
+	
 	protected boolean trace = true;
-
-
 
 	/**
 	 * Builds the.
@@ -66,6 +72,10 @@ public class TaskRule extends ParametrisedRule<Task> {
 	@Override
 	public void build(AST cst, IModule module) {
 		super.build(cst, module);
+		
+		// FOREACH
+		forEach = (ForEachModuleElement) module.createAst(AstUtil.getChild(cst, ModelFlowParser.FOREACH), this);
+		
 		// Guard
 		guard = (ExecutableBlock<Boolean>) module.createAst(AstUtil.getChild(cst, ModelFlowParser.GUARD), this);
 
@@ -85,8 +95,10 @@ public class TaskRule extends ParametrisedRule<Task> {
 				
 		// @disabled 
 		if (getAnnotation("disabled") != null) enabled = false;
-		// @volatile 
+		// @noTrace 
 		if (getAnnotation("noTrace") != null) trace = false;
+		// @always
+		if (getAnnotation("always") != null) alwaysExecute = true;
 	}
 	
 	protected void process(AST cst, Integer token, List<ModelCallExpression> destination, IModule module){
@@ -112,6 +124,10 @@ public class TaskRule extends ParametrisedRule<Task> {
 				}
 			}
 		}
+	}
+	
+	public boolean isGenerator() {
+		return forEach != null;
 	}
 
 	/**
@@ -146,74 +162,108 @@ public class TaskRule extends ParametrisedRule<Task> {
 	 */
 	@Override
 	public Collection<Task> getDomElements() {
-		return Arrays.asList(task);
+		return tasks;
 	}
 
-	@Override
-	public void compile(EolCompilationContext context) {
-		if (context instanceof ModelFlowCompilationContext) {
-			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
-
-			task = DomFactoryImpl.eINSTANCE.createTask();
-			task.setName(getName());
-			task.setDefinition(getType().getName());
+	protected HashMap<String, Variable[]> map = new HashMap<>();
 	
-			ITaskFactory factory = null;
-			try {
-				// Factory exists?
-				factory = ctx.getModule().getTaskFactoryRegistry().getFactory(getType().getName());
-			} catch (Exception e) {
-				String msg = String.format("Unkown task factory '%s'", getType().getName());
-				ctx.addWarningMarker(getType(), msg);
-			}
-			for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
-				Property property = DomFactoryImpl.eINSTANCE.createProperty();
-				property.setKey(p.getKey().getName());
-				property.setValue(p.getValue());
-				task.getProperties().add(property);
-				if (factory != null && !factory.getParameters().contains(property.getKey())) {
-					String msg = String.format("Parameter '%s' does not exist for task type '%s'", p.getKey().getName(), getType().getName());
-					ctx.addWarningMarker(p.getKey(), msg);
+	@SuppressWarnings("unchecked")
+	@Override
+	public void compile(IEolCompilationContext context) {
+		if (context instanceof IModelFlowCompilationContext) {
+			IModelFlowCompilationContext ctx = (IModelFlowCompilationContext) context;
+
+			List<Object> list = new ArrayList<>(1);
+			list.add(getName());
+			Iterator<Object> iterator = list.iterator();
+			if (forEach != null) {
+				forEach.compile(ctx);
+				try {
+					forEach.execute(new EolContext());
+					iterator = forEach.getIterator();
+				} catch (EolRuntimeException e) {
+					ctx.addErrorMarker(forEach, e.getMessage());
 				}
 			}
-			for (ModelCallExpression p : inputs) {
-				p.compile(context);
-				task.getConsumes().addAll(p.getDomElements());
-			}
-			for (ModelCallExpression p : inouts) {
-				p.compile(context);
-				task.getModifies().addAll(p.getDomElements());
-			}
-			for (ModelCallExpression p : outputs) {
-				p.compile(context);
-				task.getProduces().addAll(p.getDomElements());
-			}
-			if (guard != null) {
-				guard.compile(context);
-				task.setGuard(guard);
-			}
-			if (!enabled) {
-				task.setEnabled(false);
-			}
-			if (!trace) {
-				task.setTraceable(false);
-			}
+			FrameStack frameStack = ctx.getFrameStack();
+			for (int loop = 1; iterator.hasNext(); loop++) {
+				Object next = iterator.next();				
+				String name = getName();
+				if (forEach != null){					
+					frameStack.enterLocal(FrameType.UNPROTECTED, this, getVariables(loop, next));
+					name += String.format("@%d", loop);
+					map.put(name, getVariables(loop, next));
+				}
+				createTask(ctx, name);
+				if (forEach != null){	
+					frameStack.leaveLocal(this);
+				}
+			}			
+			
 		}
 	}
+
+	private Variable[] getVariables(int loop, Object next) {
+		Variable itemVar = new Variable(forEach.getIteratorParameter().getName(), next, EolAnyType.Instance, false);
+		Variable countVar = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
+		return new Variable[] {itemVar, countVar};
+	}
+	
+	/**
+	 * @return the iterator
+	 */
+	public Variable[] getVars(String name) {
+		return map.get(name);
+	}
+
+	protected void createTask(IModelFlowCompilationContext ctx, String name) {
+		Task task = DomFactoryImpl.eINSTANCE.createTask();
+		task.setName(name);
+		task.setDefinition(getType().getName());
+
+		ITaskFactory factory = null;
+		try {
+			// Factory exists?
+			factory = ctx.getModule().getTaskFactoryRegistry().getFactory(getType().getName());
+		} catch (Exception e) {
+			String msg = String.format("Unkown task factory '%s'", getType().getName());
+			ctx.addWarningMarker(getType(), msg);
+		}
+		setupConfigurableParameters(ctx, task, factory);
+		for (ModelCallExpression p : inputs) {
+			p.compile(ctx);
+			task.getConsumes().addAll(p.getDomElements());
+		}
+		for (ModelCallExpression p : inouts) {
+			p.compile(ctx);
+			task.getModifies().addAll(p.getDomElements());
+		}
+		for (ModelCallExpression p : outputs) {
+			p.compile(ctx);
+			task.getProduces().addAll(p.getDomElements());
+		}
+		if (guard != null) {
+			guard.compile(ctx);
+			task.setGuard(guard);
+		}
+		if (!enabled) {
+			task.setEnabled(false);
+		}
+		if (!trace) {
+			task.setTraceable(false);
+		}
+		if (alwaysExecute) {
+			task.setAlwaysExecute(true);
+		}
+		tasks.add(task);
+		task.setModuleElement(this);
+	}
+
+
 
 	@Override
 	public Object execute(IEolContext context) throws EolRuntimeException {
-		Object object = super.execute(context);
-		if (guard != null) {
-			// TODO fix guard
-			// task.setGuard(guard.execute(context));
-		}
-		return object;
-	}
-
-	@Override
-	protected EList<Property> getProperties() {
-		return task.getProperties();
+		return null;
 	}
 
 }

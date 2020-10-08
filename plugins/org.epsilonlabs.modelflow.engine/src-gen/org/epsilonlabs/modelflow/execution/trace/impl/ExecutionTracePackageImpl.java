@@ -28,7 +28,6 @@ import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.Snapshot;
 import org.epsilonlabs.modelflow.execution.trace.Stateful;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
-import org.epsilonlabs.modelflow.execution.trace.Timed;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
 
 /**
@@ -51,13 +50,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	 * @generated
 	 */
 	private EClass statefulEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass timedEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -219,36 +211,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	@Override
 	public EAttribute getStateful_EndState() {
 		return (EAttribute)statefulEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getTimed() {
-		return timedEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getTimed_Start() {
-		return (EAttribute)timedEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getTimed_End() {
-		return (EAttribute)timedEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -448,10 +410,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		statefulEClass = createEClass(STATEFUL);
 		createEAttribute(statefulEClass, STATEFUL__END_STATE);
 
-		timedEClass = createEClass(TIMED);
-		createEAttribute(timedEClass, TIMED__START);
-		createEAttribute(timedEClass, TIMED__END);
-
 		snapshotEClass = createEClass(SNAPSHOT);
 		createEAttribute(snapshotEClass, SNAPSHOT__STAMP);
 		createEAttribute(snapshotEClass, SNAPSHOT__TIMESTAMP);
@@ -508,9 +466,7 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		resourceSnapshotEClass.getESuperTypes().add(this.getSnapshot());
 		propertySnapshotEClass.getESuperTypes().add(this.getSnapshot());
 		workflowExecutionEClass.getESuperTypes().add(this.getStateful());
-		workflowExecutionEClass.getESuperTypes().add(this.getTimed());
 		taskExecutionEClass.getESuperTypes().add(this.getStateful());
-		taskExecutionEClass.getESuperTypes().add(this.getTimed());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(executionTraceEClass, ExecutionTrace.class, "ExecutionTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -520,10 +476,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 
 		initEClass(statefulEClass, Stateful.class, "Stateful", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStateful_EndState(), ecorePackage.getEString(), "endState", null, 0, 1, Stateful.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(timedEClass, Timed.class, "Timed", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getTimed_Start(), ecorePackage.getELong(), "start", null, 0, 1, Timed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTimed_End(), ecorePackage.getELong(), "end", null, 0, 1, Timed.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(snapshotEClass, Snapshot.class, "Snapshot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSnapshot_Stamp(), ecorePackage.getEJavaObject(), "stamp", null, 0, 1, Snapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -587,14 +539,14 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		   source,
 		   new String[] {
 			   "classIcon", "operation",
-			   "label", "return \'Workflow\' \n+ \' (\' + self.endState +\') \' \n+ ((self.end-self.start)/1000)+ \'s\';"
+			   "label", "return \'Workflow\' \n+ \' (\' + self.endState +\') \';"
 		   });
 		addAnnotation
 		  (taskExecutionEClass,
 		   source,
 		   new String[] {
 			   "classIcon", "operation",
-			   "label", "return self.task.name \n+ \' (\' + self.endState +\') \' \n+ (self.end-self.start) + \'ms\';"
+			   "label", "return self.task.name \n+ \' (\' + self.endState +\') \';"
 		   });
 	}
 

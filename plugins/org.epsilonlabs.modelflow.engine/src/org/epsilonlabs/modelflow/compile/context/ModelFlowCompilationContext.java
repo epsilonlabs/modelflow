@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.compile.context;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.epsilon.common.module.ModuleElement;
@@ -29,9 +29,9 @@ public class ModelFlowCompilationContext extends EolCompilationContext implement
 
 	protected IModelFlowModule module;
 
-	protected List<ResourceRule> resourceDeclarations = new ArrayList<>();
-	protected List<TaskRule> taskDeclarations = new ArrayList<>();
-	protected List<ParameterDeclaration> parameterDeclarations = new ArrayList<>();
+	protected Collection<ResourceRule> resourceDeclarations = new ArrayList<>();
+	protected Collection<TaskRule> taskDeclarations = new ArrayList<>();
+	protected Collection<ParameterDeclaration> parameterDeclarations = new ArrayList<>();
 
 
 	protected Map<String, ModuleElement> resourceToRuleMap = new HashMap<>();
@@ -42,23 +42,13 @@ public class ModelFlowCompilationContext extends EolCompilationContext implement
 	}
 	
 	@Override
-	public List<ResourceRule> getResourceDeclarations() {
+	public Collection<ResourceRule> getResourceDeclarations() {
 		return resourceDeclarations;
-	}
-
-	@Override
-	public void addResourceDeclaration(ResourceRule resourceDeclarations) {
-		this.resourceDeclarations.add(resourceDeclarations);
 	}
 	
 	@Override
-	public List<TaskRule> getTaskDeclarations() {
+	public Collection<TaskRule> getTaskDeclarations() {
 		return taskDeclarations;
-	}
-
-	@Override
-	public void addTaskDeclaration(TaskRule taskRule) {
-		this.taskDeclarations.add(taskRule);
 	}
 	
 	@Override
@@ -87,13 +77,8 @@ public class ModelFlowCompilationContext extends EolCompilationContext implement
 	}
 
 	@Override
-	public List<ParameterDeclaration> getParameterDeclarations() {
+	public Collection<ParameterDeclaration> getParameterDeclarations() {
 		return parameterDeclarations;
-	}
-	
-	@Override
-	public void addParameterDeclaration(ParameterDeclaration parameterDeclaration) {
-		this.parameterDeclarations.add(parameterDeclaration);
 	}
 
 }

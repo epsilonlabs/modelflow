@@ -9,26 +9,16 @@ package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map.Entry;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.epsilon.common.module.ModuleElement;
-import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
-import org.eclipse.epsilon.eol.dom.NameExpression;
+import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
 import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
 
-public class ResourceRule extends ParametrisedRule<ModelResource> {
+public class ResourceRule extends ConfigurableRule<ModelResource> {
 
 	protected ModelResource modelResource;
-
-	@Override
-	public EList<Property> getProperties() {
-		return modelResource.getProperties();
-	}
 
 	@Override
 	public Collection<ModelResource> getDomElements() {
@@ -36,13 +26,13 @@ public class ResourceRule extends ParametrisedRule<ModelResource> {
 	}
 
 	@Override
-	public void compile(EolCompilationContext context) {
+	public void compile(IEolCompilationContext context) {
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			
-			modelResource = DomFactoryImpl.eINSTANCE.createModelResource();
-			modelResource.setName(getName());
-			modelResource.setDefinition(getType().getName());
+			ModelResource resource = DomFactoryImpl.eINSTANCE.createModelResource();
+			resource.setName(getName());
+			resource.setDefinition(getType().getName());
 			
 			IModelResourceFactory factory = null;
 			try {
@@ -52,8 +42,10 @@ public class ResourceRule extends ParametrisedRule<ModelResource> {
 				String msg = String.format("Unkown resource factory '%s'", getType().getName());
 				ctx.addWarningMarker(getType(), msg);
 			}
-	
-			for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
+			
+			setupConfigurableParameters(ctx, resource, factory);
+			
+			/*for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
 				Property property = DomFactoryImpl.eINSTANCE.createProperty();
 				property.setKey(p.getKey().getName());
 				property.setValue(p.getValue());
@@ -63,8 +55,9 @@ public class ResourceRule extends ParametrisedRule<ModelResource> {
 					ctx.addWarningMarker(p.getKey(), msg);
 				}
 				
-			}
+			}*/
 			
+			modelResource = resource;
 		}
 		
 	}

@@ -127,14 +127,15 @@ public class ModulePersistenceHelper {
 			try {
 				traceResource.load(null);
 				executionTrace = (ExecutionTrace) traceResource.getContents().get(0);
+				ctx.setExecutionTrace(executionTrace);
 			} catch (Exception e) {
-				ctx.getWarningStream().println("Unable to load execution trace. Creating new one.%n");
+				ctx.getWarningStream().println("Unable to load execution trace. Creating new one.");
 			}
 		} 
 		if (executionTrace == null) {
 			executionTrace = ExecutionTraceFactoryImpl.eINSTANCE.createExecutionTrace();
+			ctx.setExecutionTrace(executionTrace);
 		}
-		ctx.setExecutionTrace(executionTrace);
 	}
 	
 	public void updateExecutionTrace() throws EolRuntimeException {
@@ -147,7 +148,7 @@ public class ModulePersistenceHelper {
 			Resource traceResource = getResourceSet().createResource(fileUri);
 			
 			ExecutionTrace executionTrace = ctx.getExecutionTrace();
-			traceResource.getContents().add(executionTrace);	
+			traceResource.getContents().add(executionTrace);
 			
 			try {
 				Map<String, String> options = new HashMap<>();

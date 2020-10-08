@@ -7,9 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.repository;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.epsilonlabs.modelflow.dom.api.ITask;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
@@ -23,51 +22,17 @@ public class TaskRepository {
 
 	protected TaskFactoryRegistry taskFactoryRegistry;
 	protected ResourceRepository resourceRepository;
-	protected Map<String, ITask> /* <ResourceIdentity, Resource> */ tasks;
+	protected Map<String, ITask> tasks;
 
 
 	public TaskRepository(TaskFactoryRegistry registry, ResourceFactoryRegistry resRegistry) {
 		this.taskFactoryRegistry = registry;
 		this.resourceRepository = new ResourceRepository(resRegistry);
-		this.tasks = new HashMap<>();
-
+		this.tasks = new ConcurrentHashMap<>();
 	}
 	
 	public ResourceRepository getResourceRepository() {
 		return resourceRepository;
-	}
-
-	// FIXME decide whether to keep 
-	public ITask register(ITaskNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		// Retrieve resources and register them in their appropriate format (based on dep graph)
-		// TODO Collection<IResource<?>> resources = this.resourceRepository.lookForResourceDependencies(node);
-		// Instantiate the task
-		
-		/** Retrieve ID */
-		
-		/** Check if task exists */ // When would a task exist?
-		/** .. From task repository */
-		/*if (taskRepository.containsKey(id)) {
-			ITask iTask = taskRepository.get(id);
-		} */
-		/** .. From execution trace? */
-		
-		/** Create new instance */
-		ITask task = this.create(node, ctx);
-		
-		//taskRepository.put(id, task);
-		return task;
-		
-		
-		// register the task
-	}
-	
-	public Optional<ITask> get(String id) {
-		if (this.tasks.containsKey(id)) {
-			return Optional.of(this.tasks.get(id));
-		} else {
-			return Optional.empty();
-		}
 	}
 	
 	public Boolean hasFactory(ITaskNode node){
@@ -88,6 +53,11 @@ public class TaskRepository {
 
 	protected String uniqueId(ITaskNode node){
 		return node.getName();
+	}
+	
+	public void clear() {
+		this.tasks.clear();
+		this.resourceRepository.clear();
 	}
 
 }

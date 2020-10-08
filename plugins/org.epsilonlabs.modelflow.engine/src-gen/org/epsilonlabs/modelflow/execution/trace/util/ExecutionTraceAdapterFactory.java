@@ -83,10 +83,6 @@ public class ExecutionTraceAdapterFactory extends AdapterFactoryImpl {
 				return createStatefulAdapter();
 			}
 			@Override
-			public Adapter caseTimed(Timed object) {
-				return createTimedAdapter();
-			}
-			@Override
 			public Adapter caseSnapshot(Snapshot object) {
 				return createSnapshotAdapter();
 			}
@@ -151,20 +147,6 @@ public class ExecutionTraceAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createStatefulAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.execution.trace.Timed <em>Timed</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.execution.trace.Timed
-	 * @generated
-	 */
-	public Adapter createTimedAdapter() {
 		return null;
 	}
 

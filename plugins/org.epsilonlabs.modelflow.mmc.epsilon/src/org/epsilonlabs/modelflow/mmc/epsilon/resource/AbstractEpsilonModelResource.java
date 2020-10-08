@@ -76,26 +76,50 @@ public abstract class AbstractEpsilonModelResource extends AbstractResource<IMod
 
 	@Override
 	public void modelAsInOut() {
-		if (!this.read.isPresent()) getModel().setReadOnLoad(true);
-		if (!this.store.isPresent()) getModel().setStoredOnDisposal(true);
+		if (!this.read.isPresent()) {
+			this.read = Optional.of(true);
+			getModel().setReadOnLoad(true);
+		}
+		if (!this.store.isPresent()) {
+			this.store = Optional.of(true);
+			getModel().setStoredOnDisposal(true);
+		}
 	}
 	
 	@Override
 	public void modelAsInput() {
-		if (!this.read.isPresent()) getModel().setReadOnLoad(true);
-		if (!this.store.isPresent()) getModel().setStoredOnDisposal(false);
+		if (!this.read.isPresent()) {
+			this.read = Optional.of(true);
+			getModel().setReadOnLoad(true);
+		}
+		if (!this.store.isPresent()) {
+			this.store = Optional.of(false);
+			getModel().setStoredOnDisposal(false);
+		}
 	}
 	
 	@Override
 	public void modelAsOutput() {
-		if (!this.read.isPresent()) getModel().setReadOnLoad(false);
-		if (!this.store.isPresent()) getModel().setStoredOnDisposal(true);
+		if (!this.read.isPresent()) {
+			this.read = Optional.of(false);
+			getModel().setReadOnLoad(false);
+		}
+		if (!this.store.isPresent()) {
+			this.store = Optional.of(true);
+			getModel().setStoredOnDisposal(true);
+		}
 	}
 	
 	@Override
 	public void modelAsTransient() {
-		if (!this.read.isPresent()) getModel().setReadOnLoad(false);
-		if (!this.store.isPresent()) getModel().setStoredOnDisposal(false);
+		if (!this.read.isPresent()) {
+			this.read = Optional.of(false);
+			getModel().setReadOnLoad(false);
+		}
+		if (!this.store.isPresent()) {
+			this.store = Optional.of(false);
+			getModel().setStoredOnDisposal(false);
+		}
 	}
 	
 	@Override

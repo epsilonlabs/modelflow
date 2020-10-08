@@ -4,6 +4,7 @@ for (i in Sequence{1..4}){
 	var q = new SEPR!Question;
 	q.title = "Question " + i.asString();
 	q.description = "Description of Question " + i.asString();
+	q.marks = 100/4;
 	exam.questions.add(q);
 }
 

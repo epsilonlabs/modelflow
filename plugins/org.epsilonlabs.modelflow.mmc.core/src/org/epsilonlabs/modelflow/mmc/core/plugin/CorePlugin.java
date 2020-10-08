@@ -16,6 +16,8 @@ import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
 import org.epsilonlabs.modelflow.mmc.core.task.FileReaderTask;
 import org.epsilonlabs.modelflow.mmc.core.task.PrintTask;
+import org.epsilonlabs.modelflow.mmc.core.task.SleepTask;
+import org.epsilonlabs.modelflow.mmc.core.task.XsdValidationTask;
 
 public class CorePlugin extends AbstractPlugin {
 
@@ -41,7 +43,7 @@ public class CorePlugin extends AbstractPlugin {
 
 	@Override
 	public List<Class<? extends ITaskFactory>> getTaskFactories() {
-		return Arrays.asList(FileReaderTask.Factory.class, PrintTask.Factory.class);
+		return Arrays.asList(FileReaderTask.Factory.class, PrintTask.Factory.class, SleepTask.Factory.class, XsdValidationTask.Factory.class);
 	}
 
 	@Override

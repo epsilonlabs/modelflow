@@ -48,22 +48,24 @@ public class ModelFlowEditor extends EolEditor implements ITextEditor {
 		keywords.add("param");
 		
 		keywords.add("task");
-		keywords.add("workflow");
+		//keywords.add("workflow");
 		keywords.add("model");
-		keywords.add("metamodel");
-		keywords.add("abstract");
-		keywords.add("extends");
+		//keywords.add("metamodel");
+		//keywords.add("abstract");
+		//keywords.add("extends");
 		
-		keywords.add("type");
+		//keywords.add("type");
 		keywords.add("is");
 		keywords.add("as");
-		keywords.add("on");
+		//keywords.add("on");
 		keywords.add("dependsOn");
+		keywords.add("forEach");
+		
 		
 		keywords.add("in");
 		keywords.add("inout");
 		keywords.add("out");
-		keywords.add("trans");
+		//keywords.add("trans");
 
 		keywords.addAll(superKeywords);
 		HashSet<String> set = new HashSet<>(keywords);

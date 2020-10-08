@@ -83,6 +83,10 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 				return createNamedAdapter();
 			}
 			@Override
+			public Adapter caseConfigurable(Configurable object) {
+				return createConfigurableAdapter();
+			}
+			@Override
 			public Adapter caseAbstractResource(AbstractResource object) {
 				return createAbstractResourceAdapter();
 			}
@@ -171,6 +175,20 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNamedAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Configurable <em>Configurable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.epsilonlabs.modelflow.dom.Configurable
+	 * @generated
+	 */
+	public Adapter createConfigurableAdapter() {
 		return null;
 	}
 

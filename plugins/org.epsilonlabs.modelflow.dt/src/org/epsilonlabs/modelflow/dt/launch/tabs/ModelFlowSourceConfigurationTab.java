@@ -171,6 +171,21 @@ public class ModelFlowSourceConfigurationTab extends AbstractSourceConfiguration
 		protectOutputsCheckbox = new Button(group, SWT.CHECK);
 		protectOutputsCheckbox.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		protectOutputsCheckbox.addSelectionListener(this);
+		
+		// Clean Traces
+		Button clearTracesButton = new Button(group, SWT.PUSH);
+		clearTracesButton.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		clearTracesButton.setText("Clear execution traces");
+		clearTracesButton.addSelectionListener(new SelectionListener() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {		
+				new Path(getExecutionTracePathForActiveEditor()).toFile().delete();
+			}
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				// Do nothing				
+			}
+		});
 	}
 	
 	/** 
@@ -206,6 +221,7 @@ public class ModelFlowSourceConfigurationTab extends AbstractSourceConfiguration
 				if (btn.getSelection() && tracePathText.getText().isEmpty()) {
 					tracePathText.setText(getTracePathForActiveEditor());
 				}
+				update();
 			}
 			
 			@Override
@@ -281,6 +297,5 @@ public class ModelFlowSourceConfigurationTab extends AbstractSourceConfiguration
 		file.getParentFile().mkdirs();
 		return resolve.toString();		
 	}
-	
 	
 }

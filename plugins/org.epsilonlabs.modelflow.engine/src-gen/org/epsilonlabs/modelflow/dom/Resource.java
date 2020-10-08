@@ -9,8 +9,6 @@
  */
 package org.epsilonlabs.modelflow.dom;
 
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Resource</b></em>'.
@@ -20,7 +18,6 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Resource#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Resource#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Resource#getDeclared <em>Declared</em>}</li>
  * </ul>
@@ -30,18 +27,6 @@ import org.eclipse.emf.common.util.EList;
  * @generated
  */
 public interface Resource extends AbstractResource {
-	/**
-	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
-	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.Property}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Properties</em>' containment reference list.
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getResource_Properties()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<Property> getProperties();
-
 	/**
 	 * Returns the value of the '<em><b>Definition</b></em>' attribute.
 	 * <!-- begin-user-doc -->

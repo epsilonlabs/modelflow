@@ -51,6 +51,7 @@ tokens {
 	RESLIST;
 	DEPENDSON;
 	PARAMDECLARATION;
+	FOREACH;
 }
 
 workflowContents
@@ -76,7 +77,7 @@ taskDeclaration
 		$tree.getExtraTokens().add($cb);
 	}
 	:	
-	ta='task'^ NAME ruleType in? inout? out? dependsOn? ((ob='{'! guard? propertyDeclaration* cb='}'!) | ';')!
+	ta='task'^ NAME ruleType in? inout? out? dependsOn? forEach? ((ob='{'! guard? propertyDeclaration* cb='}'!) | ';')!
 	{$ta.setType(TASKDECLARATION);}
 	;
 	
@@ -120,12 +121,21 @@ inout
 	
 out
 	@after {
-		$tree.getExtraTokens().add($i);
+		$tree.getExtraTokens().add($o);
 	}
 	:
-	i='out'^ taskResourceList
-	{$i.setType(OUTPUTS);}
+	o='out'^ taskResourceList
+	{$o.setType(OUTPUTS);}
 	;		
+
+forEach
+	@after {
+		$tree.getExtraTokens().add($fe);
+	}
+	:
+	fe='forEach'^ formalParameter 'in'! expressionOrStatementBlock
+	{$fe.setType(FOREACH);}
+	;
 	
 taskResourceList
 	@after {
@@ -149,7 +159,6 @@ taskResource
 		$res.setType(TASKRESOURCE);	
 	}
 	;
-	
 		
 dependsOn
 	@after {

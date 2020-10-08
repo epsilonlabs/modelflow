@@ -9,7 +9,6 @@ package org.epsilonlabs.modelflow.execution.trace;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class ExecutionTracePrinter {
 
@@ -31,9 +30,6 @@ public class ExecutionTracePrinter {
 		for (WorkflowExecution execution : trace.getExecutions()) {
 			builder.append("==  Workflow == \n");
 			builder.append(SEPARATOR);
-			appendFormatted(builder, "started: %s\n", millisToDate(execution.getStart()));
-			appendFormatted(builder, "finished: %s\n", millisToDate(execution.getEnd()));
-			appendFormatted(builder, "duration: %s ms\n", TimeUnit.MILLISECONDS.convert(execution.getEnd()-execution.getStart(), TimeUnit.NANOSECONDS));
 			appendFormatted(builder, "status: %s\n", execution.getEndState());
 			builder.append(SEPARATOR);
 			builder.append("==== Tasks ==== \n");
@@ -55,7 +51,6 @@ public class ExecutionTracePrinter {
 
 	protected void appendTask(StringBuilder builder, TaskExecution t) {
 		appendFormatted(builder, ">> %s \n", t.getTask().getName());
-		appendFormatted(builder, " duration: %s ms\n", TimeUnit.MILLISECONDS.convert(t.getEnd()-t.getStart(), TimeUnit.NANOSECONDS));
 		appendFormatted(builder, " status: %s\n", t.getEndState());
 		if (!t.getInputModels().isEmpty()) {					
 			builder.append(" inputs:\n");

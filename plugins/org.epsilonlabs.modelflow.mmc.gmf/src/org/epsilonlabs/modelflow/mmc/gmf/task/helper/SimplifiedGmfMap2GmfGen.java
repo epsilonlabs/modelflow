@@ -247,6 +247,7 @@ public class SimplifiedGmfMap2GmfGen {
 
 			return new GenModelProducer() {
 
+				@Override
 				public GenEditorGenerator process(Mapping mapping, IProgressMonitor progress) {
 					progress.beginTask(null, 1);
 					try {
@@ -275,13 +276,14 @@ public class SimplifiedGmfMap2GmfGen {
 			final DiagramRunTimeModelHelper drtModelHelper = new BasicDiagramRunTimeModelHelper();
 			final ViewmapProducer viewmapProducer = detectTransformationOptions();
 			DiagramGenModelTransformer.Parameters opts = new DiagramGenModelTransformer.Parameters(drtModelHelper, viewmapProducer, idDespenser.get(), getOptions().getGenerateRCP());
-			final DiagramGenModelTransformer t = new DiagramGenModelTransformer(opts);
+			t = new DiagramGenModelTransformer(opts);
 			if (getGenModel() != null) {
 				t.setEMFGenModel(getGenModel());
 			}
 			
 			return new GenModelProducer() {
 
+				@Override
 				public GenEditorGenerator process(Mapping mapping, IProgressMonitor progress) {
 					progress.beginTask(null, 1);
 					try {
@@ -295,10 +297,14 @@ public class SimplifiedGmfMap2GmfGen {
 			};
 		}
 	}
-
+	
+	protected DiagramGenModelTransformer t;
 	protected Trace qvtTrace;
 	protected History trace;
 	
+	public DiagramGenModelTransformer getDiagramTransformer() {
+		return t;
+	}
 	
 	public History getTrace() {
 		return trace;

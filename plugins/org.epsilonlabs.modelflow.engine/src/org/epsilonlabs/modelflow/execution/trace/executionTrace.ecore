@@ -15,10 +15,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="Stateful" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="endState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Timed" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="start" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Snapshot" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="stamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timestamp" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELongObject"/>
@@ -38,20 +34,20 @@
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="WorkflowExecution" eSuperTypes="#//Stateful #//Timed">
+  <eClassifiers xsi:type="ecore:EClass" name="WorkflowExecution" eSuperTypes="#//Stateful">
     <eAnnotations source="exeed">
       <details key="classIcon" value="operation"/>
-      <details key="label" value="return 'Workflow' &#xA;+ ' (' + self.endState +') ' &#xA;+ ((self.end-self.start)/1000)+ 's';"/>
+      <details key="label" value="return 'Workflow' &#xA;+ ' (' + self.endState +') ';"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
         eType="#//TaskExecution" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Workflow"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TaskExecution" eSuperTypes="#//Stateful #//Timed">
+  <eClassifiers xsi:type="ecore:EClass" name="TaskExecution" eSuperTypes="#//Stateful">
     <eAnnotations source="exeed">
       <details key="classIcon" value="operation"/>
-      <details key="label" value="return self.task.name &#xA;+ ' (' + self.endState +') ' &#xA;+ (self.end-self.start) + 'ms';"/>
+      <details key="label" value="return self.task.name &#xA;+ ' (' + self.endState +') ';"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputModels" upperBound="-1"
         eType="#//ResourceSnapshot" containment="true"/>

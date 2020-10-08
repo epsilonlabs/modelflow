@@ -7,10 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import java.util.Collection;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
@@ -19,20 +19,21 @@ import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.api.IResource;
 import org.epsilonlabs.modelflow.dom.api.ITask;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.IPublisher;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
-import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
 import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
 import org.epsilonlabs.modelflow.management.param.TaskParamManager;
-import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 import org.epsilonlabs.modelflow.management.resource.ResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.reactivex.Completable;
+import io.reactivex.subjects.CompletableSubject;
 import io.reactivex.subjects.PublishSubject;
 
 public class TaskNode implements ITaskNode { 
@@ -41,106 +42,117 @@ public class TaskNode implements ITaskNode {
 	
 	protected Task taskDefintion;
 	protected ITask taskInstance;
-	protected IDependencyGraph dependencyGraph;
 	protected TaskState state;
-	protected PublishSubject<TaskState> statusUpdater = PublishSubject.create();
 
-	protected Collection<ImmutablePair<ResourceKind, IAbstractResourceNode>> dependentResources;
-	protected Collection<ITaskNode> dependentTasks;
-	protected Collection<IAbstractResourceNode> inouts;
-	protected Collection<IAbstractResourceNode> outputs;
-	protected Collection<IAbstractResourceNode> inputs;
+	protected final CompletableSubject completable = CompletableSubject.create();
+
+	protected final PublishSubject<TaskState> statusUpdater = PublishSubject.create();
 
 	private TaskInputPropertyHandler taskInputs;
 	private TaskOutputPropertyHandler taskOutputs;
-
 	
-	public TaskNode(Task task, IDependencyGraph graph) {
+	public TaskNode(Task task) {
 		this.taskDefintion = task;
 		setState(TaskState.CREATED);
-		this.dependencyGraph = graph;
 	}
 	
 	@Override
-	public void subscribe(IPublisher pub){
+	public Completable getObservable() {
+		return completable;
+	}
+	
+	@Override
+	public void subscribe(IModelFlowPublisher pub){
 		statusUpdater.subscribe(status -> pub.taskState(this.taskDefintion.getName(), status));
 	}
 	
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
-		// Locate Utilities
-		ResourceManager manager = ctx.getResourceManager(); 
-		TaskParamManager pManager = ctx.getParamManager();
+		LOG.debug("Called execute for {}", getTaskDefinition().getName());
 		
-		IncrementalTaskNodeChecker incremental = new IncrementalTaskNodeChecker(this, ctx);
-		
-		// Instantiate and configure basic properties
+		// Instantiate task and populate
 		this.taskInstance = ctx.getTaskRepository().create(this, ctx);
 		setState(TaskState.INITIALIZED);
 		
-
 		/*
 		 * Check if it should execute 
 		 * i.e. task is enabled && guard is OK 
 		 */
 		if (shouldExecute(ctx)) {
-			
 			// Prepare for execution 
 			this.taskInstance.validateParameters();
-			
+			// Assume it will execute
 			boolean execute = true;
-			// If input properties changed, continue 
-			boolean outputsChanged = incremental.haveOutputPropertiesChanged() || incremental.haveOutputModelsChanged();
 			
-			boolean derivedOutputDependencies = new DependencyGraphHelper(this.dependencyGraph).hasDerivedOutputDependencies(this);
-			if (derivedOutputDependencies || incremental.haveInputPropertiesChanged() || incremental.haveInputModelsChanged() || outputsChanged) {
-				// If output models and properties have not been externally changed continue 
-				if (outputsChanged) {
-					execute = decideIfShouldExecute(ctx, execute);
+			ConservativeExecutionHelper conservativeHelper = new ConservativeExecutionHelper(this, ctx);
+			if (conservativeHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
+				DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getDependencyGraph());
+				
+				if ( !(taskInstance.isAlwaysExecute() || taskDefintion.getAlwaysExecute()) 
+						&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(this)) )
+				{
+					boolean inputsChanged = conservativeHelper.haveInputPropertiesChanged() 
+							|| conservativeHelper.haveInputModelsChanged();
+					int shouldExecuteOutput = shouldExecuteBasedOnOutput(ctx, conservativeHelper);
+					switch (shouldExecuteOutput) {
+					case 0:
+						execute = inputsChanged;
+						break;
+					case -1:
+						if (inputsChanged) {
+							// WARN!
+						}
+						execute = false;
+						break;
+					default:
+						break;
+					}					
 				}
-				if (execute) {
-					// Go ahead with execution
-					doExecute(ctx, manager, pManager);
-				}
+			}
+			if (execute) {
+				doExecute(ctx);
 			} else {
-				execute = false;
+				noNeedToExecute(ctx, conservativeHelper);
 			}
-			// Past Execution was the same 
-			if (!execute){
-				noNeedToExecute(ctx, incremental);
-			}
-		} 
-		// Guard failed or task disabled  
-		else {
-			// -- SKIPPING --
+		}
+		else { // Guard failed or task is disabled
 			skip();			
 		}
 	}
 
-	protected boolean decideIfShouldExecute(IModelFlowContext ctx, boolean execute) {
+	/**
+	 * @param ctx
+	 * @param conservativeHelper
+	 * @return 0 ignore, 1 must execute, -1 must not execute
+	 */
+	protected int shouldExecuteBasedOnOutput(IModelFlowContext ctx, ConservativeExecutionHelper conservativeHelper) {
+		// Determine which outputs have changed
+		boolean outputsChanged = conservativeHelper.haveOutputPropertiesChanged() 
+				|| conservativeHelper.haveOutputModelsChanged();
 		if (ctx.isInteractive()) {
-			String msg = String.format("The outputs of task %s have been modified%n", getTaskDefinition().getName());
-			ctx.getOutputStream().print(msg);
-			
-			String result = null;
-			while ( ! ("N".equalsIgnoreCase(result) || "Y".equalsIgnoreCase(result)) ) {							
-				result = ctx.getUserInput().prompt("Would you like to discard these changes and continue with the execution? %n"
-						+ "Y - discard changes and continue %n"
-						+ "N - keep changes and abort execution", 
-						null);
-			}
-			LOG.debug("Continuing with execution");
-			execute = "Y".equalsIgnoreCase(result);
-			
+			if (outputsChanged) {
+				// List them and prompt
+				String msg = String.format("The outputs of task %s have been modified from the previous execution.", getTaskDefinition().getName());
+				String instructions = "Would you like to discard these changes and continue with the execution?\n"
+						+ "1 - discard changes and continue with execution\n"
+						+ "0 - only execute if inputs have changed\n"
+						+ "-1 - keep changes and abort execution";
+				List<Integer> validOptions = Arrays.asList(-1, 0, 1);
+				Integer selected = 2;
+				while(!validOptions.contains(selected)) {
+					selected = ctx.getUserInput().promptInteger(msg + "\n\n" + instructions, 0);	
+				}					
+			} 
+			return 0;
 		} else {
-			if (ctx.isProtectResources()){
-				execute = false;
-				LOG.debug("Aborting execution of {}", getTaskDefinition().getName());
+			// We should not execute if outputs have changed since they are protected, if they are not we execute to restore consistency
+			if (ctx.isProtectResources()) {
+				return outputsChanged ? -1 : 0; 
+				
 			} else {
-				LOG.debug("Going ahead with execution of {}", getTaskDefinition().getName());
+				return outputsChanged ? 1 : 0;
 			}
 		}
-		return execute;
 	}
 
 	/**
@@ -148,12 +160,22 @@ public class TaskNode implements ITaskNode {
 	 * @param ctx 	the ModelFlow context
 	 * @param incremental
 	 */
-	protected void noNeedToExecute(IModelFlowContext ctx, IncrementalTaskNodeChecker incremental) {
+	protected void noNeedToExecute(IModelFlowContext ctx, ConservativeExecutionHelper incremental) {
 		// -- SKIPPING --
 		skip();
 		
 		// Copy Execution Trace 
 		incremental.copyFromPrevious();
+		
+		// End-To-End Traces
+		processEndToEndTraces(ctx); // Do nothing for the time being
+		
+		// Check if tasks depend on my execution results
+		/*if (new DependencyGraphHelper(ctx.getDependencyGraph()).hasDerivedOutputDependencies(this)) {
+			ExecutionTrace trace = ctx.getExecutionTrace();
+			EList<TaskExecution> tasks = trace.getExecutions().get(-1).getTasks();
+			tasks.stream().filter(t->t.getTask().getName().equals(this.getName())).map(TaskExecution::getOutputProperties).;
+		}*/
 		
 		//Safely dispose no longer used models
 		safelyDispose(ctx);
@@ -170,19 +192,27 @@ public class TaskNode implements ITaskNode {
 	 * @param pManager
 	 * @throws MFRuntimeException
 	 */
-	protected void doExecute(IModelFlowContext ctx, ResourceManager manager, TaskParamManager pManager)
+	protected void doExecute(IModelFlowContext ctx)
 			throws MFRuntimeException {
+		
+		ResourceManager manager = ctx.getResourceManager(); 
+		TaskParamManager pManager = ctx.getParamManager();
 		/*
 		 * TODO if any derived outputs are contributed, 
 		 * then either check its stamp has not changed or 
 		 * re-execute  
 		 */
-			
-		// Register inputs in execution trace
-		pManager.processInputs(this, ctx);
 		
+		// Register inputs in execution trace
+		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+		pManager.processInputs(this, ctx);
+		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+
 		// Assign Models Before Execution
+		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
 		manager.processResourcesBeforeExecution(this, ctx);
+		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
+
 		
 		setState(TaskState.RESOLVED);
 		
@@ -190,30 +220,40 @@ public class TaskNode implements ITaskNode {
 		
 		// Execute 
 		setState(TaskState.EXECUTING);
+		ctx.getProfiler().start(IMeasurable.Stage.EXECUTION, this, ctx);
 		this.taskInstance.execute(ctx);
+		ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION, this, ctx);
 		setState(TaskState.EXECUTED);
-		
+
 		ctx.getFrameStack().put(
 			Variable.createReadOnlyVariable(getName(), taskInstance)
 		);
 		
 		// Cleanup if necessary 
+		ctx.getProfiler().start(IMeasurable.Stage.CLEANUP, this, ctx);
 		this.taskInstance.afterExecute();
+		ctx.getProfiler().stop(IMeasurable.Stage.CLEANUP, this, ctx);
 		
 		// -- POST PROCESSING -- 
 		
 		// Record outputs in execution trace
+		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
 		pManager.processOutputs(this, ctx);
-		
+		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+
 		// Traces
-		processTraces(ctx);
+		ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+		processEndToEndTraces(ctx);
+		ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
 		
 		// Process Models After Execution
+		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 		manager.processResourcesAfterExecution(this, ctx);
+		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 	}
 
 	protected void safelyDispose(IModelFlowContext ctx) {
-		new DependencyGraphHelper(this.dependencyGraph).getResourceNodes(this).stream()
+		new DependencyGraphHelper(ctx.getDependencyGraph()).getResourceNodes(this).stream()
 			.filter(r->r instanceof IModelResourceNode)
 			.forEach(r -> {
 				IModelResourceNode resource = (IModelResourceNode)r;
@@ -248,16 +288,20 @@ public class TaskNode implements ITaskNode {
 		LOG.info("Skipping {}", taskDefintion.getName());
 	}
 
-	protected void processTraces(IModelFlowContext ctx) {
+	protected void processEndToEndTraces(IModelFlowContext ctx) {
 		boolean endToEndTracing = ctx.isEndToEndTracing();
 		boolean traceable = this.taskDefintion.getTraceable();
-		if (endToEndTracing && traceable && !getState().isSkpped()) {
-			// Check if task produced traces
-			this.taskInstance.getTrace().ifPresent(traces -> {
-				ManagementTrace trace = ctx.getManagementTrace();
-				ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(trace, this.taskDefintion);
-				traceUpdater.update(traces);
-			});
+		if (endToEndTracing && traceable) {
+			if (!getState().isSkpped()) {
+				// Check if task produced traces
+				this.taskInstance.getTrace().ifPresent(traces -> {
+					ManagementTrace trace = ctx.getManagementTrace();
+					ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(trace, this.taskDefintion);
+					traceUpdater.update(traces);
+				});
+			} else {
+				// Should remain the same
+			}
 		}
 	}
 	
@@ -342,8 +386,19 @@ public class TaskNode implements ITaskNode {
 	}
 	
 	protected synchronized void setState(TaskState state){
+		LOG.debug("Task {} is {}", getTaskDefinition().getName(), state.name());
 		this.statusUpdater.onNext(state);
 		this.state = state;
+		switch (state) {
+		case EXECUTED:
+		case SKIPPED:
+			this.statusUpdater.onComplete();
+			this.completable.onComplete();
+			break;
+		default: 
+			break;
+		}
+
 	}
 	
 	@Override
@@ -372,5 +427,6 @@ public class TaskNode implements ITaskNode {
 	public String toString() {
 		return this.getName();
 	}
+
 
 }

@@ -1,11 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: ModelFlow Unit Tests
 Bundle-SymbolicName: org.epsilonlabs.modelflow.tests;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-ClassPath: .
-Bundle-Vendor: %providerName
-Bundle-Localization: plugin
+Bundle-Vendor: Epsilon
 Automatic-Module-Name: org.epsilonlabs.modelflow.tests
 Require-Bundle: org.epsilonlabs.modelflow.dependencies;visibility:=reexport,
  org.epsilonlabs.modelflow.engine;visibility:=reexport,
@@ -20,7 +19,6 @@ Require-Bundle: org.epsilonlabs.modelflow.dependencies;visibility:=reexport,
  net.bytebuddy.byte-buddy;visibility:=reexport,
  org.objenesis;visibility:=reexport,
  javax.inject;visibility:=reexport,
- org.epsilonlabs.modelflow.logback;visibility:=reexport,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
@@ -32,7 +30,8 @@ Export-Package: org.epsilonlabs.modelflow.tests,
  org.epsilonlabs.modelflow.tests.ast,
  org.epsilonlabs.modelflow.tests.common,
  org.epsilonlabs.modelflow.tests.common.validator,
- org.epsilonlabs.modelflow.tests.trace
+ org.epsilonlabs.modelflow.tests.trace,
+ org.epsilonlabs.modelflow.tests.wip;x-internal:=true
 Import-Package: org.slf4j,
  org.slf4j.helpers,
  org.slf4j.spi

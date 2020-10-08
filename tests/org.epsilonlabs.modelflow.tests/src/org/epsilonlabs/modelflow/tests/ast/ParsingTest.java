@@ -133,6 +133,12 @@ public class ParsingTest extends AbstractParsingTest {
 
 	@Override
 	@Test
+	public void testTaskForEachSequence() {
+		super.testTaskForEachSequence();
+	}
+	
+	@Override
+	@Test
 	public void testParamNoType() {
 		super.testParamNoType();
 	}

@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.execution.graph;
 import java.util.Collection;
 
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
@@ -84,5 +85,10 @@ public interface IDependencyGraph {
 	 * Reset.
 	 */
 	void reset();
+
+	/**
+	 * @param publisher
+	 */
+	void subscribe(IModelFlowPublisher publisher);
 	
 }

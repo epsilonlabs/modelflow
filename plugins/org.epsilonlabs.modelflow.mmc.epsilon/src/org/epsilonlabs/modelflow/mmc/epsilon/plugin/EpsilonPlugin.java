@@ -15,6 +15,7 @@ import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
 import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonEmfModelResource;
+import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonSimulinkModelResource;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonXmlModelResource;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.EpsilonEclTask;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.EpsilonEglTask;
@@ -46,13 +47,8 @@ public class EpsilonPlugin extends AbstractPlugin {
 
 	@Override
 	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
-		return Arrays.asList(EpsilonEmfModelResource.Factory.class, EpsilonXmlModelResource.Factory.class);
-		/*
-		 * EpsilonSimulinkModelResource.Factory.class,
-		 * 
-		 * EpsilonEcoreModelResource.Factory.class,
-		 * EpsilonXsdModelResource.Factory.class);
-		 */
+		return Arrays.asList(EpsilonEmfModelResource.Factory.class, EpsilonXmlModelResource.Factory.class,
+				EpsilonSimulinkModelResource.Factory.class);
 	}
 
 	@Override

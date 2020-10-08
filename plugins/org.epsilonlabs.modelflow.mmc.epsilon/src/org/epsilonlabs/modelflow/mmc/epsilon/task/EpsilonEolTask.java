@@ -7,18 +7,23 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.epsilon.task;
 
+import java.util.Collection;
+import java.util.Optional;
+
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.execute.context.FrameStack;
+import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Output;
+import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
+import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.RuntimeTracer;
 
-/** 
- * TODO: modelflowTrace variable empty to be populated by the execution
- * if not populated return empty
- */
 public class EpsilonEolTask extends AbstractEpsilonTask implements ITask {
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked") 
 	@Override
 	public IEolModule getModule() {
 		if (module == null) {
@@ -42,4 +47,26 @@ public class EpsilonEolTask extends AbstractEpsilonTask implements ITask {
 
 	}
 
+	protected RuntimeTracer tracer;
+	
+	@Output(key="result")
+	public Object getResult() {
+		return result;
+	}
+	
+	@Override
+	public Optional<Collection<Trace>> getTrace() {
+		if (tracer !=null) {
+			return Optional.of(tracer.getTraces());
+		} 
+		return Optional.empty();
+	}
+
+	@Override
+	protected void beforeParse() throws MFExecutionException {
+		super.beforeParse();
+		FrameStack frameStack = getModule().getContext().getFrameStack();
+		tracer = new RuntimeTracer(this);
+		frameStack.putGlobal(Variable.createReadOnlyVariable("mfTrace", tracer));
+	}
 }

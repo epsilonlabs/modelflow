@@ -2,8 +2,6 @@ package org.epsilonlabs.modelflow.tests.common;
 
 import java.util.Map;
 
-import org.eclipse.core.runtime.Platform;
-import org.epsilonlabs.modelflow.Setup;
 import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -23,13 +21,7 @@ public abstract class ExtensionPointTests {
 	@Before
 	public void retrieveExtensionPoints() {
 		Injector injector;
-		if (Platform.isRunning()) {			
-			Setup setup = Setup.getInstance();
-			setup.init();
-			injector = Guice.createInjector(setup.getPluginExtensions());
-		} else {
-			injector = Guice.createInjector(getPlugin());
-		}
+		injector = Guice.createInjector(getPlugin());
 		taskFactories = injector.getInstance(TaskFactoryRegistry.class).getFactories();
 		resourceFactories = injector.getInstance(ResourceFactoryRegistry.class).getFactories();
 	}
@@ -43,7 +35,6 @@ public abstract class ExtensionPointTests {
 	public void testAvailableResourceTypes() {
 		expectedResources();
 	}
-	
 	
 	protected abstract void expectedTasks();
 	protected abstract void expectedResources();

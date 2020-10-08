@@ -1,0 +1,13 @@
+param mBasedir : String;
+param tBasedir : String;
+param mm : String;
+
+model SEPR is epsilon:emf {
+	src: mBasedir + "sepr.model"
+	metamodelFile: mm
+}
+task produce is epsilon:eol
+	out SEPR
+{
+	src: tBasedir + "generateModel.eol"
+}

@@ -101,14 +101,14 @@ public interface DomPackage extends EPackage {
 	int NAMED_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
+	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl <em>Configurable</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.dom.impl.AbstractTaskImpl
-	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getAbstractTask()
+	 * @see org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl
+	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getConfigurable()
 	 * @generated
 	 */
-	int ABSTRACT_TASK = 3;
+	int CONFIGURABLE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -117,7 +117,80 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_TASK__NAME = NAMED__NAME;
+	int CONFIGURABLE__NAME = NAMED__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE__PROPERTIES = NAMED_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE__MODULE_ELEMENT = NAMED_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Configurable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE_FEATURE_COUNT = NAMED_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of operations of the '<em>Configurable</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.AbstractTaskImpl <em>Abstract Task</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.epsilonlabs.modelflow.dom.impl.AbstractTaskImpl
+	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getAbstractTask()
+	 * @generated
+	 */
+	int ABSTRACT_TASK = 4;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_TASK__NAME = CONFIGURABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_TASK__PROPERTIES = CONFIGURABLE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_TASK__MODULE_ELEMENT = CONFIGURABLE__MODULE_ELEMENT;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Task</em>' class.
@@ -126,7 +199,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_TASK_FEATURE_COUNT = NAMED_FEATURE_COUNT + 0;
+	int ABSTRACT_TASK_FEATURE_COUNT = CONFIGURABLE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Abstract Task</em>' class.
@@ -135,7 +208,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_TASK_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
+	int ABSTRACT_TASK_OPERATION_COUNT = CONFIGURABLE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl <em>Task</em>}' class.
@@ -145,7 +218,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getTask()
 	 * @generated
 	 */
-	int TASK = 4;
+	int TASK = 5;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -155,6 +228,24 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int TASK__NAME = ABSTRACT_TASK__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__PROPERTIES = ABSTRACT_TASK__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__MODULE_ELEMENT = ABSTRACT_TASK__MODULE_ELEMENT;
 
 	/**
 	 * The feature id for the '<em><b>Produces</b></em>' containment reference list.
@@ -184,22 +275,13 @@ public interface DomPackage extends EPackage {
 	int TASK__MODIFIES = ABSTRACT_TASK_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Dependencies</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__PROPERTIES = ABSTRACT_TASK_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Guard</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TASK__GUARD = ABSTRACT_TASK_FEATURE_COUNT + 4;
+	int TASK__DEPENDENCIES = ABSTRACT_TASK_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Definition</b></em>' attribute.
@@ -208,7 +290,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__DEFINITION = ABSTRACT_TASK_FEATURE_COUNT + 5;
+	int TASK__DEFINITION = ABSTRACT_TASK_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -217,7 +299,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__ENABLED = ABSTRACT_TASK_FEATURE_COUNT + 6;
+	int TASK__ENABLED = ABSTRACT_TASK_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Traceable</b></em>' attribute.
@@ -226,16 +308,25 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__TRACEABLE = ABSTRACT_TASK_FEATURE_COUNT + 7;
+	int TASK__TRACEABLE = ABSTRACT_TASK_FEATURE_COUNT + 6;
 
 	/**
-	 * The feature id for the '<em><b>Dependencies</b></em>' reference list.
+	 * The feature id for the '<em><b>Always Execute</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__DEPENDENCIES = ABSTRACT_TASK_FEATURE_COUNT + 8;
+	int TASK__ALWAYS_EXECUTE = ABSTRACT_TASK_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Guard</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__GUARD = ABSTRACT_TASK_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Task</em>' class.
@@ -275,6 +366,24 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__NAME = TASK__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW__PROPERTIES = TASK__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW__MODULE_ELEMENT = TASK__MODULE_ELEMENT;
+
+	/**
 	 * The feature id for the '<em><b>Produces</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -302,22 +411,13 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__MODIFIES = TASK__MODIFIES;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * The feature id for the '<em><b>Dependencies</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW__PROPERTIES = TASK__PROPERTIES;
-
-	/**
-	 * The feature id for the '<em><b>Guard</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WORKFLOW__GUARD = TASK__GUARD;
+	int WORKFLOW__DEPENDENCIES = TASK__DEPENDENCIES;
 
 	/**
 	 * The feature id for the '<em><b>Definition</b></em>' attribute.
@@ -347,13 +447,22 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__TRACEABLE = TASK__TRACEABLE;
 
 	/**
-	 * The feature id for the '<em><b>Dependencies</b></em>' reference list.
+	 * The feature id for the '<em><b>Always Execute</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW__DEPENDENCIES = TASK__DEPENDENCIES;
+	int WORKFLOW__ALWAYS_EXECUTE = TASK__ALWAYS_EXECUTE;
+
+	/**
+	 * The feature id for the '<em><b>Guard</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW__GUARD = TASK__GUARD;
 
 	/**
 	 * The feature id for the '<em><b>Tasks</b></em>' containment reference list.
@@ -417,7 +526,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getAbstractResource()
 	 * @generated
 	 */
-	int ABSTRACT_RESOURCE = 2;
+	int ABSTRACT_RESOURCE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -426,7 +535,25 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_RESOURCE__NAME = NAMED__NAME;
+	int ABSTRACT_RESOURCE__NAME = CONFIGURABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_RESOURCE__PROPERTIES = CONFIGURABLE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_RESOURCE__MODULE_ELEMENT = CONFIGURABLE__MODULE_ELEMENT;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Resource</em>' class.
@@ -435,7 +562,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_RESOURCE_FEATURE_COUNT = NAMED_FEATURE_COUNT + 0;
+	int ABSTRACT_RESOURCE_FEATURE_COUNT = CONFIGURABLE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>Abstract Resource</em>' class.
@@ -444,7 +571,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ABSTRACT_RESOURCE_OPERATION_COUNT = NAMED_OPERATION_COUNT + 0;
+	int ABSTRACT_RESOURCE_OPERATION_COUNT = CONFIGURABLE_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.ResourceReferenceImpl <em>Resource Reference</em>}' class.
@@ -454,7 +581,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getResourceReference()
 	 * @generated
 	 */
-	int RESOURCE_REFERENCE = 5;
+	int RESOURCE_REFERENCE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Resource</b></em>' reference.
@@ -500,7 +627,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getResource()
 	 * @generated
 	 */
-	int RESOURCE = 6;
+	int RESOURCE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -518,7 +645,16 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__PROPERTIES = ABSTRACT_RESOURCE_FEATURE_COUNT + 0;
+	int RESOURCE__PROPERTIES = ABSTRACT_RESOURCE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int RESOURCE__MODULE_ELEMENT = ABSTRACT_RESOURCE__MODULE_ELEMENT;
 
 	/**
 	 * The feature id for the '<em><b>Definition</b></em>' attribute.
@@ -527,7 +663,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DEFINITION = ABSTRACT_RESOURCE_FEATURE_COUNT + 1;
+	int RESOURCE__DEFINITION = ABSTRACT_RESOURCE_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Declared</b></em>' attribute.
@@ -536,7 +672,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DECLARED = ABSTRACT_RESOURCE_FEATURE_COUNT + 2;
+	int RESOURCE__DECLARED = ABSTRACT_RESOURCE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -545,7 +681,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = ABSTRACT_RESOURCE_FEATURE_COUNT + 3;
+	int RESOURCE_FEATURE_COUNT = ABSTRACT_RESOURCE_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -564,7 +700,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getDerivedResource()
 	 * @generated
 	 */
-	int DERIVED_RESOURCE = 7;
+	int DERIVED_RESOURCE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -574,6 +710,24 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_RESOURCE__NAME = ABSTRACT_RESOURCE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_RESOURCE__PROPERTIES = ABSTRACT_RESOURCE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_RESOURCE__MODULE_ELEMENT = ABSTRACT_RESOURCE__MODULE_ELEMENT;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' reference.
@@ -619,7 +773,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getModelResource()
 	 * @generated
 	 */
-	int MODEL_RESOURCE = 8;
+	int MODEL_RESOURCE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -638,6 +792,15 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int MODEL_RESOURCE__PROPERTIES = RESOURCE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_RESOURCE__MODULE_ELEMENT = RESOURCE__MODULE_ELEMENT;
 
 	/**
 	 * The feature id for the '<em><b>Definition</b></em>' attribute.
@@ -683,7 +846,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getMetamodeResource()
 	 * @generated
 	 */
-	int METAMODE_RESOURCE = 9;
+	int METAMODE_RESOURCE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -702,6 +865,15 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int METAMODE_RESOURCE__PROPERTIES = RESOURCE__PROPERTIES;
+
+	/**
+	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int METAMODE_RESOURCE__MODULE_ELEMENT = RESOURCE__MODULE_ELEMENT;
 
 	/**
 	 * The feature id for the '<em><b>Definition</b></em>' attribute.
@@ -747,7 +919,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getTaskDependency()
 	 * @generated
 	 */
-	int TASK_DEPENDENCY = 10;
+	int TASK_DEPENDENCY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -802,7 +974,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getResourceDependency()
 	 * @generated
 	 */
-	int RESOURCE_DEPENDENCY = 11;
+	int RESOURCE_DEPENDENCY = 12;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -857,7 +1029,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 12;
+	int PROPERTY = 13;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -981,6 +1153,38 @@ public interface DomPackage extends EPackage {
 	EAttribute getNamed_Name();
 
 	/**
+	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.Configurable <em>Configurable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Configurable</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Configurable
+	 * @generated
+	 */
+	EClass getConfigurable();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.dom.Configurable#getProperties <em>Properties</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Configurable#getProperties()
+	 * @see #getConfigurable()
+	 * @generated
+	 */
+	EReference getConfigurable_Properties();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Configurable#getModuleElement <em>Module Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Module Element</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Configurable#getModuleElement()
+	 * @see #getConfigurable()
+	 * @generated
+	 */
+	EAttribute getConfigurable_ModuleElement();
+
+	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.AbstractResource <em>Abstract Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1055,17 +1259,6 @@ public interface DomPackage extends EPackage {
 	EAttribute getTask_Guard();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.dom.Task#getProperties <em>Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.Task#getProperties()
-	 * @see #getTask()
-	 * @generated
-	 */
-	EReference getTask_Properties();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Task#getDefinition <em>Definition</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1097,6 +1290,17 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTask_Traceable();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Task#getAlwaysExecute <em>Always Execute</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Always Execute</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Task#getAlwaysExecute()
+	 * @see #getTask()
+	 * @generated
+	 */
+	EAttribute getTask_AlwaysExecute();
 
 	/**
 	 * Returns the meta object for the reference list '{@link org.epsilonlabs.modelflow.dom.Task#getDependencies <em>Dependencies</em>}'.
@@ -1150,17 +1354,6 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getResource();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.dom.Resource#getProperties <em>Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.Resource#getProperties()
-	 * @see #getResource()
-	 * @generated
-	 */
-	EReference getResource_Properties();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Resource#getDefinition <em>Definition</em>}'.
@@ -1449,6 +1642,32 @@ public interface DomPackage extends EPackage {
 		EAttribute NAMED__NAME = eINSTANCE.getNamed_Name();
 
 		/**
+		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl <em>Configurable</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl
+		 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getConfigurable()
+		 * @generated
+		 */
+		EClass CONFIGURABLE = eINSTANCE.getConfigurable();
+
+		/**
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONFIGURABLE__PROPERTIES = eINSTANCE.getConfigurable_Properties();
+
+		/**
+		 * The meta object literal for the '<em><b>Module Element</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONFIGURABLE__MODULE_ELEMENT = eINSTANCE.getConfigurable_ModuleElement();
+
+		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.AbstractResourceImpl <em>Abstract Resource</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1511,14 +1730,6 @@ public interface DomPackage extends EPackage {
 		EAttribute TASK__GUARD = eINSTANCE.getTask_Guard();
 
 		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TASK__PROPERTIES = eINSTANCE.getTask_Properties();
-
-		/**
 		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1541,6 +1752,14 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TASK__TRACEABLE = eINSTANCE.getTask_Traceable();
+
+		/**
+		 * The meta object literal for the '<em><b>Always Execute</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TASK__ALWAYS_EXECUTE = eINSTANCE.getTask_AlwaysExecute();
 
 		/**
 		 * The meta object literal for the '<em><b>Dependencies</b></em>' reference list feature.
@@ -1585,14 +1804,6 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EClass RESOURCE = eINSTANCE.getResource();
-
-		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESOURCE__PROPERTIES = eINSTANCE.getResource_Properties();
 
 		/**
 		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.

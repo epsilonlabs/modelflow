@@ -1,0 +1,32 @@
+[% import "templates.egl"; %]
+digraph G {
+	node[fontname=Tahoma, fontsize=10, shape=record, style=filled]
+	edge[fontname=Tahoma, fontsize=10, arrowsize=0.7]
+	[% for (t in Task.all){%]
+		[% if (not t.isTypeOf(Workflow)) { 
+			var used = false;
+		%]
+			[% for (rr in t.consumes.select(i|i.resource == m)) { 
+			used = true;%]
+	[%= rr.resource.name() %] -> [%= t.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkolivegreen3]
+	[%= rr.resource.node()%]
+			[% } %]
+			[% for (rr in t.produces.select(i|i.resource == m)) {
+				used = true; %]
+	[%= t.name() %] -> [%= rr.resource.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkgoldenrod1]
+	[%= rr.resource.node()%]
+			[% } %]
+			[% for (rr in t.modifies.select(i|i.resource == m)) { 
+				used = true; %]
+	[%= t.name() %] -> [%= rr.resource.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkorange2]
+	[%= rr.resource.name() %] -> [%= t.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkorange2]
+	[%= rr.resource.node()%]		
+			[% } %]
+			[% if (used) {
+				used = false; %]
+	[%= t.name() %] [fillcolor="[% if (t.enabled) {%]aliceblue[%} else {%]grey96[%}%]", margin=.2, label=<[%=t.label()%]>]
+			[% } %]
+		[% } %]
+	[% } %]
+	
+}

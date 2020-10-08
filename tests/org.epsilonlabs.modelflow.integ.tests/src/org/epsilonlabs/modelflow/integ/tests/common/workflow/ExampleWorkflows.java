@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.integ.tests.common.workflow;
 
 import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locate;
-import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopy;
-import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateInTarget;
+import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopyToTestDir;
+import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateInTestDir;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,7 +28,7 @@ import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 public class ExampleWorkflows {
 
 	private static String locateEugeniaResourceAndCopy(String name) {
-		return locateAndCopy("eugenia/model/filesystem." + name);
+		return locateAndCopyToTestDir("eugenia/model/filesystem." + name);
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ExampleWorkflows {
 			/** copyright */
 			
 			.addTask("copyright", "core:fileReader")
-			.addProperty("src", locateAndCopy("eugenia/task/copyright.txt"))
+			.addProperty("src", locateAndCopyToTestDir("eugenia/task/copyright.txt"))
 			
 			/** Emfatic2Ecore */
 			
@@ -207,41 +207,41 @@ public class ExampleWorkflows {
 			/** ======== Resources ======== */
 
 			.addModelResource("Source", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Source.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Source.model"))
 			.addProperty("metamodelFile", locate("mm/Entity.ecore"))
 			
 			.addModelResource("Vocabulary", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Vocabulary.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Vocabulary.model"))
 			.addProperty("metamodelFile", locate("mm/DomainVocabulary.ecore"))
 			
 			.addModelResource("Target", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Target.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Target.model"))
 			.addProperty("metamodelFile", locate("mm/Entity.ecore"))
 			
 			.addModelResource("Graph", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/graph.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/graph.model"))
 			.addProperty("metamodelFile", locate("mm/Graph.ecore"))
 			
 			.addModelResource("Tree", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/tree.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/tree.model"))
 			.addProperty("metamodelFile", locate("mm/tree.ecore"))
 			
 			/** ======== Tasks ======== */
 			
 			.addTask("compare", "epsilon:ecl")
-			.addProperty("src", locateAndCopy("task/Comparison.ecl"))
+			.addProperty("src", locateAndCopyToTestDir("task/Comparison.ecl"))
 			.addInput("Source")
 			.addInput("Vocabulary")
 			
 			.addTask("merge", "epsilon:eml")
-			.addProperty("src", locateAndCopy("task/Merging.eml"))
+			.addProperty("src", locateAndCopyToTestDir("task/Merging.eml"))
 			.addInput("Source")
 			.addInput("Vocabulary")
 			.addInput("compare.comparison") 
 			.addOutput("Target")
 			
 			.addTask("transform", "epsilon:etl")
-			.addProperty("src", locateAndCopy("task/entity2node.etl"))
+			.addProperty("src", locateAndCopyToTestDir("task/entity2node.etl"))
 			.addInput("Target")
 			.addInput("Tree")
 			.addOutput("Graph") 
@@ -255,42 +255,42 @@ public class ExampleWorkflows {
 			/** ======== Resources ======== */
 
 			.addModelResource("A", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Source.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Source.model"))
 			.addProperty("metamodelFile", locate("mm/Entity.ecore"))
 			
 			.addModelResource("B", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Vocabulary.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Vocabulary.model"))
 			.addProperty("metamodelFile", locate("mm/DomainVocabulary.ecore"))
 			
 			.addModelResource("AB", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/Target.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/Target.model"))
 			.addProperty("metamodelFile", locate("mm/Entity.ecore"))
 			
 			.addModelResource("C", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/tree.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/tree.model"))
 			.addProperty("metamodelFile", locate("mm/tree.ecore"))
 			
 			.addModelResource("ABC", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/graph.model"))
+			.addProperty("src", locateAndCopyToTestDir("m/graph.model"))
 			.addProperty("metamodelFile", locate("mm/graph.ecore"))
 			
 			/** ======== Tasks ======== */
 			
 			.addTask("X", "epsilon:etl")
-			.addProperty("src", locateAndCopy("task/transformationA.etl"))
+			.addProperty("src", locateAndCopyToTestDir("task/transformationA.etl"))
 			.addInput("A")
 			.addInput("B")
 			.addOutput("AB")
 			
 			.addTask("Y", "epsilon:etl")
-			.addProperty("src", locateAndCopy("task/transformationB.etl"))
+			.addProperty("src", locateAndCopyToTestDir("task/transformationB.etl"))
 			.addInput("C")
 			.addInput("AB")
 			.addOutput("ABC") 
 			
 			.addTask("Z", "epsilon:egl")
-			.addProperty("src", locateAndCopy("task/generate.egl"))
-			.addProperty("outputRoot", locateAndCopy("task/output"))
+			.addProperty("src", locateAndCopyToTestDir("task/generate.egl"))
+			.addProperty("outputRoot", locateAndCopyToTestDir("task/output"))
 			.addProperty("target", "ListOfNodes.md")
 			.addInput("ABC") 
 			
@@ -301,12 +301,12 @@ public class ExampleWorkflows {
 		return new WorkflowBuilder()
 			
 			.addModelResource("OO", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/OOInstance.model"))
-			.addProperty("metamodelFile", locateAndCopy("mm/OO.ecore"))
+			.addProperty("src", locateAndCopyToTestDir("m/OOInstance.model"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir("mm/OO.ecore"))
 			
 			.addTask("generateFromTemplate", "epsilon:egl")
-			.addProperty("src", locateAndCopy("task/OO2Java.egl"))
-			.addProperty("outputRoot", locateAndCopy("task/ooEgl/output"))
+			.addProperty("src", locateAndCopyToTestDir("task/OO2Java.egl"))
+			.addProperty("outputRoot", locateAndCopyToTestDir("task/ooEgl/output"))
 			.addProperty("target", "MyJava.java")
 			.addInput("OO")
 			
@@ -318,12 +318,12 @@ public class ExampleWorkflows {
 		return new WorkflowBuilder()
 			
 			.addModelResource("t", "epsilon:emf")
-			.addProperty("src", locateInTarget("wf/componentWorkflow.mftrace"))
-			.addProperty("metamodelFile", locateAndCopy("mm/managementTrace.ecore"))
+			.addProperty("src", locateInTestDir("wf/componentWorkflow.mftrace"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir("mm/managementTrace.ecore"))
 			
 			.addTask("generateDot", "epsilon:egl")
-			.addProperty("src", locateAndCopy("task/mmtTrace.egl"))
-			.addProperty("outputRoot", locateAndCopy("trace"))
+			.addProperty("src", locateAndCopyToTestDir("task/mmtTrace.egl"))
+			.addProperty("outputRoot", locateAndCopyToTestDir("trace"))
 			.addProperty("target", "mgmTrace.dot")
 			.addInput("t")
 			
@@ -334,12 +334,12 @@ public class ExampleWorkflows {
 		return new WorkflowBuilder()
 			
 			.addModelResource("t", "epsilon:emf")
-			.addProperty("src", locateInTarget("wf/componentWorkflow.mfexec"))
-			.addProperty("metamodelFile", locateAndCopy("mm/executionTrace.ecore"))
+			.addProperty("src", locateInTestDir("wf/componentWorkflow.mfexec"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir("mm/executionTrace.ecore"))
 			
 			.addTask("generateDot", "epsilon:egl")
-			.addProperty("src", locateAndCopy("task/execTrace.egl"))
-			.addProperty("outputRoot", locateAndCopy("trace"))
+			.addProperty("src", locateAndCopyToTestDir("task/execTrace.egl"))
+			.addProperty("outputRoot", locateAndCopyToTestDir("trace"))
 			.addProperty("target", "execTrace.dot")
 			.addInput("t")
 			
@@ -350,45 +350,45 @@ public class ExampleWorkflows {
 		Workflow w = new WorkflowBuilder()
 			
 			.addModelResource("Wakeup", "epsilon:emf")
-			.addProperty("src", locateAndCopy("m/wakeup.model"))
-			.addProperty("metamodelFile", locateAndCopy("mm/Flowchart.ecore"))
+			.addProperty("src", locateAndCopyToTestDir("m/wakeup.model"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir("mm/Flowchart.ecore"))
 			.addProperty("expand", true)
 			.addProperty("cache", true)
 			
 			.addTask("generateCode", "epsilon:egx")
-			.addProperty("src", locateAndCopy("task/egx/protected/main.egx"))
-			.addProperty("outputRoot", locateAndCopy("task/egx/output"))
+			.addProperty("src", locateAndCopyToTestDir("task/egx/protected/main.egx"))
+			.addProperty("outputRoot", locateAndCopyToTestDir("task/egx/output"))
 			.addInput("Wakeup")
 			
 			.build("egl");
 		
-		String destination = System.getProperty("user.dir") + "/target/task/egx"; 
+		String destination = System.getProperty("user.dir") + "/testOutput/task/egx"; 
 		Path sourceDirectory = Paths.get(System.getProperty("user.dir") + "/resources/task/egx/");
-		Path targetDirectory = Paths.get(destination);
-		ResourceLocator.copyDir(sourceDirectory.toFile(), targetDirectory.toFile());
+		Path outputDirectory = Paths.get(destination);
+		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());
 		
 		return w;
 	}
 	
 	public static Workflow getMarkersWorkflow() {
-		String metamodel = locateInTarget("markingMate/markingmate.ecore");
+		String metamodel = locateInTestDir("markingMate/markingmate.ecore");
 		return new WorkflowBuilder()
 				
 				.addModelResource("BOB", "epsilon:emf")
-				.addProperty("src", locateInTarget("markingMate/model/sepr-bob.model"))
+				.addProperty("src", locateInTestDir("markingMate/model/sepr-bob.model"))
 				.addProperty("metamodelFile", metamodel)
 				
 				.addModelResource("ALICE", "epsilon:emf")
-				.addProperty("src", locateInTarget("markingMate/model/sepr-alice.model"))
+				.addProperty("src", locateInTestDir("markingMate/model/sepr-alice.model"))
 				.addProperty("metamodelFile", metamodel)
 				
 				.addTask("bob", "epsilon:eol")
 				.addInout("BOB")
-				.addProperty("src", locateAndCopy("markingMate/task/helper/bob-marks.eol"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/helper/bob-marks.eol"))
 				
 				.addTask("alice", "epsilon:eol")
 				.addInout("ALICE")
-				.addProperty("src", locateAndCopy("markingMate/task/helper/alice-marks.eol"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/helper/alice-marks.eol"))
 				
 				.build("Marker");
 	}
@@ -396,52 +396,52 @@ public class ExampleWorkflows {
 	
 	
 	public static Workflow getMarkingMateWorkflow() {
-		String metamodel = locateAndCopy("markingMate/markingmate.ecore");
+		String metamodel = locateAndCopyToTestDir("markingMate/markingmate.ecore");
 		Workflow w = new WorkflowBuilder()
 				
 				.addModelResource("SEPR", "epsilon:emf")
-				.addProperty("src", locateAndCopy("markingMate/model/sepr.model"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/model/sepr.model"))
 				.addProperty("metamodelFile", metamodel)
 				
 				.addModelResource("BOB", "epsilon:emf")
-				.addProperty("src", locateAndCopy("markingMate/model/sepr-bob.model"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/model/sepr-bob.model"))
 				.addProperty("metamodelFile", metamodel)
 				
 				.addModelResource("ALICE", "epsilon:emf")
-				.addProperty("src", locateAndCopy("markingMate/model/sepr-alice.model"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/model/sepr-alice.model"))
 				.addProperty("metamodelFile", metamodel)
 
 				.addModelResource("MARKED", "epsilon:emf")
-				.addProperty("src", locateAndCopy("markingMate/model/sepr-marked.model"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/model/sepr-marked.model"))
 				.addProperty("metamodelFile", metamodel)
 				
 				.addTask("produce", "epsilon:eol")
 				.addOutput("SEPR")
-				.addProperty("src", locateAndCopy("markingMate/task/generateModel.eol"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/generateModel.eol"))
 				
 				.addTask("validateSetup", "epsilon:evl")
 				.addInput("SEPR")
 				.addProperty("failOnError", true)
-				.addProperty("src", locateAndCopy("markingMate/task/validateSetup.evl"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/validateSetup.evl"))
 				
 				.addTask("split", "epsilon:etl")
 				.addInput("SEPR")
 				.addOutput("ALICE")
 				.addOutput("BOB")
 				.addGuard("validateSetup.result")
-				.addProperty("src", locateAndCopy("markingMate/task/split.etl"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/split.etl"))
 				
 				.addTask("validateMarking", "epsilon:evl")
 				.addInput("ALICE")
 				.addInput("BOB")
 				.addProperty("failOnError", true)
-				.addProperty("src", locateAndCopy("markingMate/task/validateMarking.evl"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/validateMarking.evl"))
 			
 				.addTask("compare", "epsilon:ecl")
 				.addInput("ALICE")
 				.addInput("BOB")
 				.addGuard("validateMarking.result")
-				.addProperty("src", locateAndCopy("markingMate/task/markingmate.ecl"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/markingmate.ecl"))
 				
 				.addTask("merge", "epsilon:eml")
 				.addInput("compare.comparison")
@@ -449,22 +449,22 @@ public class ExampleWorkflows {
 				.addInput("BOB")
 				.addOutput("MARKED")		
 				.addGuard("validateMarking.result")
-				.addProperty("src", locateAndCopy("markingMate/task/markingmate.eml"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/markingmate.eml"))
 				
 				.addTask("csv", "epsilon:egx")
 				.addGuard("validateMarking.result")
 				.addInput("MARKED")
-				.addProperty("src", locateAndCopy("markingMate/task/feedback.egx"))
+				.addProperty("src", locateAndCopyToTestDir("markingMate/task/feedback.egx"))
 				
 				.build("MarkingMateWorkflow");
 		
-		locateAndCopy("markingMate/task/csv.egl");
-		locateAndCopy("markingMate/task/feedback.egl");
-		locateAndCopy("markingMate/task/all-feedback.egl");
-		String destination = System.getProperty("user.dir") + "/target/task/egx"; 
+		locateAndCopyToTestDir("markingMate/task/csv.egl");
+		locateAndCopyToTestDir("markingMate/task/feedback.egl");
+		locateAndCopyToTestDir("markingMate/task/all-feedback.egl");
+		String destination = System.getProperty("user.dir") + "/testOutput/task/egx"; 
 		Path sourceDirectory = Paths.get(System.getProperty("user.dir") + "/resources/task/egx/");
-		Path targetDirectory = Paths.get(destination);
-		ResourceLocator.copyDir(sourceDirectory.toFile(), targetDirectory.toFile());
+		Path outputDirectory = Paths.get(destination);
+		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());
 		
 		return w;
 	}
@@ -475,40 +475,40 @@ public class ExampleWorkflows {
 		Workflow w = new WorkflowBuilder()
 			
 			.addModelResource("config", "epsilon:emf")
-			.addProperty("src", locateAndCopy(RES + "m/config.model"))
-			.addProperty("metamodelFile", locateAndCopy(RES + "mm/configuration.ecore"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "m/config.model"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir(RES + "mm/configuration.ecore"))
 			
 			.addModelResource("component", "epsilon:emf")
-			.addProperty("src", locateAndCopy(RES + "m/component.model"))
-			.addProperty("metamodelFile", locateAndCopy(RES + "mm/component.ecore"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "m/component.model"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir(RES + "mm/component.ecore"))
 			
 			.addModelResource("extended", "epsilon:emf")
-			.addProperty("src", locateAndCopy(RES + "m/extended.model"))
-			.addProperty("metamodelFile", locateAndCopy(RES + "mm/component.ecore"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "m/extended.model"))
+			.addProperty("metamodelFile", locateAndCopyToTestDir(RES + "mm/component.ecore"))
 			
 			.addTask("validate", "epsilon:evl")
-			.addProperty("src", locateAndCopy(RES + "mmt/validate.evl"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "mmt/validate.evl"))
 			.addInput("config")
 			.addInput("component")
 			
 			.addTask("m2m", "epsilon:etl")
-			.addProperty("src", locateAndCopy(RES + "mmt/addTolerances.etl"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "mmt/addTolerances.etl"))
 			.addInput("config")
 			.addInput("component")
 			.addOutput("extended")
 			.dependsOn("validate")
 			
 			.addTask("m2t", "epsilon:egx")
-			.addProperty("src", locateAndCopy(RES + "mmt/generateReactive.egx"))
+			.addProperty("src", locateAndCopyToTestDir(RES + "mmt/generateReactive.egx"))
 			.addProperty("outputRoot","../../examples/org.epsilonlabs.modelflow.component.example/src-gen/")
 			.addInput("extended")
 	
 			.build("componentWorkflow");
 		
-		String destination = System.getProperty("user.dir") + "/target/mmt/"; 
+		String destination = System.getProperty("user.dir") + "/testOutput/mmt/"; 
 		Path sourceDirectory = Paths.get(RES + "mmt/");
-		Path targetDirectory = Paths.get(destination);
-		ResourceLocator.copyDir(sourceDirectory.toFile(), targetDirectory.toFile());
+		Path outputDirectory = Paths.get(destination);
+		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());
 		
 		return w;
 	}

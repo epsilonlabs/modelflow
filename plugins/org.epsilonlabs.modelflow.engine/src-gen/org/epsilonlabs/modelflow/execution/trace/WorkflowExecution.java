@@ -27,10 +27,10 @@ import org.epsilonlabs.modelflow.dom.Workflow;
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getWorkflowExecution()
- * @model annotation="exeed classIcon='operation' label='return \'Workflow\' \n+ \' (\' + self.endState +\') \' \n+ ((self.end-self.start)/1000)+ \'s\';'"
+ * @model annotation="exeed classIcon='operation' label='return \'Workflow\' \n+ \' (\' + self.endState +\') \';'"
  * @generated
  */
-public interface WorkflowExecution extends Stateful, Timed {
+public interface WorkflowExecution extends Stateful {
 	/**
 	 * Returns the value of the '<em><b>Tasks</b></em>' containment reference list.
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.execution.trace.TaskExecution}.

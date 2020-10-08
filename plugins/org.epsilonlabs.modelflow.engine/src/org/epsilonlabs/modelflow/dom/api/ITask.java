@@ -53,7 +53,7 @@ public interface ITask {
 	 *   
 	 * Main Execution.
 	 *
-	 * @param ctx TODO
+	 * @param ctx Context
 	 * @throws MFRuntimeException the MF runtime exception
 	 */
 	void execute(IModelFlowContext ctx) throws MFRuntimeException;
@@ -71,13 +71,6 @@ public interface ITask {
 	 * this is the method where they must be synchronised. 
 	 */
 	void processModelsAfterExecution();
-	
-	/**
-	 * Main result of the execution.
-	 *
-	 * @return the result
-	 */
-	Object getResult();
 	
 	/**
 	 *  
@@ -100,5 +93,7 @@ public interface ITask {
 	 * @return the task node
 	 */
 	ITaskNode getTaskNode();
+	
+	boolean isAlwaysExecute();
 	
 }

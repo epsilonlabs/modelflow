@@ -1,0 +1,32 @@
+rule Dependency {
+	
+	parameters : Map {
+		"w" = Workflow.all.first(),
+		"format" = "graphviz-dot",
+		"path" = List{"Dependencies"},
+		"icon" = "diagram-ff0000"
+	}
+	
+	template: "dependency.egl"
+	
+}
+rule Task transform t: Task {
+	parameters : Map {
+		"format" = "graphviz-dot",
+		"path" = List{"Tasks", t.name},
+		"icon" = "diagram-ff0000"
+	}
+	
+	template: "task.egl"
+	
+}
+rule Model transform m: M!ModelResource {
+	
+	parameters : Map {
+		"format" = "graphviz-dot",
+		"path" = List{"Models", m.name},
+		"icon" = "diagram-ff0000"
+	}
+	
+	template: "model.egl"
+}

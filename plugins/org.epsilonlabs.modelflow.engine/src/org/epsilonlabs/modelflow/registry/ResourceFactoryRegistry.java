@@ -9,13 +9,12 @@ package org.epsilonlabs.modelflow.registry;
 
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.ModelResource;
 import org.epsilonlabs.modelflow.dom.Resource;
 import org.epsilonlabs.modelflow.dom.api.IResource;
 import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
-import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
+import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 
@@ -27,15 +26,7 @@ public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResou
 	public ResourceFactoryRegistry(Set<IModelResourceFactory> resourceFactory) {
 		factoryRegistry = new FactoryMap<IModelResourceFactory>(resourceFactory);
 	}
-	
-	protected IModelResourceFactory getFactory(ModelResource r) throws MFInvalidFactoryException {
-		return super.getFactory(r.getDefinition());
-	}
-	
-	protected IModelResourceFactory getFactory(IModelResourceNode r) throws MFInvalidFactoryException {
-		return this.getFactory(r.getInternal());	
-	}
-	
+
 	public IResource<?> create(IModelResourceNode res, IModelFlowContext ctx) throws MFRuntimeException {
 			Resource r = res.getInternal();
 			IModelResourceFactory factory;
@@ -44,8 +35,7 @@ public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResou
 			} catch (MFInvalidFactoryException e) {
 				throw new MFResourceInstantiationException(e);
 			}
-			return factory.instantiate(res, res.getName(), ctx);
-		
+			return factory.create(res, res.getName(), ctx);
 	}
 	
 }

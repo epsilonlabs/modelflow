@@ -1,0 +1,8 @@
+model sim is epsilon:simulink{
+	src: "model.slx"
+}
+task eol is epsilon:eol
+	out sim
+{
+	src: "create.eol"
+}

@@ -12,10 +12,15 @@ abstract class Named {
   attr String name;
 }
 
-abstract class AbstractResource extends Named {
+abstract class Configurable extends Named {
+  val Property[*] properties;
+  transient attr EJavaObject moduleElement;
 }
 
-abstract class AbstractTask extends Named {
+abstract class AbstractResource extends Configurable {
+}
+
+abstract class AbstractTask extends Configurable {
 }
 
 @exeed(classIcon="operation", label="return self.name +' ('+  self.definition.parent.shortId + ':' + self.definition.shortId + ')';")
@@ -23,12 +28,12 @@ class Task extends AbstractTask {
   val ResourceReference[*] produces;
   val ResourceReference[*] consumes;
   val ResourceReference[*] modifies;
-  val Property[*] properties;
   ref TaskDependency[*]#before dependencies;
-  attr EJavaObject guard;
   attr String definition;
   attr Boolean enabled = "true";
   attr Boolean traceable = "true";
+  attr Boolean alwaysExecute = "false";
+  transient attr EJavaObject guard;
 }
 
 class ResourceReference {
@@ -38,7 +43,6 @@ class ResourceReference {
 
 @exeed(classIcon="model", label="return 'Resource ' + self.name;")
 class Resource extends AbstractResource {
-  val Property[*] properties;
   attr String definition;
   attr Boolean declared = "true";
 }

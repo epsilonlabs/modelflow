@@ -21,7 +21,7 @@ import org.epsilonlabs.modelflow.dom.DomPackage;
  *
  * @generated
  */
-public abstract class AbstractResourceImpl extends NamedImpl implements AbstractResource {
+public abstract class AbstractResourceImpl extends ConfigurableImpl implements AbstractResource {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

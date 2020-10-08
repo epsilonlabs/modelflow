@@ -1,11 +1,15 @@
 package org.epsilonlabs.modelflow.mmc.gmf.tests.integ;
 
+import static org.junit.Assert.fail;
+
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.tests.common.workflow.GmfTask;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.WorkflowBuilderTest;
+import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,14 +25,32 @@ public class GmfTaskTest extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 		
+	protected Workflow w;
+	
 	@Test 
-	public void test_genDiagram() {
-		execute(GmfTask.getGenDiagramWorkflow());	
+	public void testGenDiagram() {
+		w = GmfTask.getGenDiagramWorkflow();	
 	}
 	
 	@Test 
-	public void test_gmfMap2gmfGen() {
-		execute(GmfTask.getGmfmap2GmfGenWorkflow());	
+	public void testGmfMap2gmfGen() {
+		w = GmfTask.getGmfmap2GmfGenWorkflow();	
+	}
+	
+	@After
+	public void exec() {
+		try {
+			execute();
+		} catch (Exception e) {
+			cleanup();
+			e.printStackTrace();
+			fail("Execution error");
+		}
+	}
+
+	@Override
+	protected void setupSource() {
+		module.setWorkflow(w);
 	}
 	
 }

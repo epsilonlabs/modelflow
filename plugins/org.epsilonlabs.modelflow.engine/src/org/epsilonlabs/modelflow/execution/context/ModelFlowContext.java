@@ -11,12 +11,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.epsilon.common.module.IModule;
-import org.eclipse.epsilon.erl.execute.context.ErlContext;
+import org.eclipse.epsilon.erl.execute.context.concurrent.ErlContextParallel;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.IScheduler;
-import org.epsilonlabs.modelflow.execution.IPublisher;
 import org.epsilonlabs.modelflow.execution.Publisher;
+import org.epsilonlabs.modelflow.execution.control.DefaultModelFlowProfiler;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
+import org.epsilonlabs.modelflow.execution.control.ModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -26,24 +29,25 @@ import org.epsilonlabs.modelflow.management.resource.ResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.repository.TaskRepository;
 
-public class ModelFlowContext extends ErlContext implements IModelFlowContext {
+public class ModelFlowContext extends ErlContextParallel implements IModelFlowContext {
 
 	protected IDependencyGraph dependencyGraph;
 	protected IExecutionGraph executionGraph;
 	protected IScheduler executor;
-	protected IPublisher publisher = new Publisher();
-	
+	protected IModelFlowProfiler profiler;
+	protected IModelFlowPublisher publisher = new Publisher();
+
 	protected ExecutionTrace executionTrace;
 	protected ManagementTrace managementTrace;
-	
+
 	protected TaskRepository taskRepository;
-	protected ResourceManager modelManager;	
-	protected TaskParamManager paramManager;	
-	
+	protected ResourceManager modelManager;
+	protected TaskParamManager paramManager;
+
 	protected Boolean endToEndTracing = true;
 	protected Boolean interactive = true;
 	protected Boolean protectResources = true;
-	
+
 	@Override
 	public IModelFlowModule getModule() {
 		return (IModelFlowModule) this.module;
@@ -53,9 +57,11 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 	public void setModule(IModule module) {
 		if (module instanceof IModelFlowModule) {
 			super.setModule(module);
+		} else {
+			throw new IllegalArgumentException("module is not instance of IModelFlowModule");
 		}
 	}
-	
+
 	@Override
 	public ExecutionTrace getExecutionTrace() {
 		return this.executionTrace;
@@ -65,7 +71,7 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 	public void setExecutionTrace(ExecutionTrace trace) {
 		this.executionTrace = trace;
 	}
-	
+
 	@Override
 	public ManagementTrace getManagementTrace() {
 		return this.managementTrace;
@@ -105,47 +111,47 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 	public void setTaskRepository(TaskRepository taskRepository) {
 		this.taskRepository = taskRepository;
 	}
-	
+
 	@Override
 	public ResourceManager getResourceManager() {
 		return modelManager;
 	}
-	
+
 	@Override
 	public void setResourceManager(ResourceManager modelManager) {
 		this.modelManager = modelManager;
 	}
-	
+
 	@Override
 	public void setExecutor(IScheduler executor) {
 		this.executor = executor;
 	}
-	
+
 	@Override
 	public IScheduler getExecutor() {
 		return this.executor;
 	}
-	
+
 	@Override
 	public TaskParamManager getParamManager() {
 		return paramManager;
 	}
-	
+
 	@Override
 	public void setParamManager(TaskParamManager paramManager) {
 		this.paramManager = paramManager;
 	}
-	
+
 	@Override
-	public IPublisher getPublisher() {
+	public IModelFlowPublisher getPublisher() {
 		return publisher;
 	}
-	
+
 	@Override
-	public void setPublisher(IPublisher publisher) {
+	public void setPublisher(IModelFlowPublisher publisher) {
 		this.publisher = publisher;
 	}
-	
+
 	@Override
 	public boolean isEndToEndTracing() {
 		return endToEndTracing;
@@ -179,21 +185,31 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 	@Override
 	public void validate() throws MFExecutionException {
 		TaskRepository repo = getTaskRepository();
-		Set<ITaskNode> unknownTaskTypes = getExecutionGraph().getTasks().stream().filter(t->!repo.hasFactory(t)).collect(Collectors.toSet());
+		Set<ITaskNode> unknownTaskTypes = getExecutionGraph().getTasks().stream().filter(t -> !repo.hasFactory(t))
+				.collect(Collectors.toSet());
 		if (!unknownTaskTypes.isEmpty()) {
-			String msg ="These tasks types are unknown: %s";
-			Set<String> unknowns = unknownTaskTypes.stream().map(n->n.getTaskDefinition().getDefinition()).collect(Collectors.toSet());
+			String msg = "These tasks types are unknown: %s";
+			Set<String> unknowns = unknownTaskTypes.stream().map(n -> n.getTaskDefinition().getDefinition())
+					.collect(Collectors.toSet());
 			throw new MFExecutionException(String.format(msg, unknowns));
 		}
 	}
-	
-	/** Managing inherited methods from parent contexts 
-	
+
 	@Override
-	public ModelRepository getModelRepository() {}
-	
+	public void setProfiler(IModelFlowProfiler profiler) {
+		this.profiler = profiler;
+	}
+
 	@Override
-	public void setModelRepository(ModelRepository modelRepository) {}
-	*/
-	
+	public IModelFlowProfiler getProfiler() {
+		if (profiler == null) {
+			if (isProfilingEnabled()) {
+				profiler = new ModelFlowExecutionProfiler();
+			} else {
+				profiler = new DefaultModelFlowProfiler();
+			}
+		}
+		return this.profiler;
+	}
+
 }

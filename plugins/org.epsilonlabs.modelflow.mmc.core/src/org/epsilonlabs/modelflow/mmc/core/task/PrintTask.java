@@ -52,6 +52,11 @@ public class PrintTask extends AbstractTask {
 	}
 	
 	@Override
+	public boolean isAlwaysExecute() {
+		return true;
+	}
+	
+	@Override
 	public void validateParameters() throws MFRuntimeException {
 		// Nothing to validate
 	}
@@ -74,11 +79,6 @@ public class PrintTask extends AbstractTask {
 	@Override
 	public void processModelsAfterExecution() {
 		// Do nothing
-	}
-
-	@Override
-	public Object getResult() {
-		return string;
 	}
 
 	@Override

@@ -1,0 +1,24 @@
+pre {
+	var time = 1000;
+}
+task A is core:sleep {
+	timeout: time
+}
+task B is core:sleep dependsOn A {
+	timeout: time
+}
+task C is core:sleep dependsOn A {
+	timeout: time
+}
+task D is core:sleep dependsOn B, C {
+	timeout: time
+}
+task E is core:sleep dependsOn C {
+	timeout: time
+}
+task F is core:sleep dependsOn D {
+	timeout: time
+}
+task G is core:sleep dependsOn A {
+	timeout: time
+}

@@ -2,11 +2,7 @@ rule Exam2Exam
 	transform s : SEPR!Exam
   	to t : Reviewer!Exam {
 	t.students = s.students.equivalent();
-
-	for (i in questions){
-		var q = s.questions.at(i).equivalent();
-		t.questions.add(q);
-	}
+	t.questions = s.questions.equivalent();	
 }
 @lazy
 rule Student2Student
@@ -34,4 +30,5 @@ rule Questions
   	to t : Reviewer!Question {
   	t.title = s.title;
     t.description = s.description;
+    t.marks = s.marks;
 }

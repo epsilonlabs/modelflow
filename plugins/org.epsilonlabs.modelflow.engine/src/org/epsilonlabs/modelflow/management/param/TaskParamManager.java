@@ -27,14 +27,18 @@ public class TaskParamManager {
 		Map<String, Object> hashes = node.getInputParams().getHashes();
 		LOG.debug("InputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
-		new ExecutionTraceUpdater(trace).addTaskInputProperties(node, hashes);
+		synchronized (trace) {		
+			new ExecutionTraceUpdater(trace).addTaskInputProperties(node, hashes);
+		}
 	}
 	
 	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
 		Map<String, Object> hashes = node.getOutputParams().getHashes();
 		LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
-		new ExecutionTraceUpdater(trace).addTaskOutputProperties(node, hashes);
+		synchronized (trace) {			
+			new ExecutionTraceUpdater(trace).addTaskOutputProperties(node, hashes);
+		}
 	}
 	
 }

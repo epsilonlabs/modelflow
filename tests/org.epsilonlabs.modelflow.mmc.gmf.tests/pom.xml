@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>org.epsilonlabs.modelflow.mmc.gmf.tests</artifactId>
-	<name>Modelflow GMF Model Management Connectivity Tests</name>
+	<name>Modelflow GMF MMC Tests</name>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>

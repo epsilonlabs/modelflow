@@ -14,6 +14,8 @@ import java.util.Optional;
 import org.epsilonlabs.modelflow.dom.api.IResource;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
@@ -75,8 +77,13 @@ public class ResourceManager {
 		// TODO... Add resource default alias
 		// Call Resource Type Before method
 		r.beforeTask();
+		
 		// Load resource as indicated by the resource kind (in/out..)
+		IModelFlowProfiler profiler = ctx.getProfiler();
+		profiler.start(IMeasurable.Stage.LOAD, rNode, ctx);
 		IModelWrapper mRes = new ResourceLoader(kind,r).load(tNode);
+		profiler.stop(IMeasurable.Stage.LOAD, rNode, ctx);
+
 		// Add model to list of models for task to accept
 		list.add(mRes);
 		// If model is of used as input (input or in/out) 
@@ -175,10 +182,7 @@ public class ResourceManager {
 			String propertyName = derivedNode.getName().split("_")[1];
 			// If result
 			Object result = null;
-			if ("result".equals(propertyName)) {
-				result = tNode.getTaskInstance().getResult();
-			// If trace
-			} else if ("trace".equals(propertyName)){
+			if ("trace".equals(propertyName)){
 				result = tNode.getTaskInstance().getTrace();
 			// If other
 			} else {

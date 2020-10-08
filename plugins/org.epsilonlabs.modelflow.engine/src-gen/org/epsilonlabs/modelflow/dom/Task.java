@@ -23,12 +23,12 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getProduces <em>Produces</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getConsumes <em>Consumes</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getModifies <em>Modifies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getProperties <em>Properties</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getGuard <em>Guard</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDependencies <em>Dependencies</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getTraceable <em>Traceable</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDependencies <em>Dependencies</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getAlwaysExecute <em>Always Execute</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getGuard <em>Guard</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask()
@@ -79,7 +79,7 @@ public interface Task extends AbstractTask {
 	 * @return the value of the '<em>Guard</em>' attribute.
 	 * @see #setGuard(Object)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Guard()
-	 * @model
+	 * @model transient="true"
 	 * @generated
 	 */
 	Object getGuard();
@@ -93,18 +93,6 @@ public interface Task extends AbstractTask {
 	 * @generated
 	 */
 	void setGuard(Object value);
-
-	/**
-	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
-	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.Property}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Properties</em>' containment reference list.
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Properties()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<Property> getProperties();
 
 	/**
 	 * Returns the value of the '<em><b>Definition</b></em>' attribute.
@@ -173,6 +161,29 @@ public interface Task extends AbstractTask {
 	 * @generated
 	 */
 	void setTraceable(Boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Always Execute</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Always Execute</em>' attribute.
+	 * @see #setAlwaysExecute(Boolean)
+	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_AlwaysExecute()
+	 * @model default="false"
+	 * @generated
+	 */
+	Boolean getAlwaysExecute();
+
+	/**
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.Task#getAlwaysExecute <em>Always Execute</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Always Execute</em>' attribute.
+	 * @see #getAlwaysExecute()
+	 * @generated
+	 */
+	void setAlwaysExecute(Boolean value);
 
 	/**
 	 * Returns the value of the '<em><b>Dependencies</b></em>' reference list.

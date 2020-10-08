@@ -85,12 +85,6 @@ public class ExecutionTraceSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ExecutionTracePackage.TIMED: {
-				Timed timed = (Timed)theEObject;
-				T result = caseTimed(timed);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ExecutionTracePackage.SNAPSHOT: {
 				Snapshot snapshot = (Snapshot)theEObject;
 				T result = caseSnapshot(snapshot);
@@ -115,7 +109,6 @@ public class ExecutionTraceSwitch<T> extends Switch<T> {
 				WorkflowExecution workflowExecution = (WorkflowExecution)theEObject;
 				T result = caseWorkflowExecution(workflowExecution);
 				if (result == null) result = caseStateful(workflowExecution);
-				if (result == null) result = caseTimed(workflowExecution);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -123,7 +116,6 @@ public class ExecutionTraceSwitch<T> extends Switch<T> {
 				TaskExecution taskExecution = (TaskExecution)theEObject;
 				T result = caseTaskExecution(taskExecution);
 				if (result == null) result = caseStateful(taskExecution);
-				if (result == null) result = caseTimed(taskExecution);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -158,21 +150,6 @@ public class ExecutionTraceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseStateful(Stateful object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Timed</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Timed</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTimed(Timed object) {
 		return null;
 	}
 

@@ -17,7 +17,7 @@ public interface IModelResourceFactory extends IFactory {
 	@Override
 	Class<? extends IResource<?>> getInstanceClass();
 
-	<M> IResource<M> instantiate(IModelResourceNode resource, String name, IModelFlowContext ctx) throws MFInstantiationException;
+	<M> IResource<M> create(IModelResourceNode resource, String name, IModelFlowContext ctx) throws MFInstantiationException;
 	
 	void beforeWorkflow();
 	

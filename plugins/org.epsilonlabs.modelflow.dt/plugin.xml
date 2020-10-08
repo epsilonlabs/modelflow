@@ -55,7 +55,7 @@
  <extension
        point="org.eclipse.epsilon.picto.pictoSource">
     <pictoSource
-          class="org.epsilonlabs.modelflow.dt.picto.ModelFlowDotPictoSource">
+          class="org.epsilonlabs.modelflow.dt.picto.ModelFlowMainPictoSource">
     </pictoSource>
     <pictoSource
           class="org.epsilonlabs.modelflow.dt.picto.ExecutionTracePictoSource">
@@ -72,6 +72,13 @@
           dialog="org.epsilonlabs.modelflow.dt.launch.ModelFlowModuleConfiguration"
           language="ModelFlow"
           name="Sequential">
+    </implementation>
+    <implementation
+          class="org.epsilonlabs.modelflow.ModelFlowModuleParallel"
+          default="false"
+          dialog="org.epsilonlabs.modelflow.dt.launch.ModelFlowModuleConfiguration"
+          language="ModelFlow"
+          name="Parallel">
     </implementation>
  </extension>
  <extension

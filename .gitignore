@@ -5,4 +5,4 @@
 **/todelete/**
 
 *.launch
-*emf-rest*
+**/testOutput/**

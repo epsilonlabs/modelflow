@@ -43,6 +43,7 @@ import org.epsilonlabs.modelflow.dom.ModelResource;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.TaskDependency;
 import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.ast.ForEachModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.ModelCallExpression;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
@@ -251,6 +252,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			ParameterDeclaration param = (ParameterDeclaration) module.createAst(paramAst, this);
 			getCompilationContext().getParameterDeclarations().add(param);
 		}
+		
 		// Resources
 		List<AST> resourceChildrenAsts = AstUtil.getChildren(cst, ModelFlowParser.RESOURCEDECLARATION);
 		for (AST resource : resourceChildrenAsts) {
@@ -281,6 +283,9 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		
 		case ModelFlowParser.GUARD:
 			return new ExecutableBlock<>(Boolean.class);
+			
+		case ModelFlowParser.FOREACH:
+			return new ForEachModuleElement();
 			
 		case ModelFlowParser.PARAMDECLARATION:
 			return new ParameterDeclaration();
@@ -338,7 +343,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	public List<ModuleMarker> compile() {
 		ModelFlowCompilationContext context = getCompilationContext();
 		workflow = DomFactoryImpl.eINSTANCE.createWorkflow();
-		workflow.getTasks();
 		for (ResourceRule modelDeclaration : context.getResourceDeclarations()) {
 			modelDeclaration.compile(context);
 			Collection<ModelResource> resources = modelDeclaration.getDomElements();
@@ -384,7 +388,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public TaskFactoryRegistry getTaskFactoryRegistry() {
 		if (taskFactoryRegistry == null) {
-			taskFactoryRegistry = Setup.getInstance().getTaskFactoryRegistry();
+					taskFactoryRegistry = Setup.getInstance().getTaskFactoryRegistry();
 		}
 		return taskFactoryRegistry;
 	}
@@ -424,6 +428,13 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		super.prepareContext();
 		IModelFlowContext ctx = getContext();
 
+		if (getTaskFactoryRegistry() == null) {
+			throw new EolRuntimeException("The Task Factory Registry is null");
+		}
+		if (getResFactoryRegistry() == null) {
+			throw new EolRuntimeException("The Resource Factory Registry is null");
+		}
+		
 		// Task Repository
 		if (ctx.getTaskRepository() == null) {
 			TaskRepository taskRepository = new TaskRepository(getTaskFactoryRegistry(), getResFactoryRegistry());
@@ -481,7 +492,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	 * ErlModule::prepareExecution().
 	 */
 	@Override
-	protected void prepareExecution() throws EolRuntimeException {
+	public void prepareExecution() throws EolRuntimeException {
 		if (getWorkflow() == null && parser != null) {
 			compile();
 		}
@@ -509,6 +520,10 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	protected ManagementTrace processRules() throws EolRuntimeException {
 		IModelFlowContext ctx = getContext();
+		
+		if (ctx.isProfilingEnabled()) {
+			ctx.getProfiler().track();
+		}
 				
 		if (!ctx.getDependencyGraph().getState().equals(GraphState.POPULATED)) {
 			LOG.debug("Building Dependency Graph");
@@ -519,21 +534,23 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			ctx.getExecutionGraph().build(ctx);
 		}
 		LOG.debug("Executing");
-		ctx.getExecutor().execute(ctx);
-		
-		LOG.debug("Updating Execution Trace");
-		traceHelper.updateExecutionTrace();
-
-		if (getContext().isEndToEndTracing() && config.isSaveEndToEndTraces()) {
-			LOG.debug("Updating Management Trace");
-			traceHelper.updateEndToEndTrace();
+		try {
+			ctx.getExecutor().execute(ctx);
+		} finally {
+			LOG.debug("Updating Execution Trace");
+			traceHelper.updateExecutionTrace();
+	
+			if (getContext().isEndToEndTracing() && config.isSaveEndToEndTraces()) {
+				LOG.debug("Updating Management Trace");
+				traceHelper.updateEndToEndTrace();
+			}
 		}
 		
 		return ctx.getManagementTrace();
 	}
 
 	@Override
-	protected void postExecution() throws EolRuntimeException {
+	public void postExecution() throws EolRuntimeException {
 		super.postExecution();
 
 		getContext().getTaskRepository().getResourceRepository().flush();
