@@ -6,8 +6,11 @@
 # mvn versions:update-properties -Dversions.allowSnapshots=true -DallowMinorUpdates=false -DallowMajorUpdates=false -DallowIncrementalUpdates=false
 
 rm -rf lib/
-mvn clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
-
+if [[ ! -v CIRCLE_BRANCH ]]; then  #tests if we are in circleci
+    ./mvnw clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
+else
+    mvn clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
+fi
 # Add the new dependencies to the classpath. Crate then entry list in a separate file since modifying the .classpath file breakes eclipse
 rm -f jarEntries.tmp
 suff=-sources.jar

@@ -1,21 +1,16 @@
-version: 2.1
-
-orbs:
-  maven: circleci/maven@0.0.12
+version: 2.0
 
 jobs:
   install_deps:
     docker:
       - image: circleci/openjdk:stretch
     steps:
-      - run: echo pwd
-      - run: echo ls
-      - run: cd setup/org.epsilonlabs.modelflow.dependencies
-      - run: ./download-dependencies.sh
-      - run: cd ../..
-workflows:
-  maven_test:
-    jobs:
-      - install_deps
-      - maven/test
+    - checkout
+    - run: 
+      name: install missing dependencies
+      command: |
+        echo $PWD
+        cd ./setup/org.epsilonlabs.modelflow.dependencies/
+        ./download-dependencies.sh
+    - run: ./mvnw clean verify
          
