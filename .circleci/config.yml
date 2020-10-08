@@ -3,11 +3,17 @@ version: 2.1
 orbs:
   maven: circleci/maven@0.0.12
 
-workflows:
-  maven_test:
-    jobs:
+jobs:
+  install_deps:
+    docker:
+      - image: java
+    steps:
       - run: cd setup/org.epsilonlabs.modelflow.dependencies
       - run: ./download-dependencies.sh
       - run: cd ../..
+workflows:
+  maven_test:
+    jobs:
+      - install_deps
       - maven/test
          
