@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/epsilonlabs/modelflow.svg?style=svg)](https://circleci.com/gh/epsilonlabs/modelflow)
 # ModelFlow
 A conservative model management workflow execution language.
 
