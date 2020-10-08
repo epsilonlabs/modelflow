@@ -6,7 +6,7 @@ orbs:
 jobs:
   install_deps:
     docker:
-      - image: circleci/maven@0.0.12
+      - image: circleci/openjdk:stretch
     steps:
       - run: echo pwd
       - run: echo ls
