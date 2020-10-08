@@ -6,8 +6,10 @@ orbs:
 jobs:
   install_deps:
     docker:
-      - image: java
+      - image: circleci/maven@0.0.12
     steps:
+      - run: echo pwd
+      - run: echo ls
       - run: cd setup/org.epsilonlabs.modelflow.dependencies
       - run: ./download-dependencies.sh
       - run: cd ../..
