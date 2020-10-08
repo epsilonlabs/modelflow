@@ -3,14 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>org.epsilonlabs.modelflow.setup</artifactId>
-		<groupId>org.epsilonlabs.modelflow</groupId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
-
 	<artifactId>org.epsilonlabs.modelflow.dependencies</artifactId>
+	<groupId>org.epsilonlabs.modelflow</groupId>
 	<packaging>eclipse-plugin</packaging>
+	<version>0.0.1-SNAPSHOT</version>
 	<name>Modelflow Dependencies</name>
 
 	<dependencies>
