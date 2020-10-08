@@ -61,6 +61,7 @@
 		<unit id="org.apache.commons.cli" version="0.0.0"/>
 		<unit id="org.apache.xmlbeans" version="0.0.0"/>
 		<unit id="javax.xml.stream" version="0.0.0"/>
+		<unit id="javax.xml.bind" version="0.0.0"/>
 		<unit id="com.atlassian.commonmark" version="0.0.0"/>
 		<unit id="com.atlassian.commonmark-gfm-strikethrough" version="0.0.0"/>
 		<unit id="com.atlassian.commonmark-gfm-tables" version="0.0.0"/>

@@ -50,4 +50,5 @@ Require-Bundle: org.epsilonlabs.modelflow.dependencies,
   org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.inject.multibindings,
+ javax.xml.bind,
  org.slf4j

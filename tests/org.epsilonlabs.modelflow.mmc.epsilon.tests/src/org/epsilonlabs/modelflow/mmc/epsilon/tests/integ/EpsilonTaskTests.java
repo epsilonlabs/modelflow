@@ -86,6 +86,7 @@ public class EpsilonTaskTests extends WorkflowBuilderTest {
 	}
 	
 	@Test
+	@Ignore
 	public void testSimulink() {
 		w = EpsilonTask.getSimulinkWorkflow();
 	}
