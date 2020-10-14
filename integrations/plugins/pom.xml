@@ -16,6 +16,6 @@
 	</parent>
 
 	<modules>
-	    <module>modelflow-maven-plugin</module>
+	    <!--<module>modelflow-maven-plugin</module>-->
 	</modules>
 </project>

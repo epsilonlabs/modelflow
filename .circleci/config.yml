@@ -3,13 +3,17 @@ version: 2.1
 orbs:
   maven: circleci/maven@1.0.3
 
+dependencies:
+  override:
+    - mvn -DskipTests clean install dependency:resolve-plugins dependency:go-offline
+
 jobs:
   build:
     docker:
       - image: circleci/openjdk:stretch
     steps:
       - checkout
-      - run: 
+      - run:  
           command: |
             cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
     
