@@ -4,10 +4,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>org.epsilonlabs.modelflow.dependencies</artifactId>
-	<groupId>org.epsilonlabs.modelflow</groupId>
 	<packaging>eclipse-plugin</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Modelflow Dependencies</name>
+
+	<parent>
+		<groupId>org.epsilonlabs.modelflow</groupId>
+		<artifactId>org.epsilonlabs.modelflow.setup</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
 
 	<dependencies>
 		<dependency>
