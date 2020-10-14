@@ -6,27 +6,24 @@
    <feature url="features/org.epsilonlabs.modelflow.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow"/>
    </feature>
-   <bundle id="org.epsilonlabs.modelflow.mmc.acceleo">
+   <feature url="features/org.epsilonlabs.modelflow.acceleo.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.acceleo.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.atl">
+   </feature>
+   <feature url="features/org.epsilonlabs.modelflow.atl.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.atl.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.emf">
+   </feature>
+   <feature url="features/org.epsilonlabs.modelflow.emf.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.emf.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.epsilon">
+   </feature>
+   <feature url="features/org.epsilonlabs.modelflow.epsilon.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.epsilon.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.gmf">
+   </feature>
+   <feature url="features/org.epsilonlabs.modelflow.qvto.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.qvto.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.qvto">
+   </feature>
+   <feature url="features/org.epsilonlabs.modelflow.xtext.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.xtext.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
-   <bundle id="org.epsilonlabs.modelflow.mmc.xtext">
-      <category name="org.epsilonlabs.modelflow.mmc"/>
-   </bundle>
+   </feature>
    <category-def name="org.epsilonlabs.modelflow" label="ModelfFlow">
       <description>
          Parser and execution engines for ModelFlow.
@@ -38,10 +35,10 @@
       </description>
    </category-def>
    <repository-reference location="http://download.eclipse.org/emfatic/update" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/epsilon/updates/" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/hawk/2.0.0/updates/" enabled="true" />
    <repository-reference location="http://download.eclipse.org/mmt/qvto/updates/releases" enabled="true" />
    <repository-reference location="http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases" enabled="true" />
    <repository-reference location="http://download.eclipse.org/releases/2020-03" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/tools/orbit/downloads/drops/R20200529191137/repository" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/tools/orbit/downloads/drops/R20200831200620/repository" enabled="true" />
+   <repository-reference location="http://download.eclipse.org/mmt/atl/updates/releases/4.2.1" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/epsilon/updates/2.1" enabled="true" />
 </site>

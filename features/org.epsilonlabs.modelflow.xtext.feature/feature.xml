@@ -13,7 +13,7 @@
       [Enter Copyright Description here.]
    </copyright>
 
-    <license url="https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt">
+   <license url="https://www.eclipse.org/org/documents/epl-2.0/EPL-2.0.txt">
       Eclipse Public License - v 2.0
 
     THE ACCOMPANYING PROGRAM IS PROVIDED UNDER THE TERMS OF THIS ECLIPSE
@@ -292,6 +292,13 @@ version(s), and exceptions or additional permissions here}.&quot;
 
   You may add additional accurate notices of copyright ownership.
    </license>
+
+   <requires>
+      <import plugin="org.epsilonlabs.modelflow.engine"/>
+      <import plugin="com.google.inject"/>
+      <import plugin="org.epsilonlabs.modelflow.dependencies"/>
+      <import plugin="org.apache.commons.io"/>
+   </requires>
 
    <plugin
          id="org.epsilonlabs.modelflow.mmc.xtext"

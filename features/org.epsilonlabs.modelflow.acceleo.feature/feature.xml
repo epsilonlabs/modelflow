@@ -293,6 +293,12 @@ version(s), and exceptions or additional permissions here}.&quot;
   You may add additional accurate notices of copyright ownership.
    </license>
 
+   <requires>
+      <import plugin="org.epsilonlabs.modelflow.engine"/>
+      <import plugin="com.google.inject"/>
+      <import plugin="org.apache.commons.io"/>
+   </requires>
+
    <plugin
          id="org.epsilonlabs.modelflow.mmc.acceleo"
          download-size="0"

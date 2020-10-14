@@ -294,18 +294,20 @@ version(s), and exceptions or additional permissions here}.&quot;
    </license>
 
    <requires>
-      <import plugin="org.epsilonlabs.modelflow.dependencies"/>
       <import plugin="com.google.inject"/>
       <import plugin="com.google.guava"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
       <import plugin="org.eclipse.epsilon.erl.engine"/>
+      <import plugin="org.apache.commons.csv"/>
       <import plugin="org.slf4j.api"/>
       <import plugin="org.eclipse.epsilon.erl.dt"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.epsilon.dt.exeed"/>
       <import plugin="org.eclipse.epsilon.picto"/>
       <import plugin="org.apache.ant"/>
-      <import plugin="org.apache.commons.csv"/>
+      <import plugin="org.eclipse.equinox.common"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="javax.xml.bind"/>
    </requires>
 
    <plugin
@@ -328,5 +330,11 @@ version(s), and exceptions or additional permissions here}.&quot;
          install-size="0"
          version="0.0.0"
          unpack="false"/>
+
+   <plugin
+         id="org.epsilonlabs.modelflow.dependencies"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
 
 </feature>

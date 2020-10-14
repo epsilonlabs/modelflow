@@ -295,6 +295,12 @@ version(s), and exceptions or additional permissions here}.&quot;
 
    <requires>
       <import plugin="org.epsilonlabs.modelflow.engine"/>
+      <import plugin="org.apache.commons.io"/>
+      <import plugin="javax.xml.bind"/>
+      <import feature="org.eclipse.epsilon.core.dt.feature" version="2.1.0.202007031223"/>
+      <import feature="org.eclipse.epsilon.core.feature" version="2.1.0.202007031223"/>
+      <import feature="org.eclipse.epsilon.emf.dt.feature" version="2.1.0.202007031223"/>
+      <import feature="org.eclipse.epsilon.emf.feature" version="2.1.0.202007031223"/>
       <import plugin="org.eclipse.epsilon.evl.engine"/>
       <import plugin="org.eclipse.epsilon.etl.engine"/>
       <import plugin="org.eclipse.epsilon.emc.emf"/>
@@ -306,7 +312,6 @@ version(s), and exceptions or additional permissions here}.&quot;
       <import plugin="org.eclipse.epsilon.epl.engine"/>
       <import plugin="org.eclipse.epsilon.eml.engine"/>
       <import plugin="org.eclipse.epsilon.egl.traceability.fine"/>
-      <import plugin="org.apache.commons.io"/>
    </requires>
 
    <plugin
