@@ -54,17 +54,18 @@ public abstract class ExampleProjectTest extends IncrementalTest {
 		Path sourceProject = getProject();
 		FileFilter filter = getFileFilter();
 		Path destinationProject = getOutputPath();
+		if (getOutputPath().toFile().getParentFile().exists()) {
+			try{
+				FileUtils.cleanDirectory(getOutputPath().getParent().toFile());
+			} catch (Exception e) {
+				fail(e.getMessage());
+			}
+		}
 		try (Stream<Path> stream = Files.walk(sourceProject)) {
 			stream.filter(f -> filter.accept(f.toFile())).forEach(source -> {
 				Path dest = destinationProject.resolve(sourceProject.relativize(source));
 				File file = dest.toFile();
-				if (file.isDirectory() && file.exists()) {
-					try {
-						FileUtils.cleanDirectory(file);
-					} catch (IOException e) {
-						fail(e.getMessage());
-					}
-				} else {					
+				if (file.isDirectory()) {					
 					file.mkdirs();
 				}
 				try {
@@ -88,7 +89,7 @@ public abstract class ExampleProjectTest extends IncrementalTest {
 	protected FileFilter getFileFilter() {
 		return pathname -> {
 			String absolutePath = pathname.getAbsolutePath();
-			boolean binOrTarget = absolutePath.contains("/bin/") || absolutePath.contains("/target/");
+			boolean binOrTarget = absolutePath.contains("/bin/") || absolutePath.contains("/target/") || absolutePath.contains("/.settings/");
 			return !pathname.isHidden() && !binOrTarget;
 		};
 	}

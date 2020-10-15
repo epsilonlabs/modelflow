@@ -20,7 +20,6 @@
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
-					<testSuite>org.epsilonlabs.modelflow.tests</testSuite>
 					<testClass>org.epsilonlabs.modelflow.tests.ModelFlowUnitTestSuite</testClass>
 				</configuration>
 			</plugin>

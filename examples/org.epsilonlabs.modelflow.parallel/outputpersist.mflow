@@ -1,0 +1,6 @@
+task A is core:fileReader {
+	src: "run.mflow"
+}
+task B is core:print {
+	text: A.contents 
+}
