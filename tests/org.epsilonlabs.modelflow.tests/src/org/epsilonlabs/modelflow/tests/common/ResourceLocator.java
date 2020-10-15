@@ -16,7 +16,7 @@ public class ResourceLocator {
 	}
 	
 	public static String locateInTestDir(String location){
-		return System.getProperty("user.dir") + "/testOutput/"+ location;
+		return System.getProperty("user.dir") + "/target/modelflow/test/"+ location;
 	}
 
 	public static String locateAndCopyToTestDir(String location) {
@@ -24,7 +24,7 @@ public class ResourceLocator {
 		if (location.startsWith("/")){
 			l = location.split("/resources/")[1];
 		}
-		String destination = System.getProperty("user.dir") + "/testOutput/" +	l;
+		String destination = locateInTestDir(l);
 		File target = new File(destination);
 		if (target.exists()) {
 			target.delete();
@@ -49,6 +49,7 @@ public class ResourceLocator {
 		try {
 			if (target.exists()) {
 				FileUtils.deleteDirectory(target);
+				target.mkdir();
 			}
 			FileUtils.copyDirectory(source, target);
 		} catch (IOException e) {

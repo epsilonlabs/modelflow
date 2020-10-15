@@ -362,9 +362,8 @@ public class ExampleWorkflows {
 			
 			.build("egl");
 		
-		String destination = System.getProperty("user.dir") + "/testOutput/task/egx"; 
-		Path sourceDirectory = Paths.get(System.getProperty("user.dir") + "/resources/task/egx/");
-		Path outputDirectory = Paths.get(destination);
+		Path sourceDirectory = Paths.get(ResourceLocator.locate("task/egx/"));
+		Path outputDirectory = Paths.get(ResourceLocator.locateInTestDir("task/egx"));
 		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());
 		
 		return w;
@@ -461,8 +460,8 @@ public class ExampleWorkflows {
 		locateAndCopyToTestDir("markingMate/task/csv.egl");
 		locateAndCopyToTestDir("markingMate/task/feedback.egl");
 		locateAndCopyToTestDir("markingMate/task/all-feedback.egl");
-		String destination = System.getProperty("user.dir") + "/testOutput/task/egx"; 
-		Path sourceDirectory = Paths.get(System.getProperty("user.dir") + "/resources/task/egx/");
+		String destination = ResourceLocator.locateInTestDir("task/egx"); 
+		Path sourceDirectory = Paths.get(ResourceLocator.locateInTestDir("/resources/task/egx/"));
 		Path outputDirectory = Paths.get(destination);
 		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());
 		
@@ -505,7 +504,7 @@ public class ExampleWorkflows {
 	
 			.build("componentWorkflow");
 		
-		String destination = System.getProperty("user.dir") + "/testOutput/mmt/"; 
+		String destination = ResourceLocator.locateInTestDir("/mmt/"); 
 		Path sourceDirectory = Paths.get(RES + "mmt/");
 		Path outputDirectory = Paths.get(destination);
 		ResourceLocator.copyDir(sourceDirectory.toFile(), outputDirectory.toFile());

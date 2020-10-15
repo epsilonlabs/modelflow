@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import org.apache.commons.io.FileUtils;
+import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 
 /**
  * @author Betty Sanchez
@@ -27,7 +28,7 @@ public class TestUtils {
 	}
 
 	public static Path getOutputPath(String projectName) {
-		return Paths.get(System.getProperty("user.dir"), "..", "..", "testOutput", projectName).normalize();
+		return Paths.get(ResourceLocator.locateInTestDir(projectName)).normalize();
 	}
 
 	public static void copyExampleProjectToTempLocation(String projectName) {

@@ -47,7 +47,7 @@ public abstract class ExampleProjectTest extends IncrementalTest {
 	}
 
 	protected Path getOutputPath() {
-		return Paths.get(System.getProperty("user.dir"), "..", "..", "testOutput", getProjectName()).normalize();
+		return Paths.get(ResourceLocator.locateInTestDir(getProjectName())).normalize();
 	}
 
 	protected void copyToTempLocation() {
@@ -65,13 +65,14 @@ public abstract class ExampleProjectTest extends IncrementalTest {
 			stream.filter(f -> filter.accept(f.toFile())).forEach(source -> {
 				Path dest = destinationProject.resolve(sourceProject.relativize(source));
 				File file = dest.toFile();
-				if (file.isDirectory()) {					
+				if (source.toFile().isDirectory()) {					
 					file.mkdirs();
-				}
-				try {
-					Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
-				} catch (Exception e) {
-					fail("Unable to copy files to test directory");
+				} else {
+					try {
+						Files.copy(source, dest, StandardCopyOption.REPLACE_EXISTING);
+					} catch (Exception e) {
+						fail("Unable to copy files to test directory");
+					}
 				}
 			});
 		} catch (IOException e) {

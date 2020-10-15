@@ -20,7 +20,7 @@ import io.reactivex.Observable;
 
 public abstract class WorkflowBuilderTest {
 	
-	protected static final String DIR = System.getProperty("user.dir") + "/testOutput/";
+	protected static final String DIR = "./target/modelflow/test/";
 	protected ModelFlowModule module;
 	protected Boolean protect = true;
 	
