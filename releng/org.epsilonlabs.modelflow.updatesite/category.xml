@@ -36,9 +36,9 @@
    </category-def>
    <repository-reference location="http://download.eclipse.org/emfatic/update" enabled="true" />
    <repository-reference location="http://download.eclipse.org/mmt/qvto/updates/releases" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/releases/2020-03" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/tools/orbit/downloads/drops/R20200831200620/repository" enabled="true" />
-   <repository-reference location="http://download.eclipse.org/mmt/atl/updates/releases/4.2.1" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/releases/2020-03" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/tools/orbit/downloads/drops/R20200831200620/repository" enabled="true" />
+   <repository-reference location="https://download.eclipse.org/mmt/atl/updates/releases/4.2.1" enabled="true" />
    <repository-reference location="https://download.eclipse.org/epsilon/updates/2.1" enabled="true" />
 </site>

@@ -7,7 +7,7 @@
 		<unit id="org.eclipse.emf.emfatic.feature.group" version="0.8.0.202003241508"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		<repository location="http://download.eclipse.org/releases/2020-03"/>
+		<repository location="https://download.eclipse.org/releases/2020-03"/>
 		<unit id="org.eclipse.emf.sdk.feature.group" version="2.21.0.v20200205-0529"/>
 		<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.12.1.201812070911"/>
 		<unit id="org.eclipse.equinox.sdk.feature.group" version="3.20.100.v20200303-1901"/>
@@ -38,7 +38,7 @@
 		<unit id="org.eclipse.m2e.feature.feature.group" version="1.15.0.20200310-1832"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20200831200620/repository"/>
+		<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20200831200620/repository"/>
 		<unit id="com.google.inject" version="0.0.0"/>
 		<unit id="com.google.inject.assistedinject" version="0.0.0"/>
 		<unit id="com.google.inject.multibindings" version="0.0.0"/>
@@ -72,7 +72,7 @@
 		<unit id="com.atlassian.commonmark-yaml" version="0.0.0"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		<repository location="http://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases"/>
+		<repository location="https://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases"/>
 		<unit id="org.eclipse.gmf.sdk.feature.group" version="3.2.1.201409171321"/>
 		<unit id="org.eclipse.gmf.tooling.codegen.xtend2.feature.group" version="3.2.1.201409171321"/>
 		<unit id="org.eclipse.gmf.tooling.feature.group" version="3.2.1.201409171321"/>
@@ -103,7 +103,7 @@
 		<unit id="org.eclipse.epsilon.picto.feature.feature.group" version="0.0.0"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-		<repository location="http://download.eclipse.org/mmt/atl/updates/releases/4.2.1"/>
+		<repository location="https://download.eclipse.org/mmt/atl/updates/releases/4.2.1"/>
 		<unit id="org.eclipse.m2m.atl.sdk.feature.group" version="4.2.1.v202006221222"/>
 	</location>
 </locations>

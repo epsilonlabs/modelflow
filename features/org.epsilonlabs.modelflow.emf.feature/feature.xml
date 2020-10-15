@@ -293,15 +293,9 @@ version(s), and exceptions or additional permissions here}.&quot;
   You may add additional accurate notices of copyright ownership.
    </license>
 
-   <requires>
-      <import plugin="org.epsilonlabs.modelflow.engine"/>
-      <import plugin="org.eclipse.epsilon.emc.emf"/>
-      <import plugin="org.eclipse.emf.emfatic.core"/>
-      <import plugin="org.eclipse.emf.codegen.ecore"/>
-      <import plugin="org.eclipse.epsilon.common.dt"/>
-      <import plugin="org.eclipse.gymnast.runtime.core"/>
-      <import plugin="org.eclipse.jdt.core"/>
-   </requires>
+   <includes
+         id="org.epsilonlabs.modelflow.feature"
+         version="0.0.1.qualifier"/>
 
    <plugin
          id="org.epsilonlabs.modelflow.mmc.emf"

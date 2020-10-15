@@ -293,26 +293,9 @@ version(s), and exceptions or additional permissions here}.&quot;
   You may add additional accurate notices of copyright ownership.
    </license>
 
-   <requires>
-      <import plugin="org.epsilonlabs.modelflow.engine"/>
-      <import plugin="org.apache.commons.io"/>
-      <import plugin="javax.xml.bind"/>
-      <import feature="org.eclipse.epsilon.core.dt.feature" version="2.1.0.202007031223"/>
-      <import feature="org.eclipse.epsilon.core.feature" version="2.1.0.202007031223"/>
-      <import feature="org.eclipse.epsilon.emf.dt.feature" version="2.1.0.202007031223"/>
-      <import feature="org.eclipse.epsilon.emf.feature" version="2.1.0.202007031223"/>
-      <import plugin="org.eclipse.epsilon.evl.engine"/>
-      <import plugin="org.eclipse.epsilon.etl.engine"/>
-      <import plugin="org.eclipse.epsilon.emc.emf"/>
-      <import plugin="org.eclipse.epsilon.emc.simulink"/>
-      <import plugin="org.eclipse.epsilon.eunit.engine"/>
-      <import plugin="org.eclipse.epsilon.ecl.engine"/>
-      <import plugin="org.eclipse.epsilon.flock.engine"/>
-      <import plugin="org.eclipse.epsilon.common.dt"/>
-      <import plugin="org.eclipse.epsilon.epl.engine"/>
-      <import plugin="org.eclipse.epsilon.eml.engine"/>
-      <import plugin="org.eclipse.epsilon.egl.traceability.fine"/>
-   </requires>
+   <includes
+         id="org.epsilonlabs.modelflow.feature"
+         version="0.0.1.qualifier"/>
 
    <plugin
          id="org.epsilonlabs.modelflow.mmc.epsilon"
