@@ -24,11 +24,11 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ 
-	CompareMergeTransformIncrementalTest.class,
+	//CompareMergeTransformIncrementalTest.class,
+	//ExampleTestSuite.class,
 	ComponentOneChangeIncrementalTest.class,	
 	EglIncrementalTest.class,
 	EgxIncrementalTest.class,
-	ExampleTestSuite.class,
 	//FullProcessTests.class, 
 	InjectionTests.class,
 	MarkersIncrementalTest.class,
