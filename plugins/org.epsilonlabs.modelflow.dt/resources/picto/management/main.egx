@@ -4,7 +4,12 @@ rule Main{
 		return Map {
 			"path" = Sequence{"Management Trace"},
 			"icon" = "diagram-ff0000",
-			"format" = "graphviz-dot"
+			"format" = "graphviz-dot",
+			"layers" = Sequence {
+	            Map {"id"="elemLabel", "title"="Element Label", "active"=false},
+	            Map {"id"="propLabel", "title"="Property Label", "active"=false},
+	        	Map {"id"="fileLabel", "title"="File Label", "active"=false}
+	        }
 		};
 	}
 }
@@ -15,7 +20,12 @@ rule exec transform tt : TaskTrace {
 		return Map {
 			"path" = Sequence{"Tasks", tt.task.name},
 			"icon" = "diagram-ff0000",
-			"format" = "graphviz-dot"//circo
+			"format" = "graphviz-dot",//circo
+			"layers" = Sequence {
+	            Map {"id"="elemLabel", "title"="Element Label", "active"=false},
+	            Map {"id"="propLabel", "title"="Property Label", "active"=false},
+	            Map {"id"="fileLabel", "title"="File Label", "active"=false}
+	        }
 		};
 	}
 }

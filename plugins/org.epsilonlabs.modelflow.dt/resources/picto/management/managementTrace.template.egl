@@ -1,44 +1,14 @@
-[%import "managementTrace.eol";%]
+[%import "template.egl";%]
 strict digraph G {
 graph [splines=polyline]
+rankdir=LR;
+concentrate=true;
+tooltip="End-to-End Traceability"
 [%
 var colors = new Map;
 var defColors = new Sequence;
-for (p in Element.all){%]
- "[%= idOf(p) %]" [label="[%= labelOf(p) %]"]
-[%} for (t in Trace.all){%]
-[%for (so in t.sources){%]
-[%for (ta in t.targets){%]
-  [% if (so.isKindOf(ModelElement)){ %]
-  "[%= so.container.name.safe() %]" [fillcolor="[%=getColor(so.container.name)%]", style=filled]
-  "[%= so.container.name.safe() + "::" + so.elementId.safe() %]" [shape="hexagon", label="", fillcolor="[%=getColor(so.container.name)%]", style=filled]
-  "[%= so.container.name.safe() %]" -> "[%= so.container.name.safe() + "::" + so.elementId.safe() %]" [ label = "[%= so.role%]"]
-  [% } if (ta.isKindOf(ModelElement)){ %]
-  "[%= ta.container.name.safe() %]" [fillcolor="[%=getColor(ta.container.name)%]", style=filled]
-  "[%= ta.container.name.safe() + "::" + ta.elementId.safe() %]" [shape="hexagon", label="", fillcolor="[%=getColor(ta.container.name)%]", style=filled]
-  "[%= ta.container.name.safe() %]" -> "[%= ta.container.name.safe() + "::" + ta.elementId.safe() %]" [ label = "[%= ta.role%]"]
-  [% } 
-  if (so.isTypeOf(ModelElementProperty)){ %]
-  "[%= idOf(so) %]" [ shape=triangle, label="", fillcolor="[%=getColor(so.container.name)%]", style=filled]
-  "[%= so.container.name.safe() + "::" + so.elementId.safe() %]" -> "[%= idOf(so) %]"
-  [% } if (ta.isTypeOf(ModelElementProperty)){ %]
-  "[%= idOf(ta) %]" [ shape=triangle, label="", fillcolor="[%=getColor(ta.container.name)%]", style=filled]
-  "[%= ta.container.name.safe() + "::" + ta.elementId.safe() %]" -> "[%= idOf(ta) %]"
-  [% } 
-  if (so.isTypeOf(FileElement)){ %]
-  "[%= so.container.name.safe() %]" [label="[%= simpleName(so) %]", fillcolor="[%=getColor(so.container.name)%]", style=filled]
-  "[%= idOf(so) %]" [shape=diamond, fillcolor="[%=getColor(so.container.name)%]", style=filled]
-  "[%= so.container.name.safe() %]" -> "[%= idOf(so) %]" 
-  [% } if (ta.isTypeOf(FileElement)){ %]
-   "[%= ta.container.name.safe() %]" [label="[%= simpleName(ta) %]", fillcolor="[%=getColor(ta.container.name)%]", style=filled]
-   "[%= idOf(ta) %]" [shape=diamond, label="", fillcolor="[%=getColor(ta.container.name)%]", style=filled]
-   "[%= ta.container.name.safe() %]" -> "[%= idOf(ta) %]" 
-  [% } %]
-   [%if (t.link.isTypeOf(ManagementOperation)){%]
-   "[%= idOf(so) %]" -> "[%= t.link.managementOperation.safe()%]" 
-   "[%= t.link.managementOperation.safe() %]"-> "[%= idOf(ta) %]"
-   [%} else {%]
-   "[%= idOf(so) %]" -> "[%= idOf(ta) %]"
-   [%} %]
-[% }}} %]
+for (t in TaskTrace.all){ %]
+[%=t.traceGraph()%]
+[% } %]
+[%=key(TaskTrace.all())%]
 }

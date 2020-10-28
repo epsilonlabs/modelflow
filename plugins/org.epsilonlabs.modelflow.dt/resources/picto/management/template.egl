@@ -1,0 +1,59 @@
+[%import "managementTrace.eol";
+
+@template
+operation key(start : Any){ %]
+subgraph cluster_0 {
+	rank="same";
+	style=filled;
+	color=lightgrey;
+	node [style=filled];
+	label = "Model Key";
+[%
+	var so = start.traces.flatten().sources.flatten().container.flatten();
+	var ta = start.traces.flatten().targets.flatten().container.flatten();
+	var col = so;
+	col.addAll(ta);
+	for (r in col){
+		if (r.isTypeOf(ModelResource)){ %]
+	"[%= r.name %]Label" [label="[%= r.name %]", fillcolor="[%=r.color()%]"]
+[%		} 
+	} %]
+}
+[% }
+
+@template
+operation TaskTrace traceGraph(){ %]
+[%	for (t in self.traces){
+	for (so in t.sources){ 
+		for (ta in t.targets){
+ 			if (so.isKindOf(ModelElement)){ %]
+  // ModelElement Source
+  "[%= so.elemId() %]" [shape="hexagon", label="[%if (isLayerActive("elemLabel")){%][%=so.elemLabel()%][%}%]", fillcolor="[%=so.color()%]", style=filled, tooltip="[%=so.container.label()%]"]
+[% 			} if (ta.isKindOf(ModelElement)){ %]
+  // ModelElement Target
+  "[%= ta.elemId() %]" [shape="hexagon", label="[%if (isLayerActive("elemLabel")){%][%=ta.elemLabel()%][%}%]", fillcolor="[%=ta.color()%]", style=filled, tooltip="[%=ta.container.label()%]"]
+[% 			} if (so.isTypeOf(ModelElementProperty)){ %]
+  // ModelElement Property Source
+  "[%= so.propertyId() %]" [ shape=triangle, label="[%if (isLayerActive("propLabel")){%][%=so.propertyLabel()%][%}%]", fillcolor="[%=so.color()%]", style=filled, tooltip="[%=so.elemId.label()%]"]
+[% 			} if (ta.isTypeOf(ModelElementProperty)){ %]
+  // ModelElement Property Target
+  "[%= ta.propertyId() %]" [ shape=triangle, label="[%if (isLayerActive("propLabel")){%][%=ta.propertyLabel()%][%}%]", fillcolor="[%=ta.color()%]", style=filled, tooltip="[%=ta.elemId.label()%]"]
+[% 			} if (so.isTypeOf(FileElement)){ %] 
+  // FileElement Region Source				 
+  "[%= so.fileId() %]" [shape=diamond, label="[%if (isLayerActive("fileLabel")){%][%=so.fileLabel()%][%}%]", fillcolor="[%=so.color()%]", style=filled, tooltip="[%=so.container.label()%]"]
+[% 			} if (ta.isTypeOf(FileElement)){ %] 
+  // FileElement Region Target
+  "[%= ta.fileId() %]" [shape=diamond, label="[%if (isLayerActive("fileLabel")){%][%=ta.fileLabel()%][%}%]", fillcolor="[%=ta.color()%]", style=filled, tooltip="[%=ta.container.label()%]"]
+[% 			} if (t.link.isTypeOf(ManagementOperation)){%]
+  // ModelManagementOperation Link
+  [%= t.link.managementOperation.safe()%] [tooltip="[%=self.task.name%]"]
+  "[%= so.id() %]" -> "[%= t.link.managementOperation.safe()%]" 
+  "[%= t.link.managementOperation.safe() %]"-> "[%= ta.id() %]"
+[%			} else {%]
+  // Link
+   "[%= so.id() %]" -> "[%= ta.id() %]"
+[%				}
+			} 
+ 		}
+	} %]
+[% } %]
