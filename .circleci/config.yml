@@ -21,7 +21,7 @@ jobs:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: ./releng/org.epsilonlabs.modelflow.updatesite/target/
+          at: ./
       - run:
           name: "Publish Release on GitHub"
           command: |
