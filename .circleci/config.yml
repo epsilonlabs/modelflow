@@ -11,20 +11,21 @@ jobs:
             cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
       - run: mvn clean verify
       - persist_to_workspace:
-          root: /tmp/artifacts
+          root: ./
           paths:
-          - releng/org.epsilonlabs.modelflow.updatesite/target/
+          - releng/org.epsilonlabs.modelflow.updatesite/target/*.zip
+          - tests/org.epsilonlabs.modelflow.jacoco/target/site/jacoco-aggregate/
 
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: /tmp/artifacts
+          at: ./releng/org.epsilonlabs.modelflow.updatesite/target/
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -replace latest /tmp/artifacts/updatesite.zip
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -replace latest ./releng/org.epsilonlabs.modelflow.updatesite/target/updatesite.zip
           
          
 workflows:
