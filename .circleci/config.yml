@@ -10,7 +10,6 @@ jobs:
           command: |
             cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
       - run: mvn clean verify
-      - persist_to_workspace:
 
   publish-github-release:
     docker:
