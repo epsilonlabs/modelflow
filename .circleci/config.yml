@@ -10,16 +10,18 @@ jobs:
           command: |
             cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
       - run: mvn clean verify
+      - persist_to_workspace:
+
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
     steps:
       - attach_workspace:
-          at: ./setup/org.epsilonlabs.modelflow.updatesite/target/
+          at: ./releng/org.epsilonlabs.modelflow.updatesite/target/
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -draft -replace latest ./setup/org.epsilonlabs.modelflow.updatesite/target/updatesite.zip
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -replace latest ./project/releng/org.epsilonlabs.modelflow.updatesite/target/updatesite.zip
           
          
 workflows:
