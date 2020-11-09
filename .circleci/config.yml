@@ -25,8 +25,12 @@ jobs:
       - run:
           name: "Publish Release on GitHub"
           command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -replace latest ./releng/org.epsilonlabs.modelflow.updatesite/target/updatesite.zip
-          
+            mkdir /tmp/release
+            cp ./releng/org.epsilonlabs.modelflow.updatesite/target/updatesite.zip /tmp/release/
+            zip -r /tmp/release/jacoco.zip ./tests/org.epsilonlabs.modelflow.jacoco/target/site/jacoco-aggregate/
+            label="latest"
+            [[ -n "${CIRCLE_TAG}" ]] && latest=${CIRCLE_TAG}
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -recreate latest /tmp/release  
          
 workflows:
   version: 2
@@ -36,3 +40,4 @@ workflows:
       - publish-github-release:
           requires:
             - build
+
