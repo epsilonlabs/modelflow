@@ -23,33 +23,12 @@ import org.epsilonlabs.modelflow.dom.Resource;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ResourceImpl#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ResourceImpl#getDeclared <em>Declared</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ResourceImpl extends AbstractResourceImpl implements Resource {
-	/**
-	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefinition()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String DEFINITION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefinition()
-	 * @generated
-	 * @ordered
-	 */
-	protected String definition = DEFINITION_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getDeclared() <em>Declared</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -95,29 +74,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	 * @generated
 	 */
 	@Override
-	public String getDefinition() {
-		return definition;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setDefinition(String newDefinition) {
-		String oldDefinition = definition;
-		definition = newDefinition;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.RESOURCE__DEFINITION, oldDefinition, definition));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Boolean getDeclared() {
 		return declared;
 	}
@@ -143,8 +99,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__DEFINITION:
-				return getDefinition();
 			case DomPackage.RESOURCE__DECLARED:
 				return getDeclared();
 		}
@@ -156,13 +110,9 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__DEFINITION:
-				setDefinition((String)newValue);
-				return;
 			case DomPackage.RESOURCE__DECLARED:
 				setDeclared((Boolean)newValue);
 				return;
@@ -178,9 +128,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__DEFINITION:
-				setDefinition(DEFINITION_EDEFAULT);
-				return;
 			case DomPackage.RESOURCE__DECLARED:
 				setDeclared(DECLARED_EDEFAULT);
 				return;
@@ -196,8 +143,6 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case DomPackage.RESOURCE__DEFINITION:
-				return DEFINITION_EDEFAULT == null ? definition != null : !DEFINITION_EDEFAULT.equals(definition);
 			case DomPackage.RESOURCE__DECLARED:
 				return DECLARED_EDEFAULT == null ? declared != null : !DECLARED_EDEFAULT.equals(declared);
 		}
@@ -214,9 +159,7 @@ public class ResourceImpl extends AbstractResourceImpl implements Resource {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (definition: ");
-		result.append(definition);
-		result.append(", declared: ");
+		result.append(" (declared: ");
 		result.append(declared);
 		result.append(')');
 		return result.toString();

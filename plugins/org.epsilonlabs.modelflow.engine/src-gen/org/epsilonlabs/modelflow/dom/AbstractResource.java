@@ -15,6 +15,10 @@ package org.epsilonlabs.modelflow.dom;
  * A representation of the model object '<em><b>Abstract Resource</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * An abstract resource.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getAbstractResource()
  * @model abstract="true"

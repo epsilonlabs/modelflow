@@ -155,25 +155,9 @@ public class DomSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.METAMODE_RESOURCE: {
-				MetamodeResource metamodeResource = (MetamodeResource)theEObject;
-				T result = caseMetamodeResource(metamodeResource);
-				if (result == null) result = caseResource(metamodeResource);
-				if (result == null) result = caseAbstractResource(metamodeResource);
-				if (result == null) result = caseConfigurable(metamodeResource);
-				if (result == null) result = caseNamed(metamodeResource);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case DomPackage.TASK_DEPENDENCY: {
 				TaskDependency taskDependency = (TaskDependency)theEObject;
 				T result = caseTaskDependency(taskDependency);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DomPackage.RESOURCE_DEPENDENCY: {
-				ResourceDependency resourceDependency = (ResourceDependency)theEObject;
-				T result = caseResourceDependency(resourceDependency);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -338,21 +322,6 @@ public class DomSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Metamode Resource</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Metamode Resource</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMetamodeResource(MetamodeResource object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Task Dependency</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -364,21 +333,6 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTaskDependency(TaskDependency object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Resource Dependency</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Resource Dependency</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseResourceDependency(ResourceDependency object) {
 		return null;
 	}
 

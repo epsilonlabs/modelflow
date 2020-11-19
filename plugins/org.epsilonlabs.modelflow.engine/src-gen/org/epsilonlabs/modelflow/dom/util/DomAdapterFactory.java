@@ -115,16 +115,8 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 				return createModelResourceAdapter();
 			}
 			@Override
-			public Adapter caseMetamodeResource(MetamodeResource object) {
-				return createMetamodeResourceAdapter();
-			}
-			@Override
 			public Adapter caseTaskDependency(TaskDependency object) {
 				return createTaskDependencyAdapter();
-			}
-			@Override
-			public Adapter caseResourceDependency(ResourceDependency object) {
-				return createResourceDependencyAdapter();
 			}
 			@Override
 			public Adapter caseProperty(Property object) {
@@ -291,20 +283,6 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.MetamodeResource <em>Metamode Resource</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.MetamodeResource
-	 * @generated
-	 */
-	public Adapter createMetamodeResourceAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.TaskDependency <em>Task Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -315,20 +293,6 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createTaskDependencyAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ResourceDependency <em>Resource Dependency</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency
-	 * @generated
-	 */
-	public Adapter createResourceDependencyAdapter() {
 		return null;
 	}
 

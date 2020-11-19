@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.epsilonlabs.modelflow.dom.DomPackage;
@@ -42,7 +42,7 @@ import org.epsilonlabs.modelflow.dom.TaskDependency;
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getConsumes <em>Consumes</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getModifies <em>Modifies</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDependencies <em>Dependencies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDefinition <em>Definition</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getDependentTasks <em>Dependent Tasks</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getTraceable <em>Traceable</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.TaskImpl#getAlwaysExecute <em>Always Execute</em>}</li>
@@ -93,24 +93,14 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	protected EList<TaskDependency> dependencies;
 
 	/**
-	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
+	 * The cached value of the '{@link #getDependentTasks() <em>Dependent Tasks</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDefinition()
+	 * @see #getDependentTasks()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final String DEFINITION_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDefinition()
-	 * @generated
-	 * @ordered
-	 */
-	protected String definition = DEFINITION_EDEFAULT;
+	protected EList<TaskDependency> dependentTasks;
 
 	/**
 	 * The default value of the '{@link #getEnabled() <em>Enabled</em>}' attribute.
@@ -279,29 +269,6 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	 * @generated
 	 */
 	@Override
-	public String getDefinition() {
-		return definition;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setDefinition(String newDefinition) {
-		String oldDefinition = definition;
-		definition = newDefinition;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.TASK__DEFINITION, oldDefinition, definition));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Boolean getEnabled() {
 		return enabled;
 	}
@@ -373,7 +340,7 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	@Override
 	public EList<TaskDependency> getDependencies() {
 		if (dependencies == null) {
-			dependencies = new EObjectWithInverseResolvingEList<TaskDependency>(TaskDependency.class, this, DomPackage.TASK__DEPENDENCIES, DomPackage.TASK_DEPENDENCY__BEFORE);
+			dependencies = new EObjectResolvingEList<TaskDependency>(TaskDependency.class, this, DomPackage.TASK__DEPENDENCIES);
 		}
 		return dependencies;
 	}
@@ -383,14 +350,12 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case DomPackage.TASK__DEPENDENCIES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getDependencies()).basicAdd(otherEnd, msgs);
+	public EList<TaskDependency> getDependentTasks() {
+		if (dependentTasks == null) {
+			dependentTasks = new EObjectResolvingEList<TaskDependency>(TaskDependency.class, this, DomPackage.TASK__DEPENDENT_TASKS);
 		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
+		return dependentTasks;
 	}
 
 	/**
@@ -407,8 +372,6 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return ((InternalEList<?>)getConsumes()).basicRemove(otherEnd, msgs);
 			case DomPackage.TASK__MODIFIES:
 				return ((InternalEList<?>)getModifies()).basicRemove(otherEnd, msgs);
-			case DomPackage.TASK__DEPENDENCIES:
-				return ((InternalEList<?>)getDependencies()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -429,8 +392,8 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return getModifies();
 			case DomPackage.TASK__DEPENDENCIES:
 				return getDependencies();
-			case DomPackage.TASK__DEFINITION:
-				return getDefinition();
+			case DomPackage.TASK__DEPENDENT_TASKS:
+				return getDependentTasks();
 			case DomPackage.TASK__ENABLED:
 				return getEnabled();
 			case DomPackage.TASK__TRACEABLE:
@@ -468,8 +431,9 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				getDependencies().clear();
 				getDependencies().addAll((Collection<? extends TaskDependency>)newValue);
 				return;
-			case DomPackage.TASK__DEFINITION:
-				setDefinition((String)newValue);
+			case DomPackage.TASK__DEPENDENT_TASKS:
+				getDependentTasks().clear();
+				getDependentTasks().addAll((Collection<? extends TaskDependency>)newValue);
 				return;
 			case DomPackage.TASK__ENABLED:
 				setEnabled((Boolean)newValue);
@@ -507,8 +471,8 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 			case DomPackage.TASK__DEPENDENCIES:
 				getDependencies().clear();
 				return;
-			case DomPackage.TASK__DEFINITION:
-				setDefinition(DEFINITION_EDEFAULT);
+			case DomPackage.TASK__DEPENDENT_TASKS:
+				getDependentTasks().clear();
 				return;
 			case DomPackage.TASK__ENABLED:
 				setEnabled(ENABLED_EDEFAULT);
@@ -542,8 +506,8 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 				return modifies != null && !modifies.isEmpty();
 			case DomPackage.TASK__DEPENDENCIES:
 				return dependencies != null && !dependencies.isEmpty();
-			case DomPackage.TASK__DEFINITION:
-				return DEFINITION_EDEFAULT == null ? definition != null : !DEFINITION_EDEFAULT.equals(definition);
+			case DomPackage.TASK__DEPENDENT_TASKS:
+				return dependentTasks != null && !dependentTasks.isEmpty();
 			case DomPackage.TASK__ENABLED:
 				return ENABLED_EDEFAULT == null ? enabled != null : !ENABLED_EDEFAULT.equals(enabled);
 			case DomPackage.TASK__TRACEABLE:
@@ -566,9 +530,7 @@ public class TaskImpl extends AbstractTaskImpl implements Task {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (definition: ");
-		result.append(definition);
-		result.append(", enabled: ");
+		result.append(" (enabled: ");
 		result.append(enabled);
 		result.append(", traceable: ");
 		result.append(traceable);

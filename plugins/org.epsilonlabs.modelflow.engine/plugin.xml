@@ -14,7 +14,7 @@
       <package
             uri="http://eclipse.org/epsilon/modelflow/management/trace/1.0"
             class="org.epsilonlabs.modelflow.management.trace.ManagementTracePackage"
-            genModel="src/org/epsilonlabs/modelflow/management/trace/managementTrace.genmodel"/>
+            genModel="model/managementTrace.genmodel"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
@@ -22,7 +22,7 @@
       <package
             uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.0"
             class="org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage"
-            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+            genModel="model/executionTrace.genmodel"/>
    </extension>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
@@ -30,7 +30,7 @@
       <package
             uri="http://eclipse.org/epsilon/modelflow/1.0"
             class="org.epsilonlabs.modelflow.dom.DomPackage"
-            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+            genModel="model/executionTrace.genmodel"/>
    </extension>
 
 </plugin>

@@ -68,7 +68,7 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 			// Create task dependency element
 			taskDependency = DomFactoryImpl.eINSTANCE.createTaskDependency();
 			// Assign parent as after
-			declaringTaskRule.getDomElements().stream().forEach(taskDependency::setAfter);
+			declaringTaskRule.getDomElements().stream().forEach(taskDependency::setTask);
 			// Assign name expression as before 
 			List<TaskRule> rules = ctx.getTaskDeclarations().stream()
 				// Match tasks with dependency name
@@ -80,7 +80,7 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 				Collection<Task> domElements = taskRule.getDomElements();
 				
 				// Assing task as before in the task dependency  
-				domElements.forEach(taskDependency::setBefore);
+				domElements.forEach(taskDependency::setDependsOn);
 			}
 			else {
 				String msg = String.format("Task with name '%s' could not be found", target.getName()); 

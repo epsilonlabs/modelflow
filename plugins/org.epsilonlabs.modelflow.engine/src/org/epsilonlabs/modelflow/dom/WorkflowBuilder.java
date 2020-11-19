@@ -67,10 +67,10 @@ public class WorkflowBuilder {
 			if (t.getGuard() instanceof String) {
 				String guard = (String) t.getGuard();
 				names.stream().filter(e-> guard.contains(e + ".")).forEach(task -> {
-					if (t.getDependencies().stream().noneMatch(d->d.getBefore().getName().equals(task))){
+					if (t.getDependencies().stream().noneMatch(d->d.getDependsOn().getName().equals(task))){
 						TaskDependency dep = DomFactoryImpl.eINSTANCE.createTaskDependency();
-						dep.setBefore(t);
-						dep.setAfter(tasks.stream().filter(a->a.getName().equals(task)).findFirst().get());
+						dep.setTask(t);
+						dep.setDependsOn(tasks.stream().filter(a->a.getName().equals(task)).findFirst().get());
 						workflow.getTaskDependencies().add(dep);
 					}
 				});
@@ -118,8 +118,8 @@ public class WorkflowBuilder {
 				Optional<Task> findFirst = getBuilder().tasks.stream().filter(ta-> ta.getName().equals(d)).findFirst();
 				if (findFirst.isPresent()) {					
 					TaskDependency dep = DomFactoryImpl.eINSTANCE.createTaskDependency();
-					dep.setBefore(findFirst.get());
-					dep.setAfter(task);
+					dep.setDependsOn(findFirst.get());
+					dep.setTask(task);
 					getBuilder().taskDependencies.add(dep);
 				} else {
 					throw new IllegalStateException(String.format("Task %s has not been created yet", d));

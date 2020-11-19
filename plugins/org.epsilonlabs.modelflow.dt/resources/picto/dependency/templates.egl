@@ -3,4 +3,80 @@ import "utils.eol";
 @template
 operation Resource node(){ %]
 [%= self.name() %] [shape=parallelogram, margin=0, esep=0, sep=0, fillcolor="bisque1", label=<[%=self.label()%]>]
+[% } 
+
+@template
+operation Task dependencies() { %]
+[% if (not self.isTypeOf(Workflow)) { %]
+[%= self.name() %] [fillcolor="[% if (self.enabled) {%]aliceblue[%} else {%]grey96[%}%]", margin=.2, label=<[%=self.label()%]>]
+	[% for (rr in self.consumes) { %]
+[%= rr.resource.name() %] -> [%= self.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkolivegreen3]
+[%= rr.resource.node()%]
+	[% } %]
+	[% for (rr in self.produces) { %]
+[%= self.name() %] -> [%= rr.resource.name() %] [%=rr.aliasLabel()%] [style=dashed, color=darkgoldenrod1]
+[%= rr.resource.node()%]
+	[% } %]
+	[% for (rr in self.modifies) { %]
+[%= self.name() %] -> [%= rr.resource.name() %] [%=rr.aliasLabel()%] [dir=both, style=dashed, color=darkorange2]
+[%= rr.resource.node()%]		
+	[% } %]
 [% } %]
+[% }
+
+@template
+operation graph() { %]
+graph [ranksep=".3"]
+node[fontname=Arial, fontsize=10, shape=record, style=filled]
+edge[fontname=Arial, fontsize=10, arrowsize=0.7]
+[% }
+
+
+@template
+operation legend(){ %]
+	//Legend
+    subgraph cluster_01 { 
+	node [shape=plaintext, style=invisible]
+	edge [fontsize=8]
+    label = "Legend";   
+    {
+      rank=same;
+    	key
+    	key2
+    }
+    key [label=<<table border="0" cellpadding="2" cellspacing="2" cellborder="0">
+      <tr><td align="right" port="i1">model</td></tr>
+      <tr><td align="right" port="i2">model</td></tr>
+      <tr><td align="right" port="i3">model</td></tr>
+      <tr><td align="right" port="i4">model</td></tr>
+      <tr><td align="right" port="i5">task</td></tr>
+      </table>>]
+    key2 [label=<<table border="0" cellpadding="2" cellspacing="2" cellborder="0">
+      <tr><td port="i1">task</td></tr>
+      <tr><td port="i2">task</td></tr>
+      <tr><td port="i3">task</td></tr>
+      <tr><td port="i4">taks</td></tr>
+      <tr><td port="i5">task</td></tr>
+      </table>>]
+    key:i1:e -> key2:i1:w [style=dashed, color=darkolivegreen3, label="is input of"]
+    key:i2:e -> key2:i2:w [style=dashed, color=darkgoldenrod1, label="is modified by"]
+    key:i3:e -> key2:i3:w [dir=both, style=dashed, color=darkorange2, label="is output of"]
+    key:i4:e -> key2:i4:w [style=dashed, color=indigo, label="is derived from"]
+    key:i5:e -> key2:i5:w [color=dodgerblue1, label="depends on"]*/
+ 
+    Model [shape=parallelogram, fillcolor="thistle", shape=record, style=filled]
+    DisabledTask [fillcolor="grey96",label="Disabled Task",shape=record, style=filled]
+    EnabledTask [fillcolor="aliceblue", label="Enabled Task", shape=record, style=filled]
+    EnabledTask1 [fillcolor="aliceblue", label="Enabled Task", shape=record, style=filled]
+    Model -> EnabledTask [style=dashed, color=darkolivegreen3, label="consumes"]
+    EnabledTask -> Model [style=dashed, color=darkgoldenrod1, label="modifies"]
+    EnabledTask1 -> Model [dir=both, style=dashed, color=darkorange2, label="produces"]
+    EnabledTask1-> Model [style=dashed, color=indigo, label="produces derived "]
+    EnabledTask -> DisabledTask [color=dodgerblue1, label="depends on"]
+ 
+    //Model-> DisabledTask [style=invisible, arrowhead=none]
+    //DisabledTask-> EnabledTask [style=invisible, arrowhead=none]
+    
+  }
+[%}
+%]

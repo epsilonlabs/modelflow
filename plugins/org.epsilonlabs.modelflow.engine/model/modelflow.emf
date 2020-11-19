@@ -1,0 +1,100 @@
+@namespace(uri="http://eclipse.org/epsilon/modelflow/1.0", prefix="dom")
+package dom;
+
+@GenModel(documentation="The workflow definition, container of tasks, resources and dependencies.")
+class Workflow extends Task {
+  @GenModel(documentation="The list of contained tasks.")
+  val Task[*] tasks;
+  @GenModel(documentation="The list of contained resources.")
+  val AbstractResource[*] resources;
+  @GenModel(documentation="The list of tasks interdependencies.")
+  val TaskDependency[*] taskDependencies;
+}
+
+@GenModel(documentation="A named element.")
+abstract class Named {
+  @GenModel(documentation="The name.")
+  attr String name;
+}
+
+@GenModel(documentation="A named element configurable through a set of properties.")
+abstract class Configurable extends Named {
+  @GenModel(documentation="The list of configurable properties.")
+  val Property[*] properties;
+  @GenModel(documentation="FIXME: A reference to a module element.")
+  transient attr EJavaObject moduleElement;
+  @GenModel(documentation="The name of the entity that configures this configurable element.")
+  attr String definition;
+}
+
+@GenModel(documentation="An abstract resource.")
+abstract class AbstractResource extends Configurable {}
+
+@GenModel(documentation="An abstract task.")
+abstract class AbstractTask extends Configurable {}
+
+@GenModel(documentation="A task.")
+class Task extends AbstractTask {
+  @GenModel(documentation="The list of resource references to be produced.")
+  val ResourceReference[*] produces;
+  @GenModel(documentation="The list of resource references to be consumed.")
+  val ResourceReference[*] consumes;
+  @GenModel(documentation="The list of resource references to be modified.")
+  val ResourceReference[*] modifies;
+  
+  @GenModel(documentation="The list of task dependencies to be executed beforehand.")
+  ref TaskDependency[*] dependencies;
+  @GenModel(documentation="The list of tasks that depend on this task.")
+  derived ref TaskDependency[*] dependentTasks;
+    
+  @GenModel(documentation="Whether the task is enabled.")
+  attr Boolean enabled = "true";
+  @GenModel(documentation="Whether the task should be traced.")
+  attr Boolean traceable = "true";
+  @GenModel(documentation="Whether the task shall always be executed even when inputs do not change.")
+  attr Boolean alwaysExecute = "false";
+  
+  @GenModel(documentation="A condition that must be valid for the task to execute.")
+  transient attr EJavaObject guard;
+}
+@GenModel(documentation="An resource reference that may use aliases.")
+class ResourceReference {
+  @GenModel(documentation="The reference to an abstract resource.")
+  ref AbstractResource resource;
+  @GenModel(documentation="The list of aliases to be used.")
+  attr String[*] aliases;
+}
+@GenModel(documentation="A generic resource type.")
+class Resource extends AbstractResource {
+  attr Boolean declared = "true";
+}
+@GenModel(documentation="A derived resource type.")
+class DerivedResource extends AbstractResource {
+  @GenModel(documentation="The reference to generic resource.")
+  ref Resource reference;
+  @GenModel(documentation="The reference to generic resource.")
+  attr Boolean declared = "false";
+}
+@GenModel(documentation="A model resource type.")
+class ModelResource extends Resource {}
+
+@GenModel(documentation="An explicit task-task dependency")
+class TaskDependency {
+  @GenModel(documentation="The task")
+  ref Task task;
+  @GenModel(documentation="The task it dependends on")
+  ref Task dependsOn;
+  @GenModel(documentation="The type of their dependency")
+  attr String type;
+}
+
+@GenModel(documentation="A key value pair of properties.")
+class Property {
+  @GenModel(documentation="The specified property key.")
+  attr String key;
+  @GenModel(documentation="The specified property value.")
+  transient attr EJavaObject value;
+  @GenModel(documentation="The resolved property value.")
+  attr EJavaObject evaluatedValue;
+}
+

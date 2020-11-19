@@ -18,6 +18,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Resource Reference</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * An resource reference that may use aliases.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -35,6 +39,9 @@ public interface ResourceReference extends EObject {
 	 * Returns the value of the '<em><b>Resource</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The reference to an abstract resource.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resource</em>' reference.
 	 * @see #setResource(AbstractResource)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getResourceReference_Resource()
@@ -58,6 +65,9 @@ public interface ResourceReference extends EObject {
 	 * The list contents are of type {@link java.lang.String}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of aliases to be used.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Aliases</em>' attribute list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getResourceReference_Aliases()
 	 * @model

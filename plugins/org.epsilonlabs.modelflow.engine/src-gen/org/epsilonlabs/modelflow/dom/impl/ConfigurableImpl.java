@@ -37,6 +37,7 @@ import org.epsilonlabs.modelflow.dom.Property;
  * <ul>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl#getProperties <em>Properties</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl#getModuleElement <em>Module Element</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.impl.ConfigurableImpl#getDefinition <em>Definition</em>}</li>
  * </ul>
  *
  * @generated
@@ -70,6 +71,26 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 	 * @ordered
 	 */
 	protected Object moduleElement = MODULE_ELEMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefinition()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String DEFINITION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getDefinition() <em>Definition</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDefinition()
+	 * @generated
+	 * @ordered
+	 */
+	protected String definition = DEFINITION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -132,6 +153,29 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 	 * @generated
 	 */
 	@Override
+	public String getDefinition() {
+		return definition;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setDefinition(String newDefinition) {
+		String oldDefinition = definition;
+		definition = newDefinition;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, DomPackage.CONFIGURABLE__DEFINITION, oldDefinition, definition));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DomPackage.CONFIGURABLE__PROPERTIES:
@@ -152,6 +196,8 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 				return getProperties();
 			case DomPackage.CONFIGURABLE__MODULE_ELEMENT:
 				return getModuleElement();
+			case DomPackage.CONFIGURABLE__DEFINITION:
+				return getDefinition();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,6 +218,9 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 			case DomPackage.CONFIGURABLE__MODULE_ELEMENT:
 				setModuleElement(newValue);
 				return;
+			case DomPackage.CONFIGURABLE__DEFINITION:
+				setDefinition((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -190,6 +239,9 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 			case DomPackage.CONFIGURABLE__MODULE_ELEMENT:
 				setModuleElement(MODULE_ELEMENT_EDEFAULT);
 				return;
+			case DomPackage.CONFIGURABLE__DEFINITION:
+				setDefinition(DEFINITION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -206,6 +258,8 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 				return properties != null && !properties.isEmpty();
 			case DomPackage.CONFIGURABLE__MODULE_ELEMENT:
 				return MODULE_ELEMENT_EDEFAULT == null ? moduleElement != null : !MODULE_ELEMENT_EDEFAULT.equals(moduleElement);
+			case DomPackage.CONFIGURABLE__DEFINITION:
+				return DEFINITION_EDEFAULT == null ? definition != null : !DEFINITION_EDEFAULT.equals(definition);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -222,6 +276,8 @@ public abstract class ConfigurableImpl extends NamedImpl implements Configurable
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (moduleElement: ");
 		result.append(moduleElement);
+		result.append(", definition: ");
+		result.append(definition);
 		result.append(')');
 		return result.toString();
 	}
