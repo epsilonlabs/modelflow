@@ -16,6 +16,10 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Workflow</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * The workflow definition, container of tasks, resources and dependencies.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -23,7 +27,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.epsilonlabs.modelflow.dom.Workflow#getTasks <em>Tasks</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Workflow#getResources <em>Resources</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Workflow#getTaskDependencies <em>Task Dependencies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Workflow#getResourceDependencies <em>Resource Dependencies</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getWorkflow()
@@ -36,6 +39,9 @@ public interface Workflow extends Task {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.Task}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of contained tasks.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Tasks</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getWorkflow_Tasks()
 	 * @model containment="true"
@@ -48,6 +54,9 @@ public interface Workflow extends Task {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.AbstractResource}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of contained resources.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Resources</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getWorkflow_Resources()
 	 * @model containment="true"
@@ -60,23 +69,14 @@ public interface Workflow extends Task {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.TaskDependency}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of tasks interdependencies.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Task Dependencies</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getWorkflow_TaskDependencies()
 	 * @model containment="true"
 	 * @generated
 	 */
 	EList<TaskDependency> getTaskDependencies();
-
-	/**
-	 * Returns the value of the '<em><b>Resource Dependencies</b></em>' containment reference list.
-	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.ResourceDependency}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Resource Dependencies</em>' containment reference list.
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getWorkflow_ResourceDependencies()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<ResourceDependency> getResourceDependencies();
 
 } // Workflow

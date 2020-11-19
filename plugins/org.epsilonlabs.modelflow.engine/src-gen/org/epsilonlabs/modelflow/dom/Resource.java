@@ -14,41 +14,22 @@ package org.epsilonlabs.modelflow.dom;
  * A representation of the model object '<em><b>Resource</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A generic resource type.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Resource#getDefinition <em>Definition</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Resource#getDeclared <em>Declared</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getResource()
- * @model annotation="exeed classIcon='model' label='return \'Resource \' + self.name;'"
+ * @model
  * @generated
  */
 public interface Resource extends AbstractResource {
-	/**
-	 * Returns the value of the '<em><b>Definition</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Definition</em>' attribute.
-	 * @see #setDefinition(String)
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getResource_Definition()
-	 * @model
-	 * @generated
-	 */
-	String getDefinition();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.Resource#getDefinition <em>Definition</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Definition</em>' attribute.
-	 * @see #getDefinition()
-	 * @generated
-	 */
-	void setDefinition(String value);
-
 	/**
 	 * Returns the value of the '<em><b>Declared</b></em>' attribute.
 	 * The default value is <code>"true"</code>.

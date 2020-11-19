@@ -16,6 +16,10 @@ import org.eclipse.emf.common.util.EList;
  * A representation of the model object '<em><b>Task</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A task.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -24,7 +28,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getConsumes <em>Consumes</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getModifies <em>Modifies</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDependencies <em>Dependencies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDefinition <em>Definition</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getDependentTasks <em>Dependent Tasks</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getEnabled <em>Enabled</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getTraceable <em>Traceable</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.Task#getAlwaysExecute <em>Always Execute</em>}</li>
@@ -32,7 +36,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask()
- * @model annotation="exeed classIcon='operation' label='return self.name +\' (\'+  self.definition.parent.shortId + \':\' + self.definition.shortId + \')\';'"
+ * @model
  * @generated
  */
 public interface Task extends AbstractTask {
@@ -41,6 +45,9 @@ public interface Task extends AbstractTask {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.ResourceReference}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of resource references to be produced.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Produces</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Produces()
 	 * @model containment="true"
@@ -53,6 +60,9 @@ public interface Task extends AbstractTask {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.ResourceReference}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of resource references to be consumed.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Consumes</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Consumes()
 	 * @model containment="true"
@@ -65,6 +75,9 @@ public interface Task extends AbstractTask {
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.ResourceReference}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of resource references to be modified.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Modifies</em>' containment reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Modifies()
 	 * @model containment="true"
@@ -76,6 +89,9 @@ public interface Task extends AbstractTask {
 	 * Returns the value of the '<em><b>Guard</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * A condition that must be valid for the task to execute.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Guard</em>' attribute.
 	 * @see #setGuard(Object)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Guard()
@@ -95,32 +111,13 @@ public interface Task extends AbstractTask {
 	void setGuard(Object value);
 
 	/**
-	 * Returns the value of the '<em><b>Definition</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Definition</em>' attribute.
-	 * @see #setDefinition(String)
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Definition()
-	 * @model
-	 * @generated
-	 */
-	String getDefinition();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.Task#getDefinition <em>Definition</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Definition</em>' attribute.
-	 * @see #getDefinition()
-	 * @generated
-	 */
-	void setDefinition(String value);
-
-	/**
 	 * Returns the value of the '<em><b>Enabled</b></em>' attribute.
 	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Whether the task is enabled.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Enabled</em>' attribute.
 	 * @see #setEnabled(Boolean)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Enabled()
@@ -144,6 +141,9 @@ public interface Task extends AbstractTask {
 	 * The default value is <code>"true"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Whether the task should be traced.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Traceable</em>' attribute.
 	 * @see #setTraceable(Boolean)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Traceable()
@@ -167,6 +167,9 @@ public interface Task extends AbstractTask {
 	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * Whether the task shall always be executed even when inputs do not change.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Always Execute</em>' attribute.
 	 * @see #setAlwaysExecute(Boolean)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_AlwaysExecute()
@@ -188,15 +191,31 @@ public interface Task extends AbstractTask {
 	/**
 	 * Returns the value of the '<em><b>Dependencies</b></em>' reference list.
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.TaskDependency}.
-	 * It is bidirectional and its opposite is '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getBefore <em>Before</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of task dependencies to be executed beforehand.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Dependencies</em>' reference list.
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_Dependencies()
-	 * @see org.epsilonlabs.modelflow.dom.TaskDependency#getBefore
-	 * @model opposite="before"
+	 * @model
 	 * @generated
 	 */
 	EList<TaskDependency> getDependencies();
+
+	/**
+	 * Returns the value of the '<em><b>Dependent Tasks</b></em>' reference list.
+	 * The list contents are of type {@link org.epsilonlabs.modelflow.dom.TaskDependency}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The list of tasks that depend on this task.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Dependent Tasks</em>' reference list.
+	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTask_DependentTasks()
+	 * @model derived="true"
+	 * @generated
+	 */
+	EList<TaskDependency> getDependentTasks();
 
 } // Task

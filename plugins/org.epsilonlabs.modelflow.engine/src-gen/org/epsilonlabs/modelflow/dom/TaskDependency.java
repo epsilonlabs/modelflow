@@ -16,24 +16,81 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Task Dependency</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * An explicit task-task dependency
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.TaskDependency#getTask <em>Task</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.dom.TaskDependency#getDependsOn <em>Depends On</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.TaskDependency#getType <em>Type</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.TaskDependency#getBefore <em>Before</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.TaskDependency#getAfter <em>After</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency()
- * @model annotation="exeed classIcon='transition' label='return self.before.name + \' depends \' + self.after.name;'"
+ * @model
  * @generated
  */
 public interface TaskDependency extends EObject {
 	/**
+	 * Returns the value of the '<em><b>Task</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The task
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Task</em>' reference.
+	 * @see #setTask(Task)
+	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency_Task()
+	 * @model
+	 * @generated
+	 */
+	Task getTask();
+
+	/**
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getTask <em>Task</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Task</em>' reference.
+	 * @see #getTask()
+	 * @generated
+	 */
+	void setTask(Task value);
+
+	/**
+	 * Returns the value of the '<em><b>Depends On</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The task it dependends on
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Depends On</em>' reference.
+	 * @see #setDependsOn(Task)
+	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency_DependsOn()
+	 * @model
+	 * @generated
+	 */
+	Task getDependsOn();
+
+	/**
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getDependsOn <em>Depends On</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Depends On</em>' reference.
+	 * @see #getDependsOn()
+	 * @generated
+	 */
+	void setDependsOn(Task value);
+
+	/**
 	 * Returns the value of the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The type of their dependency
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Type</em>' attribute.
 	 * @see #setType(String)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency_Type()
@@ -51,51 +108,5 @@ public interface TaskDependency extends EObject {
 	 * @generated
 	 */
 	void setType(String value);
-
-	/**
-	 * Returns the value of the '<em><b>Before</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.epsilonlabs.modelflow.dom.Task#getDependencies <em>Dependencies</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Before</em>' reference.
-	 * @see #setBefore(Task)
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency_Before()
-	 * @see org.epsilonlabs.modelflow.dom.Task#getDependencies
-	 * @model opposite="dependencies"
-	 * @generated
-	 */
-	Task getBefore();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getBefore <em>Before</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Before</em>' reference.
-	 * @see #getBefore()
-	 * @generated
-	 */
-	void setBefore(Task value);
-
-	/**
-	 * Returns the value of the '<em><b>After</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>After</em>' reference.
-	 * @see #setAfter(Task)
-	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getTaskDependency_After()
-	 * @model
-	 * @generated
-	 */
-	Task getAfter();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getAfter <em>After</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>After</em>' reference.
-	 * @see #getAfter()
-	 * @generated
-	 */
-	void setAfter(Task value);
 
 } // TaskDependency

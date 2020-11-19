@@ -13,7 +13,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/tasks"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/resources"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/taskDependencies"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/resourceDependencies"/>
     </genClasses>
     <genClasses image="false" ecoreClass="modelflow.ecore#//Named">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Named/name"/>
@@ -21,6 +20,7 @@
     <genClasses image="false" ecoreClass="modelflow.ecore#//Configurable">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Configurable/properties"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Configurable/moduleElement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Configurable/definition"/>
     </genClasses>
     <genClasses image="false" ecoreClass="modelflow.ecore#//AbstractResource"/>
     <genClasses image="false" ecoreClass="modelflow.ecore#//AbstractTask"/>
@@ -29,7 +29,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/consumes"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/modifies"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/dependencies"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/definition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/dependentTasks"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/enabled"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/traceable"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/alwaysExecute"/>
@@ -40,7 +40,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//ResourceReference/aliases"/>
     </genClasses>
     <genClasses ecoreClass="modelflow.ecore#//Resource">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute modelflow.ecore#//Resource/definition"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Resource/declared"/>
     </genClasses>
     <genClasses ecoreClass="modelflow.ecore#//DerivedResource">
@@ -48,16 +47,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//DerivedResource/declared"/>
     </genClasses>
     <genClasses ecoreClass="modelflow.ecore#//ModelResource"/>
-    <genClasses ecoreClass="modelflow.ecore#//MetamodeResource"/>
     <genClasses ecoreClass="modelflow.ecore#//TaskDependency">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/task"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/dependsOn"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//TaskDependency/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/before"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/after"/>
-    </genClasses>
-    <genClasses ecoreClass="modelflow.ecore#//ResourceDependency">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//ResourceDependency/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//ResourceDependency/source"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//ResourceDependency/target"/>
     </genClasses>
     <genClasses ecoreClass="modelflow.ecore#//Property">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Property/key"/>

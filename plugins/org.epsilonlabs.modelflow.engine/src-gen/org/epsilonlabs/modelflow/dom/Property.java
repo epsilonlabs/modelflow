@@ -16,6 +16,10 @@ import org.eclipse.emf.ecore.EObject;
  * A representation of the model object '<em><b>Property</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A key value pair of properties.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -26,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getProperty()
- * @model annotation="exeed classIcon='parameter' label='\nvar optional = \'\';\nif (self.optional){\r\n\toptional = \'?\';\r\n} \nreturn self.key + optional +\' : \' + self.value;\n'"
+ * @model
  * @generated
  */
 public interface Property extends EObject {
@@ -34,6 +38,9 @@ public interface Property extends EObject {
 	 * Returns the value of the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The specified property key.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Key</em>' attribute.
 	 * @see #setKey(String)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getProperty_Key()
@@ -56,6 +63,9 @@ public interface Property extends EObject {
 	 * Returns the value of the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The specified property value.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
 	 * @see #setValue(Object)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getProperty_Value()
@@ -78,6 +88,9 @@ public interface Property extends EObject {
 	 * Returns the value of the '<em><b>Evaluated Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The resolved property value.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Evaluated Value</em>' attribute.
 	 * @see #setEvaluatedValue(Object)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getProperty_EvaluatedValue()

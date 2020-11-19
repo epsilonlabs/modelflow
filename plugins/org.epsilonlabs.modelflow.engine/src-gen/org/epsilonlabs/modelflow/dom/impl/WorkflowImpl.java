@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.epsilonlabs.modelflow.dom.AbstractResource;
 import org.epsilonlabs.modelflow.dom.DomPackage;
-import org.epsilonlabs.modelflow.dom.ResourceDependency;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.TaskDependency;
 import org.epsilonlabs.modelflow.dom.Workflow;
@@ -39,7 +38,6 @@ import org.epsilonlabs.modelflow.dom.Workflow;
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.WorkflowImpl#getTasks <em>Tasks</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.WorkflowImpl#getResources <em>Resources</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.dom.impl.WorkflowImpl#getTaskDependencies <em>Task Dependencies</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.dom.impl.WorkflowImpl#getResourceDependencies <em>Resource Dependencies</em>}</li>
  * </ul>
  *
  * @generated
@@ -74,16 +72,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 	 * @ordered
 	 */
 	protected EList<TaskDependency> taskDependencies;
-
-	/**
-	 * The cached value of the '{@link #getResourceDependencies() <em>Resource Dependencies</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getResourceDependencies()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<ResourceDependency> resourceDependencies;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -149,19 +137,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 	 * @generated
 	 */
 	@Override
-	public EList<ResourceDependency> getResourceDependencies() {
-		if (resourceDependencies == null) {
-			resourceDependencies = new EObjectContainmentEList<ResourceDependency>(ResourceDependency.class, this, DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES);
-		}
-		return resourceDependencies;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case DomPackage.WORKFLOW__TASKS:
@@ -170,8 +145,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 				return ((InternalEList<?>)getResources()).basicRemove(otherEnd, msgs);
 			case DomPackage.WORKFLOW__TASK_DEPENDENCIES:
 				return ((InternalEList<?>)getTaskDependencies()).basicRemove(otherEnd, msgs);
-			case DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES:
-				return ((InternalEList<?>)getResourceDependencies()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -190,8 +163,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 				return getResources();
 			case DomPackage.WORKFLOW__TASK_DEPENDENCIES:
 				return getTaskDependencies();
-			case DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES:
-				return getResourceDependencies();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -217,10 +188,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 				getTaskDependencies().clear();
 				getTaskDependencies().addAll((Collection<? extends TaskDependency>)newValue);
 				return;
-			case DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES:
-				getResourceDependencies().clear();
-				getResourceDependencies().addAll((Collection<? extends ResourceDependency>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -242,9 +209,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 			case DomPackage.WORKFLOW__TASK_DEPENDENCIES:
 				getTaskDependencies().clear();
 				return;
-			case DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES:
-				getResourceDependencies().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -263,8 +227,6 @@ public class WorkflowImpl extends TaskImpl implements Workflow {
 				return resources != null && !resources.isEmpty();
 			case DomPackage.WORKFLOW__TASK_DEPENDENCIES:
 				return taskDependencies != null && !taskDependencies.isEmpty();
-			case DomPackage.WORKFLOW__RESOURCE_DEPENDENCIES:
-				return resourceDependencies != null && !resourceDependencies.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

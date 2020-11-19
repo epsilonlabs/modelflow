@@ -69,9 +69,7 @@ public class DomFactoryImpl extends EFactoryImpl implements DomFactory {
 			case DomPackage.RESOURCE: return createResource();
 			case DomPackage.DERIVED_RESOURCE: return createDerivedResource();
 			case DomPackage.MODEL_RESOURCE: return createModelResource();
-			case DomPackage.METAMODE_RESOURCE: return createMetamodeResource();
 			case DomPackage.TASK_DEPENDENCY: return createTaskDependency();
-			case DomPackage.RESOURCE_DEPENDENCY: return createResourceDependency();
 			case DomPackage.PROPERTY: return createProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -150,31 +148,9 @@ public class DomFactoryImpl extends EFactoryImpl implements DomFactory {
 	 * @generated
 	 */
 	@Override
-	public MetamodeResource createMetamodeResource() {
-		MetamodeResourceImpl metamodeResource = new MetamodeResourceImpl();
-		return metamodeResource;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public TaskDependency createTaskDependency() {
 		TaskDependencyImpl taskDependency = new TaskDependencyImpl();
 		return taskDependency;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceDependency createResourceDependency() {
-		ResourceDependencyImpl resourceDependency = new ResourceDependencyImpl();
-		return resourceDependency;
 	}
 
 	/**

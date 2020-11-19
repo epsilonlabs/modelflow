@@ -15,6 +15,10 @@ package org.epsilonlabs.modelflow.dom;
  * A representation of the model object '<em><b>Derived Resource</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A derived resource type.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * </p>
@@ -24,7 +28,7 @@ package org.epsilonlabs.modelflow.dom;
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getDerivedResource()
- * @model annotation="exeed classIcon='text' label='return \'Derived resource \' + self.name;'"
+ * @model
  * @generated
  */
 public interface DerivedResource extends AbstractResource {
@@ -32,6 +36,9 @@ public interface DerivedResource extends AbstractResource {
 	 * Returns the value of the '<em><b>Reference</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The reference to generic resource.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Reference</em>' reference.
 	 * @see #setReference(Resource)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getDerivedResource_Reference()
@@ -55,6 +62,9 @@ public interface DerivedResource extends AbstractResource {
 	 * The default value is <code>"false"</code>.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * <!-- begin-model-doc -->
+	 * The reference to generic resource.
+	 * <!-- end-model-doc -->
 	 * @return the value of the '<em>Declared</em>' attribute.
 	 * @see #setDeclared(Boolean)
 	 * @see org.epsilonlabs.modelflow.dom.DomPackage#getDerivedResource_Declared()

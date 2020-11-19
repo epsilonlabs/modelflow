@@ -22,12 +22,10 @@ import org.epsilonlabs.modelflow.dom.Configurable;
 import org.epsilonlabs.modelflow.dom.DerivedResource;
 import org.epsilonlabs.modelflow.dom.DomFactory;
 import org.epsilonlabs.modelflow.dom.DomPackage;
-import org.epsilonlabs.modelflow.dom.MetamodeResource;
 import org.epsilonlabs.modelflow.dom.ModelResource;
 import org.epsilonlabs.modelflow.dom.Named;
 import org.epsilonlabs.modelflow.dom.Property;
 import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.ResourceDependency;
 import org.epsilonlabs.modelflow.dom.ResourceReference;
 import org.epsilonlabs.modelflow.dom.Task;
 import org.epsilonlabs.modelflow.dom.TaskDependency;
@@ -115,21 +113,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass metamodeResourceEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass taskDependencyEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass resourceDependencyEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -245,16 +229,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getWorkflow_ResourceDependencies() {
-		return (EReference)workflowEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getNamed() {
 		return namedEClass;
 	}
@@ -297,6 +271,16 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	@Override
 	public EAttribute getConfigurable_ModuleElement() {
 		return (EAttribute)configurableEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getConfigurable_Definition() {
+		return (EAttribute)configurableEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -375,16 +359,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTask_Definition() {
-		return (EAttribute)taskEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getTask_Enabled() {
 		return (EAttribute)taskEClass.getEStructuralFeatures().get(5);
 	}
@@ -417,6 +391,16 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	@Override
 	public EReference getTask_Dependencies() {
 		return (EReference)taskEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getTask_DependentTasks() {
+		return (EReference)taskEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -465,18 +449,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getResource_Definition() {
-		return (EAttribute)resourceEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getResource_Declared() {
-		return (EAttribute)resourceEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)resourceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -525,16 +499,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EClass getMetamodeResource() {
-		return metamodeResourceEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getTaskDependency() {
 		return taskDependencyEClass;
 	}
@@ -545,8 +509,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EAttribute getTaskDependency_Type() {
-		return (EAttribute)taskDependencyEClass.getEStructuralFeatures().get(0);
+	public EReference getTaskDependency_Task() {
+		return (EReference)taskDependencyEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -555,7 +519,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getTaskDependency_Before() {
+	public EReference getTaskDependency_DependsOn() {
 		return (EReference)taskDependencyEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -565,48 +529,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getTaskDependency_After() {
-		return (EReference)taskDependencyEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getResourceDependency() {
-		return resourceDependencyEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getResourceDependency_Type() {
-		return (EAttribute)resourceDependencyEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getResourceDependency_Source() {
-		return (EReference)resourceDependencyEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getResourceDependency_Target() {
-		return (EReference)resourceDependencyEClass.getEStructuralFeatures().get(2);
+	public EAttribute getTaskDependency_Type() {
+		return (EAttribute)taskDependencyEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -682,7 +606,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		createEReference(workflowEClass, WORKFLOW__TASKS);
 		createEReference(workflowEClass, WORKFLOW__RESOURCES);
 		createEReference(workflowEClass, WORKFLOW__TASK_DEPENDENCIES);
-		createEReference(workflowEClass, WORKFLOW__RESOURCE_DEPENDENCIES);
 
 		namedEClass = createEClass(NAMED);
 		createEAttribute(namedEClass, NAMED__NAME);
@@ -690,6 +613,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		configurableEClass = createEClass(CONFIGURABLE);
 		createEReference(configurableEClass, CONFIGURABLE__PROPERTIES);
 		createEAttribute(configurableEClass, CONFIGURABLE__MODULE_ELEMENT);
+		createEAttribute(configurableEClass, CONFIGURABLE__DEFINITION);
 
 		abstractResourceEClass = createEClass(ABSTRACT_RESOURCE);
 
@@ -700,7 +624,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		createEReference(taskEClass, TASK__CONSUMES);
 		createEReference(taskEClass, TASK__MODIFIES);
 		createEReference(taskEClass, TASK__DEPENDENCIES);
-		createEAttribute(taskEClass, TASK__DEFINITION);
+		createEReference(taskEClass, TASK__DEPENDENT_TASKS);
 		createEAttribute(taskEClass, TASK__ENABLED);
 		createEAttribute(taskEClass, TASK__TRACEABLE);
 		createEAttribute(taskEClass, TASK__ALWAYS_EXECUTE);
@@ -711,7 +635,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		createEAttribute(resourceReferenceEClass, RESOURCE_REFERENCE__ALIASES);
 
 		resourceEClass = createEClass(RESOURCE);
-		createEAttribute(resourceEClass, RESOURCE__DEFINITION);
 		createEAttribute(resourceEClass, RESOURCE__DECLARED);
 
 		derivedResourceEClass = createEClass(DERIVED_RESOURCE);
@@ -720,17 +643,10 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		modelResourceEClass = createEClass(MODEL_RESOURCE);
 
-		metamodeResourceEClass = createEClass(METAMODE_RESOURCE);
-
 		taskDependencyEClass = createEClass(TASK_DEPENDENCY);
+		createEReference(taskDependencyEClass, TASK_DEPENDENCY__TASK);
+		createEReference(taskDependencyEClass, TASK_DEPENDENCY__DEPENDS_ON);
 		createEAttribute(taskDependencyEClass, TASK_DEPENDENCY__TYPE);
-		createEReference(taskDependencyEClass, TASK_DEPENDENCY__BEFORE);
-		createEReference(taskDependencyEClass, TASK_DEPENDENCY__AFTER);
-
-		resourceDependencyEClass = createEClass(RESOURCE_DEPENDENCY);
-		createEAttribute(resourceDependencyEClass, RESOURCE_DEPENDENCY__TYPE);
-		createEReference(resourceDependencyEClass, RESOURCE_DEPENDENCY__SOURCE);
-		createEReference(resourceDependencyEClass, RESOURCE_DEPENDENCY__TARGET);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__KEY);
@@ -774,14 +690,12 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		resourceEClass.getESuperTypes().add(this.getAbstractResource());
 		derivedResourceEClass.getESuperTypes().add(this.getAbstractResource());
 		modelResourceEClass.getESuperTypes().add(this.getResource());
-		metamodeResourceEClass.getESuperTypes().add(this.getResource());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(workflowEClass, Workflow.class, "Workflow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getWorkflow_Tasks(), this.getTask(), null, "tasks", null, 0, -1, Workflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getWorkflow_Resources(), this.getAbstractResource(), null, "resources", null, 0, -1, Workflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getWorkflow_TaskDependencies(), this.getTaskDependency(), null, "taskDependencies", null, 0, -1, Workflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWorkflow_ResourceDependencies(), this.getResourceDependency(), null, "resourceDependencies", null, 0, -1, Workflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(namedEClass, Named.class, "Named", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getNamed_Name(), ecorePackage.getEString(), "name", null, 0, 1, Named.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -789,6 +703,7 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		initEClass(configurableEClass, Configurable.class, "Configurable", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getConfigurable_Properties(), this.getProperty(), null, "properties", null, 0, -1, Configurable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getConfigurable_ModuleElement(), ecorePackage.getEJavaObject(), "moduleElement", null, 0, 1, Configurable.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getConfigurable_Definition(), ecorePackage.getEString(), "definition", null, 0, 1, Configurable.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(abstractResourceEClass, AbstractResource.class, "AbstractResource", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -798,8 +713,8 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		initEReference(getTask_Produces(), this.getResourceReference(), null, "produces", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTask_Consumes(), this.getResourceReference(), null, "consumes", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTask_Modifies(), this.getResourceReference(), null, "modifies", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTask_Dependencies(), this.getTaskDependency(), this.getTaskDependency_Before(), "dependencies", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getTask_Definition(), ecorePackage.getEString(), "definition", null, 0, 1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTask_Dependencies(), this.getTaskDependency(), null, "dependencies", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTask_DependentTasks(), this.getTaskDependency(), null, "dependentTasks", null, 0, -1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTask_Enabled(), ecorePackage.getEBooleanObject(), "enabled", "true", 0, 1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTask_Traceable(), ecorePackage.getEBooleanObject(), "traceable", "true", 0, 1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTask_AlwaysExecute(), ecorePackage.getEBooleanObject(), "alwaysExecute", "false", 0, 1, Task.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -810,7 +725,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 		initEAttribute(getResourceReference_Aliases(), ecorePackage.getEString(), "aliases", null, 0, -1, ResourceReference.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceEClass, Resource.class, "Resource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getResource_Definition(), ecorePackage.getEString(), "definition", null, 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getResource_Declared(), ecorePackage.getEBooleanObject(), "declared", "true", 0, 1, Resource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(derivedResourceEClass, DerivedResource.class, "DerivedResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -819,17 +733,10 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		initEClass(modelResourceEClass, ModelResource.class, "ModelResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
-		initEClass(metamodeResourceEClass, MetamodeResource.class, "MetamodeResource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-
 		initEClass(taskDependencyEClass, TaskDependency.class, "TaskDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getTaskDependency_Task(), this.getTask(), null, "task", null, 0, 1, TaskDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getTaskDependency_DependsOn(), this.getTask(), null, "dependsOn", null, 0, 1, TaskDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTaskDependency_Type(), ecorePackage.getEString(), "type", null, 0, 1, TaskDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTaskDependency_Before(), this.getTask(), this.getTask_Dependencies(), "before", null, 0, 1, TaskDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTaskDependency_After(), this.getTask(), null, "after", null, 0, 1, TaskDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(resourceDependencyEClass, ResourceDependency.class, "ResourceDependency", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getResourceDependency_Type(), ecorePackage.getEString(), "type", null, 0, 1, ResourceDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResourceDependency_Source(), this.getAbstractResource(), null, "source", null, 0, 1, ResourceDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getResourceDependency_Target(), this.getAbstractResource(), null, "target", null, 0, 1, ResourceDependency.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -838,76 +745,6 @@ public class DomPackageImpl extends EPackageImpl implements DomPackage {
 
 		// Create resource
 		createResource(eNS_URI);
-
-		// Create annotations
-		// exeed
-		createExeedAnnotations();
-	}
-
-	/**
-	 * Initializes the annotations for <b>exeed</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createExeedAnnotations() {
-		String source = "exeed";
-		addAnnotation
-		  (taskEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "operation",
-			   "label", "return self.name +\' (\'+  self.definition.parent.shortId + \':\' + self.definition.shortId + \')\';"
-		   });
-		addAnnotation
-		  (resourceEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "model",
-			   "label", "return \'Resource \' + self.name;"
-		   });
-		addAnnotation
-		  (derivedResourceEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "text",
-			   "label", "return \'Derived resource \' + self.name;"
-		   });
-		addAnnotation
-		  (modelResourceEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "model",
-			   "label", "\nvar l = \'Model \' + self.name; \nif (self.definition.isDefined()){\r\n\tl = l +\' (\'+  self.definition.parent.shortId + \':\' + self.definition.shortId +\')\'; \r\n}\nif (self.conformsTo.isDefined()){\r\n\tl = l + \' conforms to \' + self.conformsTo.name;\n\t/*if (self.conformsTo.parent.isDefined()){\r\n\t\tl = l +\'(\' + self.conformsTo.definition.parent.shortId + \':\' + self.conformsTo.definition.shortId + \')\';\r\n\t} */\r\n}\nreturn l;\n"
-		   });
-		addAnnotation
-		  (metamodeResourceEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "emfmodel",
-			   "label", "return \'Metamodel \' + self.name;"
-		   });
-		addAnnotation
-		  (taskDependencyEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "transition",
-			   "label", "return self.before.name + \' depends \' + self.after.name;"
-		   });
-		addAnnotation
-		  (resourceDependencyEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "transition",
-			   "label", "return self.source.name + \' depends \' + self.target.name;"
-		   });
-		addAnnotation
-		  (propertyEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "parameter",
-			   "label", "\nvar optional = \'\';\nif (self.optional){\r\n\toptional = \'?\';\r\n} \nreturn self.key + optional +\' : \' + self.value;\n"
-		   });
 	}
 
 } //DomPackageImpl

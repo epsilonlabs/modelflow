@@ -83,15 +83,6 @@ public interface DomFactory extends EFactory {
 	ModelResource createModelResource();
 
 	/**
-	 * Returns a new object of class '<em>Metamode Resource</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Metamode Resource</em>'.
-	 * @generated
-	 */
-	MetamodeResource createMetamodeResource();
-
-	/**
 	 * Returns a new object of class '<em>Task Dependency</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -99,15 +90,6 @@ public interface DomFactory extends EFactory {
 	 * @generated
 	 */
 	TaskDependency createTaskDependency();
-
-	/**
-	 * Returns a new object of class '<em>Resource Dependency</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Resource Dependency</em>'.
-	 * @generated
-	 */
-	ResourceDependency createResourceDependency();
 
 	/**
 	 * Returns a new object of class '<em>Property</em>'.

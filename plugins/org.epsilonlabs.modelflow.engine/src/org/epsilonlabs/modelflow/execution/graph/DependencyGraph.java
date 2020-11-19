@@ -52,7 +52,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		Workflow workflow = ctx.getModule().getWorkflow();
 		workflow.getResources().forEach(r -> this.addResource(r, ctx));
 		workflow.getTasks().forEach(t -> this.addTask(t, ctx));
-		workflow.getResourceDependencies().forEach(this::addResourceDependencies);
+		//workflow.getResourceDependencies().forEach(this::addResourceDependencies);
 		workflow.getTaskDependencies().forEach(this::addTaskDependencies);
 		processImplicitResources(workflow);
 		updateStatus(GraphState.POPULATED);
@@ -109,9 +109,9 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 
 	protected void addTaskDependencies(TaskDependency d) {
 		// Source Node that requires this dependency
-		ITaskNode node = getTask(d.getAfter());
+		ITaskNode node = getTask(d.getTask());
 		// Dependency
-		ITaskNode dependency = getTask(d.getBefore());
+		ITaskNode dependency = getTask(d.getDependsOn());
 		// source (node) --(dependsOn)--> target (dependency)
 		getGraph().addEdge(node, dependency, new DependencyEdge(DependencyEdge.Kind.TASK));
 	}

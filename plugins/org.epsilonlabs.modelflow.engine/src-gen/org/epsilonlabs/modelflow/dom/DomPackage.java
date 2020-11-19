@@ -138,13 +138,22 @@ public interface DomPackage extends EPackage {
 	int CONFIGURABLE__MODULE_ELEMENT = NAMED_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONFIGURABLE__DEFINITION = NAMED_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Configurable</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONFIGURABLE_FEATURE_COUNT = NAMED_FEATURE_COUNT + 2;
+	int CONFIGURABLE_FEATURE_COUNT = NAMED_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Configurable</em>' class.
@@ -191,6 +200,15 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int ABSTRACT_TASK__MODULE_ELEMENT = CONFIGURABLE__MODULE_ELEMENT;
+
+	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_TASK__DEFINITION = CONFIGURABLE__DEFINITION;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Task</em>' class.
@@ -248,6 +266,15 @@ public interface DomPackage extends EPackage {
 	int TASK__MODULE_ELEMENT = ABSTRACT_TASK__MODULE_ELEMENT;
 
 	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK__DEFINITION = ABSTRACT_TASK__DEFINITION;
+
+	/**
 	 * The feature id for the '<em><b>Produces</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -284,13 +311,13 @@ public interface DomPackage extends EPackage {
 	int TASK__DEPENDENCIES = ABSTRACT_TASK_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * The feature id for the '<em><b>Dependent Tasks</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK__DEFINITION = ABSTRACT_TASK_FEATURE_COUNT + 4;
+	int TASK__DEPENDENT_TASKS = ABSTRACT_TASK_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -384,6 +411,15 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__MODULE_ELEMENT = TASK__MODULE_ELEMENT;
 
 	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW__DEFINITION = TASK__DEFINITION;
+
+	/**
 	 * The feature id for the '<em><b>Produces</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -420,13 +456,13 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__DEPENDENCIES = TASK__DEPENDENCIES;
 
 	/**
-	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * The feature id for the '<em><b>Dependent Tasks</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW__DEFINITION = TASK__DEFINITION;
+	int WORKFLOW__DEPENDENT_TASKS = TASK__DEPENDENT_TASKS;
 
 	/**
 	 * The feature id for the '<em><b>Enabled</b></em>' attribute.
@@ -492,22 +528,13 @@ public interface DomPackage extends EPackage {
 	int WORKFLOW__TASK_DEPENDENCIES = TASK_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Resource Dependencies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WORKFLOW__RESOURCE_DEPENDENCIES = TASK_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Workflow</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW_FEATURE_COUNT = TASK_FEATURE_COUNT + 4;
+	int WORKFLOW_FEATURE_COUNT = TASK_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Workflow</em>' class.
@@ -554,6 +581,15 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int ABSTRACT_RESOURCE__MODULE_ELEMENT = CONFIGURABLE__MODULE_ELEMENT;
+
+	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABSTRACT_RESOURCE__DEFINITION = CONFIGURABLE__DEFINITION;
 
 	/**
 	 * The number of structural features of the '<em>Abstract Resource</em>' class.
@@ -663,7 +699,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DEFINITION = ABSTRACT_RESOURCE_FEATURE_COUNT + 0;
+	int RESOURCE__DEFINITION = ABSTRACT_RESOURCE__DEFINITION;
 
 	/**
 	 * The feature id for the '<em><b>Declared</b></em>' attribute.
@@ -672,7 +708,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE__DECLARED = ABSTRACT_RESOURCE_FEATURE_COUNT + 1;
+	int RESOURCE__DECLARED = ABSTRACT_RESOURCE_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Resource</em>' class.
@@ -681,7 +717,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_FEATURE_COUNT = ABSTRACT_RESOURCE_FEATURE_COUNT + 2;
+	int RESOURCE_FEATURE_COUNT = ABSTRACT_RESOURCE_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Resource</em>' class.
@@ -728,6 +764,15 @@ public interface DomPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_RESOURCE__MODULE_ELEMENT = ABSTRACT_RESOURCE__MODULE_ELEMENT;
+
+	/**
+	 * The feature id for the '<em><b>Definition</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_RESOURCE__DEFINITION = ABSTRACT_RESOURCE__DEFINITION;
 
 	/**
 	 * The feature id for the '<em><b>Reference</b></em>' reference.
@@ -839,79 +884,6 @@ public interface DomPackage extends EPackage {
 	int MODEL_RESOURCE_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.MetamodeResourceImpl <em>Metamode Resource</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.dom.impl.MetamodeResourceImpl
-	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getMetamodeResource()
-	 * @generated
-	 */
-	int METAMODE_RESOURCE = 10;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE__NAME = RESOURCE__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE__PROPERTIES = RESOURCE__PROPERTIES;
-
-	/**
-	 * The feature id for the '<em><b>Module Element</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE__MODULE_ELEMENT = RESOURCE__MODULE_ELEMENT;
-
-	/**
-	 * The feature id for the '<em><b>Definition</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE__DEFINITION = RESOURCE__DEFINITION;
-
-	/**
-	 * The feature id for the '<em><b>Declared</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE__DECLARED = RESOURCE__DECLARED;
-
-	/**
-	 * The number of structural features of the '<em>Metamode Resource</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE_FEATURE_COUNT = RESOURCE_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of operations of the '<em>Metamode Resource</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int METAMODE_RESOURCE_OPERATION_COUNT = RESOURCE_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.TaskDependencyImpl <em>Task Dependency</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -919,7 +891,25 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getTaskDependency()
 	 * @generated
 	 */
-	int TASK_DEPENDENCY = 11;
+	int TASK_DEPENDENCY = 10;
+
+	/**
+	 * The feature id for the '<em><b>Task</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DEPENDENCY__TASK = 0;
+
+	/**
+	 * The feature id for the '<em><b>Depends On</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_DEPENDENCY__DEPENDS_ON = 1;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' attribute.
@@ -928,25 +918,7 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_DEPENDENCY__TYPE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Before</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TASK_DEPENDENCY__BEFORE = 1;
-
-	/**
-	 * The feature id for the '<em><b>After</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TASK_DEPENDENCY__AFTER = 2;
+	int TASK_DEPENDENCY__TYPE = 2;
 
 	/**
 	 * The number of structural features of the '<em>Task Dependency</em>' class.
@@ -967,61 +939,6 @@ public interface DomPackage extends EPackage {
 	int TASK_DEPENDENCY_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.ResourceDependencyImpl <em>Resource Dependency</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.dom.impl.ResourceDependencyImpl
-	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getResourceDependency()
-	 * @generated
-	 */
-	int RESOURCE_DEPENDENCY = 12;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_DEPENDENCY__TYPE = 0;
-
-	/**
-	 * The feature id for the '<em><b>Source</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_DEPENDENCY__SOURCE = 1;
-
-	/**
-	 * The feature id for the '<em><b>Target</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_DEPENDENCY__TARGET = 2;
-
-	/**
-	 * The number of structural features of the '<em>Resource Dependency</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_DEPENDENCY_FEATURE_COUNT = 3;
-
-	/**
-	 * The number of operations of the '<em>Resource Dependency</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int RESOURCE_DEPENDENCY_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.dom.impl.PropertyImpl <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1029,7 +946,7 @@ public interface DomPackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 13;
+	int PROPERTY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -1121,17 +1038,6 @@ public interface DomPackage extends EPackage {
 	EReference getWorkflow_TaskDependencies();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.dom.Workflow#getResourceDependencies <em>Resource Dependencies</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Resource Dependencies</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.Workflow#getResourceDependencies()
-	 * @see #getWorkflow()
-	 * @generated
-	 */
-	EReference getWorkflow_ResourceDependencies();
-
-	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.Named <em>Named</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1183,6 +1089,17 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getConfigurable_ModuleElement();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Configurable#getDefinition <em>Definition</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Definition</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Configurable#getDefinition()
+	 * @see #getConfigurable()
+	 * @generated
+	 */
+	EAttribute getConfigurable_Definition();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.AbstractResource <em>Abstract Resource</em>}'.
@@ -1259,17 +1176,6 @@ public interface DomPackage extends EPackage {
 	EAttribute getTask_Guard();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Task#getDefinition <em>Definition</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Definition</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.Task#getDefinition()
-	 * @see #getTask()
-	 * @generated
-	 */
-	EAttribute getTask_Definition();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Task#getEnabled <em>Enabled</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1314,6 +1220,17 @@ public interface DomPackage extends EPackage {
 	EReference getTask_Dependencies();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.epsilonlabs.modelflow.dom.Task#getDependentTasks <em>Dependent Tasks</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Dependent Tasks</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.Task#getDependentTasks()
+	 * @see #getTask()
+	 * @generated
+	 */
+	EReference getTask_DependentTasks();
+
+	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.ResourceReference <em>Resource Reference</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1354,17 +1271,6 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getResource();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Resource#getDefinition <em>Definition</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Definition</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.Resource#getDefinition()
-	 * @see #getResource()
-	 * @generated
-	 */
-	EAttribute getResource_Definition();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.Resource#getDeclared <em>Declared</em>}'.
@@ -1420,16 +1326,6 @@ public interface DomPackage extends EPackage {
 	EClass getModelResource();
 
 	/**
-	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.MetamodeResource <em>Metamode Resource</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Metamode Resource</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.MetamodeResource
-	 * @generated
-	 */
-	EClass getMetamodeResource();
-
-	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.TaskDependency <em>Task Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1438,6 +1334,28 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getTaskDependency();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getTask <em>Task</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Task</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.TaskDependency#getTask()
+	 * @see #getTaskDependency()
+	 * @generated
+	 */
+	EReference getTaskDependency_Task();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getDependsOn <em>Depends On</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Depends On</em>'.
+	 * @see org.epsilonlabs.modelflow.dom.TaskDependency#getDependsOn()
+	 * @see #getTaskDependency()
+	 * @generated
+	 */
+	EReference getTaskDependency_DependsOn();
 
 	/**
 	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getType <em>Type</em>}'.
@@ -1449,71 +1367,6 @@ public interface DomPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getTaskDependency_Type();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getBefore <em>Before</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Before</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.TaskDependency#getBefore()
-	 * @see #getTaskDependency()
-	 * @generated
-	 */
-	EReference getTaskDependency_Before();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.TaskDependency#getAfter <em>After</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>After</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.TaskDependency#getAfter()
-	 * @see #getTaskDependency()
-	 * @generated
-	 */
-	EReference getTaskDependency_After();
-
-	/**
-	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.ResourceDependency <em>Resource Dependency</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Resource Dependency</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency
-	 * @generated
-	 */
-	EClass getResourceDependency();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.dom.ResourceDependency#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency#getType()
-	 * @see #getResourceDependency()
-	 * @generated
-	 */
-	EAttribute getResourceDependency_Type();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.ResourceDependency#getSource <em>Source</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Source</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency#getSource()
-	 * @see #getResourceDependency()
-	 * @generated
-	 */
-	EReference getResourceDependency_Source();
-
-	/**
-	 * Returns the meta object for the reference '{@link org.epsilonlabs.modelflow.dom.ResourceDependency#getTarget <em>Target</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Target</em>'.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency#getTarget()
-	 * @see #getResourceDependency()
-	 * @generated
-	 */
-	EReference getResourceDependency_Target();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.dom.Property <em>Property</em>}'.
@@ -1616,14 +1469,6 @@ public interface DomPackage extends EPackage {
 		EReference WORKFLOW__TASK_DEPENDENCIES = eINSTANCE.getWorkflow_TaskDependencies();
 
 		/**
-		 * The meta object literal for the '<em><b>Resource Dependencies</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference WORKFLOW__RESOURCE_DEPENDENCIES = eINSTANCE.getWorkflow_ResourceDependencies();
-
-		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.NamedImpl <em>Named</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1666,6 +1511,14 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONFIGURABLE__MODULE_ELEMENT = eINSTANCE.getConfigurable_ModuleElement();
+
+		/**
+		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONFIGURABLE__DEFINITION = eINSTANCE.getConfigurable_Definition();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.AbstractResourceImpl <em>Abstract Resource</em>}' class.
@@ -1730,14 +1583,6 @@ public interface DomPackage extends EPackage {
 		EAttribute TASK__GUARD = eINSTANCE.getTask_Guard();
 
 		/**
-		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute TASK__DEFINITION = eINSTANCE.getTask_Definition();
-
-		/**
 		 * The meta object literal for the '<em><b>Enabled</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1768,6 +1613,14 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TASK__DEPENDENCIES = eINSTANCE.getTask_Dependencies();
+
+		/**
+		 * The meta object literal for the '<em><b>Dependent Tasks</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TASK__DEPENDENT_TASKS = eINSTANCE.getTask_DependentTasks();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.ResourceReferenceImpl <em>Resource Reference</em>}' class.
@@ -1804,14 +1657,6 @@ public interface DomPackage extends EPackage {
 		 * @generated
 		 */
 		EClass RESOURCE = eINSTANCE.getResource();
-
-		/**
-		 * The meta object literal for the '<em><b>Definition</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RESOURCE__DEFINITION = eINSTANCE.getResource_Definition();
 
 		/**
 		 * The meta object literal for the '<em><b>Declared</b></em>' attribute feature.
@@ -1858,16 +1703,6 @@ public interface DomPackage extends EPackage {
 		EClass MODEL_RESOURCE = eINSTANCE.getModelResource();
 
 		/**
-		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.MetamodeResourceImpl <em>Metamode Resource</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.epsilonlabs.modelflow.dom.impl.MetamodeResourceImpl
-		 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getMetamodeResource()
-		 * @generated
-		 */
-		EClass METAMODE_RESOURCE = eINSTANCE.getMetamodeResource();
-
-		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.TaskDependencyImpl <em>Task Dependency</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1878,62 +1713,28 @@ public interface DomPackage extends EPackage {
 		EClass TASK_DEPENDENCY = eINSTANCE.getTaskDependency();
 
 		/**
+		 * The meta object literal for the '<em><b>Task</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TASK_DEPENDENCY__TASK = eINSTANCE.getTaskDependency_Task();
+
+		/**
+		 * The meta object literal for the '<em><b>Depends On</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TASK_DEPENDENCY__DEPENDS_ON = eINSTANCE.getTaskDependency_DependsOn();
+
+		/**
 		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute TASK_DEPENDENCY__TYPE = eINSTANCE.getTaskDependency_Type();
-
-		/**
-		 * The meta object literal for the '<em><b>Before</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TASK_DEPENDENCY__BEFORE = eINSTANCE.getTaskDependency_Before();
-
-		/**
-		 * The meta object literal for the '<em><b>After</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TASK_DEPENDENCY__AFTER = eINSTANCE.getTaskDependency_After();
-
-		/**
-		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.ResourceDependencyImpl <em>Resource Dependency</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.epsilonlabs.modelflow.dom.impl.ResourceDependencyImpl
-		 * @see org.epsilonlabs.modelflow.dom.impl.DomPackageImpl#getResourceDependency()
-		 * @generated
-		 */
-		EClass RESOURCE_DEPENDENCY = eINSTANCE.getResourceDependency();
-
-		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute RESOURCE_DEPENDENCY__TYPE = eINSTANCE.getResourceDependency_Type();
-
-		/**
-		 * The meta object literal for the '<em><b>Source</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESOURCE_DEPENDENCY__SOURCE = eINSTANCE.getResourceDependency_Source();
-
-		/**
-		 * The meta object literal for the '<em><b>Target</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESOURCE_DEPENDENCY__TARGET = eINSTANCE.getResourceDependency_Target();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.dom.impl.PropertyImpl <em>Property</em>}' class.

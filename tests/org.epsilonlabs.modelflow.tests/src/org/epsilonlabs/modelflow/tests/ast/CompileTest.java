@@ -213,8 +213,8 @@ public class CompileTest extends AbstractParsingTest {
 			EList<TaskDependency> dependencies = w.getTaskDependencies();
 			assertTrue("One dependency", dependencies.size()==1);
 			TaskDependency dep = dependencies.get(0);
-			assertTrue("Task1 should be before", dep.getBefore().getName().equals("Task1"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			assertTrue("Task1 should be before", dep.getDependsOn().getName().equals("Task1"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			return true;
 		};
 	}
@@ -227,11 +227,11 @@ public class CompileTest extends AbstractParsingTest {
 			EList<TaskDependency> dependencies = w.getTaskDependencies();
 			assertTrue("Two dependencies expected", dependencies.size()==2);
 			TaskDependency dep = dependencies.get(0);
-			assertTrue("Task1 should be before", dep.getBefore().getName().equals("Task1"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			assertTrue("Task1 should be before", dep.getDependsOn().getName().equals("Task1"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			dep = dependencies.get(1);
-			assertTrue("Task3 should be before", dep.getBefore().getName().equals("Task3"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			assertTrue("Task3 should be before", dep.getDependsOn().getName().equals("Task3"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			return true;
 		};
 	}

@@ -15,9 +15,13 @@ package org.epsilonlabs.modelflow.dom;
  * A representation of the model object '<em><b>Model Resource</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * A model resource type.
+ * <!-- end-model-doc -->
+ *
  *
  * @see org.epsilonlabs.modelflow.dom.DomPackage#getModelResource()
- * @model annotation="exeed classIcon='model' label='\nvar l = \'Model \' + self.name; \nif (self.definition.isDefined()){\r\n\tl = l +\' (\'+  self.definition.parent.shortId + \':\' + self.definition.shortId +\')\'; \r\n}\nif (self.conformsTo.isDefined()){\r\n\tl = l + \' conforms to \' + self.conformsTo.name;\n\t/*if (self.conformsTo.parent.isDefined()){\r\n\t\tl = l +\'(\' + self.conformsTo.definition.parent.shortId + \':\' + self.conformsTo.definition.shortId + \')\';\r\n\t} \052/\r\n}\nreturn l;\n'"
+ * @model
  * @generated
  */
 public interface ModelResource extends Resource {
