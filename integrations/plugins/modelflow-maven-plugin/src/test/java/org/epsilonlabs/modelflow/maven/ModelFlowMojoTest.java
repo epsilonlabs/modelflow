@@ -12,14 +12,12 @@ import java.util.Properties;
 
 import org.apache.maven.Maven;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ResolutionErrorHandler;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequestPopulator;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.plugin.testing.AbstractMojoTestCase;
 import org.apache.maven.repository.RepositorySystem;
-import org.codehaus.plexus.PlexusContainer;
 
 /**
  * @author Betty Sanchez
@@ -35,18 +33,14 @@ public class ModelFlowMojoTest extends AbstractMojoTestCase {
 	protected void setUp() throws Exception {
 		this.maven = lookup(Maven.class);
 		this.requestPopulator = lookup(MavenExecutionRequestPopulator.class);
-		this.mojo = new ModelFlowMojo();
-		this.mojo.repositorySystem = lookup(RepositorySystem.class);
-		this.mojo.resolutionErrorHandler = lookup(ResolutionErrorHandler.class);
-		
-		final PlexusContainer container = getContainer();
-		
+		this.mojo = new ModelFlowMojo();	
 	}
 
 	public void testUnitExecution() throws Exception {
 		this.mojo.endToEnd = false;
 		this.mojo.src = Paths.get(System.getProperty("user.dir"),"src/test/resources/org/epsilonlabs/modelflow/maven/test.mflow").toFile().getAbsoluteFile();
 		this.mojo.execute();
+		
 	}
 	
 	public void testIntegrationExecution() throws Exception {

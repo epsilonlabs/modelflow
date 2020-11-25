@@ -8,14 +8,18 @@
 package org.epsilonlabs.modelflow;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 
+import com.google.common.collect.Iterables;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -49,19 +53,21 @@ public class Setup {
 	private Setup() {}
 	
 	public void init(){
-		pluginExtensions = Setup.getExtensions(PLUGIN_EP_ID, PLUGIN_EP_ATTRIBUTE);
-		Injector injector = Guice.createInjector(pluginExtensions);
-		taskFactoryRegistry = injector.getInstance(TaskFactoryRegistry.class);
-		resourceFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
-		taskExtensions = Setup.getExtensions(TASK_EP_ID, TASK_EP_ATTRIBUTE);
-		resourceExtensions = Setup.getExtensions(RESOURCE_EP_ID,RESOURCE_EP_ATTRIBUTE); 
-	}
-
-	public List<Module> getTaskExtensions() {
-		return taskExtensions;
-	}
-	public List<Module> getResourceExtensions() {
-		return resourceExtensions;
+		final Injector injector;
+		if (Platform.isRunning()) {			
+			pluginExtensions = Setup.getExtensions(PLUGIN_EP_ID, PLUGIN_EP_ATTRIBUTE);
+			injector = Guice.createInjector(pluginExtensions);
+		} else {
+			final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
+			final ServiceLoader<AbstractPlugin> serviceLoader = ServiceLoader.load(AbstractPlugin.class, contextClassLoader);
+			final AbstractPlugin[] plugins = Iterables.toArray(serviceLoader, AbstractPlugin.class);
+			pluginExtensions = Arrays.asList(plugins);
+			injector = Guice.createInjector(plugins);			
+		}
+		if (!pluginExtensions.isEmpty()) {			
+			taskFactoryRegistry = injector.getInstance(TaskFactoryRegistry.class);
+			resourceFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
+		}
 	}
 
 	public List<Module> getPluginExtensions() {
@@ -88,7 +94,7 @@ public class Setup {
 					System.err.println("Unable to find Extension");
 				}
 			}
-		}
+		} 
 		return exts;
 	}
 }

@@ -7,7 +7,15 @@
 	<artifactId>modelflow-maven-plugin-test</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
+	<dependencies>
+		<dependency>
+			<groupId>org.epsilonlabs.modelflow</groupId>
+			<artifactId>org.epsilonlabs.modelflow.mmc.epsilon</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>maven-plugin</type>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

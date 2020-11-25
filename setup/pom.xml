@@ -16,7 +16,7 @@
 	</parent>
 
 	<modules>
-	    <module>org.epsilonlabs.modelflow.dependencies</module>
+		<module>org.epsilonlabs.modelflow.dependencies</module>
 	    <!--<module>org.epsilonlabs.modelflow.logback</module>-->
 	</modules>
 	

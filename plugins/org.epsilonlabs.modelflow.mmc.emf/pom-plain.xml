@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.epsilonlabs.modelflow</groupId>
+	<artifactId>org.epsilonlabs.modelflow.mmc.emf</artifactId>
+	<name>ModelFlow - EMF</name>
+
+	<parent>
+		<groupId>org.epsilonlabs.modelflow</groupId>
+		<artifactId>modelflow-plain-parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../../pom-plain.xml</relativePath>
+	</parent>
+
+	<dependencies>
+
+		<!-- org.eclipse.emf.emfatic.core,
+		org.eclipse.gymnast.runtime.core,
+		 -->
+		<dependency>
+			<groupId>org.eclipse.emf</groupId>
+			<artifactId>org.eclipse.emf.codegen.ecore</artifactId>
+			<version>2.23.0</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>org.epsilonlabs.modelflow.engine</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.epsilon</groupId>
+			<artifactId>org.eclipse.epsilon.emc.emf</artifactId>
+			<version>${epsilon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.epsilon</groupId>
+			<artifactId>org.eclipse.epsilon.common</artifactId>
+			<version>${epsilon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jdt</groupId>
+			<artifactId>org.eclipse.jdt.core</artifactId>
+			<version>3.21.0</version>
+		</dependency>
+
+	</dependencies>
+
+</project>
