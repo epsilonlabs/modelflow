@@ -1,0 +1,3 @@
+task sayHi is core:print{
+	text: "Hello World!"
+}

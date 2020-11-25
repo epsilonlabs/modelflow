@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ASCII"?>
+<executionTrace:ExecutionTrace xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:executionTrace="http://eclipse.org/epsilon/modelflow/exec/trace/1.0">
+  <executions>
+    <tasks endState="EXECUTED">
+      <task name="sayHi" definition="core:print">
+        <properties key="text"/>
+      </task>
+    </tasks>
+    <workflow>
+      <tasks name="sayHi" definition="core:print">
+        <properties key="text"/>
+      </tasks>
+    </workflow>
+  </executions>
+</executionTrace:ExecutionTrace>
