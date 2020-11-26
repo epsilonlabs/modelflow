@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<swt.version>3.114.0</swt.version>
+		<swt.version>3.115.0</swt.version>
 		<guice.version>3.0</guice.version>
 		<epsilon.version>2.1.0</epsilon.version>
 		<emf.version>2.21.0</emf.version>
@@ -55,16 +55,11 @@
 	</pluginRepositories>
 
 	<modules>
-		<module>plugins/org.epsilonlabs.modelflow.dependencies/pom-plain.xml
-		</module>
-		<module>plugins/org.epsilonlabs.modelflow.engine/pom-plain.xml
-		</module>
-		<module>plugins/org.epsilonlabs.modelflow.mmc.core/pom-plain.xml
-		</module>
-		<module>plugins/org.epsilonlabs.modelflow.mmc.epsilon/pom-plain.xml
-		</module>
-		<module>plugins/org.epsilonlabs.modelflow.mmc.emf/pom-plain.xml
-		</module>
+		<module>plugins/org.epsilonlabs.modelflow.dependencies/pom-plain.xml</module>
+		<module>plugins/org.epsilonlabs.modelflow.engine/pom-plain.xml</module>
+		<module>plugins/org.epsilonlabs.modelflow.mmc.core/pom-plain.xml</module>
+		<module>plugins/org.epsilonlabs.modelflow.mmc.epsilon/pom-plain.xml</module>
+		<!--<module>plugins/org.epsilonlabs.modelflow.mmc.emf/pom-plain.xml</module>-->
 	</modules>
 
 	<dependencyManagement>
@@ -74,6 +69,12 @@
 				<artifactId>org.eclipse.swt</artifactId>
 				<version>${swt.version}</version>
 			</dependency>
+      <dependency>
+        <groupId>org.eclipse.platform</groupId>
+        <artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+				<version>${swt.version}</version>
+      </dependency>
+
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.jface</artifactId>
@@ -201,7 +202,7 @@
 				<artifactId>org.eclipse.osgi.services</artifactId>
 				<version>3.8.0</version>
 			</dependency>
-			<!-- <dependency> <groupId>org.eclipse.platform</groupId> <artifactId>org.eclipse.ant.core</artifactId> 
+			<dependency> <groupId>org.eclipse.platform</groupId> <artifactId>org.eclipse.ant.core</artifactId> 
 				<version>3.5.700</version> </dependency> <dependency> <groupId>org.eclipse.platform</groupId> 
 				<artifactId>org.eclipse.compare.core</artifactId> <version>3.6.800</version> 
 				</dependency> <dependency> <groupId>org.eclipse.platform</groupId> <artifactId>org.eclipse.debug.core</artifactId> 
@@ -222,7 +223,7 @@
 				</dependency> <dependency> <groupId>org.eclipse.platform</groupId> <artifactId>org.eclipse.ui.workbench</artifactId> 
 				<version>3.118.0</version> </dependency> <dependency> <groupId>org.eclipse.platform</groupId> 
 				<artifactId>org.eclipse.ui.workbench.texteditor</artifactId> <version>3.14.100</version> 
-				</dependency> -->
+				</dependency> 
 
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
@@ -324,11 +325,11 @@
 				<artifactId>org.eclipse.e4.core.di.extensions</artifactId>
 				<version>0.15.500</version>
 			</dependency>
-			<!-- <dependency> <groupId>org.eclipse.emf</groupId> <artifactId>org.eclipse.emf.common</artifactId> 
+			<dependency> <groupId>org.eclipse.emf</groupId> <artifactId>org.eclipse.emf.common</artifactId> 
 				<version>2.18.0</version> </dependency> <dependency> <groupId>org.eclipse.emf</groupId> 
 				<artifactId>org.eclipse.xsd</artifactId> <version>2.17.0</version> </dependency> 
 				<dependency> <groupId>org.eclipse.emf</groupId> <artifactId>org.eclipse.emf.mapping.ecore2xml</artifactId> 
-				<version>2.11.0</version> </dependency> -->
+				<version>2.11.0</version> </dependency>
 			<!-- ModelFlow -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -371,7 +372,7 @@
 				<version>${xmi.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.commons</groupId>
+				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>1.3.2</version>
 			</dependency>
@@ -512,7 +513,15 @@
 		<directory>target-plain</directory>
 		<outputDirectory>target-plain/classes</outputDirectory>
 		<testOutputDirectory>target-plain/test-classes</testOutputDirectory>
-		<plugins>
+		
+    <resources>
+        <resource>
+            <directory>META-INF</directory>
+            <targetPath>META-INF</targetPath>
+        </resource>
+    </resources>
+
+    <plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -529,6 +538,7 @@
 				</dependencies>
 			</plugin>
 
+<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -561,7 +571,7 @@
 					</execution>
 				</executions>
 			</plugin>
-
+-->
 		</plugins>
 	</build>
 

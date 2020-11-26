@@ -15,7 +15,7 @@ mvn clean install
 	<plugins>
 		<plugin>
 			<groupId>org.epsilonlabs.modelflow</groupId>
-			<artifactId>modelflow-maven-plugin</artifactId>
+			<artifactId>maven-modelflow-plugin</artifactId>
 			<version>1.0-SNAPSHOT</version>
 			<executions>
 				<execution>
