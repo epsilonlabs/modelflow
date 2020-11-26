@@ -24,7 +24,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>1.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -35,74 +34,60 @@
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.evl.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.etl.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.ecl.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.epl.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.eml.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.egl.traceability.fine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.flock.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.eunit.engine</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.emc.emf</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.epsilon</groupId>
 			<artifactId>org.eclipse.epsilon.emc.simulink</artifactId>
-			<version>${epsilon.version}</version>
 		</dependency>
 		
 		<!-- HAWK -->
 		<dependency>
 			<groupId>org.eclipse.hawk</groupId>
 			<artifactId>org.eclipse.hawk.core</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.hawk</groupId>
 			<artifactId>org.eclipse.hawk.localfolder</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.hawk</groupId>
 			<artifactId>org.eclipse.hawk.emf</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.hawk</groupId>
 			<artifactId>org.eclipse.hawk.epsilon</artifactId>
-			<version>2.0.0</version>
 		</dependency>
 	</dependencies>
 
