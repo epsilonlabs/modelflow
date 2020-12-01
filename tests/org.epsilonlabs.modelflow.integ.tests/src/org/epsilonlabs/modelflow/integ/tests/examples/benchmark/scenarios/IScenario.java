@@ -13,12 +13,10 @@ import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
  */
 public interface IScenario {
 
-	/**
-	 * @param basedir
-	 * @return
-	 */
-	Runnable getModifications(Path basedir);
-
+	default Runnable getModifications(Path basedir) {
+		return getModifications(basedir.toString());
+	}
+	
 	/**
 	 * @param basedir
 	 * @return
@@ -34,5 +32,11 @@ public interface IScenario {
 	 * @return
 	 */
 	boolean isProtect();
+
+	/**
+	 * @return
+	 */
+	String getName();
+
 
 }

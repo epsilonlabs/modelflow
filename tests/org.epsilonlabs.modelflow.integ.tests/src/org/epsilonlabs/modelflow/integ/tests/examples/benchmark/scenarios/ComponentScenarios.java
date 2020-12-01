@@ -3,8 +3,6 @@
  */
 package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios;
 
-import java.nio.file.Path;
-
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.FileModifier;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
@@ -30,6 +28,11 @@ public enum ComponentScenarios implements IScenario {
 	MODIFY_TRANSFORMATION_SCRIPT,
 	MODIFY_VALIDATIONS_CRIPT,
 	NO_MODIFICATION;
+	
+	@Override
+	public String getName() {
+		return name();
+	}
 	
 	protected static IValidate expect(boolean validateTaskExecuted, boolean transformTaskExecuted, boolean generateTaskExecuted) {
 		TaskStateValidator x = new TaskStateValidator((validateTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "validate");
@@ -79,11 +82,6 @@ public enum ComponentScenarios implements IScenario {
 		default:
 			return null;
 		}
-	}
-	
-	@Override
-	public Runnable getModifications(Path basedir){
-		return getModifications(basedir.toString());
 	}
 	
 	@Override
