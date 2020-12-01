@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
+import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MeasurableObject;
 import org.epsilonlabs.modelflow.execution.control.MemoryUnit;
 import org.epsilonlabs.modelflow.execution.control.ProfiledStage;
@@ -38,11 +39,10 @@ import com.google.inject.Injector;
  *
  */
 public abstract class AbstractBenchmark {
-
+	
 	protected static final TimeUnit TU = TimeUnit.NANOSECONDS;
 	protected static final MemoryUnit MU = MemoryUnit.BYTES;
-	protected static final int MAX_ITER = 1;
-
+	
 	protected static File resultsFile;
 	protected static TaskFactoryRegistry taskFactoryRegistry;
 	protected static ResourceFactoryRegistry resourceFactoryRegistry;
@@ -68,10 +68,11 @@ public abstract class AbstractBenchmark {
 	 * @param iteration
 	 * @param projectName
 	 * @param buildFileName
+	 * @param maxIter 
 	 * @throws Exception
 	 */
 	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, String projectName,
-			String buildFileName) throws Exception {
+			String buildFileName, int maxIter) throws Exception {
 		final Path outputPath = TestUtils.copyExampleProjectToTempLocation(projectName);
 		boolean protect = scenario.isProtect();
 		ModelFlowModule module = createModule(tracing, protect, outputPath);
@@ -125,7 +126,7 @@ public abstract class AbstractBenchmark {
 		final IValidate validator = scenario.getValidator();
 		assertTrue(validator.expected(), validator.ok(module));
 		
-		storeResults(scenario, tracing, iteration, module);
+		storeResults(scenario, tracing, iteration, module, maxIter);
  
 		TestUtils.clearExecutionFiles(projectName);
 	}
@@ -135,7 +136,7 @@ public abstract class AbstractBenchmark {
 	 * @param outputPath
 	 * @return
 	 */
-	private ModelFlowModule createModule(Boolean tracing, Boolean protect, final Path outputPath) {
+	protected ModelFlowModule createModule(Boolean tracing, Boolean protect, final Path outputPath) {
 		File endToEndTraceFile = outputPath.resolve("endToEndTrace.mftrace").toFile();
 		File executionTraceFile = outputPath.resolve("executionTrace.mfexec").toFile();
 
@@ -155,14 +156,16 @@ public abstract class AbstractBenchmark {
 		return module;
 	}
 
-	private void storeResults(IScenario scenario, Boolean tracing, Integer iteration, ModelFlowModule module) {
+	protected void storeResults(IScenario scenario, Boolean tracing, Integer iteration, ModelFlowModule module, int maxIter) {
 		// Save tracked memory profile of last iteration
-		if (MAX_ITER == iteration) {			
+		if (maxIter == iteration) {			
 			IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
 			StageProfilerMap profiledStages = profiler.getProfiledStages();
 			profiledStages.entrySet().forEach(s -> {
 				ProfiledStage stage = s.getValue();
 				MeasurableObject key = s.getKey();
+				final MeasureableSnapshot start = stage.getStart();
+				final MeasureableSnapshot end = stage.getEnd();
 				Object[] results = new Object[] { 
 						scenario, 
 						tracing, 
@@ -170,10 +173,10 @@ public abstract class AbstractBenchmark {
 						key.getNode(),
 						key.getStage().getGroup(), 
 						key.getStage().name(), 
-						stage.getStart().getTime(TU),
-						stage.getEnd().getTime(TU),
-						stage.getStart().getFreeMemory(MU),
-						stage.getEnd().getFreeMemory(MU)
+						(start != null) ? start.getTime(TU) : "",
+						(end != null) ? end.getTime(TU) : "",
+						(start != null) ? start.getFreeMemory(MU) : "",
+						(end != null) ? end.getFreeMemory(MU) : ""
 				};
 				try {
 					BenchmarkUtils.writeResults(resultsFile, results);

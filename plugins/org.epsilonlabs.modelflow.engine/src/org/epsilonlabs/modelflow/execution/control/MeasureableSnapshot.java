@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class MeassureSnapshot implements Serializable{
+public class MeasureableSnapshot implements Serializable{
 	
 	private static final long serialVersionUID = 312306623488191951L;
 
@@ -26,7 +26,7 @@ public class MeassureSnapshot implements Serializable{
 	protected int threads ;
 	protected boolean delta;
 	
-	public MeassureSnapshot() {
+	public MeasureableSnapshot() {
 		this.time = System.nanoTime();
 		this.freeMemory = RT.freeMemory();
 		this.maxMemory = RT.maxMemory();
@@ -35,7 +35,7 @@ public class MeassureSnapshot implements Serializable{
 		this.threads = Thread.activeCount();
 	}
 	
-	public MeassureSnapshot(long time, long freeMemmory, long maxMemory, long totalMemory, int available, int threads) {
+	public MeasureableSnapshot(long time, long freeMemmory, long maxMemory, long totalMemory, int available, int threads) {
 		this.time = time;
 		this.freeMemory = freeMemmory;
 		this.maxMemory = maxMemory;
@@ -45,9 +45,9 @@ public class MeassureSnapshot implements Serializable{
 		this.delta = true;
 	}
 	
-	public MeassureSnapshot delta(MeassureSnapshot start) {
-		MeassureSnapshot end = this;
-		return new MeassureSnapshot(
+	public MeasureableSnapshot delta(MeasureableSnapshot start) {
+		MeasureableSnapshot end = this;
+		return new MeasureableSnapshot(
 				end.time 				- start.time, 
 				end.freeMemory			- start.freeMemory, 
 				end.maxMemory 			- start.maxMemory,

@@ -46,7 +46,7 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	@Override
 	public void stop(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context) {
 		// Must be the first line invoked
-		MeassureSnapshot meassureSnapshot = new MeassureSnapshot();
+		MeasureableSnapshot meassureSnapshot = new MeasureableSnapshot();
 		
 		MeasurableObject measurableObject = new MeasurableObject(ast, stage);
 		ProfiledStage profiledStageDiagnostic = profiledStages.get(measurableObject);

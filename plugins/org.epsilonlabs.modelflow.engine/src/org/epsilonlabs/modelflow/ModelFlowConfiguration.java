@@ -43,7 +43,7 @@ public class ModelFlowConfiguration implements IModelFlowConfiguration {
 	
 	@Override
 	public void setEndToEndTraceLocation(File file) {
-		this.executionTraceLocation = file;
+		this.endToEndTraceLocation = file;
 	}
 
 	@Override

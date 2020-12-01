@@ -204,52 +204,70 @@ public class TaskNode implements ITaskNode {
 		 */
 		
 		// Register inputs in execution trace
-		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-		pManager.processInputs(this, ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+			pManager.processInputs(this, ctx);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+		}
 		// Assign Models Before Execution
-		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-		manager.processResourcesBeforeExecution(this, ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-
-		
-		setState(TaskState.RESOLVED);
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
+			manager.processResourcesBeforeExecution(this, ctx);
+		} finally {			
+			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
+		}
+		setState(TaskState.RESOLVED);		
 		
 		// -- EXECUTING --
 		
 		// Execute 
-		setState(TaskState.EXECUTING);
-		ctx.getProfiler().start(IMeasurable.Stage.EXECUTION, this, ctx);
-		this.taskInstance.execute(ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION, this, ctx);
-		setState(TaskState.EXECUTED);
+		try {
+			setState(TaskState.EXECUTING);
+			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION, this, ctx);
+			this.taskInstance.execute(ctx);
+			setState(TaskState.EXECUTED);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION, this, ctx);
+		}
 
 		ctx.getFrameStack().put(
 			Variable.createReadOnlyVariable(getName(), taskInstance)
 		);
 		
 		// Cleanup if necessary 
-		ctx.getProfiler().start(IMeasurable.Stage.CLEANUP, this, ctx);
-		this.taskInstance.afterExecute();
-		ctx.getProfiler().stop(IMeasurable.Stage.CLEANUP, this, ctx);
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.CLEANUP, this, ctx);
+			this.taskInstance.afterExecute();
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.CLEANUP, this, ctx);
+		}
 		
 		// -- POST PROCESSING -- 
 		
 		// Record outputs in execution trace
-		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
-		pManager.processOutputs(this, ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+			pManager.processOutputs(this, ctx);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+		}
 
 		// Traces
-		ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
-		processEndToEndTraces(ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+			processEndToEndTraces(ctx);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+		}
 		
 		// Process Models After Execution
-		ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-		manager.processResourcesAfterExecution(this, ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
+			manager.processResourcesAfterExecution(this, ctx);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
+		}
 	}
 
 	protected void safelyDispose(IModelFlowContext ctx) {
@@ -427,6 +445,5 @@ public class TaskNode implements ITaskNode {
 	public String toString() {
 		return this.getName();
 	}
-
 
 }
