@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
+package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,7 +25,7 @@ public class BenchmarkUtils {
 	 * @param record
 	 * @throws IOException
 	 */
-	protected static void writeResults(File file, Object... record) throws IOException {
+	public static void writeResults(File file, Object... record) throws IOException {
 		FileWriter fileWriter = new FileWriter(file, true);
 		CSVFormat csvFormat = CSVFormat.EXCEL;
 		try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
@@ -50,7 +50,7 @@ public class BenchmarkUtils {
 	 * @param resultsFile
 	 * @return
 	 */
-	protected static final void prepareResultFile(File file, String... headers) throws IOException {
+	public static final void prepareResultFile(File file, String... headers) throws IOException {
 		FileWriter fileWriter = new FileWriter(file);
 		CSVFormat csvFormat = CSVFormat.EXCEL.withHeader(headers);
 		try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {

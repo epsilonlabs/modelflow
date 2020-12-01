@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
+package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util;
 
 import static org.junit.Assert.fail;
 
@@ -31,9 +31,16 @@ public class TestUtils {
 		return Paths.get(ResourceLocator.locateInTestDir(projectName)).normalize();
 	}
 
-	public static void copyExampleProjectToTempLocation(String projectName) {
+	public static Path copyExampleProjectToTempLocation(String projectName) {
 		Path sourceProject = getProject(projectName);
 		Path destinationProject = getOutputPath(projectName);
+		if (destinationProject.toFile().exists()) {
+			try {
+				FileUtils.cleanDirectory(destinationProject.toFile());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
 		FileFilter filter = getExampleFileFilter();
 		try (Stream<Path> stream = Files.walk(sourceProject)) {
 			stream.filter(f -> filter.accept(f.toFile())).forEach(source -> {
@@ -57,6 +64,7 @@ public class TestUtils {
 		} catch (IOException e) {
 			fail(e.getMessage());
 		}
+		return destinationProject;
 	}
 
 	/**
@@ -76,7 +84,8 @@ public class TestUtils {
 
 	public static void clearExecutionFiles(String projectName) {
 		try {
-			FileUtils.deleteDirectory(getOutputPath(projectName).toFile());
+			final Path output = getOutputPath(projectName);
+			FileUtils.deleteDirectory(output.toFile());
 		} catch (IOException e1) {
 			fail("Unable to clear files");
 		}

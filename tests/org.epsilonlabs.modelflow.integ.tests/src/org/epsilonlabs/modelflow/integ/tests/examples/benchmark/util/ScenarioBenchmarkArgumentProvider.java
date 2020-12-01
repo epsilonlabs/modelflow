@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
+package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util;
 
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.toSet;

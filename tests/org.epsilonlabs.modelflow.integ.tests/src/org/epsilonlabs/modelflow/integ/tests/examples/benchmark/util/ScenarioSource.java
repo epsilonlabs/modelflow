@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
+package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

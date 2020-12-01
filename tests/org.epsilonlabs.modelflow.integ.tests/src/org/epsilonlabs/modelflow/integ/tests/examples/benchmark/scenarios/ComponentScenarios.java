@@ -1,7 +1,9 @@
 /**
  * 
  */
-package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
+package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios;
+
+import java.nio.file.Path;
 
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.FileModifier;
@@ -14,7 +16,7 @@ import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
  * @author Betty Sanchez
  *
  */
-public enum ComponentScenarios {
+public enum ComponentScenarios implements IScenario {
 
 	MODIFY_COMPONENT_MODEL,
 	MODIFY_CONFIG_MODEL,
@@ -36,6 +38,7 @@ public enum ComponentScenarios {
 		return new CompositeValidator(y, x, z);
 	}
 
+	@Override
 	public boolean isProtect() {
 		switch (this) {
 		case MODIFY_EXTENDED_MODEL:
@@ -46,6 +49,7 @@ public enum ComponentScenarios {
 		}
 	}
 
+	@Override
 	public IValidate getValidator(){
 		switch (this) {
 		case NO_MODIFICATION:
@@ -77,6 +81,12 @@ public enum ComponentScenarios {
 		}
 	}
 	
+	@Override
+	public Runnable getModifications(Path basedir){
+		return getModifications(basedir.toString());
+	}
+	
+	@Override
 	public Runnable getModifications(String basedir){
 		String modelDir 	= basedir + "/resources/m/%s";
 		String scriptDir 	= basedir + "/resources/mmt/%s";
