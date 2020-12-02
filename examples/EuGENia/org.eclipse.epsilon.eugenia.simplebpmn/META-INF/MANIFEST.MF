@@ -1,11 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
-Bundle-SymbolicName: org.epsilonlabs.modelflow.eugenia.bpmn.example;singleton:=true
-Automatic-Module-Name: org.epsilonlabs.modelflow.eugenia.bpmn.example
+Bundle-SymbolicName: org.eclipse.epsilon.eugenia.simplebpmn;singleton:=true
+Automatic-Module-Name: org.eclipse.epsilon.eugenia.simplebpmn
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
-Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: SimpleBPMN,

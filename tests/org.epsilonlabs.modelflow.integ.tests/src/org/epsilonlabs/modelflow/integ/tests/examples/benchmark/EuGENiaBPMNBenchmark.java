@@ -7,6 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
@@ -45,7 +48,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		// Setup Variables
 		setupClass();
 		
-		String projectName = "org.epsilonlabs.modelflow.eugenia.bpmn.example";
+		String projectName = "org.epsilonlabs.modelflow.eugenia.simplebpmn";
 		String buildFileName = "eugenia.mflow";
 		
 		final Path eugeniaSource = Paths.get(System.getProperty("user.dir"), "..","..", "examples", "EuGENia");
@@ -54,10 +57,9 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		final File buildScript = TestUtils.getBuildScript(eugeniaOutputProjectPath, buildFileName);
 		
 		// Copy dependent diagram project
-		final String diagramProjectName = "org.eclipse.epsilon.eugenia.bpmn.diagram.custom";
+		final String diagramProjectName = "org.eclipse.epsilon.eugenia.simplebpmn.diagram.custom";
 		this.diagramProjectOutputPath = TestUtils.copyExampleProjectToTempLocation(eugeniaSource.resolve(diagramProjectName), diagramProjectName);
 		importProject(diagramProjectOutputPath);
-		
 		
 		testExecution(scenario, tracing, iteration, eugeniaOutputProjectPath, buildScript, MAX_ITER);
 	}
@@ -69,7 +71,6 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	protected void importProject(final Path outputPath) throws CoreException {
 		final org.eclipse.core.runtime.Path mainEclipseProject = new org.eclipse.core.runtime.Path(outputPath.resolve(".project").toString());
 		IProjectDescription description = ResourcesPlugin.getWorkspace().loadProjectDescription(mainEclipseProject);
-		description.setLocation(new org.eclipse.core.runtime.Path(outputPath.toString()));
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(description.getName());
 		project.create(description, null);
 		project.open(null);
@@ -77,7 +78,21 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	
 	@Override
 	protected void cleanup() {
+		super.cleanup();
+		final IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		for (int i = 0; i < projects.length; i++ ) {
+			try {
+				final IProject p = projects[i];
+				System.out.println(">>>>>> : " + p.getName());
+				//if (! p.getName().equals("org.eclipse.epsilon.eugenia.simplebpmn")) {
+					p.delete(IResource.ALWAYS_DELETE_PROJECT_CONTENT, null);
+				//}
+			} catch (Exception e) {
+				fail("Unable to close projects");
+			}
+		}
 		TestUtils.clearExecutionFiles(diagramProjectOutputPath.getParent());
+		
 	}
 
 	@Override
@@ -87,7 +102,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		// Execution parameters
 		Map<String, Object> params = new HashMap<>();
 		params.put("metamodelName", "simplebpmn");
-		params.put("pluginPrefix", "org.eclipse.epsilon.eugenia.bpmn");
+		params.put("pluginPrefix", "org.eclipse.epsilon.eugenia");
 		params.put("copyrightStatement", "copyright.txt");
 		
 		FrameStack fs = module.getContext().getFrameStack();

@@ -7,7 +7,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
-package org.eclipse.epsilon.eugenia.bpmn.diagram.custom;
+package org.eclipse.epsilon.eugenia.simplebpmn.diagram.custom;
 import org.eclipse.draw2d.RotatableDecoration;
 
 import org.eclipse.draw2d.Ellipse;

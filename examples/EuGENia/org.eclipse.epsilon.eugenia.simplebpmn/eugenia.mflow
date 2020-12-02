@@ -19,6 +19,11 @@ model GenModel is epsilon:emf {
 model GmfGen is epsilon:emf {
 	src : base + ".gmfgen"
 	metamodelUri : "http://www.eclipse.org/gmf/2009/GenModel"
+	saveOpts {
+		var map = new Map;
+		map.put("ENCODING", "UTF-8");
+		return map;
+	}
 }
 
 model GmfMap is epsilon:emf {
@@ -82,7 +87,7 @@ task Ecore2GenModel is epsilon:etl
  	params {
  		var map = new Map;
  		map.put("pluginName", pluginName);
-		map.put("foreignModel", "Ecore2GenModel");
+		map.put("foreignModel", metamodelName + ".ecore");
 		map.put("usedGenPackages", genPackages.result);
 		if (copyrightStatement.isDefined()){
 			map.put("copyright", copyright.contents);
@@ -128,7 +133,6 @@ task PolishGenModel is epsilon:eol
 		return map;
  	}
 }
-
 // ValidateEcoreForGMFToolGraphMap 
 task ValidateEcoreForGMFToolGraphMap is epsilon:evl
 	in ECore as Ecore
@@ -156,6 +160,14 @@ task PolishGMFToolGraphMap is epsilon:eol
  	src : "resources/task/polish/ECore2GMF.eol"
 }
 
+
+// GmfMap2GmfGen 
+task GmfMap2GmfGen is gmf:gmfMap2gmfGen
+	in ECore as Ecore 
+		and GmfMap 
+		and GenModel 
+	out GmfGen;
+	
 // FixGmfGen 
 task FixGmfGen is epsilon:eol
 	in ECore as Ecore
@@ -199,12 +211,6 @@ task GenerateDomainModelCode is emf:genCode
 	generateEditor : true
 }
 
-// GmfMap2GmfGen 
-task GmfMap2GmfGen is gmf:gmfMap2gmfGen
-	in ECore as Ecore 
-		and GmfMap 
-		and GenModel 
-	out GmfGen;
 
 // GenerateDiagramCode
 task GenerateDiagramCode is gmf:genDiagram
