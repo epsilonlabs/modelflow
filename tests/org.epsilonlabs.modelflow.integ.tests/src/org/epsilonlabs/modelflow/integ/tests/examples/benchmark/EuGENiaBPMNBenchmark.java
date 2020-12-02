@@ -39,16 +39,17 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 
 	protected static final int MAX_ITER = 1;
 	protected Path diagramProjectOutputPath;
-	
+	protected String metamodelName = "simplebpmn";
+	protected String base = "org.eclipse.epsilon.eugenia";
+
 	@ParameterizedTest(name = "Scenario {0} tracing {1} #{2}.")
 	@ScenarioSource(value = ComponentScenarios.class, names="NO_MODIFICATION", mode = Mode.INCLUDE, times = MAX_ITER)
 	public void componentExampleTwoExecutionTests(ComponentScenarios scenario, Boolean tracing, Integer iteration)
 			throws Exception {
-
-		// Setup Variables
+				// Setup Variables
 		setupClass();
 		
-		String projectName = "org.epsilonlabs.modelflow.eugenia.simplebpmn";
+		String projectName = String.format("%s.%s", base, metamodelName);
 		String buildFileName = "eugenia.mflow";
 		
 		final Path eugeniaSource = Paths.get(System.getProperty("user.dir"), "..","..", "examples", "EuGENia");
@@ -57,7 +58,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		final File buildScript = TestUtils.getBuildScript(eugeniaOutputProjectPath, buildFileName);
 		
 		// Copy dependent diagram project
-		final String diagramProjectName = "org.eclipse.epsilon.eugenia.simplebpmn.diagram.custom";
+		final String diagramProjectName = String.format("%s.%s.diagram.custom", base, metamodelName);
 		this.diagramProjectOutputPath = TestUtils.copyExampleProjectToTempLocation(eugeniaSource.resolve(diagramProjectName), diagramProjectName);
 		importProject(diagramProjectOutputPath);
 		
@@ -83,10 +84,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		for (int i = 0; i < projects.length; i++ ) {
 			try {
 				final IProject p = projects[i];
-				System.out.println(">>>>>> : " + p.getName());
-				//if (! p.getName().equals("org.eclipse.epsilon.eugenia.simplebpmn")) {
-					p.delete(IResource.ALWAYS_DELETE_PROJECT_CONTENT, null);
-				//}
+				p.delete(IResource.ALWAYS_DELETE_PROJECT_CONTENT, null);
 			} catch (Exception e) {
 				fail("Unable to close projects");
 			}
@@ -101,8 +99,8 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		
 		// Execution parameters
 		Map<String, Object> params = new HashMap<>();
-		params.put("metamodelName", "simplebpmn");
-		params.put("pluginPrefix", "org.eclipse.epsilon.eugenia");
+		params.put("metamodelName", metamodelName);
+		params.put("pluginPrefix", base);
 		params.put("copyrightStatement", "copyright.txt");
 		
 		FrameStack fs = module.getContext().getFrameStack();

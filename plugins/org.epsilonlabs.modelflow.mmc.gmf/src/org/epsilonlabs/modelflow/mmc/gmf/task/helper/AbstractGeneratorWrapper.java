@@ -19,6 +19,7 @@ import java.util.Set;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -330,9 +331,11 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 		return newFile(fullPath);
 	}
 	protected File newFile(IPath f){
-		File absoluteFile = f.toFile().getAbsoluteFile();
-		this.files.add(absoluteFile);
-		return absoluteFile;
+		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		final String fileLocation = root.getFile(f).getRawLocation().toString();
+		final File absFile = new File(fileLocation);
+		this.files.add(absFile);
+		return absFile;
 	}
 	public Set<File> getFiles() {
 		return files;

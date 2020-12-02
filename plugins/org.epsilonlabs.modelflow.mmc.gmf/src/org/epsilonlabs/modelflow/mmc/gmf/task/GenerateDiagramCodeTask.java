@@ -1,7 +1,6 @@
 package org.epsilonlabs.modelflow.mmc.gmf.task;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
@@ -137,10 +135,7 @@ public class GenerateDiagramCodeTask extends AbstractTask implements ITask {
 
 	@Output(key = "GeneratedFiles", hasher = FileHasher.class)
 	public Set<File> getFilies(){
-		Path base = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toFile().toPath();
-		return files.stream()
-				.map(f->base.resolve(f.toString().substring(1)).toFile())
-				.collect(Collectors.toSet());
+		return files.stream().collect(Collectors.toSet());
 	}
 
 	@Override
