@@ -47,32 +47,32 @@ for (class in getNodes()) {
 	
 	// Create GmfTool creation tool
 	var creationTool := createCreationTool(class);
-	mfTrace.trace(class, creationTool, "creation tool");
+	if (mTrace.isDefined()) mfTrace.trace(class, creationTool, "creation tool");
 	nodesToolGroup.tools.add(creationTool);
 	
 	class.~creationTool := creationTool;
 	
 	// Create GmfGraph figure
 	var figureDescriptor := createFigureDescriptor(class.name + 'Figure');
-	mfTrace.trace(class, figureDescriptor, "figure descriptor");
+	if (mTrace.isDefined()) mfTrace.trace(class, figureDescriptor, "figure descriptor");
 	class.~figureDescriptor := figureDescriptor;
 	
 	// Create GmfGraph figure
 	var figure := class.createFigure();
-	mfTrace.trace(class, figure, "figure");	
+	if (mTrace.isDefined()) mfTrace.trace(class, figure, "figure");	
 	figureDescriptor.actualFigure := figure;
 	figure.name := figureDescriptor.name;
 	
 	// Create GmfGraph label
 	var label := class.createLabel();
-	mfTrace.trace(class, label, "label");	
+	if (mTrace.isDefined()) mfTrace.trace(class, label, "label");	
 	label.name := class.getLabelName() + 'Figure';
 	
 	// If the label belongs to a compartment owning node
 	// limit its vertical size
 	if (not class.getCompartmentReferences().isEmpty()) {
 		var maxDimension := new GmfGraph!Dimension;
-		mfTrace.trace(class, maxDimension, "dimension");
+		if (mTrace.isDefined()) mfTrace.trace(class, maxDimension, "dimension");
 		maxDimension.dx := 10000;
 		maxDimension.dy := 50;
 		label.maximumSize := maxDimension;
@@ -80,7 +80,7 @@ for (class in getNodes()) {
 		
 	// Create GmfGraph node
 	var node := new GmfGraph!Node;
-	mfTrace.trace(class, node, "node");
+	if (mTrace.isDefined()) mfTrace.trace(class, node, "node");
 	node.name := class.name;
 	node.figure := figureDescriptor;
 	canvas.nodes.add(node);
@@ -90,14 +90,14 @@ for (class in getNodes()) {
 	
 	if (class.getNodeSize().isDefined()) {
 		var defaultSizeFacet := new GmfGraph!DefaultSizeFacet;
-		mfTrace.trace(class, defaultSizeFacet, "defaultSizeFacet");
+		if (mTrace.isDefined()) mfTrace.trace(class, defaultSizeFacet, "defaultSizeFacet");
 		node.facets.add(defaultSizeFacet);
 		defaultSizeFacet.defaultSize := class.getNodeSize();
 	}
 
 	// Create GmfMap node mapping
 	var nodeMapping : new GmfMap!NodeMapping;
-	mfTrace.trace(class, nodeMapping, "nodeMapping");
+	if (mTrace.isDefined()) mfTrace.trace(class, nodeMapping, "nodeMapping");
 	nodeMapping.diagramNode := node;
 	nodeMapping.domainMetaElement := class;
 	nodeMapping.tool := creationTool;
@@ -107,7 +107,7 @@ for (class in getNodes()) {
 	var labelPlacement := class.getLabelPlacement();
     if (labelPlacement <> 'none') {
 		var diagramLabel := new GmfGraph!DiagramLabel;
-		mfTrace.trace(class, diagramLabel, "diagramLabel");
+		if (mTrace.isDefined()) mfTrace.trace(class, diagramLabel, "diagramLabel");
 		diagramLabel.name := class.getLabelName();
 		diagramLabel.elementIcon := class.labelHasIcon(true);
 		canvas.labels.add(diagramLabel);
@@ -117,7 +117,7 @@ for (class in getNodes()) {
 
 			// Create GmfGraph child access
 			var childAccess : new GmfGraph!ChildAccess;
-			mfTrace.trace(class, childAccess, "childAccess");
+			if (mTrace.isDefined()) mfTrace.trace(class, childAccess, "childAccess");
 			childAccess.figure := label;
 			childAccess.accessor := 'getFigure' + class.getLabelName() + 'Figure';
 			figureDescriptor.accessors.add(childAccess);
@@ -127,7 +127,7 @@ for (class in getNodes()) {
 		} else {
 			// Create GmfGraph label figure
 			var labelFigureDescriptor := createFigureDescriptor(class.name + 'LabelFigure');
-			mfTrace.trace(class, labelFigureDescriptor, "labelFigureDescriptor");
+			if (mTrace.isDefined()) mfTrace.trace(class, labelFigureDescriptor, "labelFigureDescriptor");
 			labelFigureDescriptor.actualFigure := label;
 			diagramLabel.figure := labelFigureDescriptor;
 		}
@@ -135,7 +135,7 @@ for (class in getNodes()) {
 
 		// Create GmfMap feature label mapping
 		var featureLabelMapping : new GmfMap!FeatureLabelMapping;
-		mfTrace.trace(class, featureLabelMapping, "featureLabelMapping");
+		if (mTrace.isDefined()) mfTrace.trace(class, featureLabelMapping, "featureLabelMapping");
 		nodeMapping.labelMappings.add(featureLabelMapping);
 		featureLabelMapping.diagramLabel := diagramLabel;
 		featureLabelMapping.editPattern := class.getLabelEditPattern();
@@ -149,13 +149,13 @@ for (class in getNodes()) {
 	for (attribute in getLabelledAttributesFor(class)) {
 		// Create GmfGraph label
 		var label := new GmfGraph!Label;
-		mfTrace.trace(attribute, label, "label");
+		if (mTrace.isDefined()) mfTrace.trace(attribute, label, "label");
 		label.name := attribute.getLabelName() + 'Figure';
 		label.text := attribute.getAnnotationValue('gmf.label', 'label.text');
 		
 		// Create GmfGraph diagram label
 		var diagramLabel := new GmfGraph!DiagramLabel;
-		mfTrace.trace(attribute, diagramLabel, "diagramLabel");
+		if (mTrace.isDefined()) mfTrace.trace(attribute, diagramLabel, "diagramLabel");
 		diagramLabel.name := attribute.getLabelName();
 		diagramLabel.elementIcon := false;
 		canvas.labels.add(diagramLabel);
@@ -164,7 +164,7 @@ for (class in getNodes()) {
 			
 		// Create GmfGraph child access
 		var childAccess : new GmfGraph!ChildAccess;
-		mfTrace.trace(attribute, childAccess, "childAccess");
+		if (mTrace.isDefined()) mfTrace.trace(attribute, childAccess, "childAccess");
 		childAccess.figure := label;
 		childAccess.accessor := 'getFigure' + label.name;
 		figureDescriptor.accessors.add(childAccess);
@@ -174,7 +174,7 @@ for (class in getNodes()) {
 		
 		// Create GmfMap feature label mapping
 		var featureLabelMapping : new GmfMap!FeatureLabelMapping;
-		mfTrace.trace(attribute, featureLabelMapping, "featureLabelMapping");
+		if (mTrace.isDefined()) mfTrace.trace(attribute, featureLabelMapping, "featureLabelMapping");
 		nodeMapping.labelMappings.add(featureLabelMapping);
 		featureLabelMapping.diagramLabel := diagramLabel;
 		featureLabelMapping.features.add(attribute);
@@ -206,7 +206,7 @@ for (containment in getDiagramClass().getContainmentReferences()) {
 for (phantom in getPhantomNodes()) {
 	if (phantom.~topNodeReference.isUndefined()) {
 		var topNodeReference := new GmfMap!TopNodeReference;
-		mfTrace.trace(phantom, topNodeReference, "topNodeReference");
+		if (mTrace.isDefined()) mfTrace.trace(phantom, topNodeReference, "topNodeReference");
 		mapping.nodes.add(topNodeReference);
 		topNodeReference.ownedChild := phantom.~nodeMapping;
 		phantom.~topNodeReference := topNodeReference;
@@ -220,7 +220,7 @@ for (class in getNodes()) {
 			// Create GmfMap child reference
 			
 			var childReference := new GmfMap!ChildReference;
-			mfTrace.trace(class, childReference, "childReference");
+			if (mTrace.isDefined()) mfTrace.trace(class, childReference, "childReference");
 			class.~nodeMapping.children.add(childReference);
 			childReference.containmentFeature := affixed;
 			
@@ -251,13 +251,13 @@ for (class in getNodes()) {
 		var figure := figureDescriptor.actualFigure;
 		
 		var compartmentRectangle := new GmfGraph!Rectangle;
-		mfTrace.trace(class, compartmentRectangle, "compartmentRectangle");
+		if (mTrace.isDefined()) mfTrace.trace(class, compartmentRectangle, "compartmentRectangle");
 		compartmentRectangle.outline := false;
 		figure.children.add(compartmentRectangle);
 		compartmentRectangle.name := referenceName + 'CompartmentFigure';
 		
 		var compartmentChildAccess := new GmfGraph!ChildAccess;
-		mfTrace.trace(class, compartmentChildAccess, "compartmentChildAccess");
+		if (mTrace.isDefined()) mfTrace.trace(class, compartmentChildAccess, "compartmentChildAccess");
 		figureDescriptor.accessors.add(compartmentChildAccess);
 		compartmentChildAccess.figure := compartmentRectangle;
 		compartmentChildAccess.accessor := 'get' + compartmentRectangle.name;
@@ -265,7 +265,7 @@ for (class in getNodes()) {
 		// Create GmfGraph compartment
 		
 		var compartment := new GmfGraph!Compartment;
-		mfTrace.trace(class, compartment, "compartment");
+		if (mTrace.isDefined()) mfTrace.trace(class, compartment, "compartment");
 		compartment.name := referenceName + 'Compartment';
 		compartment.collapsible := containment.isCollapsible();
 		compartment.figure := class.~figureDescriptor;
@@ -275,7 +275,7 @@ for (class in getNodes()) {
 		// Create GmfMap compartment mapping
 		
 		var compartmentMapping := new GmfMap!CompartmentMapping;
-		mfTrace.trace(class, compartmentMapping, "compartmentMapping");
+		if (mTrace.isDefined()) mfTrace.trace(class, compartmentMapping, "compartmentMapping");
 		compartmentMapping.compartment := compartment;
 		class.~nodeMapping.compartments.add(compartmentMapping);
 		class.~nodeMapping.relatedDiagrams.add(canvasMapping);
@@ -285,7 +285,7 @@ for (class in getNodes()) {
 			// Create GmfMap child reference
 			
 			var childReference := new GmfMap!ChildReference;
-			mfTrace.trace(child, childReference, "childReference");
+			if (mTrace.isDefined()) mfTrace.trace(child, childReference, "childReference");
 			class.~nodeMapping.children.add(childReference);
 			childReference.compartment := compartmentMapping;
 			childReference.containmentFeature := containment;
@@ -321,25 +321,25 @@ for (class in getLinks()) {
 	
 	// Create GmfTool creation tool
 	var creationTool := createCreationTool(class);
-	mfTrace.trace(class, creationTool, "creationTool");
+	if (mTrace.isDefined()) mfTrace.trace(class, creationTool, "creationTool");
 	linksToolGroup.tools.add(creationTool);
 	
 	// Create GmfGraph figure descriptor
 	var figureDescriptor := new GmfGraph!FigureDescriptor;
-	mfTrace.trace(class, figureDescriptor, "figureDescriptor");
+	if (mTrace.isDefined()) mfTrace.trace(class, figureDescriptor, "figureDescriptor");
 	figureDescriptor.name := class.name + 'Figure';
 	figureGallery.descriptors.add(figureDescriptor);
 	
 	// Create GmfGraph polyline connection
 	var polylineConnection := new GmfGraph!PolylineConnection;
-	mfTrace.trace(class, polylineConnection, "polylineConnection");
+	if (mTrace.isDefined()) mfTrace.trace(class, polylineConnection, "polylineConnection");
 	figureDescriptor.actualFigure := polylineConnection;
 	polylineConnection.name := figureDescriptor.name;
 	polylineConnection.formatConnection(class);
 
 	// Create GmfGraph connection
 	var connection := new GmfGraph!Connection;
-	mfTrace.trace(class, connection, "connection");
+	if (mTrace.isDefined()) mfTrace.trace(class, connection, "connection");
 	connection.name := class.name;
 	connection.figure := figureDescriptor;
 	canvas.connections.add(connection);
@@ -349,7 +349,7 @@ for (class in getLinks()) {
 	for (containmentFeature in getAllSuitableContainmentReferences(class)) {
 		// Create GmfMap link mapping
 		var linkMapping : new GmfMap!LinkMapping;
-		mfTrace.trace(containmentFeature, linkMapping, "linkMapping");
+		if (mTrace.isDefined()) mfTrace.trace(containmentFeature, linkMapping, "linkMapping");
 		mapping.links.add(linkMapping);
 		linkMapping.containmentFeature := containmentFeature;
 		linkMapping.diagramLink := connection;
@@ -363,7 +363,7 @@ for (class in getLinks()) {
 		var targetEndConstraint := class.getTargetConstraint();
 		if (sourceEndConstraint.isDefined() or targetEndConstraint.isDefined()) {
 			linkMapping.creationConstraints := new GmfMap!LinkConstraints;
-			mfTrace.trace(containmentFeature, linkMapping, "linkMapping");
+			if (mTrace.isDefined()) mfTrace.trace(containmentFeature, linkMapping, "linkMapping");
 			if (sourceEndConstraint.isDefined()) {
 				linkMapping.creationConstraints.sourceEnd := new GmfMap!Constraint;
 				linkMapping.creationConstraints.sourceEnd.body := sourceEndConstraint;				
@@ -380,21 +380,21 @@ for (class in getLinks()) {
 	
 	if (hasLabel) {
 		var labelFigureDescriptor := createFigureDescriptor(class.getLabelName() + 'Figure');
-		mfTrace.trace(class, labelFigureDescriptor, "labelFigureDescriptor");
+		if (mTrace.isDefined()) mfTrace.trace(class, labelFigureDescriptor, "labelFigureDescriptor");
 		var label := class.createLabel();
-		mfTrace.trace(class, label, "label");
+		if (mTrace.isDefined()) mfTrace.trace(class, label, "label");
 		label.name := class.getLabelName() + 'Label';
 		labelFigureDescriptor.actualFigure := label;
 
 		var diagramLabel := new GmfGraph!DiagramLabel;
-		mfTrace.trace(class, diagramLabel, "diagramLabel");
+		if (mTrace.isDefined()) mfTrace.trace(class, diagramLabel, "diagramLabel");
 		diagramLabel.figure := labelFigureDescriptor;
 		diagramLabel.name := class.getLabelName();
 		diagramLabel.elementIcon := class.labelHasIcon(false);
 		canvas.labels.add(diagramLabel);
 
 		var featureLabelMapping := new GmfMap!FeatureLabelMapping;
-		mfTrace.trace(class, featureLabelMapping, "featureLabelMapping");
+		if (mTrace.isDefined()) mfTrace.trace(class, featureLabelMapping, "featureLabelMapping");
 		featureLabelMapping.diagramLabel := diagramLabel;
 		featureLabelMapping.editPattern := class.getLabelEditPattern();
 		featureLabelMapping.editorPattern := class.getLabelEditPattern();
@@ -413,27 +413,27 @@ for (reference in getReferenceLinks()) {
 
 	// Create GmfTool creation tool
 	var creationTool := createCreationTool(reference);
-	mfTrace.trace(reference, creationTool, "creationTool");
+	if (mTrace.isDefined()) mfTrace.trace(reference, creationTool, "creationTool");
 	linksToolGroup.tools.add(creationTool);
 	
 	// Create GmfGraph figure descriptor
 	var figureDescriptor := createFigureDescriptor(referenceName + 'Figure');
-	mfTrace.trace(reference, figureDescriptor, "figureDescriptor");
+	if (mTrace.isDefined()) mfTrace.trace(reference, figureDescriptor, "figureDescriptor");
 	
 	// Create GmfGraph external label figure descriptor
 	var externalLabelFigureDescriptor := createFigureDescriptor(referenceName + 'ExternalLabelFigure');
-	mfTrace.trace(reference, externalLabelFigureDescriptor, "externalLabelFigureDescriptor");
+	if (mTrace.isDefined()) mfTrace.trace(reference, externalLabelFigureDescriptor, "externalLabelFigureDescriptor");
 	
 	// Greate GmfGraph external label
 	var externalLabel := new GmfGraph!Label;
-	mfTrace.trace(reference, externalLabel, "externalLabel");
+	if (mTrace.isDefined()) mfTrace.trace(reference, externalLabel, "externalLabel");
 	externalLabel.name := referenceName + 'ExternalLabel';
 	externalLabel.text := reference.getLinkLabel();
 	externalLabelFigureDescriptor.actualFigure := externalLabel;
 	
 	// Create GmfGraph external label diagram label
 	var externalDiagramLabel := new GmfGraph!DiagramLabel;
-	mfTrace.trace(reference, externalDiagramLabel, "externalDiagramLabel");
+	if (mTrace.isDefined()) mfTrace.trace(reference, externalDiagramLabel, "externalDiagramLabel");
 	externalDiagramLabel.figure := externalLabelFigureDescriptor;
 	externalDiagramLabel.name := externalLabel.name;
 	externalDiagramLabel.elementIcon := false;
@@ -441,13 +441,13 @@ for (reference in getReferenceLinks()) {
 	
 	// Create GmfGraph polyline connection
 	var polylineConnection := new GmfGraph!PolylineConnection;
-	mfTrace.trace(reference, polylineConnection, "polylineConnection");
+	if (mTrace.isDefined()) mfTrace.trace(reference, polylineConnection, "polylineConnection");
 	figureDescriptor.actualFigure := polylineConnection;
 	polylineConnection.name := figureDescriptor.name;
 	
 	// Create GmfGraph connection
 	var connection := new GmfGraph!Connection;
-	mfTrace.trace(reference, connection, "connection");
+	if (mTrace.isDefined()) mfTrace.trace(reference, connection, "connection");
 	connection.name := referenceName;
 	connection.figure := figureDescriptor;
 	canvas.connections.add(connection);
@@ -456,7 +456,7 @@ for (reference in getReferenceLinks()) {
 	
 	// Create GmfMap link mapping
 	var linkMapping : new GmfMap!LinkMapping;
-	mfTrace.trace(reference, linkMapping, "linkMapping");
+	if (mTrace.isDefined()) mfTrace.trace(reference, linkMapping, "linkMapping");
 	mapping.links.add(linkMapping);
 	linkMapping.diagramLink := connection;
 	linkMapping.linkMetaFeature := reference;
@@ -464,7 +464,7 @@ for (reference in getReferenceLinks()) {
 	
 	// Create GmfMap external label mapping
 	var externalLabelMapping := new GmfMap!DesignLabelMapping;
-	mfTrace.trace(reference, externalLabelMapping, "externalLabelMapping");
+	if (mTrace.isDefined()) mfTrace.trace(reference, externalLabelMapping, "externalLabelMapping");
 	externalLabelMapping.readOnly := true;
 	externalLabelMapping.diagramLabel := externalDiagramLabel;
 	linkMapping.labelMappings.add(externalLabelMapping);
