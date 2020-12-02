@@ -27,6 +27,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
+import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 
 import com.google.common.io.Files;
 import com.google.inject.Guice;
@@ -80,6 +81,7 @@ public abstract class AbstractBenchmark {
 			module.parse(buildFile);
 		} catch (Exception e) {
 			e.printStackTrace();
+			cleanup(outputPath);
 			fail(e);
 		}
 		// Execute
@@ -88,9 +90,10 @@ public abstract class AbstractBenchmark {
 			module.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
+			cleanup(outputPath);
 			fail("Exception during first execution");
 		}
-		/*
+		
 		// Run modifications
 		System.out.println("Performing modifications");
 		try {
@@ -98,6 +101,7 @@ public abstract class AbstractBenchmark {
 			modifications.run();
 		} catch (Exception e) {
 			e.printStackTrace();
+			cleanup(outputPath);
 			fail("Unable to perform modifications");
 		}
 		
@@ -108,6 +112,7 @@ public abstract class AbstractBenchmark {
 			module.parse(buildFile);
 		} catch (Exception e) {
 			e.printStackTrace();
+			cleanup(outputPath);
 			fail(e);
 		}
 		
@@ -117,21 +122,25 @@ public abstract class AbstractBenchmark {
 			module.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
+			cleanup(outputPath);
 			fail("Exception during second execution");
 		}
 		
 		// Assert the execution performed as expected
 		final IValidate validator = scenario.getValidator();
-		assertTrue(validator.expected(), validator.ok(module));
-		*/
+		if (!validator.ok(module)) {
+			cleanup(outputPath);
+			fail(validator.expected());
+		}
 		
 		storeResults(scenario, tracing, iteration, module, maxIter);
  
-		TestUtils.clearExecutionFiles(outputPath);
-		cleanup();
+		cleanup(outputPath);
 	}
 
-	protected void cleanup() {}
+	protected void cleanup(Path outputPath) {
+		TestUtils.clearExecutionFiles(outputPath);
+	}
 	
 	/**
 	 * @param tracing

@@ -78,8 +78,8 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	}
 	
 	@Override
-	protected void cleanup() {
-		super.cleanup();
+	protected void cleanup(Path outputPath) {
+		super.cleanup(outputPath);
 		final IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for (int i = 0; i < projects.length; i++ ) {
 			try {
