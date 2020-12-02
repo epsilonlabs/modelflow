@@ -110,11 +110,17 @@ public class ModelFlowSourceConfigurationTab extends AbstractSourceConfiguration
 		configuration.setAttribute(ModelFlowModule.END_TO_END_TRACING_ATTRIBUTE, enableTracingCheckbox.getSelection());
 		configuration.setAttribute(ModelFlowModule.SAVE_END_TO_END_ATTRIBUTE, saveTraceCheckbox.getSelection());
 		configuration.setAttribute(ModelFlowModule.END_TO_END_TRACE_LOCATION_ATTRIBUTE, tracePathText.getText());
-		IFolder containers = ResourcesPlugin.getWorkspace().getRoot().getFolder(new Path(filePath.getText()));
-		Arrays.asList(containers).stream().map(IFolder::getProject).distinct().findFirst().ifPresent(e->{
-			configuration.setAttribute(ModelFlowModule.BASEDIR,e.getRawLocation().toString());
-		});
-		configuration.setAttribute(ModelFlowModule.EXECUTION_TRACE_LOCATION_ATTRIBUTE,getExecutionTracePathForActiveEditor());
+		try {
+			final Path file = new Path(filePath.getText());
+			IFolder containers = ResourcesPlugin.getWorkspace().getRoot().getFolder(file);
+			Arrays.asList(containers).stream().map(IFolder::getProject).distinct().findFirst().ifPresent(e->{
+				configuration.setAttribute(ModelFlowModule.BASEDIR,e.getRawLocation().toString());
+			});
+			configuration.setAttribute(ModelFlowModule.EXECUTION_TRACE_LOCATION_ATTRIBUTE,getExecutionTracePathForActiveEditor());
+			this.setWarningMessage(null);
+		} catch (Exception e) {
+			this.setWarningMessage("Unable to set basedir, please select a valid ModelFlow file");
+		}
 	}
 
 	/** 

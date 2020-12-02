@@ -8,11 +8,15 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.resource;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonResourceFactory;
@@ -93,6 +97,17 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 		metamodelFiles.forEach(file -> this.metamodelFiles.add(file));
 	}
 	
+
+	private Map<Object, Object> saveOptions = new HashMap<>();
+	
+	@Param(key="saveOpts")
+	public void setSaveOptions(Map<Object, Object> map){
+		this.saveOptions = map;
+	}
+	public Map<Object, Object> getSaveOptions() {
+		return saveOptions;
+	}
+	
 	public List<File> getMetamodelFiles() {
 		return metamodelFiles;
 	}
@@ -143,6 +158,23 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 	@Override
 	public void disposeImpl() {
 		super.disposeImpl();
+	}
+	
+	
+	@Override
+	public void save() {
+		if (getModel().getResource() == null) return;
+		try {
+			Map<Object, Object> options = getSaveOptions();
+			if (!getModel().getMetamodelFileUris().isEmpty()) {
+				options = new HashMap<>(getSaveOptions());
+				options.put(XMLResource.OPTION_SCHEMA_LOCATION, true);
+			}
+			getModel().getResource().save(options);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/*

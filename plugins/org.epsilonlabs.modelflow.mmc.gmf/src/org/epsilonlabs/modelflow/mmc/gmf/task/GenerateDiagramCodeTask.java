@@ -19,13 +19,10 @@ import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.gmf.codegen.gmfgen.GenDiagram;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
-import org.eclipse.gmf.internal.common.migrate.ModelLoadHelper;
 import org.epsilonlabs.modelflow.dom.AbstractResource;
 import org.epsilonlabs.modelflow.dom.api.AbstractTask;
 import org.epsilonlabs.modelflow.dom.api.ITask;
@@ -164,14 +161,18 @@ public class GenerateDiagramCodeTask extends AbstractTask implements ITask {
 			if (m.getModel() instanceof EmfModel) {
 				resource = m.getResource();
 				EmfModel model = (EmfModel) m.getModel(); 
-				EObject eObject = m.getResource().eContents().get(0);
-				if (eObject instanceof GenEditorGenerator) {
-					this.myGenModel = (GenEditorGenerator) eObject;
+				EObject eObject = model.getResource().getContents().get(0);
+				if (eObject instanceof GenDiagram) {
+					myGenModel = ((GenDiagram) eObject).getEditorGen();
+				} else if (eObject instanceof GenEditorGenerator) {
+					myGenModel = (GenEditorGenerator) eObject;
+				}
+				if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
+					myGenModel.getDomainGenModel().reconcile();
 				}
 				modelFileUri = model.getModelFileUri();
 			}
 		});
-		loadGenModel();
 		Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);
 		if (!ValidationHelper.isOK(isGenModelValid)) {
 			throw new MFInvalidModelException(isGenModelValid.getException());
@@ -182,21 +183,5 @@ public class GenerateDiagramCodeTask extends AbstractTask implements ITask {
 	public void afterExecute() {
 		LOG.debug("After execution");
 	}
-
-	private Diagnostic loadGenModel() {
-		ResourceSet srcResSet = new ResourceSetImpl();
-		ModelLoadHelper loadHelper = new ModelLoadHelper(srcResSet, modelFileUri);
-		Object root = loadHelper.getContentsRoot();
-		if (root instanceof GenDiagram) {
-			myGenModel = ((GenDiagram) root).getEditorGen();
-		} else if (root instanceof GenEditorGenerator) {
-			myGenModel = (GenEditorGenerator) root;
-		}
-		if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
-			myGenModel.getDomainGenModel().reconcile();
-		}
-		return ValidationHelper.createResourceProblemMarkers(loadHelper.getDiagnostics());
-	}
-
 
 }

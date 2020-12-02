@@ -91,10 +91,12 @@ public class TestUtils {
 	}
 
 	public static void clearExecutionFiles(Path output) {
-		try {
-			FileUtils.deleteDirectory(output.toFile());
-		} catch (IOException e1) {
-			fail("Unable to clear files");
+		if (output.toFile().exists()) {
+			try {
+				FileUtils.deleteDirectory(output.toFile());
+			} catch (IOException e1) {
+				fail("Unable to clear files");
+			}
 		}
 	}
 }
