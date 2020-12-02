@@ -23,16 +23,24 @@ import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
  */
 public class TestUtils {
 	
-	protected static Path getProject(String projectName) {
+	protected static Path getExampleProject(String projectName) {
 		return Paths.get(System.getProperty("user.dir"), "..", "..", "examples", projectName).normalize();
+	}
+	
+	protected static Path getExampleProject(Path navigateFromExamplesFolder, String projectName) {
+		return Paths.get(System.getProperty("user.dir"), "..", "..", "examples", navigateFromExamplesFolder.toString(), projectName).normalize();
 	}
 
 	public static Path getOutputPath(String projectName) {
 		return Paths.get(ResourceLocator.locateInTestDir(projectName)).normalize();
 	}
-
+	
 	public static Path copyExampleProjectToTempLocation(String projectName) {
-		Path sourceProject = getProject(projectName);
+		Path sourceProject = getExampleProject(projectName);
+		return copyExampleProjectToTempLocation(sourceProject, projectName);
+	}
+
+	public static Path copyExampleProjectToTempLocation(Path sourceProject, String projectName) {
 		Path destinationProject = getOutputPath(projectName);
 		if (destinationProject.toFile().exists()) {
 			try {
@@ -70,21 +78,20 @@ public class TestUtils {
 	/**
 	 * @return the buildScript as file
 	 */
-	public static File getBuildScript(String projectName, String scriptFile) {
-		return getOutputPath(projectName).resolve(scriptFile).toFile();
+	public static File getBuildScript(Path outputPath, String scriptFile) {
+		return outputPath.resolve(scriptFile).toFile();
 	}
 
 	private static FileFilter getExampleFileFilter() {
 		return pathname -> {
 			String absolutePath = pathname.getAbsolutePath();
 			boolean binOrTarget = absolutePath.contains("/bin/") || absolutePath.contains("/target/");
-			return !pathname.isHidden() && !binOrTarget;
+			return !binOrTarget; //!pathname.isHidden()
 		};
 	}
 
-	public static void clearExecutionFiles(String projectName) {
+	public static void clearExecutionFiles(Path output) {
 		try {
-			final Path output = getOutputPath(projectName);
 			FileUtils.deleteDirectory(output.toFile());
 		} catch (IOException e1) {
 			fail("Unable to clear files");

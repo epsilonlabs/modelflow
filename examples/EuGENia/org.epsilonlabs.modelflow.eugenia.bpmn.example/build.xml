@@ -1,0 +1,5 @@
+<project name="eugenia" default="eugenia">
+<target name="eugenia">
+	<epsilon.eugenia src="resources/model.simplebpmn.emf" />
+</target>
+</project>

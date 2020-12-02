@@ -3,8 +3,12 @@
  */
 package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
 
+import java.io.File;
+import java.nio.file.Path;
+
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios.ComponentScenarios;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.ScenarioSource;
+import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.TestUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -25,8 +29,10 @@ public class ComponentBenchmark extends AbstractBenchmark{
 		setupClass();
 		String projectName = "org.epsilonlabs.modelflow.component.example";
 		String buildFileName = "component.mflow";
-		
-		testExecution(scenario, tracing, iteration, projectName, buildFileName, MAX_ITER);
+		final Path outputPath = TestUtils.copyExampleProjectToTempLocation(projectName);
+		final File buildScript = TestUtils.getBuildScript(outputPath, buildFileName);
+
+		testExecution(scenario, tracing, iteration, outputPath, buildScript, MAX_ITER);
 	}
 
 }

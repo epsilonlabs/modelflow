@@ -9,5 +9,4 @@ for (a in ECore!EAnnotation.all){
 		}
 	}
 }
-"Done".println();
 return genPackages;

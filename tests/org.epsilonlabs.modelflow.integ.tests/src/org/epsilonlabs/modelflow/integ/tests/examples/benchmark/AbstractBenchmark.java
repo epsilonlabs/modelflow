@@ -3,7 +3,6 @@
  */
 package org.epsilonlabs.modelflow.integ.tests.examples.benchmark;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
@@ -14,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
-import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MeasurableObject;
+import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MemoryUnit;
 import org.epsilonlabs.modelflow.execution.control.ProfiledStage;
 import org.epsilonlabs.modelflow.execution.control.StageProfilerMap;
@@ -28,7 +27,6 @@ import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
-import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 
 import com.google.common.io.Files;
 import com.google.inject.Guice;
@@ -71,16 +69,15 @@ public abstract class AbstractBenchmark {
 	 * @param maxIter 
 	 * @throws Exception
 	 */
-	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, String projectName,
-			String buildFileName, int maxIter) throws Exception {
-		final Path outputPath = TestUtils.copyExampleProjectToTempLocation(projectName);
+	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, Path outputPath,
+			File buildFile, int maxIter) throws Exception {
 		boolean protect = scenario.isProtect();
 		ModelFlowModule module = createModule(tracing, protect, outputPath);
 		
 		// Parse
 		System.out.println("Parsing" );
 		try {
-			module.parse(TestUtils.getBuildScript(projectName, buildFileName));
+			module.parse(buildFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e);
@@ -93,6 +90,7 @@ public abstract class AbstractBenchmark {
 			e.printStackTrace();
 			fail("Exception during first execution");
 		}
+		/*
 		// Run modifications
 		System.out.println("Performing modifications");
 		try {
@@ -107,7 +105,7 @@ public abstract class AbstractBenchmark {
 		
 		System.out.println("Parsing second execution" );
 		try {
-			module.parse(TestUtils.getBuildScript(projectName, buildFileName));
+			module.parse(buildFile);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e);
@@ -125,12 +123,16 @@ public abstract class AbstractBenchmark {
 		// Assert the execution performed as expected
 		final IValidate validator = scenario.getValidator();
 		assertTrue(validator.expected(), validator.ok(module));
+		*/
 		
 		storeResults(scenario, tracing, iteration, module, maxIter);
  
-		TestUtils.clearExecutionFiles(projectName);
+		TestUtils.clearExecutionFiles(outputPath);
+		cleanup();
 	}
 
+	protected void cleanup() {}
+	
 	/**
 	 * @param tracing
 	 * @param outputPath
