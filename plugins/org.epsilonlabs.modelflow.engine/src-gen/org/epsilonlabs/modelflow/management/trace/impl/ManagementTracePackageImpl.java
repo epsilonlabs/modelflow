@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.FileElement;
 import org.epsilonlabs.modelflow.management.trace.Link;
-import org.epsilonlabs.modelflow.management.trace.ManagementOperation;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceFactory;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
@@ -98,13 +97,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	private EClass linkEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass managementOperationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -270,16 +262,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EReference getTrace_Properties() {
-		return (EReference)traceEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getElement() {
 		return elementEClass;
 	}
@@ -300,6 +282,16 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
+	public EAttribute getElement_Role() {
+		return (EAttribute)elementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getModelElement() {
 		return modelElementEClass;
 	}
@@ -312,16 +304,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	@Override
 	public EAttribute getModelElement_ElementId() {
 		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getModelElement_Role() {
-		return (EAttribute)modelElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -420,7 +402,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EAttribute getLink_Link() {
+	public EAttribute getLink_Type() {
 		return (EAttribute)linkEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -430,8 +412,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EClass getManagementOperation() {
-		return managementOperationEClass;
+	public EAttribute getLink_Operation() {
+		return (EAttribute)linkEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -440,8 +422,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EAttribute getManagementOperation_ManagementOperation() {
-		return (EAttribute)managementOperationEClass.getEStructuralFeatures().get(0);
+	public EReference getLink_Properties() {
+		return (EReference)linkEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -514,14 +496,13 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		createEReference(traceEClass, TRACE__SOURCES);
 		createEReference(traceEClass, TRACE__TARGETS);
 		createEReference(traceEClass, TRACE__LINK);
-		createEReference(traceEClass, TRACE__PROPERTIES);
 
 		elementEClass = createEClass(ELEMENT);
 		createEAttribute(elementEClass, ELEMENT__RESOURCE);
+		createEAttribute(elementEClass, ELEMENT__ROLE);
 
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__ELEMENT_ID);
-		createEAttribute(modelElementEClass, MODEL_ELEMENT__ROLE);
 
 		modelElementPropertyEClass = createEClass(MODEL_ELEMENT_PROPERTY);
 		createEAttribute(modelElementPropertyEClass, MODEL_ELEMENT_PROPERTY__PROPERTY);
@@ -535,10 +516,9 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		createEAttribute(regionEClass, REGION__LENGTH);
 
 		linkEClass = createEClass(LINK);
-		createEAttribute(linkEClass, LINK__LINK);
-
-		managementOperationEClass = createEClass(MANAGEMENT_OPERATION);
-		createEAttribute(managementOperationEClass, MANAGEMENT_OPERATION__MANAGEMENT_OPERATION);
+		createEAttribute(linkEClass, LINK__TYPE);
+		createEAttribute(linkEClass, LINK__OPERATION);
+		createEReference(linkEClass, LINK__PROPERTIES);
 
 		propertyEClass = createEClass(PROPERTY);
 		createEAttribute(propertyEClass, PROPERTY__KEY);
@@ -576,7 +556,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		modelElementEClass.getESuperTypes().add(this.getElement());
 		modelElementPropertyEClass.getESuperTypes().add(this.getModelElement());
 		fileElementEClass.getESuperTypes().add(this.getElement());
-		managementOperationEClass.getESuperTypes().add(this.getLink());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(managementTraceEClass, ManagementTrace.class, "ManagementTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -590,14 +569,13 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		initEReference(getTrace_Sources(), this.getElement(), null, "sources", null, 0, -1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTrace_Targets(), this.getElement(), null, "targets", null, 0, -1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTrace_Link(), this.getLink(), null, "link", null, 0, 1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTrace_Properties(), this.getProperty(), null, "properties", null, 0, -1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(elementEClass, Element.class, "Element", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getElement_Resource(), ecorePackage.getEString(), "resource", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getElement_Role(), ecorePackage.getEString(), "role", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElement_ElementId(), ecorePackage.getEString(), "elementId", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getModelElement_Role(), ecorePackage.getEString(), "role", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelElementPropertyEClass, ModelElementProperty.class, "ModelElementProperty", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElementProperty_Property(), ecorePackage.getEString(), "property", null, 0, 1, ModelElementProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -611,10 +589,9 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		initEAttribute(getRegion_Length(), ecorePackage.getEInt(), "length", null, 0, 1, Region.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getLink_Link(), ecorePackage.getEString(), "link", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(managementOperationEClass, ManagementOperation.class, "ManagementOperation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getManagementOperation_ManagementOperation(), ecorePackage.getEString(), "managementOperation", null, 0, 1, ManagementOperation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLink_Type(), ecorePackage.getEString(), "type", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLink_Operation(), ecorePackage.getEString(), "operation", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getLink_Properties(), this.getProperty(), null, "properties", null, 0, -1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getProperty_Key(), ecorePackage.getEString(), "key", null, 0, 1, Property.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -694,13 +671,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		   source,
 		   new String[] {
 			   "classIcon", "link"
-		   });
-		addAnnotation
-		  (managementOperationEClass,
-		   source,
-		   new String[] {
-			   "classIcon", "operation",
-			   "label", "return self.link + \':\' + self.managementOperation;"
 		   });
 		addAnnotation
 		  (propertyEClass,

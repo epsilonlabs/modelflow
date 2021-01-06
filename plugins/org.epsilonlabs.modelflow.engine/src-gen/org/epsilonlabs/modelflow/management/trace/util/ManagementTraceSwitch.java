@@ -131,13 +131,6 @@ public class ManagementTraceSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case ManagementTracePackage.MANAGEMENT_OPERATION: {
-				ManagementOperation managementOperation = (ManagementOperation)theEObject;
-				T result = caseManagementOperation(managementOperation);
-				if (result == null) result = caseLink(managementOperation);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case ManagementTracePackage.PROPERTY: {
 				Property property = (Property)theEObject;
 				T result = caseProperty(property);
@@ -280,21 +273,6 @@ public class ManagementTraceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLink(Link object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Management Operation</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Management Operation</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseManagementOperation(ManagementOperation object) {
 		return null;
 	}
 

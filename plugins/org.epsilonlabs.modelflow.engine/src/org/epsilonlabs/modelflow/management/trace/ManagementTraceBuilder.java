@@ -34,7 +34,7 @@ public class ManagementTraceBuilder {
 	public Trace build(){
 		Trace trace = ManagementTraceFactoryImpl.eINSTANCE.createTrace();
 		if (link != null) trace.setLink(link);
-		trace.getProperties().addAll(properties);
+		trace.getLink().getProperties().addAll(properties);
 		trace.getSources().addAll(sources);
 		trace.getTargets().addAll(targets);
 		return trace;
@@ -42,11 +42,11 @@ public class ManagementTraceBuilder {
 	
 	public ManagementTraceBuilder managementLink(String type, String operation){
 		if (type!= null || operation!= null) {			
-			ManagementOperation managementOp = ManagementTraceFactoryImpl.eINSTANCE.createManagementOperation();
+			Link managementOp = ManagementTraceFactoryImpl.eINSTANCE.createLink();
 			if (type != null && !type.isEmpty())
-				managementOp.setLink(type);
+				managementOp.setType(type);
 			if (operation != null && !operation.isEmpty()) 
-				managementOp.setManagementOperation(operation);
+				managementOp.setOperation(operation);
 			this.link = managementOp;
 		}
 		
@@ -57,7 +57,7 @@ public class ManagementTraceBuilder {
 		if (type!= null) {			
 			link = ManagementTraceFactoryImpl.eINSTANCE.createLink();
 			if (!type.isEmpty())
-				link.setLink(type);
+				link.setType(type);
 		}
 		
 		return this;
@@ -66,7 +66,7 @@ public class ManagementTraceBuilder {
 	private ModelElement modelElement(String elementId, @Nullable AbstractResource container, @Nullable String role) {
 		ModelElement element = ManagementTraceFactoryImpl.eINSTANCE.createModelElement();
 		if (container instanceof Resource) 			
-			element.setContainer(EcoreUtil.copy((Resource) container));
+			element.setResource(container.getName());
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -77,7 +77,7 @@ public class ManagementTraceBuilder {
 	private ModelElement modelElementProperty(String elementId, @Nullable AbstractResource container, String name, @Nullable String role) {
 		ModelElementProperty element = ManagementTraceFactoryImpl.eINSTANCE.createModelElementProperty();
 		if (container instanceof Resource) 			
-			element.setContainer(EcoreUtil.copy((Resource) container));
+			element.setResource(container.getName());
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -92,7 +92,7 @@ public class ManagementTraceBuilder {
 			Resource res = DomFactoryImpl.eINSTANCE.createResource();
 			res.setDeclared(false);
 			res.setName(file);
-			element.setContainer(res);
+			element.setResource(res.getName());
 		}
 		Region region = ManagementTraceFactoryImpl.eINSTANCE.createRegion();
 		if (offset != null) 

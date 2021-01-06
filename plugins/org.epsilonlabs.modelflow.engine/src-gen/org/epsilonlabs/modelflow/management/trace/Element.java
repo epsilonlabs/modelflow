@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  * </p>
  * <ul>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.Element#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.Element#getRole <em>Role</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getElement()
@@ -49,5 +50,27 @@ public interface Element extends EObject {
 	 * @generated
 	 */
 	void setResource(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Role</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Role</em>' attribute.
+	 * @see #setRole(String)
+	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getElement_Role()
+	 * @model
+	 * @generated
+	 */
+	String getRole();
+
+	/**
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.Element#getRole <em>Role</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Role</em>' attribute.
+	 * @see #getRole()
+	 * @generated
+	 */
+	void setRole(String value);
 
 } // Element

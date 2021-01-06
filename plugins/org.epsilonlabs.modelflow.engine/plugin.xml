@@ -12,11 +12,17 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated managementTrace -->
       <package
-            uri="http://eclipse.org/epsilon/modelflow/management/trace/1.0"
+            uri="http://eclipse.org/epsilon/modelflow/management/trace/1.1"
             class="org.epsilonlabs.modelflow.management.trace.ManagementTracePackage"
             genModel="model/managementTrace.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated managementTrace -->
+      <parser
+            type="trace"
+            class="org.epsilonlabs.modelflow.management.trace.util.ManagementTraceResourceFactoryImpl"/>
+   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated executionTrace -->
       <package
@@ -31,13 +37,4 @@
             type="trace"
             class="org.epsilonlabs.modelflow.execution.trace.util.ExecutionTraceResourceFactoryImpl"/>
    </extension>
-
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated executionTrace -->
-      <package
-            uri="http://eclipse.org/epsilon/modelflow/1.0"
-            class="org.epsilonlabs.modelflow.dom.DomPackage"
-            genModel="model/executionTrace.genmodel"/>
-   </extension>
-
 </plugin>

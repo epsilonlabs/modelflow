@@ -25,6 +25,7 @@ import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
  * </p>
  * <ul>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl#getRole <em>Role</em>}</li>
  * </ul>
  *
  * @generated
@@ -48,6 +49,24 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected String resource = RESOURCE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getRole() <em>Role</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRole()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ROLE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getRole() <em>Role</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRole()
+	 * @generated
+	 * @ordered
+	 */
+	protected String role = ROLE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -96,10 +115,35 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRole(String newRole) {
+		String oldRole = role;
+		role = newRole;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.ELEMENT__ROLE, oldRole, role));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case ManagementTracePackage.ELEMENT__RESOURCE:
 				return getResource();
+			case ManagementTracePackage.ELEMENT__ROLE:
+				return getRole();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -114,6 +158,9 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 		switch (featureID) {
 			case ManagementTracePackage.ELEMENT__RESOURCE:
 				setResource((String)newValue);
+				return;
+			case ManagementTracePackage.ELEMENT__ROLE:
+				setRole((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -130,6 +177,9 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 			case ManagementTracePackage.ELEMENT__RESOURCE:
 				setResource(RESOURCE_EDEFAULT);
 				return;
+			case ManagementTracePackage.ELEMENT__ROLE:
+				setRole(ROLE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -144,6 +194,8 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 		switch (featureID) {
 			case ManagementTracePackage.ELEMENT__RESOURCE:
 				return RESOURCE_EDEFAULT == null ? resource != null : !RESOURCE_EDEFAULT.equals(resource);
+			case ManagementTracePackage.ELEMENT__ROLE:
+				return ROLE_EDEFAULT == null ? role != null : !ROLE_EDEFAULT.equals(role);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -160,6 +212,8 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (resource: ");
 		result.append(resource);
+		result.append(", role: ");
+		result.append(role);
 		result.append(')');
 		return result.toString();
 	}

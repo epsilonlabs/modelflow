@@ -101,15 +101,6 @@ public interface ManagementTraceFactory extends EFactory {
 	Link createLink();
 
 	/**
-	 * Returns a new object of class '<em>Management Operation</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Management Operation</em>'.
-	 * @generated
-	 */
-	ManagementOperation createManagementOperation();
-
-	/**
 	 * Returns a new object of class '<em>Property</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

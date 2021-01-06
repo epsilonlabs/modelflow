@@ -71,7 +71,6 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 			case ManagementTracePackage.FILE_ELEMENT: return createFileElement();
 			case ManagementTracePackage.REGION: return createRegion();
 			case ManagementTracePackage.LINK: return createLink();
-			case ManagementTracePackage.MANAGEMENT_OPERATION: return createManagementOperation();
 			case ManagementTracePackage.PROPERTY: return createProperty();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -164,17 +163,6 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 	public Link createLink() {
 		LinkImpl link = new LinkImpl();
 		return link;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ManagementOperation createManagementOperation() {
-		ManagementOperationImpl managementOperation = new ManagementOperationImpl();
-		return managementOperation;
 	}
 
 	/**

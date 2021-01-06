@@ -7,8 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.management.trace;
 
-import org.epsilonlabs.modelflow.dom.Resource;
-
 public class ManagementTracePrinter {
 
 	protected final TaskTrace tTrace;
@@ -20,16 +18,21 @@ public class ManagementTracePrinter {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("==========================\n");
-		builder.append(String.format("==Traces for %s== %n", tTrace.getTask().getName()));
+		builder.append(String.format("==Traces for %s== %n", tTrace.getTask()));
 		builder.append("==========================\n");
 		for (Trace trace : tTrace.getTraces()) {
 			builder.append("- Link: \n");
-			builder.append(String.format("  (type: %s", trace.getLink().getLink()));
-			if (trace.getLink() instanceof ManagementOperation) {			
-				builder.append(String.format(", op: %s)%n", ((ManagementOperation)trace.getLink()).getManagementOperation()));
+			builder.append(String.format("  (type: %s", trace.getLink().getType()));
+			if (!trace.getLink().getOperation().isEmpty()) {			
+				builder.append(String.format(", op: %s)%n", trace.getLink().getOperation()));
 			} else {
 				builder.append(")\n");
 			}
+			builder.append("- Properties: \n");
+			for (Property prop : trace.getLink().getProperties()) {
+				builder.append(String.format("  (%s: %s)%n", prop.getKey(), prop.getValue()));
+			}
+			
 			builder.append("- Sources: \n");
 			for (Element source : trace.getSources()) {
 				element(builder, source);
@@ -37,10 +40,6 @@ public class ManagementTracePrinter {
 			builder.append("- Targets: \n");
 			for (Element target : trace.getTargets()) {
 				element(builder, target);
-			}
-			builder.append("- Properties: \n");
-			for (Property prop : trace.getProperties()) {
-				builder.append(String.format("  (%s: %s)%n", prop.getKey(), prop.getValue()));
 			}
 			builder.append("----------------\n");
 		}
@@ -66,8 +65,8 @@ public class ManagementTracePrinter {
 	}
 
 	protected String getContainer(Element element){
-		Resource container = element.getContainer();
-		return (container != null) ? container.getName() : "";
+		return element.getResource();
+		
 	}
 	
 }
