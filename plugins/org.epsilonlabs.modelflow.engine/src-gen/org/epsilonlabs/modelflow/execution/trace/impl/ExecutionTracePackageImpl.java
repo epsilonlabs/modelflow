@@ -13,13 +13,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import org.epsilonlabs.modelflow.dom.DomPackage;
-
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
-
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceFactory;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
@@ -141,17 +135,11 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 
 		isInited = true;
 
-		// Obtain or create and register interdependencies
-		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
-		DomPackageImpl theDomPackage = (DomPackageImpl)(registeredPackage instanceof DomPackageImpl ? registeredPackage : DomPackage.eINSTANCE);
-
 		// Create package meta-data objects
 		theExecutionTracePackage.createPackageContents();
-		theDomPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theExecutionTracePackage.initializePackageContents();
-		theDomPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theExecutionTracePackage.freeze();

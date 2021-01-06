@@ -9,8 +9,6 @@
  */
 package org.epsilonlabs.modelflow.management.trace.impl;
 
-import java.util.Map;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -65,7 +63,6 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case ManagementTracePackage.ESTRING_TO_OBJECT_MAP_ENTRY: return (EObject)createEStringToObjectMapEntry();
 			case ManagementTracePackage.MANAGEMENT_TRACE: return createManagementTrace();
 			case ManagementTracePackage.TASK_TRACE: return createTaskTrace();
 			case ManagementTracePackage.TRACE: return createTrace();
@@ -79,16 +76,6 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Map.Entry<String, Object> createEStringToObjectMapEntry() {
-		EStringToObjectMapEntryImpl eStringToObjectMapEntry = new EStringToObjectMapEntryImpl();
-		return eStringToObjectMapEntry;
 	}
 
 	/**

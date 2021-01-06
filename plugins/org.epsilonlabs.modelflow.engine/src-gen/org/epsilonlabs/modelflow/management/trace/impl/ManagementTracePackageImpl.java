@@ -9,19 +9,12 @@
  */
 package org.epsilonlabs.modelflow.management.trace.impl;
 
-import java.util.Map;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import org.epsilonlabs.modelflow.dom.DomPackage;
-
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
-
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.FileElement;
 import org.epsilonlabs.modelflow.management.trace.Link;
@@ -43,13 +36,6 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  * @generated
  */
 public class ManagementTracePackageImpl extends EPackageImpl implements ManagementTracePackage {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass eStringToObjectMapEntryEClass = null;
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -174,17 +160,11 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 
 		isInited = true;
 
-		// Obtain or create and register interdependencies
-		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
-		DomPackageImpl theDomPackage = (DomPackageImpl)(registeredPackage instanceof DomPackageImpl ? registeredPackage : DomPackage.eINSTANCE);
-
 		// Create package meta-data objects
 		theManagementTracePackage.createPackageContents();
-		theDomPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theManagementTracePackage.initializePackageContents();
-		theDomPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theManagementTracePackage.freeze();
@@ -192,36 +172,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		// Update the registry and return the package
 		EPackage.Registry.INSTANCE.put(ManagementTracePackage.eNS_URI, theManagementTracePackage);
 		return theManagementTracePackage;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getEStringToObjectMapEntry() {
-		return eStringToObjectMapEntryEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getEStringToObjectMapEntry_Key() {
-		return (EAttribute)eStringToObjectMapEntryEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getEStringToObjectMapEntry_Value() {
-		return (EAttribute)eStringToObjectMapEntryEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -260,8 +210,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EReference getTaskTrace_Task() {
-		return (EReference)taskTraceEClass.getEStructuralFeatures().get(0);
+	public EAttribute getTaskTrace_Task() {
+		return (EAttribute)taskTraceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -340,8 +290,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EReference getElement_Container() {
-		return (EReference)elementEClass.getEStructuralFeatures().get(0);
+	public EAttribute getElement_Resource() {
+		return (EAttribute)elementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -553,15 +503,11 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		isCreated = true;
 
 		// Create classes and their features
-		eStringToObjectMapEntryEClass = createEClass(ESTRING_TO_OBJECT_MAP_ENTRY);
-		createEAttribute(eStringToObjectMapEntryEClass, ESTRING_TO_OBJECT_MAP_ENTRY__KEY);
-		createEAttribute(eStringToObjectMapEntryEClass, ESTRING_TO_OBJECT_MAP_ENTRY__VALUE);
-
 		managementTraceEClass = createEClass(MANAGEMENT_TRACE);
 		createEReference(managementTraceEClass, MANAGEMENT_TRACE__TASKS);
 
 		taskTraceEClass = createEClass(TASK_TRACE);
-		createEReference(taskTraceEClass, TASK_TRACE__TASK);
+		createEAttribute(taskTraceEClass, TASK_TRACE__TASK);
 		createEReference(taskTraceEClass, TASK_TRACE__TRACES);
 
 		traceEClass = createEClass(TRACE);
@@ -571,7 +517,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		createEReference(traceEClass, TRACE__PROPERTIES);
 
 		elementEClass = createEClass(ELEMENT);
-		createEReference(elementEClass, ELEMENT__CONTAINER);
+		createEAttribute(elementEClass, ELEMENT__RESOURCE);
 
 		modelElementEClass = createEClass(MODEL_ELEMENT);
 		createEAttribute(modelElementEClass, MODEL_ELEMENT__ELEMENT_ID);
@@ -622,9 +568,6 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
-		// Obtain other dependent packages
-		DomPackage theDomPackage = (DomPackage)EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
-
 		// Create type parameters
 
 		// Set bounds for type parameters
@@ -636,15 +579,11 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		managementOperationEClass.getESuperTypes().add(this.getLink());
 
 		// Initialize classes, features, and operations; add parameters
-		initEClass(eStringToObjectMapEntryEClass, Map.Entry.class, "EStringToObjectMapEntry", !IS_ABSTRACT, !IS_INTERFACE, !IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getEStringToObjectMapEntry_Key(), ecorePackage.getEString(), "key", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getEStringToObjectMapEntry_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(managementTraceEClass, ManagementTrace.class, "ManagementTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getManagementTrace_Tasks(), this.getTaskTrace(), null, "tasks", null, 0, -1, ManagementTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taskTraceEClass, TaskTrace.class, "TaskTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTaskTrace_Task(), theDomPackage.getTask(), null, "task", null, 0, 1, TaskTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTaskTrace_Task(), ecorePackage.getEString(), "task", null, 0, 1, TaskTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTaskTrace_Traces(), this.getTrace(), null, "traces", null, 0, -1, TaskTrace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(traceEClass, Trace.class, "Trace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -654,7 +593,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		initEReference(getTrace_Properties(), this.getProperty(), null, "properties", null, 0, -1, Trace.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(elementEClass, Element.class, "Element", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getElement_Container(), theDomPackage.getResource(), null, "container", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getElement_Resource(), ecorePackage.getEString(), "resource", null, 0, 1, Element.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(modelElementEClass, ModelElement.class, "ModelElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getModelElement_ElementId(), ecorePackage.getEString(), "elementId", null, 0, 1, ModelElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

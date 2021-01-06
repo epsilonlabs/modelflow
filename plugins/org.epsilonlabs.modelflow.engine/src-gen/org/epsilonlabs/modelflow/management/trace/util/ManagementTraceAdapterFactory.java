@@ -9,8 +9,6 @@
  */
 package org.epsilonlabs.modelflow.management.trace.util;
 
-import java.util.Map;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 
@@ -77,10 +75,6 @@ public class ManagementTraceAdapterFactory extends AdapterFactoryImpl {
 	protected ManagementTraceSwitch<Adapter> modelSwitch =
 		new ManagementTraceSwitch<Adapter>() {
 			@Override
-			public Adapter caseEStringToObjectMapEntry(Map.Entry<String, Object> object) {
-				return createEStringToObjectMapEntryAdapter();
-			}
-			@Override
 			public Adapter caseManagementTrace(ManagementTrace object) {
 				return createManagementTraceAdapter();
 			}
@@ -143,20 +137,6 @@ public class ManagementTraceAdapterFactory extends AdapterFactoryImpl {
 		return modelSwitch.doSwitch((EObject)target);
 	}
 
-
-	/**
-	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry <em>EString To Object Map Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see java.util.Map.Entry
-	 * @generated
-	 */
-	public Adapter createEStringToObjectMapEntryAdapter() {
-		return null;
-	}
 
 	/**
 	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.management.trace.ManagementTrace <em>Management Trace</em>}'.

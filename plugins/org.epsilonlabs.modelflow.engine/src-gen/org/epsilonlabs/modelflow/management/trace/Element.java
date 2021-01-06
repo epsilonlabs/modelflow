@@ -11,8 +11,6 @@ package org.epsilonlabs.modelflow.management.trace;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.epsilonlabs.modelflow.dom.Resource;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Element</b></em>'.
@@ -22,7 +20,7 @@ import org.epsilonlabs.modelflow.dom.Resource;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.Element#getContainer <em>Container</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.Element#getResource <em>Resource</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getElement()
@@ -31,25 +29,25 @@ import org.epsilonlabs.modelflow.dom.Resource;
  */
 public interface Element extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Container</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Resource</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Container</em>' containment reference.
-	 * @see #setContainer(Resource)
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getElement_Container()
-	 * @model containment="true"
+	 * @return the value of the '<em>Resource</em>' attribute.
+	 * @see #setResource(String)
+	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getElement_Resource()
+	 * @model
 	 * @generated
 	 */
-	Resource getContainer();
+	String getResource();
 
 	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.Element#getContainer <em>Container</em>}' containment reference.
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.Element#getResource <em>Resource</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Container</em>' containment reference.
-	 * @see #getContainer()
+	 * @param value the new value of the '<em>Resource</em>' attribute.
+	 * @see #getResource()
 	 * @generated
 	 */
-	void setContainer(Resource value);
+	void setResource(String value);
 
 } // Element
