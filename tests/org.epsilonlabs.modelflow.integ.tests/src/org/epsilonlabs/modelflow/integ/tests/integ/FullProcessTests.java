@@ -14,6 +14,7 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.epsilonlabs.modelflow.ModelFlowModule;
+import org.epsilonlabs.modelflow.dom.Workflow;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.integ.tests.common.WorkflowHelper;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
@@ -66,13 +67,12 @@ public class FullProcessTests {
 	@Ignore	
 	public void oneTaskNoResourceOneExecution() {
 		try {
-			moduleEolTask.getWorkflow();
+			final Workflow workflow = moduleEolTask.getWorkflow();
 			moduleEolTask.execute();
 			
 			ExecutionTrace trace = moduleEolTask.getContext().getExecutionTrace();
 			assertTrue(trace.getExecutions().size() == 1);
 			assertTrue(trace.getExecutions().get(0).getTasks().size() == 1);
-			assertTrue(trace.getExecutions().get(0).getTasks().get(0).getTask().getDefinition().equals("epsilon:eol"));
 		} catch (EolRuntimeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -92,7 +92,6 @@ public class FullProcessTests {
 			ExecutionTrace trace = moduleEolTaskOneModel.getContext().getExecutionTrace();
 			assertTrue(trace.getExecutions().size() == 1);
 			assertTrue(trace.getExecutions().get(0).getTasks().size() == 1);
-			assertTrue(trace.getExecutions().get(0).getTasks().get(0).getTask().getDefinition().equals("epsilon:eol"));
 		} catch (EolRuntimeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -111,7 +110,6 @@ public class FullProcessTests {
 			ExecutionTrace trace = consumed.getContext().getExecutionTrace();
 			assertTrue(trace.getExecutions().size() == 1);
 			assertTrue(trace.getExecutions().get(0).getTasks().size() == 1);
-			assertTrue(trace.getExecutions().get(0).getTasks().get(0).getTask().getDefinition().equals("epsilon:eol"));
 		} catch (EolRuntimeException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -133,7 +131,6 @@ public class FullProcessTests {
 			ExecutionTrace trace = moduleEolTask.getContext().getExecutionTrace();
 			assertTrue(trace.getExecutions().size() == 1);
 			assertTrue(trace.getExecutions().get(0).getTasks().size() == 1);
-			assertTrue(trace.getExecutions().get(0).getTasks().get(0).getTask().getDefinition().equals("epsilon:eol"));
 			
 			/* FIXME
 			 * //change file

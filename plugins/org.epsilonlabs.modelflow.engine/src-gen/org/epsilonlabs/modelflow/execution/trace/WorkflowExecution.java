@@ -11,8 +11,6 @@ package org.epsilonlabs.modelflow.execution.trace;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Workflow Execution</b></em>'.
@@ -23,14 +21,13 @@ import org.epsilonlabs.modelflow.dom.Workflow;
  * </p>
  * <ul>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.WorkflowExecution#getTasks <em>Tasks</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.WorkflowExecution#getWorkflow <em>Workflow</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getWorkflowExecution()
  * @model annotation="exeed classIcon='operation' label='return \'Workflow\' \n+ \' (\' + self.endState +\') \';'"
  * @generated
  */
-public interface WorkflowExecution extends Stateful {
+public interface WorkflowExecution extends Stateful, Snapshot {
 	/**
 	 * Returns the value of the '<em><b>Tasks</b></em>' containment reference list.
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.execution.trace.TaskExecution}.
@@ -42,27 +39,5 @@ public interface WorkflowExecution extends Stateful {
 	 * @generated
 	 */
 	EList<TaskExecution> getTasks();
-
-	/**
-	 * Returns the value of the '<em><b>Workflow</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Workflow</em>' containment reference.
-	 * @see #setWorkflow(Workflow)
-	 * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getWorkflowExecution_Workflow()
-	 * @model containment="true"
-	 * @generated
-	 */
-	Workflow getWorkflow();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.execution.trace.WorkflowExecution#getWorkflow <em>Workflow</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Workflow</em>' containment reference.
-	 * @see #getWorkflow()
-	 * @generated
-	 */
-	void setWorkflow(Workflow value);
 
 } // WorkflowExecution

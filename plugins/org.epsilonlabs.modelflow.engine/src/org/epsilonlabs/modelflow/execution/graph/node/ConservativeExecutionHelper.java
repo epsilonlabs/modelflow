@@ -155,7 +155,7 @@ public class ConservativeExecutionHelper {
 			EList<PropertySnapshot> previousProperties) {
 		boolean sameNumberOfElements = previousProperties.size() == currentProperties.size();
 		boolean allElementsEqual = previousProperties.stream().allMatch(e -> {
-			String key = e.getKey();
+			String key = e.getName();
 			return currentProperties.containsKey(key) && e.getStamp().equals(currentProperties.get(key));
 		});
 		return sameNumberOfElements && allElementsEqual;
@@ -166,9 +166,9 @@ public class ConservativeExecutionHelper {
 		boolean sameNumberOfElements = previousProperties.size() == currentProperties.size();
 		if (sameNumberOfElements) {
 			return previousProperties.parallelStream().filter(e -> {
-				String key = e.getKey();
+				String key = e.getName();
 				return currentProperties.containsKey(key) && !e.getStamp().equals(currentProperties.get(key));
-			}).map(PropertySnapshot::getKey).collect(Collectors.toList());
+			}).map(PropertySnapshot::getName).collect(Collectors.toList());
 		} else {
 			throw new IllegalArgumentException();
 		}

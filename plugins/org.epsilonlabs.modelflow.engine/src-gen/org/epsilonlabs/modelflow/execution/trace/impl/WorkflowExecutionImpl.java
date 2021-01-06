@@ -10,7 +10,6 @@
 package org.epsilonlabs.modelflow.execution.trace.impl;
 
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -18,15 +17,11 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.epsilonlabs.modelflow.dom.Workflow;
-
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
+import org.epsilonlabs.modelflow.execution.trace.Snapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
 
@@ -38,13 +33,50 @@ import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getStamp <em>Stamp</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getTimestamp <em>Timestamp</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getTasks <em>Tasks</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl#getWorkflow <em>Workflow</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecution {
+	/**
+	 * The default value of the '{@link #getStamp() <em>Stamp</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStamp()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Object STAMP_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getStamp() <em>Stamp</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStamp()
+	 * @generated
+	 * @ordered
+	 */
+	protected Object stamp = STAMP_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimestamp()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final Long TIMESTAMP_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getTimestamp() <em>Timestamp</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTimestamp()
+	 * @generated
+	 * @ordered
+	 */
+	protected Long timestamp = TIMESTAMP_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getTasks() <em>Tasks</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -54,16 +86,6 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	 * @ordered
 	 */
 	protected EList<TaskExecution> tasks;
-
-	/**
-	 * The cached value of the '{@link #getWorkflow() <em>Workflow</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getWorkflow()
-	 * @generated
-	 * @ordered
-	 */
-	protected Workflow workflow;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,6 +112,52 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	 * @generated
 	 */
 	@Override
+	public Object getStamp() {
+		return stamp;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setStamp(Object newStamp) {
+		Object oldStamp = stamp;
+		stamp = newStamp;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP, oldStamp, stamp));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setTimestamp(Long newTimestamp) {
+		Long oldTimestamp = timestamp;
+		timestamp = newTimestamp;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP, oldTimestamp, timestamp));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<TaskExecution> getTasks() {
 		if (tasks == null) {
 			tasks = new EObjectContainmentEList<TaskExecution>(TaskExecution.class, this, ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS);
@@ -103,57 +171,10 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	 * @generated
 	 */
 	@Override
-	public Workflow getWorkflow() {
-		return workflow;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetWorkflow(Workflow newWorkflow, NotificationChain msgs) {
-		Workflow oldWorkflow = workflow;
-		workflow = newWorkflow;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW, oldWorkflow, newWorkflow);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setWorkflow(Workflow newWorkflow) {
-		if (newWorkflow != workflow) {
-			NotificationChain msgs = null;
-			if (workflow != null)
-				msgs = ((InternalEObject)workflow).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW, null, msgs);
-			if (newWorkflow != null)
-				msgs = ((InternalEObject)newWorkflow).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW, null, msgs);
-			msgs = basicSetWorkflow(newWorkflow, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW, newWorkflow, newWorkflow));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				return ((InternalEList<?>)getTasks()).basicRemove(otherEnd, msgs);
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
-				return basicSetWorkflow(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -166,10 +187,12 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP:
+				return getStamp();
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP:
+				return getTimestamp();
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				return getTasks();
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
-				return getWorkflow();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -183,12 +206,15 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP:
+				setStamp(newValue);
+				return;
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP:
+				setTimestamp((Long)newValue);
+				return;
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				getTasks().clear();
 				getTasks().addAll((Collection<? extends TaskExecution>)newValue);
-				return;
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
-				setWorkflow((Workflow)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -202,11 +228,14 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP:
+				setStamp(STAMP_EDEFAULT);
+				return;
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP:
+				setTimestamp(TIMESTAMP_EDEFAULT);
+				return;
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				getTasks().clear();
-				return;
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
-				setWorkflow((Workflow)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -220,12 +249,66 @@ public class WorkflowExecutionImpl extends StatefulImpl implements WorkflowExecu
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP:
+				return STAMP_EDEFAULT == null ? stamp != null : !STAMP_EDEFAULT.equals(stamp);
+			case ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP:
+				return TIMESTAMP_EDEFAULT == null ? timestamp != null : !TIMESTAMP_EDEFAULT.equals(timestamp);
 			case ExecutionTracePackage.WORKFLOW_EXECUTION__TASKS:
 				return tasks != null && !tasks.isEmpty();
-			case ExecutionTracePackage.WORKFLOW_EXECUTION__WORKFLOW:
-				return workflow != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == Snapshot.class) {
+			switch (derivedFeatureID) {
+				case ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP: return ExecutionTracePackage.SNAPSHOT__STAMP;
+				case ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP: return ExecutionTracePackage.SNAPSHOT__TIMESTAMP;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == Snapshot.class) {
+			switch (baseFeatureID) {
+				case ExecutionTracePackage.SNAPSHOT__STAMP: return ExecutionTracePackage.WORKFLOW_EXECUTION__STAMP;
+				case ExecutionTracePackage.SNAPSHOT__TIMESTAMP: return ExecutionTracePackage.WORKFLOW_EXECUTION__TIMESTAMP;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (stamp: ");
+		result.append(stamp);
+		result.append(", timestamp: ");
+		result.append(timestamp);
+		result.append(')');
+		return result.toString();
 	}
 
 } //WorkflowExecutionImpl

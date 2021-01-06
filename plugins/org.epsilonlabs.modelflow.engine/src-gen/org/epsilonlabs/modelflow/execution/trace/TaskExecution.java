@@ -11,8 +11,6 @@ package org.epsilonlabs.modelflow.execution.trace;
 
 import org.eclipse.emf.common.util.EList;
 
-import org.epsilonlabs.modelflow.dom.Task;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Task Execution</b></em>'.
@@ -26,14 +24,13 @@ import org.epsilonlabs.modelflow.dom.Task;
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getOutputModels <em>Output Models</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getInputProperties <em>Input Properties</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getOutputProperties <em>Output Properties</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getTask <em>Task</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getTaskExecution()
  * @model annotation="exeed classIcon='operation' label='return self.task.name \n+ \' (\' + self.endState +\') \';'"
  * @generated
  */
-public interface TaskExecution extends Stateful {
+public interface TaskExecution extends Stateful, Named {
 	/**
 	 * Returns the value of the '<em><b>Input Models</b></em>' containment reference list.
 	 * The list contents are of type {@link org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot}.
@@ -81,27 +78,5 @@ public interface TaskExecution extends Stateful {
 	 * @generated
 	 */
 	EList<PropertySnapshot> getOutputProperties();
-
-	/**
-	 * Returns the value of the '<em><b>Task</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Task</em>' containment reference.
-	 * @see #setTask(Task)
-	 * @see org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage#getTaskExecution_Task()
-	 * @model containment="true"
-	 * @generated
-	 */
-	Task getTask();
-
-	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getTask <em>Task</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Task</em>' containment reference.
-	 * @see #getTask()
-	 * @generated
-	 */
-	void setTask(Task value);
 
 } // TaskExecution

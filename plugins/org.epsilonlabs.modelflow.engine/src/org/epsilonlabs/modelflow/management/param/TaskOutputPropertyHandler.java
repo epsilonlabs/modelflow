@@ -99,7 +99,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 			this.hashes = new HashMap<String, Object>();
 			for (Method m : annotatedMethods) {
 				String key = getKey(m);
-				Optional<Object> value = taskExecution.getOutputProperties().stream().filter(p->p.getKey().equals(key)).map(PropertySnapshot::getStamp).findFirst();
+				Optional<Object> value = taskExecution.getOutputProperties().stream().filter(p->p.getName().equals(key)).map(PropertySnapshot::getStamp).findFirst();
 				if (value.isPresent()){
 					Object trace = value.get();
 					try {

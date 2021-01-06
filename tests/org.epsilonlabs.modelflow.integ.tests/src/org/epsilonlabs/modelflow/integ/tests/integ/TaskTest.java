@@ -91,8 +91,8 @@ public class TaskTest  {
 				WorkflowExecution execution = executionTrace.getExecutions().get(0);
 				EList<TaskExecution> tasks = execution.getTasks();
 				assertTrue(tasks.size() ==2);
-				assertTrue("print".equals(tasks.get(0).getTask().getName()));
-				assertTrue("print2".equals(tasks.get(1).getTask().getName()));
+				assertTrue("print".equals(tasks.get(0).getName()));
+				assertTrue("print2".equals(tasks.get(1).getName()));
 				return true;
 			}
 			

@@ -50,7 +50,7 @@ public class ExecutionTracePrinter {
 	
 
 	protected void appendTask(StringBuilder builder, TaskExecution t) {
-		appendFormatted(builder, ">> %s \n", t.getTask().getName());
+		appendFormatted(builder, ">> %s \n", t.getName());
 		appendFormatted(builder, " status: %s\n", t.getEndState());
 		if (!t.getInputModels().isEmpty()) {					
 			builder.append(" inputs:\n");
@@ -79,13 +79,13 @@ public class ExecutionTracePrinter {
 	}
 
 	protected void appendResourceSnapshot(StringBuilder builder, ResourceSnapshot o) {
-		appendFormatted(builder, "  -id: %s\n", o.getResource().getName());
+		appendFormatted(builder, "  -id: %s\n", o.getName());
 		appendFormatted(builder, "   timestamp: %s\n", millisToDate(o.getTimestamp()));
 		appendFormatted(builder, "   stamp: %s\n", o.getStamp());
 	}
 	
 	protected void appendPropertySnapshot(StringBuilder builder, PropertySnapshot o) {
-		appendFormatted(builder, "  -id: %s\n", o.getKey());
+		appendFormatted(builder, "  -id: %s\n", o.getName());
 		appendFormatted(builder, "   timestamp: %s\n", millisToDate(o.getTimestamp()));
 		appendFormatted(builder, "   stamp: %s\n", o.getStamp());
 	}
