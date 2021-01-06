@@ -25,6 +25,13 @@
             genModel="model/executionTrace.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated executionTrace -->
+      <parser
+            type="trace"
+            class="org.epsilonlabs.modelflow.execution.trace.util.ExecutionTraceResourceFactoryImpl"/>
+   </extension>
+
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated executionTrace -->
       <package

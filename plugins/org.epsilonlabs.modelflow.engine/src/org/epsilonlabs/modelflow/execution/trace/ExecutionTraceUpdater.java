@@ -78,11 +78,11 @@ public class ExecutionTraceUpdater {
 	}
 	
 	public synchronized WorkflowExecution createWorkflowExecution(Workflow w) {
-		Workflow copy = EcoreUtil.copy(w);
-		serializableCopy(copy);
+		//Workflow copy = EcoreUtil.copy(w);
+		//serializableCopy(copy);
 		
 		WorkflowExecution currentWorkflowExecution = ExecutionTraceFactoryImpl.eINSTANCE.createWorkflowExecution();
-		currentWorkflowExecution.setStamp(copy);
+		currentWorkflowExecution.setStamp(w.getName()); //TODO use stamp
 		trace.getExecutions().add(currentWorkflowExecution);
 		return currentWorkflowExecution;
 	}

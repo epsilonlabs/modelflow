@@ -1,8 +1,6 @@
 @namespace(uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.1", prefix="executionTrace")
 package trace;
 
-import "http://eclipse.org/epsilon/modelflow/1.0";
-
 @exeed(classIcon="clock")
 class ExecutionTrace {
 	ordered val WorkflowExecution[*] executions;

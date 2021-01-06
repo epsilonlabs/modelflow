@@ -35,11 +35,32 @@ import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImp
  */
 public class ModulePersistenceHelper {
 
+	
 	protected final IModelFlowModule module;
 	protected ResourceSet rs;
 	
 	public ModulePersistenceHelper(IModelFlowModule module){
 		this.module = module;
+	}
+	
+	Map<String, Object> saveOptions;
+	Map<String, Object> loadOptions;
+	
+	protected Map<String, Object> getSaveOptions(){
+		if (saveOptions == null) {
+			saveOptions = new HashMap<>();
+			saveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+			saveOptions.put(XMLResource.OPTION_BINARY, true);
+		}
+		return saveOptions;
+	}
+	
+	protected Map<String, Object> getLoadOptions(){
+		if (loadOptions == null) {
+			loadOptions = new HashMap<>();
+			loadOptions.put(XMLResource.OPTION_BINARY, true);
+		}
+		return loadOptions;
 	}
 	
 	protected ResourceSet getResourceSet() {
@@ -69,7 +90,7 @@ public class ModulePersistenceHelper {
 					URI fileUri = URI.createFileURI(file.getAbsolutePath());
 					Resource traceResource = getResourceSet().createResource(fileUri);
 					try {
-						traceResource.load(null);
+						traceResource.load(getLoadOptions());
 						managementTrace = (ManagementTrace) traceResource.getContents().get(0);
 						
 					} catch (Exception e) {
@@ -102,9 +123,7 @@ public class ModulePersistenceHelper {
 				ManagementTrace managementTrace = ctx.getManagementTrace();
 				traceResource.getContents().add(managementTrace);				
 				try {
-					Map<String, String> options = new HashMap<>();
-					options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-					traceResource.save(options);
+					traceResource.save(getSaveOptions());
 					String msg = String.format("End-to-End Trace saved in: %s", fileUri.toFileString());
 					ctx.getOutputStream().println(msg);
 				} catch (Exception e) {
@@ -125,7 +144,7 @@ public class ModulePersistenceHelper {
 			URI fileUri = URI.createFileURI(file.getAbsolutePath());
 			Resource traceResource = getResourceSet().createResource(fileUri);
 			try {
-				traceResource.load(null);
+				traceResource.load(getLoadOptions());
 				executionTrace = (ExecutionTrace) traceResource.getContents().get(0);
 				ctx.setExecutionTrace(executionTrace);
 			} catch (Exception e) {
@@ -151,9 +170,7 @@ public class ModulePersistenceHelper {
 			traceResource.getContents().add(executionTrace);
 			
 			try {
-				Map<String, String> options = new HashMap<>();
-				options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-				traceResource.save(options);
+				traceResource.save(getSaveOptions());
 				String msg = String.format("Execution trace saved in: %s", fileUri.toFileString());
 				ctx.getOutputStream().println(msg);				
 			} catch (Exception e) {

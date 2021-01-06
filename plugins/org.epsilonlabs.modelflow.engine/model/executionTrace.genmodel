@@ -8,7 +8,7 @@
     operationReflection="true" importOrganizing="true">
   <foreignModel>executionTrace.ecore</foreignModel>
   <genPackages prefix="ExecutionTrace" basePackage="org.epsilonlabs.modelflow.execution"
-      disposableProviderFactory="true" fileExtensions="trace" ecorePackage="executionTrace.ecore#/">
+      resource="XMI" disposableProviderFactory="true" fileExtensions="trace" ecorePackage="executionTrace.ecore#/">
     <genClasses ecoreClass="executionTrace.ecore#//ExecutionTrace">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference executionTrace.ecore#//ExecutionTrace/executions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference executionTrace.ecore#//ExecutionTrace/latest"/>
@@ -34,58 +34,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference executionTrace.ecore#//TaskExecution/outputModels"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference executionTrace.ecore#//TaskExecution/inputProperties"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference executionTrace.ecore#//TaskExecution/outputProperties"/>
-    </genClasses>
-  </genPackages>
-  <genPackages prefix="Dom" basePackage="org.epsilonlabs.modelflow" ecorePackage="http://eclipse.org/epsilon/modelflow/1.0#/">
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Workflow">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Workflow/tasks"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Workflow/resources"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Workflow/taskDependencies"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Named">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Named/name"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Configurable">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Configurable/properties"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Configurable/moduleElement"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Configurable/definition"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//AbstractResource"/>
-    <genClasses image="false" ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//AbstractTask"/>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Task">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Task/produces"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Task/consumes"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Task/modifies"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Task/dependencies"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//Task/dependentTasks"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Task/enabled"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Task/traceable"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Task/alwaysExecute"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Task/guard"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Configurable/definition"/>
-    </genClasses>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//ResourceReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//ResourceReference/resource"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//ResourceReference/aliases"/>
-    </genClasses>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Resource">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Resource/declared"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Configurable/definition"/>
-    </genClasses>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//DerivedResource">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//DerivedResource/reference"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//DerivedResource/declared"/>
-    </genClasses>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//ModelResource"/>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//TaskDependency">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//TaskDependency/task"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference http://eclipse.org/epsilon/modelflow/1.0#//TaskDependency/dependsOn"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//TaskDependency/type"/>
-    </genClasses>
-    <genClasses ecoreClass="http://eclipse.org/epsilon/modelflow/1.0#//Property">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Property/key"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Property/value"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute http://eclipse.org/epsilon/modelflow/1.0#//Property/evaluatedValue"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
