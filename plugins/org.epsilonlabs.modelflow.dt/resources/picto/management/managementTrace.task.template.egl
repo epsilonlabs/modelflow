@@ -3,7 +3,7 @@ strict digraph G {
 graph [splines=polyline]
 rankdir=LR;
 concentrate=true;
-tooltip="[%=tt.task.name%] Traces"
+tooltip="[%=tt.task%] Traces"
 
 [%
 var colors = new Map;

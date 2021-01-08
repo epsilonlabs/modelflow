@@ -18,7 +18,7 @@ rule exec transform tt : TaskTrace {
 	template: "managementTrace.task.template.egl"
 	parameters {
 		return Map {
-			"path" = Sequence{"Tasks", tt.task.name},
+			"path" = Sequence{"Tasks", tt.task},
 			"icon" = "diagram-ff0000",
 			"format" = "graphviz-dot",//circo
 			"layers" = Sequence {
