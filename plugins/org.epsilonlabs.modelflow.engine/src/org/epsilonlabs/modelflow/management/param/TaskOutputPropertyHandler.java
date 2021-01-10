@@ -7,16 +7,12 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.management.param;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -47,7 +43,8 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 					+ " should specify a key in @Output");
 		}
 	}
-	
+	/*
+	 * // TODO REMOVE
 	public Map<String, File> getFiles() {
 		return this.properties.entrySet().stream()
 			.filter(e->{
@@ -57,7 +54,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 				boolean isFileCollection = val instanceof Collection<?> && ((Collection<?>)val).stream().allMatch(f-> f instanceof File);  
 				return isFile || isFileArray || isFileCollection ;
 			}).collect(Collectors.toMap(Entry::getKey, e -> (File) e.getValue()));
-	}
+	}*/
 	
 	@Override
 	public Map<String, Object> getHashes() {
@@ -92,6 +89,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 		return hashes;
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getHashesFromTrace(TaskExecution taskExecution){
 		taskExecution = EcoreUtil.copy(taskExecution);

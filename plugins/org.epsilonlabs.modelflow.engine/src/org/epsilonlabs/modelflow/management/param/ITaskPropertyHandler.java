@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.management.param;
 import java.util.Map;
 
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 
 /**
  * The Interface ITaskPropertyHandler.
@@ -53,5 +54,11 @@ public interface ITaskPropertyHandler {
 	 * @return the hashes
 	 */
 	Map<String, Object> getHashes();
+
+	/**
+	 * @param taskExecution
+	 * @return
+	 */
+	Map<String, Object> getHashesFromTrace(TaskExecution taskExecution);
 
 }

@@ -57,25 +57,25 @@ public class ConservativeExecutionHelper {
 
 	public boolean haveInputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = task.getInputParams().getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task.getTaskInstance()).getHashes();
 		return !equivalent(inputProperties, previousPropertiesHashes);
 	}
 
 	public List<String> getChangedInputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = task.getInputParams().getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task.getTaskInstance()).getHashes();
 		return getChangedProperties(inputProperties, previousPropertiesHashes);
 	}
 
 	public boolean haveOutputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = task.getOutputParams().getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task.getTaskInstance()).getHashesFromTrace(previousTaskExecution);
 		return !equivalent(outputProperties, previousPropertiesHashes);
 	}
 	
 	public List<String> getChangedOutputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = task.getOutputParams().getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task.getTaskInstance()).getHashesFromTrace(previousTaskExecution);
 		return getChangedProperties(outputProperties, previousPropertiesHashes);
 	}
 

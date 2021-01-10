@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.management.param;
 
 import java.util.Map;
 
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
@@ -16,15 +17,23 @@ import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TaskParamManager {
+public class AnnotationTaskParameterManager implements ITaskParameterManager {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TaskParamManager.class);
-
-	protected IModelFlowContext ctx;
-	protected ExecutionTrace executionTrace;
+	private static final Logger LOG = LoggerFactory.getLogger(AnnotationTaskParameterManager.class);
 	
+	@Override
+	public ITaskPropertyHandler getInputParameterHandler(ITaskInstance task){
+		return new TaskInputPropertyHandler(task);
+	}
+	
+	@Override
+	public ITaskPropertyHandler getOutputParameterHandler(ITaskInstance task){
+		return new TaskOutputPropertyHandler(task);
+	}
+	
+	@Override
 	public void processInputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = node.getInputParams().getHashes();
+		Map<String, Object> hashes = getInputParameterHandler(node.getTaskInstance()).getHashes();
 		LOG.debug("InputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {		
@@ -32,8 +41,9 @@ public class TaskParamManager {
 		}
 	}
 	
+	@Override
 	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = node.getOutputParams().getHashes();
+		Map<String, Object> hashes = getOutputParameterHandler(node.getTaskInstance()).getHashes();
 		LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {			

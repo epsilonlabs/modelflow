@@ -28,13 +28,14 @@ import org.epsilonlabs.modelflow.repository.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ResourceManager {
+public class ResourceManager implements IResourceManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceManager.class);	
 
 	/** 
 	 * This method is called when the node has been marked ready for execution.
 	 */
+	@Override
 	public void processResourcesBeforeExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
 		// Create empty list of models for task to accept 
 		List<IModelWrapper> list = new ArrayList<>();
@@ -114,6 +115,7 @@ public class ResourceManager {
 	 * This method is called after the task has been executed.
 	 * @throws MFRuntimeException 
 	 */
+	@Override
 	public void processResourcesAfterExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
 		
 		// Prepare task execution trace 
@@ -186,7 +188,7 @@ public class ResourceManager {
 				result = tNode.getTaskInstance().getTrace();
 			// If other
 			} else {
-				result = tNode.getOutputParams().get(propertyName);
+				result = ctx.getParamManager().getOutputParameterHandler(tNode.getTaskInstance()).get(propertyName);
 			} 
 			// If present, save value in repository
 			if (result != null) {				

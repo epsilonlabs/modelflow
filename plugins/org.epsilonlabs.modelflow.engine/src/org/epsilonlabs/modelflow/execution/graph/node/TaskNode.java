@@ -23,10 +23,10 @@ import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
+import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
 import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
 import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
-import org.epsilonlabs.modelflow.management.resource.ResourceManager;
+import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
@@ -195,8 +195,8 @@ public class TaskNode implements ITaskNode {
 	protected void doExecute(IModelFlowContext ctx)
 			throws MFRuntimeException {
 		
-		ResourceManager manager = ctx.getResourceManager(); 
-		TaskParamManager pManager = ctx.getParamManager();
+		IResourceManager manager = ctx.getResourceManager(); 
+		ITaskParameterManager pManager = ctx.getParamManager();
 		/*
 		 * TODO if any derived outputs are contributed, 
 		 * then either check its stamp has not changed or 
@@ -399,22 +399,6 @@ public class TaskNode implements ITaskNode {
 			break;
 		}
 
-	}
-	
-	@Override
-	public TaskInputPropertyHandler getInputParams() {
-		if (this.taskInputs == null) {
-			this.taskInputs = new TaskInputPropertyHandler(taskInstance);
-		}
-		return this.taskInputs;
-	}
-	
-	@Override
-	public TaskOutputPropertyHandler getOutputParams() {
-		if (this.taskOutputs == null) {
-			this.taskOutputs = new TaskOutputPropertyHandler(taskInstance);
-		}
-		return this.taskOutputs;
 	}
 	
 	/** Unique Task identifiers by name */

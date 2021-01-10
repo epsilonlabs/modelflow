@@ -39,7 +39,7 @@ task m2t is epsilon:egx
 
 post Done {
 	var tasks = trace.tasks;
-	tasks.`task`.name.println("Traced Tasks: ");
+	tasks.`task`.println("Traced Tasks: ");
 	var traces = tasks.traces.flatten().collect(t|t.link.println());
 	"done".println();
 }

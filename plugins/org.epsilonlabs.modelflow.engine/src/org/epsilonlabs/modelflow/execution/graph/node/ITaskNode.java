@@ -11,8 +11,6 @@ import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
-import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
 
 import io.reactivex.Completable;
 
@@ -57,20 +55,6 @@ public interface ITaskNode extends IGraphNode {
 	 * @return the task instance
 	 */
 	ITaskInstance getTaskInstance();
-
-	/**
-	 * Gets the input params.
-	 *
-	 * @return the input params
-	 */
-	TaskInputPropertyHandler getInputParams();
-
-	/**
-	 * Gets the output params.
-	 *
-	 * @return the output params
-	 */
-	TaskOutputPropertyHandler getOutputParams();
 	
 	/**
 	 * 

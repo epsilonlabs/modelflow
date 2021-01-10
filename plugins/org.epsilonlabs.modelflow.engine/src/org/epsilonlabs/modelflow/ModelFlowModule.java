@@ -58,7 +58,7 @@ import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.GraphState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
+import org.epsilonlabs.modelflow.management.param.AnnotationTaskParameterManager;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 import org.epsilonlabs.modelflow.management.resource.ResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
@@ -475,7 +475,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 		// Param Manager
 		if (ctx.getParamManager() == null) {
-			ctx.setParamManager(new TaskParamManager());
+			ctx.setParamManager(new AnnotationTaskParameterManager());
 		}
 
 		// Execution Trace
@@ -572,8 +572,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 		// Model Manager
 		ctx.setResourceManager(new ResourceManager());
-
-		ctx.setParamManager(new TaskParamManager());
 	}
 
 }
