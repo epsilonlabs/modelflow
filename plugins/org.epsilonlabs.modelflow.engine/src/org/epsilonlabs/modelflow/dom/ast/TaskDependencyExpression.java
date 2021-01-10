@@ -20,17 +20,17 @@ import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.TaskDependency;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ITaskDependency;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 
 /**
  * @author Betty Sanchez
  *
  */
-public class TaskDependencyExpression extends Expression implements IDomElement<TaskDependency>  {
+public class TaskDependencyExpression extends Expression implements IDomElement<ITaskDependency>  {
 
-	protected TaskDependency taskDependency;
+	protected ITaskDependency taskDependency;
 	protected TaskRule declaringTaskRule;
 	protected NameExpression target; 
 
@@ -66,7 +66,7 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			// Create task dependency element
-			taskDependency = DomFactoryImpl.eINSTANCE.createTaskDependency();
+			taskDependency = DomFactory.eINSTANCE.createTaskDependency();
 			// Assign parent as after
 			declaringTaskRule.getDomElements().stream().forEach(taskDependency::setTask);
 			// Assign name expression as before 
@@ -77,7 +77,7 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 			// Check that there is only one task that matches this criteria
 			if (rules.size() == 1) {
 				TaskRule taskRule = rules.get(0);
-				Collection<Task> domElements = taskRule.getDomElements();
+				Collection<ITask> domElements = taskRule.getDomElements();
 				
 				// Assing task as before in the task dependency  
 				domElements.forEach(taskDependency::setDependsOn);
@@ -103,7 +103,7 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 	}
 
 	@Override
-	public Collection<TaskDependency> getDomElements() {
+	public Collection<ITaskDependency> getDomElements() {
 		return Arrays.asList(taskDependency);
 	}
 

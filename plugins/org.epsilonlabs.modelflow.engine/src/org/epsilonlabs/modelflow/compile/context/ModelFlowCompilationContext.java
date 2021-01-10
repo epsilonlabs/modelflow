@@ -15,8 +15,8 @@ import java.util.Map;
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.Task;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
 import org.epsilonlabs.modelflow.dom.ast.TaskRule;
@@ -57,22 +57,22 @@ public class ModelFlowCompilationContext extends EolCompilationContext implement
 	}
 
 	@Override
-	public void registerResourceModelElement(Resource r, ModuleElement declaration) {
+	public void registerResourceModelElement(IResource r, ModuleElement declaration) {
 		resourceToRuleMap.put(r.getName(), declaration);
 	}
 	
 	@Override
-	public void registerTaskModelElement(Task r, ModuleElement declaration) {
+	public void registerTaskModelElement(ITask r, ModuleElement declaration) {
 		taskToRuleMap.put(r.getName(), declaration);
 	}
 	
 	@Override
-	public ModuleElement getTaskModuleElement(Task task){
+	public ModuleElement getTaskModuleElement(ITask task){
 		return taskToRuleMap.get(task.getName());
 	}
 	
 	@Override
-	public ModuleElement getResourceModuleElement(Resource resource){
+	public ModuleElement getResourceModuleElement(IResource resource){
 		return resourceToRuleMap.get(resource.getName());
 	}
 

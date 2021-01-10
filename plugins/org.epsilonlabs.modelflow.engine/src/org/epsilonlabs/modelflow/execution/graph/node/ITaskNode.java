@@ -7,8 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
@@ -42,21 +42,21 @@ public interface ITaskNode extends IGraphNode {
 	 *
 	 * @return the task definition
 	 */
-	Task getTaskDefinition();
+	ITask getTaskDefinition();
 
 	/**
 	 * Sets the instance.
 	 *
 	 * @param task the new instance
 	 */
-	void setInstance(ITask task);
+	void setInstance(ITaskInstance task);
 	
 	/**
 	 * Gets the task instance.
 	 *
 	 * @return the task instance
 	 */
-	ITask getTaskInstance();
+	ITaskInstance getTaskInstance();
 
 	/**
 	 * Gets the input params.

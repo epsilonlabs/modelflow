@@ -13,7 +13,7 @@ import static org.junit.Assert.fail;
 import org.eclipse.emf.common.util.EList;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
@@ -43,7 +43,7 @@ public class TaskTest  {
 	protected static TaskFactoryRegistry taskFactoryRegistry;
 	protected static ResourceFactoryRegistry resFactoryRegistry;
 	protected ModelFlowModule module;
-	protected Workflow w ;
+	protected IWorkflow w ;
 	protected IValidate validator;
 	
 	@BeforeClass

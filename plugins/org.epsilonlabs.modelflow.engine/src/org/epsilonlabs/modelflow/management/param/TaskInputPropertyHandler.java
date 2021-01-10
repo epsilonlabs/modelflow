@@ -10,13 +10,13 @@ package org.epsilonlabs.modelflow.management.param;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
 
 public class TaskInputPropertyHandler extends TaskPropertyHandler {
 
-	public TaskInputPropertyHandler(ITask task) {
+	public TaskInputPropertyHandler(ITaskInstance task) {
 		super(task);
 	}
 		

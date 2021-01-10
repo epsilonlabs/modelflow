@@ -5,7 +5,8 @@
     modelName="Trace" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     testsDirectory="/org.epsilonlabs.modelflow.tests/src-gen" importerID="org.eclipse.emf.importer.ecore"
     bundleManifest="false" complianceLevel="8.0" copyrightFields="false" testsPluginID="org.epsilonlabs.modelflow.tests"
-    operationReflection="true" importOrganizing="true">
+    interfaceNamePattern="I{0}" classNamePattern="{0}" operationReflection="true"
+    importOrganizing="true">
   <foreignModel>modelflow.ecore</foreignModel>
   <genPackages prefix="Dom" basePackage="org.epsilonlabs.modelflow" disposableProviderFactory="true"
       fileExtensions="dom" ecorePackage="modelflow.ecore#/">
@@ -23,7 +24,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Configurable/definition"/>
     </genClasses>
     <genClasses image="false" ecoreClass="modelflow.ecore#//AbstractResource"/>
-    <genClasses image="false" ecoreClass="modelflow.ecore#//AbstractTask"/>
     <genClasses ecoreClass="modelflow.ecore#//Task">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/produces"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/consumes"/>

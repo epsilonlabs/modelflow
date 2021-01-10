@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.management.resource;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.slf4j.Logger;
@@ -18,16 +18,16 @@ public class ResourceLoader {
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
 	private final ResourceKind as;
-	private final IResource<?> res;
+	private final IResourceInstance<?> res;
 	
-	public ResourceLoader(ResourceKind as, IResource<?> res){
+	public ResourceLoader(ResourceKind as, IResourceInstance<?> res){
 		this.as = as;
 		this.res = res;
 	}
 	
 	public IModelWrapper load(ITaskNode taskNode) throws MFResourceInstantiationException {
 		
-		IResource<?> resource = null;
+		IResourceInstance<?> resource = null;
 		switch (as) {
 		case INPUT:
 			resource = res.asInput();

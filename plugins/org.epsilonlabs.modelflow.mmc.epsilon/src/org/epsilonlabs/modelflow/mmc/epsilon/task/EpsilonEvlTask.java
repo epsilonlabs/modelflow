@@ -15,7 +15,7 @@ import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.evl.IEvlModule;
 import org.eclipse.epsilon.evl.execute.CommandLineFixer;
 import org.eclipse.epsilon.evl.trace.ConstraintTrace;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -23,7 +23,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EvlTaskTrace;
 
-public class EpsilonEvlTask extends AbstractEpsilonTask implements ITask {
+public class EpsilonEvlTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked")
 	@Override

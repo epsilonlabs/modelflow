@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.Resource;
+import org.epsilonlabs.modelflow.dom.IResource;
 
 /**
  * The Interface IResourceNode.
@@ -21,7 +21,7 @@ public interface IResourceNode extends IAbstractResourceNode {
 	 *
 	 * @return the internal
 	 */
-	Resource getInternal();
+	IResource getInternal();
 	
 	/**
 	 * Gets the aliases.

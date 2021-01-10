@@ -37,4 +37,12 @@
             type="trace"
             class="org.epsilonlabs.modelflow.execution.trace.util.ExecutionTraceResourceFactoryImpl"/>
    </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated modelflow -->
+      <package
+            uri="http://eclipse.org/epsilon/modelflow/1.0"
+            class="org.epsilonlabs.modelflow.dom.IDomPackage"
+            genModel="model/modelflow.genmodel"/>
+   </extension>
+
 </plugin>

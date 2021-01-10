@@ -17,10 +17,9 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
@@ -49,16 +48,16 @@ public class ModulePersistenceHelper {
 	protected Map<String, Object> getSaveOptions(){
 		if (saveOptions == null) {
 			saveOptions = new HashMap<>();
-			saveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-			saveOptions.put(XMLResource.OPTION_BINARY, true);
+			//saveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+			//saveOptions.put(XMLResource.OPTION_BINARY, true);
 		}
 		return saveOptions;
 	}
 	
 	protected Map<String, Object> getLoadOptions(){
 		if (loadOptions == null) {
-			loadOptions = new HashMap<>();
-			loadOptions.put(XMLResource.OPTION_BINARY, true);
+			//loadOptions = new HashMap<>();
+			//loadOptions.put(XMLResource.OPTION_BINARY, true);
 		}
 		return loadOptions;
 	}
@@ -68,7 +67,7 @@ public class ModulePersistenceHelper {
 			rs = new ResourceSetImpl();		
 			Registry packageRegistry = rs.getPackageRegistry();
 			packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-			packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+			packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 			packageRegistry.put(ExecutionTracePackage.eNS_URI, ExecutionTracePackage.eINSTANCE);
 			packageRegistry.put(ManagementTracePackage.eNS_URI, ManagementTracePackage.eINSTANCE);
 			

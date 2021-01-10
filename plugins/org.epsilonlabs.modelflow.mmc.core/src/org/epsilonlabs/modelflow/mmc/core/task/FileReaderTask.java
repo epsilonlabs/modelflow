@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -27,7 +27,7 @@ import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.core.factory.AbstractCoreTaskFactory;
 
-public class FileReaderTask extends AbstractTask implements ITask {
+public class FileReaderTask extends AbstractTaskInstance implements ITaskInstance {
 
 	/** FACTORY */
 

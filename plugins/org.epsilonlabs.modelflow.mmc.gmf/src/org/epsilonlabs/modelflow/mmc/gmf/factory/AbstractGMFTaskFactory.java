@@ -1,6 +1,6 @@
 package org.epsilonlabs.modelflow.mmc.gmf.factory;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.IPlugin;
 import org.epsilonlabs.modelflow.dom.api.factory.AbstractTaskFactory;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
@@ -8,7 +8,7 @@ import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 
 public abstract class AbstractGMFTaskFactory extends AbstractTaskFactory implements ITaskFactory{
 
-	public AbstractGMFTaskFactory(Class<? extends AbstractTask> class1) {
+	public AbstractGMFTaskFactory(Class<? extends AbstractTaskInstance> class1) {
 		super(class1);
 	}
 

@@ -61,12 +61,7 @@
       <details key="documentation" value="An abstract resource."/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AbstractTask" abstract="true" eSuperTypes="#//Configurable">
-    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-      <details key="documentation" value="An abstract task."/>
-    </eAnnotations>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//AbstractTask">
+  <eClassifiers xsi:type="ecore:EClass" name="Task" eSuperTypes="#//Configurable">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="A task."/>
     </eAnnotations>

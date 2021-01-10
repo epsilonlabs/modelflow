@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow;
 
 import org.eclipse.epsilon.erl.IErlModule;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
@@ -24,14 +24,14 @@ public interface IModelFlowModule extends IErlModule {
 	 *
 	 * @return the workflow
 	 */
-	Workflow getWorkflow();
+	IWorkflow getWorkflow();
 
 	/**
 	 * Sets the workflow.
 	 *
 	 * @param workflow the new workflow
 	 */
-	void setWorkflow(Workflow workflow);
+	void setWorkflow(IWorkflow workflow);
 
 	
 	/**

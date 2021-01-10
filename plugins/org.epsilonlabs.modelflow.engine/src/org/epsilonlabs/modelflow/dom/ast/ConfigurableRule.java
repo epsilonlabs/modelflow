@@ -25,10 +25,10 @@ import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.erl.dom.NamedRule;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Configurable;
-import org.epsilonlabs.modelflow.dom.Property;
+import org.epsilonlabs.modelflow.dom.IConfigurable;
+import org.epsilonlabs.modelflow.dom.IProperty;
 import org.epsilonlabs.modelflow.dom.api.factory.IFactory;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 
 /**
@@ -67,9 +67,9 @@ public abstract class ConfigurableRule<T> extends NamedRule
 	 * @param element
 	 * @param factory
 	 */
-	protected void setupConfigurableParameters(IModelFlowCompilationContext ctx, Configurable element, IFactory factory) {
+	protected void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, IFactory factory) {
 		for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
-			Property property = DomFactoryImpl.eINSTANCE.createProperty();
+			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(p.getKey().getName());
 			ModuleElement value = p.getValue();
 			if (value instanceof ICompilableModuleElement) {

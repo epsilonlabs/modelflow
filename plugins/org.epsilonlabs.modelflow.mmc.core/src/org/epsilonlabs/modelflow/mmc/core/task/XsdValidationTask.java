@@ -16,7 +16,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
@@ -32,7 +32,7 @@ import org.xml.sax.SAXParseException;
  * @author Betty Sanchez
  *
  */
-public class XsdValidationTask extends AbstractTask {
+public class XsdValidationTask extends AbstractTaskInstance {
 
 	/** FACTORY */
 

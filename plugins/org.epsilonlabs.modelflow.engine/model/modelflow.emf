@@ -30,11 +30,8 @@ abstract class Configurable extends Named {
 @GenModel(documentation="An abstract resource.")
 abstract class AbstractResource extends Configurable {}
 
-@GenModel(documentation="An abstract task.")
-abstract class AbstractTask extends Configurable {}
-
 @GenModel(documentation="A task.")
-class Task extends AbstractTask {
+class Task extends Configurable {
   @GenModel(documentation="The list of resource references to be produced.")
   val ResourceReference[*] produces;
   @GenModel(documentation="The list of resource references to be consumed.")

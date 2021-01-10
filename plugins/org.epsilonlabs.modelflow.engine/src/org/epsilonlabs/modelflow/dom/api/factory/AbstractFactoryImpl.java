@@ -21,8 +21,8 @@ import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.Return;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
-import org.epsilonlabs.modelflow.dom.Configurable;
-import org.epsilonlabs.modelflow.dom.Property;
+import org.epsilonlabs.modelflow.dom.IConfigurable;
+import org.epsilonlabs.modelflow.dom.IProperty;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFUnknownPropertyException;
@@ -44,7 +44,7 @@ public abstract class AbstractFactoryImpl {
 
 	protected abstract Object getIObject();
 
-	protected abstract Configurable getConfigurable();
+	protected abstract IConfigurable getConfigurable();
 
 	/**
 	 * This method is responsible of configuring the element
@@ -55,10 +55,10 @@ public abstract class AbstractFactoryImpl {
 				.filter(m -> m.getAnnotationsByType(Param.class).length != 0).collect(Collectors.toList());
 
 		/* Iterate over the declaration properties */
-		Iterator<Property> iterator = getConfigurable().getProperties().iterator();
+		Iterator<IProperty> iterator = getConfigurable().getProperties().iterator();
 		while (iterator.hasNext()) {
 
-			Property prop = iterator.next();
+			IProperty prop = iterator.next();
 			String key = prop.getKey();
 			Object value = new ParameterHelper(prop, ctx).getEvaluatedValue();
 
@@ -85,7 +85,7 @@ public abstract class AbstractFactoryImpl {
 		}
 	}
 
-	protected void tryToAssignProperty(Property prop, Object value, Collection<Method> potentialMatchingMethods)
+	protected void tryToAssignProperty(IProperty prop, Object value, Collection<Method> potentialMatchingMethods)
 			throws MFInstantiationException {
 		boolean ok = false;
 		for (Method method : potentialMatchingMethods) {

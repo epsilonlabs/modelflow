@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.execution.IScheduler;
 import org.epsilonlabs.modelflow.execution.TopologicalSequentialScheduler;
@@ -62,7 +62,7 @@ public class ParallelTest extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 	
-	protected Workflow w ;
+	protected IWorkflow w ;
 	
 	@Test
 	public void testScheduler() {

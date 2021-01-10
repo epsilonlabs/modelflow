@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
@@ -28,7 +28,7 @@ import org.epsilonlabs.modelflow.management.param.hash.IHasher;
 
 public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	
-	public TaskOutputPropertyHandler(ITask task) {
+	public TaskOutputPropertyHandler(ITaskInstance task) {
 		super(task);
 	}
 		

@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.management.param;
 
 import java.util.Map;
 
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 
 /**
  * The Interface ITaskPropertyHandler.
@@ -23,7 +23,7 @@ public interface ITaskPropertyHandler {
 	 *
 	 * @return the task
 	 */
-	ITask getTask();
+	ITaskInstance getTask();
 
 	/**
 	 * Checks for any.

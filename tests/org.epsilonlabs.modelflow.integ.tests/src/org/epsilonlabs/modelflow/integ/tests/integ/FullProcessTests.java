@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.integ.tests.common.WorkflowHelper;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
@@ -67,7 +67,7 @@ public class FullProcessTests {
 	@Ignore	
 	public void oneTaskNoResourceOneExecution() {
 		try {
-			final Workflow workflow = moduleEolTask.getWorkflow();
+			final IWorkflow workflow = moduleEolTask.getWorkflow();
 			moduleEolTask.execute();
 			
 			ExecutionTrace trace = moduleEolTask.getContext().getExecutionTrace();

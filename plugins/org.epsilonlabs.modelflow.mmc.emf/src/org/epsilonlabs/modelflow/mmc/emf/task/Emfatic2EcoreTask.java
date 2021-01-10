@@ -18,8 +18,8 @@ import org.eclipse.emf.emfatic.core.generator.ecore.Connector;
 import org.eclipse.emf.emfatic.core.lang.gen.parser.EmfaticParserDriver;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.gymnast.runtime.core.parser.ParseContext;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -29,7 +29,7 @@ import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.emf.factory.AbstractEMFTaskFactory;
 
-public class Emfatic2EcoreTask extends AbstractTask implements ITask {
+public class Emfatic2EcoreTask extends AbstractTaskInstance implements ITaskInstance {
 
 	/** FACTORY */
 	

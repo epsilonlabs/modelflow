@@ -10,14 +10,14 @@ package org.epsilonlabs.modelflow.management.resource;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.epsilonlabs.modelflow.dom.Resource;
+import org.epsilonlabs.modelflow.dom.IResource;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 
 public abstract class AbstractModelManager<M> implements IModelManager<M> {
 
 	protected Map<String, M> cachedModels;
-	protected Map<String, Resource> resources;
+	protected Map<String, IResource> resources;
 	
 	protected AbstractModelManager() {
 		cachedModels = new ConcurrentHashMap<>();
@@ -26,7 +26,7 @@ public abstract class AbstractModelManager<M> implements IModelManager<M> {
 	
 	@Override
 	public void register(IModelResourceNode res) {
-		Resource r = res.getInternal();
+		IResource r = res.getInternal();
 		if (!resources.containsKey(r.getName())) {
 			resources.put(r.getName(), r);
 		}

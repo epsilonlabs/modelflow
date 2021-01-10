@@ -12,16 +12,16 @@ import java.util.Collection;
 
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.ModelResource;
+import org.epsilonlabs.modelflow.dom.IModelResource;
 import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 
-public class ResourceRule extends ConfigurableRule<ModelResource> {
+public class ResourceRule extends ConfigurableRule<IModelResource> {
 
-	protected ModelResource modelResource;
+	protected IModelResource modelResource;
 
 	@Override
-	public Collection<ModelResource> getDomElements() {
+	public Collection<IModelResource> getDomElements() {
 		return Arrays.asList(modelResource);
 	}
 
@@ -30,7 +30,7 @@ public class ResourceRule extends ConfigurableRule<ModelResource> {
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			
-			ModelResource resource = DomFactoryImpl.eINSTANCE.createModelResource();
+			IModelResource resource = DomFactory.eINSTANCE.createModelResource();
 			resource.setName(getName());
 			resource.setDefinition(getType().getName());
 			

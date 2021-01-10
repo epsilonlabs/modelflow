@@ -14,12 +14,12 @@ import java.util.stream.Collectors;
 import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.etl.IEtlModule;
 import org.eclipse.epsilon.etl.trace.Transformation;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
 
-public class EpsilonEtlTask extends AbstractEpsilonTask implements ITask {
+public class EpsilonEtlTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked")
 	@Override

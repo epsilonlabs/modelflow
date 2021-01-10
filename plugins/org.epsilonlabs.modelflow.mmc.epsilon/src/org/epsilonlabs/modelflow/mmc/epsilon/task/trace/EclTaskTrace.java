@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.ecl.trace.Match;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.AbstractEpsilonTask;
@@ -20,11 +20,11 @@ public class EclTaskTrace implements ITrace {
 	protected final AbstractEpsilonTask task;
 	protected final Trace trace;
 
-	public EclTaskTrace(Match match, ITask t) {
+	public EclTaskTrace(Match match, ITaskInstance t) {
 		this(match, t, null);
 	}
 
-	private EclTaskTrace(Match match, ITask t, Trace trace) {
+	private EclTaskTrace(Match match, ITaskInstance t, Trace trace) {
 		this.match = match;
 		this.task = (AbstractEpsilonTask) t;
 		this.trace = trace;
@@ -44,11 +44,11 @@ public class EclTaskTrace implements ITrace {
 		
 		/** Source */
 		String sourceElement = EpsilonTraceUtil.getElementId(task, match.getLeft());
-		AbstractResource sourceModel = EpsilonTraceUtil.getContainerModel(task, match.getLeft());
+		IAbstractResource sourceModel = EpsilonTraceUtil.getContainerModel(task, match.getLeft());
 		
 		/** Target */
 		String targetElement = EpsilonTraceUtil.getElementId(task, match.getRight());
-		AbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, match.getRight());
+		IAbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, match.getRight());
 				
 		Trace trace = new ManagementTraceBuilder()
 				.managementLink("Comparison", match.getRule().getName())

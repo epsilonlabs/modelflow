@@ -18,8 +18,8 @@ import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
-public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
+public class GmfMap2GmfGenTask extends AbstractTaskInstance implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GmfMap2GmfGenTask.class);
 

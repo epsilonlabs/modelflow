@@ -9,20 +9,20 @@ package org.epsilonlabs.modelflow.integ.tests.common.workflow;
 
 import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locate;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 
 public class SimpleWorkflows {
 
-	public static final Workflow ONE_TASK_NO_RESOURCE = new WorkflowBuilder()
+	public static final IWorkflow ONE_TASK_NO_RESOURCE = new WorkflowBuilder()
 			
 			.addTask("copyright", "core:fileReader")
 			.addProperty("src", ResourceLocator.locate("copyright.txt"))
 			
 			.build("oneTask");
 	
-	public static final Workflow ONE_TASK_TWO_RESOURCES = new WorkflowBuilder()
+	public static final IWorkflow ONE_TASK_TWO_RESOURCES = new WorkflowBuilder()
 			
 			.addModelResource("Tree", "epsilon:emf")
 			.addProperty("src", locate("etl/tree.model"))
@@ -43,7 +43,7 @@ public class SimpleWorkflows {
 			
 			.build("oneTaskTwoResources");
 	
-	public static final Workflow TWO_TASKS_THREE_RESOURCES = new WorkflowBuilder()
+	public static final IWorkflow TWO_TASKS_THREE_RESOURCES = new WorkflowBuilder()
 			
 			.addModelResource("Source", "epsilon:emf")
 			.addProperty("src", locate("eml/Source.model"))

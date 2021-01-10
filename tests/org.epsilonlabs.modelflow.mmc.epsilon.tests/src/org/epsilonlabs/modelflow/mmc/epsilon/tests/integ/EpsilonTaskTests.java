@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.mmc.epsilon.tests.integ;
 
 import static org.junit.Assert.fail;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.tests.common.workflow.EpsilonTask;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -32,7 +32,7 @@ public class EpsilonTaskTests extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 
-	protected Workflow w;
+	protected IWorkflow w;
 
 	@Test
 	@Ignore //FIXME it takes very long

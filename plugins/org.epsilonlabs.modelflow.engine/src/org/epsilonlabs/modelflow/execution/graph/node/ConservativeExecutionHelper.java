@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
@@ -109,7 +109,7 @@ public class ConservativeExecutionHelper {
 					Object pastStamp = pastResource.get().getStamp();
 					// What if past stamp is null
 					try {
-						IResource<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
+						IResourceInstance<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
 								.getOrCreate((IModelResourceNode) r, ctx);
 						Object hash;
 						if (!input || !iResource.isLoaded()) {

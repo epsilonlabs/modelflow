@@ -11,11 +11,11 @@ import java.util.Optional;
 
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.models.IModel;
-import org.epsilonlabs.modelflow.dom.api.AbstractResource;
+import org.epsilonlabs.modelflow.dom.api.AbstractResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 
-public abstract class AbstractEpsilonModelResource extends AbstractResource<IModel> {
+public abstract class AbstractEpsilonModelResource extends AbstractResourceInstance<IModel> {
 
 	protected IModel model = null; 
 
