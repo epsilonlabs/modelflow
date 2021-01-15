@@ -55,11 +55,13 @@
 	</pluginRepositories>
 
 	<modules>
-		<module>plugins/org.epsilonlabs.modelflow.dependencies/pom-plain.xml</module>
+		<module>setup/org.epsilonlabs.modelflow.dependencies/pom-plain.xml</module>
 		<module>plugins/org.epsilonlabs.modelflow.engine/pom-plain.xml</module>
 		<module>plugins/org.epsilonlabs.modelflow.mmc.core/pom-plain.xml</module>
 		<module>plugins/org.epsilonlabs.modelflow.mmc.epsilon/pom-plain.xml</module>
 		<!--<module>plugins/org.epsilonlabs.modelflow.mmc.emf/pom-plain.xml</module>-->
+		<module>integrations/plugins/modelflow-maven-plugin/pom.xml</module>
+		<module>integrations/tests/modelflow-maven-plugin-test/pom.xml</module>
 	</modules>
 
 	<dependencyManagement>

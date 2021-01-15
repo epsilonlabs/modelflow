@@ -30,7 +30,6 @@
     <module>tests</module>
     <module>features</module>
     <module>releng</module>
-    <module>integrations</module>
   </modules>
 
   <dependencies>

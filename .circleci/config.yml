@@ -16,6 +16,12 @@ jobs:
           - releng/org.epsilonlabs.modelflow.updatesite/target/*.zip
           - tests/org.epsilonlabs.modelflow.jacoco/target/site/jacoco-aggregate/
 
+  maven-integ:
+    docker:
+      - image: circleci/openjdk:stretch
+    steps:
+      - run: mvn -f pom-plain.xml clean install     
+
   publish-github-release:
     docker:
       - image: cibuilds/github:0.10
@@ -37,6 +43,9 @@ workflows:
   publish:
     jobs:
       - build
+      - maven-integ:
+          requires:
+            - build
       - publish-github-release:
           requires:
             - build

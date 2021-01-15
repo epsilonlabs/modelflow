@@ -15,7 +15,6 @@
 	</parent>
 
 	<modules>
-		<!--<module>org.epsilonlabs.modelflow.dependencies</module>-->
 	    <module>org.epsilonlabs.modelflow.engine</module>
 	    <module>org.epsilonlabs.modelflow.dt</module>
 	    <module>org.epsilonlabs.modelflow.mmc.core</module>
