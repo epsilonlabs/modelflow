@@ -477,7 +477,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		if (ctx.getParamManager() == null) {
 			ctx.setParamManager(new TaskParamManager());
 		}
-
+		
 		// Execution Trace
 		traceHelper.prepareExecutionTrace();
 		

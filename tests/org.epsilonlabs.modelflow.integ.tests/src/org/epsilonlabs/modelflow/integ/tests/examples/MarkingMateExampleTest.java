@@ -98,7 +98,7 @@ public class MarkingMateExampleTest extends ExampleProjectTest {
 		modifications = () -> {
 			String file = String.format(modelDir, "sepr.model");
 			FileModifier modifier = new FileModifier(file);
-			modifier.copyFrom("");
+			//modifier.copyFrom("");
 		};
 		second = expect(true, true, true, true, false, false, false);
 	}
@@ -108,7 +108,7 @@ public class MarkingMateExampleTest extends ExampleProjectTest {
 		modifications = () -> {
 			String file = String.format(modelDir, "sepr-bob.model");
 			FileModifier modifier = new FileModifier(file);
-			modifier.copyFrom("");
+			//modifier.copyFrom("");
 		};
 		second = expect(false, true, false, true, false, false, false);
 	}
@@ -118,11 +118,11 @@ public class MarkingMateExampleTest extends ExampleProjectTest {
 		modifications = () -> {
 			String file = String.format(modelDir, "sepr-bob.model");
 			FileModifier modifier = new FileModifier(file);
-			modifier.copyFrom("");
+			//modifier.copyFrom("");
 			
 			String file1 = String.format(modelDir, "sepr-alice.model");
 			FileModifier modifier1 = new FileModifier(file1);
-			modifier1.copyFrom("");
+			//modifier1.copyFrom("");
 		};
 		second = expect(false, true, true, true, true, true, true);
 	}

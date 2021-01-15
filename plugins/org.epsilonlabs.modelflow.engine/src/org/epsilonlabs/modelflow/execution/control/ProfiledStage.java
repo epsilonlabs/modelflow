@@ -18,36 +18,36 @@ public class ProfiledStage implements Serializable {
 
 	private static final long serialVersionUID = -2249957038111847953L;
 		
-	protected MeassureSnapshot start;
-	protected MeassureSnapshot end;
+	protected MeasureableSnapshot start;
+	protected MeasureableSnapshot end;
 
 	public ProfiledStage() {
-		this.start = new MeassureSnapshot();
+		this.start = new MeasureableSnapshot();
 	}
 
 	public void done() {
-		this.end = new MeassureSnapshot();
+		this.end = new MeasureableSnapshot();
 	}
 	
 	/**
 	 * @return the start
 	 */
-	public MeassureSnapshot getStart() {
+	public MeasureableSnapshot getStart() {
 		return start;
 	}
 	
 	/**
 	 * @return the end
 	 */
-	public MeassureSnapshot getEnd() {
+	public MeasureableSnapshot getEnd() {
 		return end;
 	}
 	
-	public void setEnd(MeassureSnapshot snapshot){
+	public void setEnd(MeasureableSnapshot snapshot){
 		this.end = snapshot;
 	}
 	
-	public MeassureSnapshot delta() {
+	public MeasureableSnapshot delta() {
 		return end.delta(start);
 	}
 

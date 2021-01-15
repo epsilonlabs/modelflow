@@ -36,10 +36,10 @@ task m2t is epsilon:egx
 	src: tBasedir + "generateReactive.egx"
 	outputRoot: "src-gen/"
 }
-
+/*
 post Done {
 	var tasks = trace.tasks;
 	tasks.`task`.name.println("Traced Tasks: ");
 	var traces = tasks.traces.flatten().collect(t|t.link.println());
 	"done".println();
-}
+}*/

@@ -11,11 +11,17 @@ import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.epsilon.emc.emf.CachedResourceSet;
+import org.eclipse.epsilon.emc.emf.CachedResourceSet.Cache.CacheItem;
 import org.eclipse.epsilon.emc.emf.EmfModel;
+import org.eclipse.epsilon.eol.EolEvaluator;
 import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
+import org.eclipse.gmf.internal.common.ToolingResourceFactory.ToolResource;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
 import org.epsilonlabs.modelflow.dom.api.AbstractTask;
@@ -63,7 +69,8 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	protected GenModel genmodel;
 	protected Mapping mapping;
 	protected GenEditorGenerator gmfgen;
-
+	protected EmfModel ecore;
+	
 	protected boolean generateRCP = false;
 	protected boolean useMapMode = true;
 	protected boolean useRuntimeFigures = true;
@@ -101,12 +108,26 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	@Override
 	public void validateParameters() throws MFExecutionException {
 		transformation = new SimplifiedGmfMap2GmfGen();
-		transformation.setMonitor(new GmfMap2GmfGenMonitor());
-		
-		TransformOptions options = transformation.getOptions();
-		options.setGenerateRCP(generateRCP); 
-		options.setUseMapMode(useMapMode);
-		options.setUseRuntimeFigures(useRuntimeFigures);
+		transformation.setMonitor(new GmfMap2GmfGenMonitor());		
+	}
+	
+	protected EolEvaluator evaluator;
+
+	protected String getAnnotationDetailValue(String annotation, String detail, String default_) {
+		if (ecore != null) {
+			try {
+				if (evaluator == null) {
+					evaluator = new EolEvaluator(ecore);
+				}
+				Object o = evaluator.evaluate("EAnnotation.all.select(a|a.source='" + annotation + "').collect(a|a.details.select(d|d.key='" + detail + "')).flatten().collect(d|d.value).first()");
+				if (o == null) return default_;
+				else return "" + o  ;
+			}
+			catch (Exception ex) {
+				return default_;
+			}
+		}
+		return default_;
 	}
 
 	@Override
@@ -114,9 +135,30 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 		if (genmodelLoc == null || mappingLoc == null || gmfgenLoc == null) {
 			throw new MFExecutionException("Invalid models");
 		}
-		try {
+		try {			
 			// Caused by: java.lang.IllegalStateException: Target gmfgen URI should be specified
-			transformation.executeTransformation();
+			final ToolResource resource = (ToolResource) transformation.executeTransformation();
+			//resource.getDefaultSaveOptions()
+			final IModelWrapper wrapper = getResources().get(GMFGenPackage.eNS_URI);
+			
+			final EmfModel emfModel = (EmfModel)wrapper.getModel();
+			final CachedResourceSet resourceSet = (CachedResourceSet) emfModel.getResource().getResourceSet();
+			//Remove resource
+			final EList<Resource> resourcesList = resourceSet.getResources();
+			resourcesList.remove(emfModel.getResource());
+			// Remove from cache
+			final Collection<CacheItem> items = resourceSet.getCache().getItems();
+			items.stream().filter(i->i.getUri().equals(resource.getURI())).findAny().ifPresent(items::remove);
+			
+			//((EmfModel)wrapper.getModel()).setResource(resource);
+			
+			final ToolResource createResource = (ToolResource) resourceSet.createResource(resource.getURI(), "org.eclipse.gmf.gen");
+			createResource.getContents().add(resource.getContents().get(0));
+			HashMap<String, Object> saveOptions = new HashMap<String, Object>();
+			saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
+			createResource.getDefaultSaveOptions().putAll(saveOptions);
+			emfModel.setResource(createResource);
+			// We need to inhibit the workflow from saving
 			transformation.getTrace();
 		} catch (Exception e) {
 			throw new MFExecutionException(e);
@@ -153,27 +195,30 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 						mappingLoc = model.getModelFileUri();
 						mapping = (Mapping) eObject;
 						resources.put(GMFMapPackage.eNS_URI, m);
-					} else if (eObject instanceof GenEditorGenerator && isOutput) {
+					} else if (eObject instanceof EPackage) { // Ecore
+						ecore = model;
+					}
+				}
+				URI uri = resource.getURI();
+				if (uri.isFile()){
+					if (uri.toString().endsWith("gmfgen") && isOutput) {
 						gmfgenLoc = model.getModelFileUri();
 						output = resource;
-					}
-				} else {
-					URI uri = resource.getURI();
-					if (uri.isFile()){
-						if (uri.toString().endsWith("gmfgen") && isOutput) {
-							gmfgenLoc = model.getModelFileUri();
-							output = resource;
-							resources.put(GMFGenPackage.eNS_URI, m);
-						}
+						resources.put(GMFGenPackage.eNS_URI, m);
 					}
 				}
 			}
 		});
 		
-		transformation.setGenModel(genmodel);
 		transformation.setMapping(mapping);
+		transformation.setGenModel(genmodel);
 		transformation.setGmfGenURI(gmfgenLoc);
 		transformation.setGmfGenResource(output);
+		
+		TransformOptions options = transformation.getOptions();
+		options.setGenerateRCP(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "rcp", "false")));
+		options.setUseMapMode(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useMapMode", "true")));
+		options.setUseRuntimeFigures(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useRuntimeFigures", "true")));
 	}
 
 	public Map<String, IModelWrapper> getResources() {
@@ -181,10 +226,6 @@ public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
 	}
 	
 	@Override
-	public void afterExecute() {
-		LOG.debug("Reloading");
-		output.getContents().clear();
-		output.getContents().add(transformation.getGmfGen());
-	}
-
+	public void afterExecute() {}
+	
 }
