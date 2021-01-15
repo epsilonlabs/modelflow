@@ -67,9 +67,8 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 					try {
 						executeTask(ctx, updater, task);
 					} catch (Exception e) {
-						ctx.getErrorStream().print(e);
-						break;
-					} 
+						throw e;
+					}
 				}
 
 			} // END WHILE

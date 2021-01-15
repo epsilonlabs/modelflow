@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.eclipse.epsilon.eugenia.simplebpmn;singleton:=true
+Automatic-Module-Name: org.eclipse.epsilon.eugenia.simplebpmn
+Bundle-Version: 1.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: SimpleBPMN,
+ SimpleBPMN.impl,
+ SimpleBPMN.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore;visibility:=reexport
+Bundle-ActivationPolicy: lazy

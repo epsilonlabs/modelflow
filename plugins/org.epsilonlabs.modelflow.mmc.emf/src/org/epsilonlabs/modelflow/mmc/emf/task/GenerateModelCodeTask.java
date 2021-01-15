@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -98,7 +99,7 @@ public class GenerateModelCodeTask extends AbstractTaskInstance implements ITask
 	
 	@Output(key="outputs", hasher = FileHasher.class)
 	public Set<File> getOutputs() {
-		return outputs.parallelStream().map(f->new File(f)).collect(Collectors.toSet());
+		return outputs.parallelStream().map(File::new).collect(Collectors.toSet());
 	}
 	
 	@Override
@@ -134,10 +135,11 @@ public class GenerateModelCodeTask extends AbstractTaskInstance implements ITask
 	
 	@Override
 	public void afterExecute() {
-		IPath workspace = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		generator.getOutputs().forEach(f->{
-			File file = workspace.append(new Path(f.toString())).toFile();
-			outputs.add(file.getAbsolutePath());
+			final Path path = new Path(f.toString());
+			final IPath rawLocation = root.getFile(path).getRawLocation();
+			outputs.add(rawLocation.toString());
 		});
 	}
 
