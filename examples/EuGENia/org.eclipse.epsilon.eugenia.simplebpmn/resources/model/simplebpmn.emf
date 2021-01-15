@@ -6,145 +6,109 @@ package SimpleBPMN;
 class BusinessProcessDiagram {
 	val BPMNElement[*] elements;
 }
-
 class BPMNElement {
 	attr String name;
 }
-
-/* SWIMLANES */
-
 @gmf.node(label="name")
-abstract class Swimlane extends BPMNElement {
-	
-}
-
+abstract class Swimlane extends BPMNElement {}
 class Lane extends Swimlane {
 	@gmf.compartment
 	val FlowObject[*] flowObjects;
 }
-
 class Pool extends Swimlane {
 	@gmf.compartment
 	val Lane[*] lanes;
 }
-
-/* CONNECTING OBJECTS */
-
 @gmf.link(label="name", source="from", target="to", color="0,0,0")
 abstract class ConnectingObject extends BPMNElement {
 	ref FlowObject from;
 	ref FlowObject to;
 }
-
 @gmf.link(tool.name="Message Flow", style="dash", target.decoration="closedarrow")
-class MessageFlow extends ConnectingObject {
-	
-}
+class MessageFlow extends ConnectingObject {}
 
 @gmf.link(tool.name="Sequence Flow", target.decoration="filledclosedarrow")
-class SequenceFlow extends ConnectingObject {
-	
-}
+class SequenceFlow extends ConnectingObject {}
 
 @gmf.link(style="dot", target.decoration="arrow")
-class Association extends ConnectingObject {
-	
-}
+class Association extends ConnectingObject {}
 
 /* FLOW OBJECTS */
 
 @gmf.node(label="name")
-abstract class FlowObject extends BPMNElement {
+abstract class FlowObject extends BPMNElement {}
 
-}
-
-abstract class Gateway extends FlowObject {
-	
-}
+abstract class Gateway extends FlowObject {}
 
 @gmf.node(tool.name="XOR Gateway",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/xor-gateway.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/xor-gateway.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class XOR extends Gateway {
-	
-}
+class XOR extends Gateway {}
 
 @gmf.node(tool.name="OR Gateway",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/or-gateway.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/or-gateway.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class OR extends Gateway {
-	
-}
+class OR extends Gateway {}
 
 @gmf.node(tool.name="AND Gateway",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/and-gateway.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/and-gateway.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class AND extends Gateway {
-}
+class AND extends Gateway {}
 
 @gmf.node(tool.name="Start Event",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/start-event.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/start-event.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class StartEvent extends FlowObject {
-}
+class StartEvent extends FlowObject {}
 
 @gmf.node(tool.name="Intermediate Event",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/intermediate-event.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/intermediate-event.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class IntermediateEvent extends FlowObject {
-}
+class IntermediateEvent extends FlowObject {}
 
 @gmf.node(tool.name="End Event",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/end-event.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/end-event.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class EndEvent extends FlowObject {
-}
+class EndEvent extends FlowObject {}
 
-class Activity extends FlowObject {
-
-}
+class Activity extends FlowObject {}
 
 /* ARTIFACTS */
 
 @gmf.node(label="name")
-abstract class Artifact extends BPMNElement {
-	
-}
+abstract class Artifact extends BPMNElement {}
 
 @gmf.node(tool.name="Data Object",
           figure="svg",
-          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.bpmn/svg/data-object.svg",
+          svg.uri="platform:/plugin/org.eclipse.epsilon.eugenia.simplebpmn/svg/data-object.svg",
           label.icon="false",
           label.placement="external",
           resizable="false",
           margin="2")
-class DataObject extends Artifact {
-	
-}
+class DataObject extends Artifact {}
 
 @gmf.node(label.placement="external", label.icon="false", border.style="dash", margin="2")
 class Group extends Artifact {

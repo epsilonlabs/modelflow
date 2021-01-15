@@ -53,6 +53,7 @@ import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.execution.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.GraphState;
@@ -520,6 +521,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	protected ManagementTrace processRules() throws EolRuntimeException {
 		IModelFlowContext ctx = getContext();
+		ctx.getProfiler().start(Stage.EXECUTION, null, ctx);
 		
 		if (ctx.isProfilingEnabled()) {
 			ctx.getProfiler().track();
@@ -544,6 +546,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 				LOG.debug("Updating Management Trace");
 				traceHelper.updateEndToEndTrace();
 			}
+			ctx.getProfiler().stop(Stage.EXECUTION, null, ctx);
 		}
 		
 		return ctx.getManagementTrace();

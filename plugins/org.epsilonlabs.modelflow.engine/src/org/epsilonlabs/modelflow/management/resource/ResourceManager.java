@@ -32,6 +32,12 @@ public class ResourceManager implements IResourceManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceManager.class);	
 
+	/*private IModelWrapper[] iModelResources;
+	private TaskNode task;
+	
+	public ResourceManager(TaskNode task){
+		this.task = task;
+	}*/
 	/** 
 	 * This method is called when the node has been marked ready for execution.
 	 */
@@ -166,8 +172,11 @@ public class ResourceManager implements IResourceManager {
 			boolean finalUse = ctx.getExecutionGraph().isLastUseOf(resourceNode, tNode, ctx.getDependencyGraph());
 			if (finalUse) {
 				// Dispose resource 
+				IModelFlowProfiler profiler = ctx.getProfiler();
 				LOG.debug("Disposing {}", resourceNode.getName());
+				profiler.start(IMeasurable.Stage.DISPOSE, resourceNode, ctx);
 				resource.dispose();
+				profiler.stop(IMeasurable.Stage.DISPOSE, resourceNode, ctx);
 			} 
 			resource.afterTask();
 		} else {

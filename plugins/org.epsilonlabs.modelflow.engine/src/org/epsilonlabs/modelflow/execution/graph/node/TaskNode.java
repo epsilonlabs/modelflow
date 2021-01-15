@@ -224,24 +224,25 @@ public class TaskNode implements ITaskNode {
 		// Execute 
 		try {
 			setState(TaskState.EXECUTING);
-			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION, this, ctx);
+			ctx.getProfiler().start(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
 			this.taskInstance.execute(ctx);
 			setState(TaskState.EXECUTED);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION, this, ctx);
+			ctx.getProfiler().stop(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
 		}
 
 		ctx.getFrameStack().put(
 			Variable.createReadOnlyVariable(getName(), taskInstance)
 		);
 		
+		/*
 		// Cleanup if necessary 
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.CLEANUP, this, ctx);
 			this.taskInstance.afterExecute();
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.CLEANUP, this, ctx);
-		}
+		}*/
 		
 		// -- POST PROCESSING -- 
 		
@@ -254,12 +255,7 @@ public class TaskNode implements ITaskNode {
 		}
 
 		// Traces
-		try {
-			ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
-			processEndToEndTraces(ctx);
-		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
-		}
+		processEndToEndTraces(ctx);
 		
 		// Process Models After Execution
 		try {
@@ -313,9 +309,14 @@ public class TaskNode implements ITaskNode {
 			if (!getState().isSkpped()) {
 				// Check if task produced traces
 				this.taskInstance.getTrace().ifPresent(traces -> {
-					ManagementTrace trace = ctx.getManagementTrace();
-					ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(trace, this.taskDefintion);
-					traceUpdater.update(traces);
+					try {
+						ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+						ManagementTrace trace = ctx.getManagementTrace();
+						ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(trace, this.taskDefintion);
+						traceUpdater.update(traces);
+					} finally {
+						ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+					}
 				});
 			} else {
 				// Should remain the same

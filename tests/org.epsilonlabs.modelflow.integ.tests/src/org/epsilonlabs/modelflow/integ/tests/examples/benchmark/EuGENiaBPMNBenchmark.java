@@ -23,10 +23,11 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios.ComponentScenarios;
+import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios.EugeniaScenarios;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.ScenarioSource;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.ScenarioSource.Mode;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.TestUtils;
+import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -37,18 +38,20 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 
-	protected static final int MAX_ITER = 1;
+	protected static final int MAX_ITER = 10;
 	protected Path diagramProjectOutputPath;
 	protected String metamodelName = "simplebpmn";
 	protected String base = "org.eclipse.epsilon.eugenia";
 
 	@ParameterizedTest(name = "Scenario {0} tracing {1} #{2}.")
-	@ScenarioSource(value = ComponentScenarios.class, names="NO_MODIFICATION", mode = Mode.INCLUDE, times = MAX_ITER)
-	public void componentExampleTwoExecutionTests(ComponentScenarios scenario, Boolean tracing, Integer iteration)
+	@ScenarioSource(value = EugeniaScenarios.class, names = "NO_MODIFICATION", mode = Mode.INCLUDE, times = MAX_ITER)
+	public void eugeniaExampleTwoExecutionTests(EugeniaScenarios scenario, Boolean tracing, Integer iteration)
 			throws Exception {
-				// Setup Variables
+		// Setup Variables
 		setupClass();
 		
+		TestUtils.clearExecutionFiles(Paths.get(ResourceLocator.getTestDir()));
+
 		String projectName = String.format("%s.%s", base, metamodelName);
 		String buildFileName = "eugenia.mflow";
 		
