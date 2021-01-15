@@ -34,10 +34,16 @@ jobs:
          
 workflows:
   version: 2
-  main:
+  publish:
     jobs:
       - build
       - publish-github-release:
           requires:
             - build
+          filters:  
+            branches:
+              only: master
+            
+
+
 
