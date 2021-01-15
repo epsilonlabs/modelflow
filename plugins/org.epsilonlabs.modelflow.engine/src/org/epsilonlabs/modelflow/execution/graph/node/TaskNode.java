@@ -235,14 +235,12 @@ public class TaskNode implements ITaskNode {
 			Variable.createReadOnlyVariable(getName(), taskInstance)
 		);
 		
-		/*
+		
 		// Cleanup if necessary 
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.CLEANUP, this, ctx);
 			this.taskInstance.afterExecute();
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.CLEANUP, this, ctx);
-		}*/
+		}
 		
 		// -- POST PROCESSING -- 
 		

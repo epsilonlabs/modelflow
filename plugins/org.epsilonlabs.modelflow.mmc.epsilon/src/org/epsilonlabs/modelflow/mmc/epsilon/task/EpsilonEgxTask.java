@@ -25,6 +25,7 @@ import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
@@ -82,9 +83,8 @@ public class EpsilonEgxTask extends AbstractEglTask implements ITaskInstance {
 	}
 	
 	@Override
-	public void afterExecute() throws MFExecutionException {
-		super.afterExecute();
-		
+	public void execute(IModelFlowContext ctx) throws MFExecutionException {
+		super.execute(ctx);
 		/*getModule().getTemplateFactory().getTemplateExecutionListeners()
 			.forEach(l -> getModule().getContext().getTemplateCache().entrySet()
 				.forEach(t -> {
@@ -98,8 +98,7 @@ public class EpsilonEgxTask extends AbstractEglTask implements ITaskInstance {
 		getModule().getContext().getInvokedTemplates()
 			.forEach(t->{
 				this.outputFiles.addAll(t.getOutputFiles());
-			});		
-		
+			});	
 	}
 	
 	
