@@ -14,23 +14,23 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 
 public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 
 	protected Set<Method> annotatedMethods;
-	protected ITask task;
+	protected ITaskInstance task;
 	protected Map<String, Object> properties;
 	protected Map<String, Object> hashes;
 
-	public TaskPropertyHandler(ITask task) {
+	public TaskPropertyHandler(ITaskInstance task) {
 		this.task = task;
 		this.annotatedMethods = getMethods();
 	}
 	
 	@Override
-	public ITask getTask() {
+	public ITaskInstance getTask() {
 		return task;
 	}
 	

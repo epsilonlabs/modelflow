@@ -10,7 +10,7 @@ package org.epsilonlabs.modelflow.mmc.core.task;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
@@ -23,7 +23,7 @@ import org.epsilonlabs.modelflow.mmc.core.factory.AbstractCoreTaskFactory;
  * @author Betty Sanchez
  *
  */
-public class PrintTask extends AbstractTask {
+public class PrintTask extends AbstractTaskInstance {
 
 	/** FACTORY */
 

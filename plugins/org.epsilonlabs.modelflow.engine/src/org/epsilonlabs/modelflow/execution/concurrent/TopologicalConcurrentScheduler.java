@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.AbstractScheduler;
@@ -52,7 +52,7 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 		IExecutionGraph eg = ctx.getExecutionGraph();
 
 		// Locate Full Execution Trace
-		Workflow wf = ctx.getModule().getWorkflow();
+		IWorkflow wf = ctx.getModule().getWorkflow();
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		WorkflowExecution currentWorkflowExecution = updater.createWorkflowExecution(wf);
 

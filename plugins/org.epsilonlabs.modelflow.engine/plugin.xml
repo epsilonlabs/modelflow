@@ -12,25 +12,37 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated managementTrace -->
       <package
-            uri="http://eclipse.org/epsilon/modelflow/management/trace/1.0"
+            uri="http://eclipse.org/epsilon/modelflow/management/trace/1.1"
             class="org.epsilonlabs.modelflow.management.trace.ManagementTracePackage"
-            genModel="src/org/epsilonlabs/modelflow/management/trace/managementTrace.genmodel"/>
+            genModel="model/managementTrace.genmodel"/>
    </extension>
 
+   <extension point="org.eclipse.emf.ecore.extension_parser">
+      <!-- @generated managementTrace -->
+      <parser
+            type="trace"
+            class="org.epsilonlabs.modelflow.management.trace.util.ManagementTraceResourceFactoryImpl"/>
+   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated executionTrace -->
       <package
-            uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.0"
+            uri="http://eclipse.org/epsilon/modelflow/exec/trace/1.1"
             class="org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage"
-            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+            genModel="model/executionTrace.genmodel"/>
    </extension>
 
-   <extension point="org.eclipse.emf.ecore.generated_package">
+   <extension point="org.eclipse.emf.ecore.extension_parser">
       <!-- @generated executionTrace -->
+      <parser
+            type="trace"
+            class="org.epsilonlabs.modelflow.execution.trace.util.ExecutionTraceResourceFactoryImpl"/>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated modelflow -->
       <package
             uri="http://eclipse.org/epsilon/modelflow/1.0"
-            class="org.epsilonlabs.modelflow.dom.DomPackage"
-            genModel="src/org/epsilonlabs/modelflow/execution/trace/executionTrace.genmodel"/>
+            class="org.epsilonlabs.modelflow.dom.IDomPackage"
+            genModel="model/modelflow.genmodel"/>
    </extension>
 
 </plugin>

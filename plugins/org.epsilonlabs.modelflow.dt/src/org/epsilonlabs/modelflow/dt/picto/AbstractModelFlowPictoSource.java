@@ -23,7 +23,7 @@ import org.eclipse.epsilon.picto.source.EglPictoSource;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IFileEditorInput;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.dt.ModelFlowPlugin;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
@@ -54,7 +54,7 @@ public abstract class AbstractModelFlowPictoSource extends EglPictoSource {
 		ResourceSet resourceSet = new ResourceSetImpl();
 		Registry packageRegistry = resourceSet.getPackageRegistry();
 		packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-		packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+		packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 		packageRegistry.put(ExecutionTracePackage.eNS_URI, ExecutionTracePackage.eINSTANCE);
 		packageRegistry.put(ManagementTracePackage.eNS_URI, ManagementTracePackage.eINSTANCE);
 		

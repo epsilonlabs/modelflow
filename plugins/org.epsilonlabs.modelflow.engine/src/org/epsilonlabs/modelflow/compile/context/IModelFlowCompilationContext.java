@@ -12,8 +12,8 @@ import java.util.Collection;
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.Task;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
 import org.epsilonlabs.modelflow.dom.ast.TaskRule;
@@ -60,7 +60,7 @@ public interface IModelFlowCompilationContext extends IEolCompilationContext {
 	 * @param r the r
 	 * @param declaration the declaration
 	 */
-	void registerResourceModelElement(Resource r, ModuleElement declaration);
+	void registerResourceModelElement(IResource r, ModuleElement declaration);
 
 	/**
 	 * Register task model element.
@@ -68,7 +68,7 @@ public interface IModelFlowCompilationContext extends IEolCompilationContext {
 	 * @param r the r
 	 * @param declaration the declaration
 	 */
-	void registerTaskModelElement(Task r, ModuleElement declaration);
+	void registerTaskModelElement(ITask r, ModuleElement declaration);
 
 	/**
 	 * Gets the task module element.
@@ -76,7 +76,7 @@ public interface IModelFlowCompilationContext extends IEolCompilationContext {
 	 * @param task the task
 	 * @return the task module element
 	 */
-	ModuleElement getTaskModuleElement(Task task);
+	ModuleElement getTaskModuleElement(ITask task);
 
 	/**
 	 * Gets the resource module element.
@@ -84,7 +84,7 @@ public interface IModelFlowCompilationContext extends IEolCompilationContext {
 	 * @param resource the resource
 	 * @return the resource module element
 	 */
-	ModuleElement getResourceModuleElement(Resource resource);
+	ModuleElement getResourceModuleElement(IResource resource);
 
 
 

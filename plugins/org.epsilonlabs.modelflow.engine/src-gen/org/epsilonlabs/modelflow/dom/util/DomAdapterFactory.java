@@ -23,7 +23,7 @@ import org.epsilonlabs.modelflow.dom.*;
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
  * <!-- end-user-doc -->
- * @see org.epsilonlabs.modelflow.dom.DomPackage
+ * @see org.epsilonlabs.modelflow.dom.IDomPackage
  * @generated
  */
 public class DomAdapterFactory extends AdapterFactoryImpl {
@@ -33,7 +33,7 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static DomPackage modelPackage;
+	protected static IDomPackage modelPackage;
 
 	/**
 	 * Creates an instance of the adapter factory.
@@ -43,7 +43,7 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	 */
 	public DomAdapterFactory() {
 		if (modelPackage == null) {
-			modelPackage = DomPackage.eINSTANCE;
+			modelPackage = IDomPackage.eINSTANCE;
 		}
 	}
 
@@ -75,59 +75,47 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	protected DomSwitch<Adapter> modelSwitch =
 		new DomSwitch<Adapter>() {
 			@Override
-			public Adapter caseWorkflow(Workflow object) {
+			public Adapter caseWorkflow(IWorkflow object) {
 				return createWorkflowAdapter();
 			}
 			@Override
-			public Adapter caseNamed(Named object) {
+			public Adapter caseNamed(INamed object) {
 				return createNamedAdapter();
 			}
 			@Override
-			public Adapter caseConfigurable(Configurable object) {
+			public Adapter caseConfigurable(IConfigurable object) {
 				return createConfigurableAdapter();
 			}
 			@Override
-			public Adapter caseAbstractResource(AbstractResource object) {
+			public Adapter caseAbstractResource(IAbstractResource object) {
 				return createAbstractResourceAdapter();
 			}
 			@Override
-			public Adapter caseAbstractTask(AbstractTask object) {
-				return createAbstractTaskAdapter();
-			}
-			@Override
-			public Adapter caseTask(Task object) {
+			public Adapter caseTask(ITask object) {
 				return createTaskAdapter();
 			}
 			@Override
-			public Adapter caseResourceReference(ResourceReference object) {
+			public Adapter caseResourceReference(IResourceReference object) {
 				return createResourceReferenceAdapter();
 			}
 			@Override
-			public Adapter caseResource(Resource object) {
+			public Adapter caseResource(IResource object) {
 				return createResourceAdapter();
 			}
 			@Override
-			public Adapter caseDerivedResource(DerivedResource object) {
+			public Adapter caseDerivedResource(IDerivedResource object) {
 				return createDerivedResourceAdapter();
 			}
 			@Override
-			public Adapter caseModelResource(ModelResource object) {
+			public Adapter caseModelResource(IModelResource object) {
 				return createModelResourceAdapter();
 			}
 			@Override
-			public Adapter caseMetamodeResource(MetamodeResource object) {
-				return createMetamodeResourceAdapter();
-			}
-			@Override
-			public Adapter caseTaskDependency(TaskDependency object) {
+			public Adapter caseTaskDependency(ITaskDependency object) {
 				return createTaskDependencyAdapter();
 			}
 			@Override
-			public Adapter caseResourceDependency(ResourceDependency object) {
-				return createResourceDependencyAdapter();
-			}
-			@Override
-			public Adapter caseProperty(Property object) {
+			public Adapter caseProperty(IProperty object) {
 				return createPropertyAdapter();
 			}
 			@Override
@@ -151,13 +139,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Workflow <em>Workflow</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IWorkflow <em>Workflow</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Workflow
+	 * @see org.epsilonlabs.modelflow.dom.IWorkflow
 	 * @generated
 	 */
 	public Adapter createWorkflowAdapter() {
@@ -165,13 +153,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Named <em>Named</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.INamed <em>Named</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Named
+	 * @see org.epsilonlabs.modelflow.dom.INamed
 	 * @generated
 	 */
 	public Adapter createNamedAdapter() {
@@ -179,13 +167,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Configurable <em>Configurable</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IConfigurable <em>Configurable</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Configurable
+	 * @see org.epsilonlabs.modelflow.dom.IConfigurable
 	 * @generated
 	 */
 	public Adapter createConfigurableAdapter() {
@@ -193,13 +181,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.AbstractResource <em>Abstract Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IAbstractResource <em>Abstract Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.AbstractResource
+	 * @see org.epsilonlabs.modelflow.dom.IAbstractResource
 	 * @generated
 	 */
 	public Adapter createAbstractResourceAdapter() {
@@ -207,27 +195,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.AbstractTask <em>Abstract Task</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ITask <em>Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.AbstractTask
-	 * @generated
-	 */
-	public Adapter createAbstractTaskAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Task <em>Task</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Task
+	 * @see org.epsilonlabs.modelflow.dom.ITask
 	 * @generated
 	 */
 	public Adapter createTaskAdapter() {
@@ -235,13 +209,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ResourceReference <em>Resource Reference</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IResourceReference <em>Resource Reference</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceReference
+	 * @see org.epsilonlabs.modelflow.dom.IResourceReference
 	 * @generated
 	 */
 	public Adapter createResourceReferenceAdapter() {
@@ -249,13 +223,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Resource <em>Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IResource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Resource
+	 * @see org.epsilonlabs.modelflow.dom.IResource
 	 * @generated
 	 */
 	public Adapter createResourceAdapter() {
@@ -263,13 +237,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.DerivedResource <em>Derived Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IDerivedResource <em>Derived Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.DerivedResource
+	 * @see org.epsilonlabs.modelflow.dom.IDerivedResource
 	 * @generated
 	 */
 	public Adapter createDerivedResourceAdapter() {
@@ -277,13 +251,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ModelResource <em>Model Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IModelResource <em>Model Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.ModelResource
+	 * @see org.epsilonlabs.modelflow.dom.IModelResource
 	 * @generated
 	 */
 	public Adapter createModelResourceAdapter() {
@@ -291,27 +265,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.MetamodeResource <em>Metamode Resource</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ITaskDependency <em>Task Dependency</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.MetamodeResource
-	 * @generated
-	 */
-	public Adapter createMetamodeResourceAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.TaskDependency <em>Task Dependency</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.TaskDependency
+	 * @see org.epsilonlabs.modelflow.dom.ITaskDependency
 	 * @generated
 	 */
 	public Adapter createTaskDependencyAdapter() {
@@ -319,27 +279,13 @@ public class DomAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.ResourceDependency <em>Resource Dependency</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.IProperty <em>Property</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.ResourceDependency
-	 * @generated
-	 */
-	public Adapter createResourceDependencyAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.dom.Property <em>Property</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.dom.Property
+	 * @see org.epsilonlabs.modelflow.dom.IProperty
 	 * @generated
 	 */
 	public Adapter createPropertyAdapter() {

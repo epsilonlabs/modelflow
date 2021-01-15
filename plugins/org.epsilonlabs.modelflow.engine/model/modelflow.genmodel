@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xA;Copyright (c) 2020 The University of York.&#xA; &#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;******************************************************************************"
+    modelDirectory="/org.epsilonlabs.modelflow.engine/src-gen" modelPluginID="org.epsilonlabs.modelflow.engine"
+    modelName="Trace" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="/org.epsilonlabs.modelflow.tests/src-gen" importerID="org.eclipse.emf.importer.ecore"
+    bundleManifest="false" complianceLevel="8.0" copyrightFields="false" testsPluginID="org.epsilonlabs.modelflow.tests"
+    interfaceNamePattern="I{0}" classNamePattern="{0}" operationReflection="true"
+    importOrganizing="true">
+  <foreignModel>modelflow.ecore</foreignModel>
+  <genPackages prefix="Dom" basePackage="org.epsilonlabs.modelflow" disposableProviderFactory="true"
+      fileExtensions="dom" ecorePackage="modelflow.ecore#/">
+    <genClasses ecoreClass="modelflow.ecore#//Workflow">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/tasks"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/resources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Workflow/taskDependencies"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="modelflow.ecore#//Named">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Named/name"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="modelflow.ecore#//Configurable">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Configurable/properties"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Configurable/moduleElement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Configurable/definition"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="modelflow.ecore#//AbstractResource"/>
+    <genClasses ecoreClass="modelflow.ecore#//Task">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/produces"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/consumes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/modifies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/dependencies"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//Task/dependentTasks"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/enabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/traceable"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/alwaysExecute"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Task/guard"/>
+    </genClasses>
+    <genClasses ecoreClass="modelflow.ecore#//ResourceReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//ResourceReference/resource"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//ResourceReference/aliases"/>
+    </genClasses>
+    <genClasses ecoreClass="modelflow.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Resource/declared"/>
+    </genClasses>
+    <genClasses ecoreClass="modelflow.ecore#//DerivedResource">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//DerivedResource/reference"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//DerivedResource/declared"/>
+    </genClasses>
+    <genClasses ecoreClass="modelflow.ecore#//ModelResource"/>
+    <genClasses ecoreClass="modelflow.ecore#//TaskDependency">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/task"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference modelflow.ecore#//TaskDependency/dependsOn"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//TaskDependency/type"/>
+    </genClasses>
+    <genClasses ecoreClass="modelflow.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Property/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Property/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute modelflow.ecore#//Property/evaluatedValue"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

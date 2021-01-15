@@ -15,18 +15,18 @@ import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.api.IResource;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
+import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
 import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
 import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
-import org.epsilonlabs.modelflow.management.resource.ResourceManager;
+import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
@@ -40,8 +40,8 @@ public class TaskNode implements ITaskNode {
 
 	private static final Logger LOG = LoggerFactory.getLogger(TaskNode.class);
 	
-	protected Task taskDefintion;
-	protected ITask taskInstance;
+	protected ITask taskDefintion;
+	protected ITaskInstance taskInstance;
 	protected TaskState state;
 
 	protected final CompletableSubject completable = CompletableSubject.create();
@@ -51,7 +51,7 @@ public class TaskNode implements ITaskNode {
 	private TaskInputPropertyHandler taskInputs;
 	private TaskOutputPropertyHandler taskOutputs;
 	
-	public TaskNode(Task task) {
+	public TaskNode(ITask task) {
 		this.taskDefintion = task;
 		setState(TaskState.CREATED);
 	}
@@ -195,8 +195,8 @@ public class TaskNode implements ITaskNode {
 	protected void doExecute(IModelFlowContext ctx)
 			throws MFRuntimeException {
 		
-		ResourceManager manager = ctx.getResourceManager(); 
-		TaskParamManager pManager = ctx.getParamManager();
+		IResourceManager manager = ctx.getResourceManager(); 
+		ITaskParameterManager pManager = ctx.getParamManager();
 		/*
 		 * TODO if any derived outputs are contributed, 
 		 * then either check its stamp has not changed or 
@@ -262,7 +262,7 @@ public class TaskNode implements ITaskNode {
 					/** Dispose resource */
 					LOG.debug("Disposing {}", resource.getName());
 					try {
-						Optional<IResource<?>> optional = ctx.getTaskRepository().getResourceRepository().get(resource);
+						Optional<IResourceInstance<?>> optional = ctx.getTaskRepository().getResourceRepository().get(resource);
 						optional.ifPresent(res -> {
 							if (res.isLoaded()) {
 								/*
@@ -368,12 +368,12 @@ public class TaskNode implements ITaskNode {
 	}
 
 	@Override
-	public Task getTaskDefinition() {
+	public ITask getTaskDefinition() {
 		return this.taskDefintion;
 	}
 	
 	@Override
-	public ITask getTaskInstance() {
+	public ITaskInstance getTaskInstance() {
 		if (getState().hasBeenInitialised()) {			
 			return this.taskInstance;
 		}
@@ -381,7 +381,7 @@ public class TaskNode implements ITaskNode {
 	}
 
 	@Override
-	public void setInstance(ITask instance) {
+	public void setInstance(ITaskInstance instance) {
 		this.taskInstance = instance;
 	}
 	
@@ -399,22 +399,6 @@ public class TaskNode implements ITaskNode {
 			break;
 		}
 
-	}
-	
-	@Override
-	public TaskInputPropertyHandler getInputParams() {
-		if (this.taskInputs == null) {
-			this.taskInputs = new TaskInputPropertyHandler(taskInstance);
-		}
-		return this.taskInputs;
-	}
-	
-	@Override
-	public TaskOutputPropertyHandler getOutputParams() {
-		if (this.taskOutputs == null) {
-			this.taskOutputs = new TaskOutputPropertyHandler(taskInstance);
-		}
-		return this.taskOutputs;
 	}
 	
 	/** Unique Task identifiers by name */

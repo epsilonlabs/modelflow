@@ -45,7 +45,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://eclipse.org/epsilon/modelflow/exec/trace/1.0";
+	String eNS_URI = "http://eclipse.org/epsilon/modelflow/exec/trace/1.1";
 
 	/**
 	 * The package namespace name.
@@ -156,6 +156,43 @@ public interface ExecutionTracePackage extends EPackage {
 	int STATEFUL_OPERATION_COUNT = 0;
 
 	/**
+	 * The meta object id for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.NamedImpl <em>Named</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.epsilonlabs.modelflow.execution.trace.impl.NamedImpl
+	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getNamed()
+	 * @generated
+	 */
+	int NAMED = 2;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED__NAME = 0;
+
+	/**
+	 * The number of structural features of the '<em>Named</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_FEATURE_COUNT = 1;
+
+	/**
+	 * The number of operations of the '<em>Named</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OPERATION_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.SnapshotImpl <em>Snapshot</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -163,7 +200,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getSnapshot()
 	 * @generated
 	 */
-	int SNAPSHOT = 2;
+	int SNAPSHOT = 3;
 
 	/**
 	 * The feature id for the '<em><b>Stamp</b></em>' attribute.
@@ -209,7 +246,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getResourceSnapshot()
 	 * @generated
 	 */
-	int RESOURCE_SNAPSHOT = 3;
+	int RESOURCE_SNAPSHOT = 4;
 
 	/**
 	 * The feature id for the '<em><b>Stamp</b></em>' attribute.
@@ -230,13 +267,13 @@ public interface ExecutionTracePackage extends EPackage {
 	int RESOURCE_SNAPSHOT__TIMESTAMP = SNAPSHOT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Resource</b></em>' containment reference.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int RESOURCE_SNAPSHOT__RESOURCE = SNAPSHOT_FEATURE_COUNT + 0;
+	int RESOURCE_SNAPSHOT__NAME = SNAPSHOT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Resource Snapshot</em>' class.
@@ -264,7 +301,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getPropertySnapshot()
 	 * @generated
 	 */
-	int PROPERTY_SNAPSHOT = 4;
+	int PROPERTY_SNAPSHOT = 5;
 
 	/**
 	 * The feature id for the '<em><b>Stamp</b></em>' attribute.
@@ -285,13 +322,13 @@ public interface ExecutionTracePackage extends EPackage {
 	int PROPERTY_SNAPSHOT__TIMESTAMP = SNAPSHOT__TIMESTAMP;
 
 	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROPERTY_SNAPSHOT__KEY = SNAPSHOT_FEATURE_COUNT + 0;
+	int PROPERTY_SNAPSHOT__NAME = SNAPSHOT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Property Snapshot</em>' class.
@@ -319,7 +356,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getWorkflowExecution()
 	 * @generated
 	 */
-	int WORKFLOW_EXECUTION = 5;
+	int WORKFLOW_EXECUTION = 6;
 
 	/**
 	 * The feature id for the '<em><b>End State</b></em>' attribute.
@@ -331,22 +368,31 @@ public interface ExecutionTracePackage extends EPackage {
 	int WORKFLOW_EXECUTION__END_STATE = STATEFUL__END_STATE;
 
 	/**
+	 * The feature id for the '<em><b>Stamp</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW_EXECUTION__STAMP = STATEFUL_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Timestamp</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WORKFLOW_EXECUTION__TIMESTAMP = STATEFUL_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Tasks</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW_EXECUTION__TASKS = STATEFUL_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Workflow</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int WORKFLOW_EXECUTION__WORKFLOW = STATEFUL_FEATURE_COUNT + 1;
+	int WORKFLOW_EXECUTION__TASKS = STATEFUL_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Workflow Execution</em>' class.
@@ -355,7 +401,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int WORKFLOW_EXECUTION_FEATURE_COUNT = STATEFUL_FEATURE_COUNT + 2;
+	int WORKFLOW_EXECUTION_FEATURE_COUNT = STATEFUL_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Workflow Execution</em>' class.
@@ -374,7 +420,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getTaskExecution()
 	 * @generated
 	 */
-	int TASK_EXECUTION = 6;
+	int TASK_EXECUTION = 7;
 
 	/**
 	 * The feature id for the '<em><b>End State</b></em>' attribute.
@@ -386,13 +432,22 @@ public interface ExecutionTracePackage extends EPackage {
 	int TASK_EXECUTION__END_STATE = STATEFUL__END_STATE;
 
 	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TASK_EXECUTION__NAME = STATEFUL_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Input Models</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_EXECUTION__INPUT_MODELS = STATEFUL_FEATURE_COUNT + 0;
+	int TASK_EXECUTION__INPUT_MODELS = STATEFUL_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Output Models</b></em>' containment reference list.
@@ -401,7 +456,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_EXECUTION__OUTPUT_MODELS = STATEFUL_FEATURE_COUNT + 1;
+	int TASK_EXECUTION__OUTPUT_MODELS = STATEFUL_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Input Properties</b></em>' containment reference list.
@@ -410,7 +465,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_EXECUTION__INPUT_PROPERTIES = STATEFUL_FEATURE_COUNT + 2;
+	int TASK_EXECUTION__INPUT_PROPERTIES = STATEFUL_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Output Properties</b></em>' containment reference list.
@@ -419,16 +474,7 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TASK_EXECUTION__OUTPUT_PROPERTIES = STATEFUL_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Task</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TASK_EXECUTION__TASK = STATEFUL_FEATURE_COUNT + 4;
+	int TASK_EXECUTION__OUTPUT_PROPERTIES = STATEFUL_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Task Execution</em>' class.
@@ -514,6 +560,27 @@ public interface ExecutionTracePackage extends EPackage {
 	EAttribute getStateful_EndState();
 
 	/**
+	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.execution.trace.Named <em>Named</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Named</em>'.
+	 * @see org.epsilonlabs.modelflow.execution.trace.Named
+	 * @generated
+	 */
+	EClass getNamed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.execution.trace.Named#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see org.epsilonlabs.modelflow.execution.trace.Named#getName()
+	 * @see #getNamed()
+	 * @generated
+	 */
+	EAttribute getNamed_Name();
+
+	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.execution.trace.Snapshot <em>Snapshot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -556,17 +623,6 @@ public interface ExecutionTracePackage extends EPackage {
 	EClass getResourceSnapshot();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot#getResource <em>Resource</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Resource</em>'.
-	 * @see org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot#getResource()
-	 * @see #getResourceSnapshot()
-	 * @generated
-	 */
-	EReference getResourceSnapshot_Resource();
-
-	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.execution.trace.PropertySnapshot <em>Property Snapshot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -575,17 +631,6 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getPropertySnapshot();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.execution.trace.PropertySnapshot#getKey <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see org.epsilonlabs.modelflow.execution.trace.PropertySnapshot#getKey()
-	 * @see #getPropertySnapshot()
-	 * @generated
-	 */
-	EAttribute getPropertySnapshot_Key();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.execution.trace.WorkflowExecution <em>Workflow Execution</em>}'.
@@ -607,17 +652,6 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getWorkflowExecution_Tasks();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.execution.trace.WorkflowExecution#getWorkflow <em>Workflow</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Workflow</em>'.
-	 * @see org.epsilonlabs.modelflow.execution.trace.WorkflowExecution#getWorkflow()
-	 * @see #getWorkflowExecution()
-	 * @generated
-	 */
-	EReference getWorkflowExecution_Workflow();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution <em>Task Execution</em>}'.
@@ -672,17 +706,6 @@ public interface ExecutionTracePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getTaskExecution_OutputProperties();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.execution.trace.TaskExecution#getTask <em>Task</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Task</em>'.
-	 * @see org.epsilonlabs.modelflow.execution.trace.TaskExecution#getTask()
-	 * @see #getTaskExecution()
-	 * @generated
-	 */
-	EReference getTaskExecution_Task();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -760,6 +783,24 @@ public interface ExecutionTracePackage extends EPackage {
 		EAttribute STATEFUL__END_STATE = eINSTANCE.getStateful_EndState();
 
 		/**
+		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.NamedImpl <em>Named</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.epsilonlabs.modelflow.execution.trace.impl.NamedImpl
+		 * @see org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTracePackageImpl#getNamed()
+		 * @generated
+		 */
+		EClass NAMED = eINSTANCE.getNamed();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED__NAME = eINSTANCE.getNamed_Name();
+
+		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.SnapshotImpl <em>Snapshot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -796,14 +837,6 @@ public interface ExecutionTracePackage extends EPackage {
 		EClass RESOURCE_SNAPSHOT = eINSTANCE.getResourceSnapshot();
 
 		/**
-		 * The meta object literal for the '<em><b>Resource</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference RESOURCE_SNAPSHOT__RESOURCE = eINSTANCE.getResourceSnapshot_Resource();
-
-		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.PropertySnapshotImpl <em>Property Snapshot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -812,14 +845,6 @@ public interface ExecutionTracePackage extends EPackage {
 		 * @generated
 		 */
 		EClass PROPERTY_SNAPSHOT = eINSTANCE.getPropertySnapshot();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute PROPERTY_SNAPSHOT__KEY = eINSTANCE.getPropertySnapshot_Key();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.WorkflowExecutionImpl <em>Workflow Execution</em>}' class.
@@ -838,14 +863,6 @@ public interface ExecutionTracePackage extends EPackage {
 		 * @generated
 		 */
 		EReference WORKFLOW_EXECUTION__TASKS = eINSTANCE.getWorkflowExecution_Tasks();
-
-		/**
-		 * The meta object literal for the '<em><b>Workflow</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference WORKFLOW_EXECUTION__WORKFLOW = eINSTANCE.getWorkflowExecution_Workflow();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl <em>Task Execution</em>}' class.
@@ -888,14 +905,6 @@ public interface ExecutionTracePackage extends EPackage {
 		 * @generated
 		 */
 		EReference TASK_EXECUTION__OUTPUT_PROPERTIES = eINSTANCE.getTaskExecution_OutputProperties();
-
-		/**
-		 * The meta object literal for the '<em><b>Task</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TASK_EXECUTION__TASK = eINSTANCE.getTaskExecution_Task();
 
 	}
 

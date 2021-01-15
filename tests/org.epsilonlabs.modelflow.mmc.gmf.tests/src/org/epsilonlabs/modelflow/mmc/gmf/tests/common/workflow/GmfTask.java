@@ -6,7 +6,7 @@ import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
 import org.eclipse.gmf.mappings.GMFMapPackage;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 
 public class GmfTask {
@@ -15,7 +15,7 @@ public class GmfTask {
 		return locateAndCopyToTestDir("filesystem." + name);
 	}
 	
-	public static Workflow getGenDiagramWorkflow() {
+	public static IWorkflow getGenDiagramWorkflow() {
 		return new WorkflowBuilder()
 			
 				.addModelResource("GmfGen", "epsilon:emf")
@@ -28,7 +28,7 @@ public class GmfTask {
 			.build();
 	}
 	
-	public static Workflow getGmfmap2GmfGenWorkflow() {
+	public static IWorkflow getGmfmap2GmfGenWorkflow() {
 		return new WorkflowBuilder()
 				.addModelResource("ECore", "epsilon:emf")
 				.addProperty("src", location("ecore"))

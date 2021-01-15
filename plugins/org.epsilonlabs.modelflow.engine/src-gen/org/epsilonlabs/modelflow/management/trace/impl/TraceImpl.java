@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.Link;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
-import org.epsilonlabs.modelflow.management.trace.Property;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
 /**
@@ -42,7 +41,6 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.TraceImpl#getSources <em>Sources</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.TraceImpl#getTargets <em>Targets</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.TraceImpl#getLink <em>Link</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.TraceImpl#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @generated
@@ -77,16 +75,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	 * @ordered
 	 */
 	protected Link link;
-
-	/**
-	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getProperties()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<Property> properties;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -184,19 +172,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 	 * @generated
 	 */
 	@Override
-	public EList<Property> getProperties() {
-		if (properties == null) {
-			properties = new EObjectContainmentEList<Property>(Property.class, this, ManagementTracePackage.TRACE__PROPERTIES);
-		}
-		return properties;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case ManagementTracePackage.TRACE__SOURCES:
@@ -205,8 +180,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 				return ((InternalEList<?>)getTargets()).basicRemove(otherEnd, msgs);
 			case ManagementTracePackage.TRACE__LINK:
 				return basicSetLink(null, msgs);
-			case ManagementTracePackage.TRACE__PROPERTIES:
-				return ((InternalEList<?>)getProperties()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -225,8 +198,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 				return getTargets();
 			case ManagementTracePackage.TRACE__LINK:
 				return getLink();
-			case ManagementTracePackage.TRACE__PROPERTIES:
-				return getProperties();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -251,10 +222,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 			case ManagementTracePackage.TRACE__LINK:
 				setLink((Link)newValue);
 				return;
-			case ManagementTracePackage.TRACE__PROPERTIES:
-				getProperties().clear();
-				getProperties().addAll((Collection<? extends Property>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -276,9 +243,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 			case ManagementTracePackage.TRACE__LINK:
 				setLink((Link)null);
 				return;
-			case ManagementTracePackage.TRACE__PROPERTIES:
-				getProperties().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -297,8 +261,6 @@ public class TraceImpl extends MinimalEObjectImpl.Container implements Trace {
 				return targets != null && !targets.isEmpty();
 			case ManagementTracePackage.TRACE__LINK:
 				return link != null;
-			case ManagementTracePackage.TRACE__PROPERTIES:
-				return properties != null && !properties.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

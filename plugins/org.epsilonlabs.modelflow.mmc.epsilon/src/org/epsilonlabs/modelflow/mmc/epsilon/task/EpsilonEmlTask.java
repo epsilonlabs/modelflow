@@ -19,7 +19,7 @@ import org.eclipse.epsilon.eml.EmlModule;
 import org.eclipse.epsilon.eml.IEmlModule;
 import org.eclipse.epsilon.eml.trace.MergeTrace;
 import org.eclipse.epsilon.etl.trace.TransformationTrace;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
@@ -33,7 +33,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
  * Produces a merge trace model and a transformation trace model
  * 
  */
-public class EpsilonEmlTask extends AbstractEpsilonTask implements ITask {
+public class EpsilonEmlTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked")
 	@Override

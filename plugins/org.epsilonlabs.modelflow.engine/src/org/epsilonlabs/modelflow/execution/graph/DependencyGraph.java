@@ -7,15 +7,14 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.DerivedResource;
-import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.ResourceDependency;
-import org.epsilonlabs.modelflow.dom.ResourceReference;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.TaskDependency;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IDerivedResource;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ITaskDependency;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
@@ -49,10 +48,10 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 
 	@Override
 	public DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException {
-		Workflow workflow = ctx.getModule().getWorkflow();
+		IWorkflow workflow = ctx.getModule().getWorkflow();
 		workflow.getResources().forEach(r -> this.addResource(r, ctx));
 		workflow.getTasks().forEach(t -> this.addTask(t, ctx));
-		workflow.getResourceDependencies().forEach(this::addResourceDependencies);
+		//workflow.getResourceDependencies().forEach(this::addResourceDependencies);
 		workflow.getTaskDependencies().forEach(this::addTaskDependencies);
 		processImplicitResources(workflow);
 		updateStatus(GraphState.POPULATED);
@@ -65,8 +64,8 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	 * 
 	 * @param workflow
 	 */
-	protected void processImplicitResources(Workflow workflow) {
-		workflow.getResources().stream().filter(r -> r instanceof DerivedResource).forEach(r -> {
+	protected void processImplicitResources(IWorkflow workflow) {
+		workflow.getResources().stream().filter(r -> r instanceof IDerivedResource).forEach(r -> {
 			// already added,
 			String[] split = r.getName().split("\\.");
 			IAbstractResourceNode resourceNode = getResource(r);
@@ -80,7 +79,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		});
 	}
 
-	protected ITaskNode addTask(Task t, IModelFlowContext ctx) {
+	protected ITaskNode addTask(ITask t, IModelFlowContext ctx) {
 		ITaskNode task = new TaskNode(t);
 		task.subscribe(ctx.getPublisher());
 		getGraph().addVertex(task);
@@ -92,13 +91,13 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		return task;
 	}
 
-	protected void addResource(AbstractResource r, IModelFlowContext ctx) {
+	protected void addResource(IAbstractResource r, IModelFlowContext ctx) {
 		IAbstractResourceNode node = null;
 
-		if (r instanceof DerivedResource) {
-			node = new DerivedResourceNode((DerivedResource) r);
-		} else if (r instanceof ModelResource) {
-			node = new ModelResourceNode((ModelResource) r);
+		if (r instanceof IDerivedResource) {
+			node = new DerivedResourceNode((IDerivedResource) r);
+		} else if (r instanceof IModelResource) {
+			node = new ModelResourceNode((IModelResource) r);
 		}
 		if (node != null) {
 			node.subscribe(ctx.getPublisher());
@@ -107,34 +106,28 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		}
 	}
 
-	protected void addTaskDependencies(TaskDependency d) {
+	protected void addTaskDependencies(ITaskDependency d) {
 		// Source Node that requires this dependency
-		ITaskNode node = getTask(d.getAfter());
+		ITaskNode node = getTask(d.getTask());
 		// Dependency
-		ITaskNode dependency = getTask(d.getBefore());
+		ITaskNode dependency = getTask(d.getDependsOn());
 		// source (node) --(dependsOn)--> target (dependency)
 		getGraph().addEdge(node, dependency, new DependencyEdge(DependencyEdge.Kind.TASK));
 	}
 
-	protected void addResourceDependencies(ResourceDependency rd) {
-		IAbstractResourceNode source = getResource(rd.getSource());
-		IAbstractResourceNode target = getResource(rd.getTarget());
-		getGraph().addEdge(source, target, new DependencyEdge(DependencyEdge.Kind.RESOURCE));
-	}
-
-	protected void addProducesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addProducesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(taskNode, resourceNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
 	}
 
-	protected void addConsumesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addConsumesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(resourceNode, taskNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
 	}
 
-	protected void addModifiesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addModifiesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(resourceNode, taskNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
@@ -144,11 +137,11 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 
 	/* GETTERS */
 
-	protected IAbstractResourceNode getResource(AbstractResource resource) {
+	protected IAbstractResourceNode getResource(IAbstractResource resource) {
 		IAbstractResourceNode resourceNode;
-		if (resource instanceof DerivedResource) {
+		if (resource instanceof IDerivedResource) {
 			resourceNode = this.resources.get(resource.getName().replace(".", "_"));
-		} else if (resource instanceof Resource) {
+		} else if (resource instanceof IResource) {
 			resourceNode = this.resources.get(resource.getName());
 		} else {
 			return null;
@@ -157,7 +150,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		return resourceNode;
 	}
 
-	protected ITaskNode getTask(Task task) {
+	protected ITaskNode getTask(ITask task) {
 		return this.tasks.get(task.getName());
 	}
 

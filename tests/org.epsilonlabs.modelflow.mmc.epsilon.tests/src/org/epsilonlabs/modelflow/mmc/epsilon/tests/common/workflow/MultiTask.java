@@ -9,12 +9,12 @@ package org.epsilonlabs.modelflow.mmc.epsilon.tests.common.workflow;
 
 import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopyToTestDir;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 
 public class MultiTask {
 	
-	public static final Workflow getFlowchartWorkflow() {
+	public static final IWorkflow getFlowchartWorkflow() {
 		return new WorkflowBuilder()
 			
 			.addModelResource("Flowchart", "epsilon:emf")
@@ -46,7 +46,7 @@ public class MultiTask {
 			.build();
 	}
 	
-	public static final Workflow getEmlWorkflow() {
+	public static final IWorkflow getEmlWorkflow() {
 		return new WorkflowBuilder()
 				
 			.addModelResource("Source", "epsilon:emf")

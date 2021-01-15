@@ -45,7 +45,7 @@ public class ExecutionTraceAnalyser {
 	}
 	
 	public boolean taskWithState(String taskName, TaskState state) throws MFUnknownTaskException {
-		Optional<TaskExecution> task = getAllTaskExecutions().stream().filter(t->t.getTask().getName().equalsIgnoreCase(taskName)).findFirst();
+		Optional<TaskExecution> task = getAllTaskExecutions().stream().filter(t->t.getName().equalsIgnoreCase(taskName)).findFirst();
 		if (task.isPresent()) {
 			String endState = task.get().getEndState();
 			if (endState.equalsIgnoreCase(state.name())) {

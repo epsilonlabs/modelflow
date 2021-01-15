@@ -16,11 +16,11 @@ import java.util.Optional;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epsilon.common.module.ModuleElement;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.Property;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IProperty;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementHandler;
 import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -57,7 +57,7 @@ public class ExecutionTraceUpdater {
 	
 	public synchronized TaskExecution getCurrentTaskExecution(ITaskNode task){
 		for (TaskExecution t: getCurrentWorkflowExecution().getTasks()) {
-			if (t.getTask().getName().equals(task.getTaskDefinition().getName())) {
+			if (t.getName().equals(task.getTaskDefinition().getName())) {
 				return t;
 			} 
 		}
@@ -69,7 +69,7 @@ public class ExecutionTraceUpdater {
 		if (previousWorkflowExecution.isPresent()) {
 			WorkflowExecution workflowExecution = previousWorkflowExecution.get();
 			for (TaskExecution t: workflowExecution.getTasks()) {
-				if (t.getTask().getName().equals(task.getTaskDefinition().getName())) {
+				if (t.getName().equals(task.getTaskDefinition().getName())) {
 					return Optional.of(t);
 				} 
 			}
@@ -77,46 +77,44 @@ public class ExecutionTraceUpdater {
 		return Optional.empty();	
 	}
 	
-	public synchronized WorkflowExecution createWorkflowExecution(Workflow w) {
-		Workflow copy = EcoreUtil.copy(w);
-		serializableCopy(copy);
+	public synchronized WorkflowExecution createWorkflowExecution(IWorkflow w) {
+		//Workflow copy = EcoreUtil.copy(w);
+		//serializableCopy(copy);
 		
 		WorkflowExecution currentWorkflowExecution = ExecutionTraceFactoryImpl.eINSTANCE.createWorkflowExecution();
-		currentWorkflowExecution.setWorkflow(copy);
+		currentWorkflowExecution.setStamp(w.getName()); //TODO use stamp
 		trace.getExecutions().add(currentWorkflowExecution);
 		return currentWorkflowExecution;
 	}
 	
 
-	public synchronized TaskExecution createTaskExecution(Task task) {
-		Task copy = EcoreUtil.copy(task);
-		serializableCopy(copy);
-
+	public synchronized TaskExecution createTaskExecution(ITask task) {
+		
 		TaskExecution exec = ExecutionTraceFactory.eINSTANCE.createTaskExecution();
-		exec.setTask(copy);
+		exec.setName(task.getName());
 
 		getCurrentWorkflowExecution().getTasks().add(exec);
 		return exec;
 	}
 	
-	protected synchronized void serializableCopy(Task task) {
+	protected synchronized void serializableCopy(ITask task) {
 		Object guard = task.getGuard();
 		if (guard instanceof ModuleElement) {
 			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)guard);
 			task.setGuard(wrapper);
 		}
-		for (Property p : task.getProperties()) {
+		for (IProperty p : task.getProperties()) {
 			serializableCopy(p);
 		}
 	}
 	
-	protected synchronized void serializableCopy(Resource resource) {
-		for (Property p : resource.getProperties()) {
+	protected synchronized void serializableCopy(IResource resource) {
+		for (IProperty p : resource.getProperties()) {
 			serializableCopy(p);
 		}
 	}
 	
-	protected synchronized void serializableCopy(Property p) {
+	protected synchronized void serializableCopy(IProperty p) {
 		Object value = p.getValue();
 		if (value instanceof ModuleElement) {
 			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)value);
@@ -124,26 +122,24 @@ public class ExecutionTraceUpdater {
 		}
 	}
 	
-	protected synchronized void serializableCopy(Workflow w) {
-		for (Task t : w.getTasks()) {
+	protected synchronized void serializableCopy(IWorkflow w) {
+		for (ITask t : w.getTasks()) {
 			serializableCopy(t);
 		}
-		for (AbstractResource r : w.getResources()) {
-			if (r instanceof Resource) {				
-				serializableCopy((Resource) r);
+		for (IAbstractResource r : w.getResources()) {
+			if (r instanceof IResource) {				
+				serializableCopy((IResource) r);
 			}
 		}
-		for (Property p : w.getProperties()) {
+		for (IProperty p : w.getProperties()) {
 			serializableCopy(p);
 		}		
 	}
 
-	public synchronized ResourceSnapshot createResourceSnapshot(Resource res, Object stamp) {
-		Resource copy = EcoreUtil.copy(res);
-		serializableCopy(copy);
-
+	public synchronized ResourceSnapshot createResourceSnapshot(IResource res, Object stamp) {
+	
 		ResourceSnapshot snapshot = ExecutionTraceFactory.eINSTANCE.createResourceSnapshot();
-		snapshot.setResource(copy);
+		snapshot.setName(res.getName());
 		snapshot.setTimestamp(System.nanoTime());
 		snapshot.setStamp(stamp);
 		LOG.debug("Stamp of {} is {}",res.getName(), stamp);
@@ -155,7 +151,7 @@ public class ExecutionTraceUpdater {
 		List<ResourceSnapshot> toRemove=new ArrayList<>();
 		trace.getLatest()
 			.parallelStream()
-			.filter(r-> r.getResource().getName().equals(snapshot.getResource().getName()))
+			.filter(r-> r.getName().equals(snapshot.getName()))
 			.forEach(toRemove::add);
 		toRemove.parallelStream().forEach(r-> trace.getLatest().remove(r));
 		
@@ -177,7 +173,7 @@ public class ExecutionTraceUpdater {
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot inputModel : taskExecution.get().getInputModels()) {
-				if (inputModel.getResource().getName().equals(resource.getInternal().getName())) {
+				if (inputModel.getName().equals(resource.getInternal().getName())) {
 					return Optional.of(inputModel);
 				}
 			}
@@ -189,7 +185,7 @@ public class ExecutionTraceUpdater {
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot outputModel : taskExecution.get().getOutputModels()) {
-				if (outputModel.getResource().getName().equals(resource.getInternal().getName())) {
+				if (outputModel.getName().equals(resource.getInternal().getName())) {
 					return Optional.of(outputModel);
 				}
 			}
@@ -209,7 +205,7 @@ public class ExecutionTraceUpdater {
 	protected synchronized PropertySnapshot createPropertySnapshot(Entry<String, Object> pair){
 		PropertySnapshot propSnapshot = ExecutionTraceFactory.eINSTANCE.createPropertySnapshot();
 		propSnapshot.setTimestamp(System.nanoTime());
-		propSnapshot.setKey(pair.getKey());
+		propSnapshot.setName(pair.getKey());
 		propSnapshot.setStamp(pair.getValue());
 		return propSnapshot;
 	}

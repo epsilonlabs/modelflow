@@ -20,8 +20,8 @@ import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -33,7 +33,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.emf.factory.AbstractEMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.emf.task.custom.CustomGenerator;
 
-public class GenerateModelCodeTask extends AbstractTask implements ITask {
+public class GenerateModelCodeTask extends AbstractTaskInstance implements ITaskInstance {
 
 	/** FACTORY */
 

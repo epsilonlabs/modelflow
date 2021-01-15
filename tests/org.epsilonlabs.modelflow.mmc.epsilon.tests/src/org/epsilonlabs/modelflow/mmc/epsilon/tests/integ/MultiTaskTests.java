@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.mmc.epsilon.tests.integ;
 
 import static org.junit.Assert.fail;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.tests.common.workflow.MultiTask;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -31,7 +31,7 @@ public class MultiTaskTests extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 
-	protected Workflow w;
+	protected IWorkflow w;
 	@Test
 	public void testFlowchart() {
 		w = MultiTask.getFlowchartWorkflow();

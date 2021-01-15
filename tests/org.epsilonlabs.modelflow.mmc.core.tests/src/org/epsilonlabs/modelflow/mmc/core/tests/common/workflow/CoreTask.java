@@ -10,12 +10,12 @@ package org.epsilonlabs.modelflow.mmc.core.tests.common.workflow;
 
 import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateAndCopyToTestDir;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 
 public class CoreTask {
 
-	public static Workflow getFileReader() {
+	public static IWorkflow getFileReader() {
 		return new WorkflowBuilder()
 			
 			.addTask("copyright", "core:fileReader")
@@ -24,7 +24,7 @@ public class CoreTask {
 			.build();
 	}
 	
-	public static Workflow getPrintTask() {
+	public static IWorkflow getPrintTask() {
 		return new WorkflowBuilder()
 			
 			.addTask("hi", "core:print")
@@ -33,7 +33,7 @@ public class CoreTask {
 			.build();
 	}	
 	
-	public static Workflow getSleepTask() {
+	public static IWorkflow getSleepTask() {
 		return new WorkflowBuilder()
 			
 			.addTask("sleep", "core:sleep")
@@ -43,7 +43,7 @@ public class CoreTask {
 			.build();
 	}	
 	
-	public static Workflow getXsdTask() {
+	public static IWorkflow getXsdTask() {
 		return new WorkflowBuilder()
 			
 			.addTask("valdiate", "core:xsdValidate")

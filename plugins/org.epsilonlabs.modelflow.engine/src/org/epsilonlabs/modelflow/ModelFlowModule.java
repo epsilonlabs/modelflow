@@ -39,17 +39,17 @@ import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.erl.ErlModule;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.TaskDependency;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ITaskDependency;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.ast.ForEachModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.ModelCallExpression;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
 import org.epsilonlabs.modelflow.dom.ast.TaskDependencyExpression;
 import org.epsilonlabs.modelflow.dom.ast.TaskRule;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.execution.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
@@ -58,7 +58,7 @@ import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.GraphState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
+import org.epsilonlabs.modelflow.management.param.AnnotationTaskParameterManager;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 import org.epsilonlabs.modelflow.management.resource.ResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
@@ -92,7 +92,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	protected ResourceFactoryRegistry resFactoryRegistry;
 	protected ModelFlowCompilationContext compilationCtx;
 	protected List<VariableDeclaration> parameterDeclarations;
-	protected Workflow workflow;
+	protected IWorkflow workflow;
 	protected ModulePersistenceHelper traceHelper;
 	protected IModelFlowConfiguration config;
 
@@ -342,22 +342,22 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public List<ModuleMarker> compile() {
 		ModelFlowCompilationContext context = getCompilationContext();
-		workflow = DomFactoryImpl.eINSTANCE.createWorkflow();
+		workflow = DomFactory.eINSTANCE.createWorkflow();
 		for (ResourceRule modelDeclaration : context.getResourceDeclarations()) {
 			modelDeclaration.compile(context);
-			Collection<ModelResource> resources = modelDeclaration.getDomElements();
+			Collection<IModelResource> resources = modelDeclaration.getDomElements();
 			workflow.getResources().addAll(resources);
 			resources.stream().forEach(r->context.registerResourceModelElement(r, modelDeclaration));
 		}
 		for (TaskRule taskDeclaration : context.getTaskDeclarations()) {
 			taskDeclaration.compile(context);
-			Collection<Task> tasks = taskDeclaration.getDomElements();
+			Collection<ITask> tasks = taskDeclaration.getDomElements();
 			tasks.stream().forEach(t->context.registerTaskModelElement(t, taskDeclaration));
 			workflow.getTasks().addAll(tasks);
 		}
 		context.getTaskDeclarations().stream().map(TaskRule::getDependsOn).flatMap(Collection::stream).forEach(dep ->{
 			dep.compile(context);
-			Collection<TaskDependency> domElements = dep.getDomElements();
+			Collection<ITaskDependency> domElements = dep.getDomElements();
 			workflow.getTaskDependencies().addAll(domElements);
 		});
 		return super.compile();
@@ -370,12 +370,12 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	 */
 
 	@Override
-	public Workflow getWorkflow() {
+	public IWorkflow getWorkflow() {
 		return workflow;
 	}
 
 	@Override
-	public void setWorkflow(Workflow workflow) {
+	public void setWorkflow(IWorkflow workflow) {
 		this.workflow = workflow;
 	}
 
@@ -475,7 +475,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 		// Param Manager
 		if (ctx.getParamManager() == null) {
-			ctx.setParamManager(new TaskParamManager());
+			ctx.setParamManager(new AnnotationTaskParameterManager());
 		}
 
 		// Execution Trace
@@ -572,8 +572,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 		// Model Manager
 		ctx.setResourceManager(new ResourceManager());
-
-		ctx.setParamManager(new TaskParamManager());
 	}
 
 }

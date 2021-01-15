@@ -24,9 +24,6 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.epsilonlabs.modelflow.dom.Task;
-
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
 import org.epsilonlabs.modelflow.management.trace.TaskTrace;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -47,14 +44,24 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  */
 public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskTrace {
 	/**
-	 * The cached value of the '{@link #getTask() <em>Task</em>}' containment reference.
+	 * The default value of the '{@link #getTask() <em>Task</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getTask()
 	 * @generated
 	 * @ordered
 	 */
-	protected Task task;
+	protected static final String TASK_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getTask() <em>Task</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTask()
+	 * @generated
+	 * @ordered
+	 */
+	protected String task = TASK_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getTraces() <em>Traces</em>}' containment reference list.
@@ -91,7 +98,7 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	 * @generated
 	 */
 	@Override
-	public Task getTask() {
+	public String getTask() {
 		return task;
 	}
 
@@ -100,34 +107,12 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetTask(Task newTask, NotificationChain msgs) {
-		Task oldTask = task;
-		task = newTask;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ManagementTracePackage.TASK_TRACE__TASK, oldTask, newTask);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public void setTask(Task newTask) {
-		if (newTask != task) {
-			NotificationChain msgs = null;
-			if (task != null)
-				msgs = ((InternalEObject)task).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ManagementTracePackage.TASK_TRACE__TASK, null, msgs);
-			if (newTask != null)
-				msgs = ((InternalEObject)newTask).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ManagementTracePackage.TASK_TRACE__TASK, null, msgs);
-			msgs = basicSetTask(newTask, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.TASK_TRACE__TASK, newTask, newTask));
+	public void setTask(String newTask) {
+		String oldTask = task;
+		task = newTask;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.TASK_TRACE__TASK, oldTask, task));
 	}
 
 	/**
@@ -151,8 +136,6 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case ManagementTracePackage.TASK_TRACE__TASK:
-				return basicSetTask(null, msgs);
 			case ManagementTracePackage.TASK_TRACE__TRACES:
 				return ((InternalEList<?>)getTraces()).basicRemove(otherEnd, msgs);
 		}
@@ -185,7 +168,7 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case ManagementTracePackage.TASK_TRACE__TASK:
-				setTask((Task)newValue);
+				setTask((String)newValue);
 				return;
 			case ManagementTracePackage.TASK_TRACE__TRACES:
 				getTraces().clear();
@@ -204,7 +187,7 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case ManagementTracePackage.TASK_TRACE__TASK:
-				setTask((Task)null);
+				setTask(TASK_EDEFAULT);
 				return;
 			case ManagementTracePackage.TASK_TRACE__TRACES:
 				getTraces().clear();
@@ -222,11 +205,27 @@ public class TaskTraceImpl extends MinimalEObjectImpl.Container implements TaskT
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case ManagementTracePackage.TASK_TRACE__TASK:
-				return task != null;
+				return TASK_EDEFAULT == null ? task != null : !TASK_EDEFAULT.equals(task);
 			case ManagementTracePackage.TASK_TRACE__TRACES:
 				return traces != null && !traces.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (task: ");
+		result.append(task);
+		result.append(')');
+		return result.toString();
 	}
 
 } //TaskTraceImpl

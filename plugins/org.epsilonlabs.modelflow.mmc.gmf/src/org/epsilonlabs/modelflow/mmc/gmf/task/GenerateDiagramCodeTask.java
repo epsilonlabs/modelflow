@@ -26,9 +26,9 @@ import org.eclipse.gmf.codegen.gmfgen.GenDiagram;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
 import org.eclipse.gmf.internal.common.migrate.ModelLoadHelper;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
-public class GenerateDiagramCodeTask extends AbstractTask implements ITask {
+public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GenerateDiagramCodeTask.class);
 
@@ -65,7 +65,7 @@ public class GenerateDiagramCodeTask extends AbstractTask implements ITask {
 	private AtomicBoolean done = new AtomicBoolean();
 	protected GenEditorGenerator myGenModel;
 	protected URI modelFileUri ;
-	protected AbstractResource resource;
+	protected IAbstractResource resource;
 	
 	protected File outputDir;
 	

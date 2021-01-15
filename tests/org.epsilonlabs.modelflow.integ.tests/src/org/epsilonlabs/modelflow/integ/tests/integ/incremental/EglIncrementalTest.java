@@ -20,7 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
@@ -134,7 +134,7 @@ public class EglIncrementalTest extends IncrementalTest {
 
 	@Override
 	protected void setupSource() {
-		Workflow w = EcoreUtil.copy(ExampleWorkflows.getEglWorkflow());
+		IWorkflow w = EcoreUtil.copy(ExampleWorkflows.getEglWorkflow());
 		module.setWorkflow(w);
 	}
 	

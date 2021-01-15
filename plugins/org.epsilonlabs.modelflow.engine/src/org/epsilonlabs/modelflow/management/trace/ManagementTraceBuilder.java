@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImpl;
 
 import io.reactivex.annotations.Nullable;
@@ -34,7 +34,7 @@ public class ManagementTraceBuilder {
 	public Trace build(){
 		Trace trace = ManagementTraceFactoryImpl.eINSTANCE.createTrace();
 		if (link != null) trace.setLink(link);
-		trace.getProperties().addAll(properties);
+		trace.getLink().getProperties().addAll(properties);
 		trace.getSources().addAll(sources);
 		trace.getTargets().addAll(targets);
 		return trace;
@@ -42,11 +42,11 @@ public class ManagementTraceBuilder {
 	
 	public ManagementTraceBuilder managementLink(String type, String operation){
 		if (type!= null || operation!= null) {			
-			ManagementOperation managementOp = ManagementTraceFactoryImpl.eINSTANCE.createManagementOperation();
+			Link managementOp = ManagementTraceFactoryImpl.eINSTANCE.createLink();
 			if (type != null && !type.isEmpty())
-				managementOp.setLink(type);
+				managementOp.setType(type);
 			if (operation != null && !operation.isEmpty()) 
-				managementOp.setManagementOperation(operation);
+				managementOp.setOperation(operation);
 			this.link = managementOp;
 		}
 		
@@ -57,16 +57,16 @@ public class ManagementTraceBuilder {
 		if (type!= null) {			
 			link = ManagementTraceFactoryImpl.eINSTANCE.createLink();
 			if (!type.isEmpty())
-				link.setLink(type);
+				link.setType(type);
 		}
 		
 		return this;
 	}
 	
-	private ModelElement modelElement(String elementId, @Nullable AbstractResource container, @Nullable String role) {
+	private ModelElement modelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
 		ModelElement element = ManagementTraceFactoryImpl.eINSTANCE.createModelElement();
-		if (container instanceof Resource) 			
-			element.setContainer(EcoreUtil.copy((Resource) container));
+		if (container instanceof IResource) 			
+			element.setResource(container.getName());
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -74,10 +74,10 @@ public class ManagementTraceBuilder {
 		return element;
 	}
 	
-	private ModelElement modelElementProperty(String elementId, @Nullable AbstractResource container, String name, @Nullable String role) {
+	private ModelElement modelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
 		ModelElementProperty element = ManagementTraceFactoryImpl.eINSTANCE.createModelElementProperty();
-		if (container instanceof Resource) 			
-			element.setContainer(EcoreUtil.copy((Resource) container));
+		if (container instanceof IResource) 			
+			element.setResource(container.getName());
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -89,10 +89,10 @@ public class ManagementTraceBuilder {
 	private FileElement fileElement(@Nullable String file, @Nullable Integer offset, @Nullable Integer length) {
 		FileElement element = ManagementTraceFactoryImpl.eINSTANCE.createFileElement();
 		if (file != null && !file.isEmpty()) {	
-			Resource res = DomFactoryImpl.eINSTANCE.createResource();
+			IResource res = DomFactory.eINSTANCE.createResource();
 			res.setDeclared(false);
 			res.setName(file);
-			element.setContainer(res);
+			element.setResource(res.getName());
 		}
 		Region region = ManagementTraceFactoryImpl.eINSTANCE.createRegion();
 		if (offset != null) 
@@ -106,25 +106,25 @@ public class ManagementTraceBuilder {
 		return element;
 	}
 	
-	public ManagementTraceBuilder addSourceModelElement(String elementId, @Nullable AbstractResource container, @Nullable String role) {
+	public ManagementTraceBuilder addSourceModelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
 		ModelElement source = modelElement(elementId, EcoreUtil.copy(container), role);
 		sources.add(source);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addTargetModelElement(String elementId, @Nullable AbstractResource container, @Nullable String role) {
+	public ManagementTraceBuilder addTargetModelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
 		ModelElement target = modelElement(elementId, EcoreUtil.copy(container), role);
 		targets.add(target);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addSourceModelElementProperty(String elementId, @Nullable AbstractResource container, String name, @Nullable String role) {
+	public ManagementTraceBuilder addSourceModelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
 		ModelElement source = modelElementProperty(elementId, EcoreUtil.copy(container), name, role);
 		sources.add(source);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addTargetModelElementProperty(String elementId, @Nullable AbstractResource container, String name, @Nullable String role) {
+	public ManagementTraceBuilder addTargetModelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
 		ModelElement target = modelElementProperty(elementId, EcoreUtil.copy(container), name,  role);
 		targets.add(target);
 		return this;

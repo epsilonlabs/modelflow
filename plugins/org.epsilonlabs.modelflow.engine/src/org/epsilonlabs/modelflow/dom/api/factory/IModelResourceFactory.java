@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.api.factory;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
@@ -15,9 +15,9 @@ import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 public interface IModelResourceFactory extends IFactory {
     		
 	@Override
-	Class<? extends IResource<?>> getInstanceClass();
+	Class<? extends IResourceInstance<?>> getInstanceClass();
 
-	<M> IResource<M> create(IModelResourceNode resource, String name, IModelFlowContext ctx) throws MFInstantiationException;
+	<M> IResourceInstance<M> create(IModelResourceNode resource, String name, IModelFlowContext ctx) throws MFInstantiationException;
 	
 	void beforeWorkflow();
 	

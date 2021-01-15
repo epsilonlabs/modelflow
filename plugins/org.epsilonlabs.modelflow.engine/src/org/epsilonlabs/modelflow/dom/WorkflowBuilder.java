@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.dom.api.factory.TaskFactoryImpl;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,14 +33,14 @@ public class WorkflowBuilder {
 
 	private static final Logger LOG = LoggerFactory.getLogger(WorkflowBuilder.class);
 
-	protected Collection<AbstractResource> resources;
-	protected Collection<Task> tasks;
-	protected Collection<TaskDependency> taskDependencies;
+	protected Collection<IAbstractResource> resources;
+	protected Collection<ITask> tasks;
+	protected Collection<ITaskDependency> taskDependencies;
 
 	private static final Pattern PATTERN = TaskFactoryImpl.REF_VAR_PATTERN;
 
 	public static void main(String[] args) {
-		Workflow workflow = new WorkflowBuilder()
+		IWorkflow workflow = new WorkflowBuilder()
 		.addTask("myEol", "epsilon:eol")
 		.addProperty("src", "Hello") 
 		.addModelResource("model", "epsilon:emf")
@@ -56,21 +56,21 @@ public class WorkflowBuilder {
 		taskDependencies = new ArrayList<>();
 	}
 	
-	public Workflow build() {
-		Workflow workflow = DomFactoryImpl.eINSTANCE.createWorkflow();
+	public IWorkflow build() {
+		IWorkflow workflow = DomFactory.eINSTANCE.createWorkflow();
 		workflow.getResources().addAll(resources);
 		workflow.getTasks().addAll(tasks);
 		workflow.getTaskDependencies().addAll(taskDependencies);
 
-		Set<String> names = tasks.stream().map(Task::getName).collect(Collectors.toSet());
+		Set<String> names = tasks.stream().map(ITask::getName).collect(Collectors.toSet());
 		tasks.forEach(t-> {
 			if (t.getGuard() instanceof String) {
 				String guard = (String) t.getGuard();
 				names.stream().filter(e-> guard.contains(e + ".")).forEach(task -> {
-					if (t.getDependencies().stream().noneMatch(d->d.getBefore().getName().equals(task))){
-						TaskDependency dep = DomFactoryImpl.eINSTANCE.createTaskDependency();
-						dep.setBefore(t);
-						dep.setAfter(tasks.stream().filter(a->a.getName().equals(task)).findFirst().get());
+					if (t.getDependencies().stream().noneMatch(d->d.getDependsOn().getName().equals(task))){
+						ITaskDependency dep = DomFactory.eINSTANCE.createTaskDependency();
+						dep.setTask(t);
+						dep.setDependsOn(tasks.stream().filter(a->a.getName().equals(task)).findFirst().get());
 						workflow.getTaskDependencies().add(dep);
 					}
 				});
@@ -79,14 +79,14 @@ public class WorkflowBuilder {
 		return workflow;
 	}
 	
-	public Workflow build(String name) {
-		Workflow build = build();
+	public IWorkflow build(String name) {
+		IWorkflow build = build();
 		build.setName(name);
 		return build;
 	}
 	
 	public TaskBuilder addTask(String name, String type){
-		Task task = DomFactoryImpl.eINSTANCE.createTask();
+		ITask task = DomFactory.eINSTANCE.createTask();
 		task.setName(name);
 		task.setDefinition(type);
 
@@ -94,7 +94,7 @@ public class WorkflowBuilder {
 	}
 	
 	public ModelResourceBuilder addModelResource(String name, String type){
-		ModelResource model = DomFactoryImpl.eINSTANCE.createModelResource();
+		IModelResource model = DomFactory.eINSTANCE.createModelResource();
 		model.setName(name);
 		model.setDefinition(type);
 		resources.add(model);
@@ -103,10 +103,10 @@ public class WorkflowBuilder {
 	}
 	
 	public class TaskBuilder extends SubBuilder {
-		protected Task task;
+		protected ITask task;
 		protected List<String> dependencies = new ArrayList<>();
 		
-		TaskBuilder(WorkflowBuilder topBuilder, Task task){
+		TaskBuilder(WorkflowBuilder topBuilder, ITask task){
 			super(topBuilder);
 			this.task = task;
 		}
@@ -115,11 +115,11 @@ public class WorkflowBuilder {
 		protected void save() {
 			getBuilder().tasks.add(task);
 			dependencies.forEach(d -> {
-				Optional<Task> findFirst = getBuilder().tasks.stream().filter(ta-> ta.getName().equals(d)).findFirst();
+				Optional<ITask> findFirst = getBuilder().tasks.stream().filter(ta-> ta.getName().equals(d)).findFirst();
 				if (findFirst.isPresent()) {					
-					TaskDependency dep = DomFactoryImpl.eINSTANCE.createTaskDependency();
-					dep.setBefore(findFirst.get());
-					dep.setAfter(task);
+					ITaskDependency dep = DomFactory.eINSTANCE.createTaskDependency();
+					dep.setDependsOn(findFirst.get());
+					dep.setTask(task);
 					getBuilder().taskDependencies.add(dep);
 				} else {
 					throw new IllegalStateException(String.format("Task %s has not been created yet", d));
@@ -141,7 +141,7 @@ public class WorkflowBuilder {
 		
 		
 		public TaskBuilder addProperty(String key, Object value){
-			Property property = DomFactoryImpl.eINSTANCE.createProperty();
+			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(key);	
 			handlePropertyDependency(value);
 			if (value instanceof Path) {
@@ -164,8 +164,8 @@ public class WorkflowBuilder {
 			return this;
 		}
 		
-		protected AbstractResource addDerivedResource(String name){
-			DerivedResource model = DomFactoryImpl.eINSTANCE.createDerivedResource();
+		protected IAbstractResource addDerivedResource(String name){
+			IDerivedResource model = DomFactory.eINSTANCE.createDerivedResource();
 			model.setName(name);
 			LOG.debug("Adding derived resource: {}", name);
 			resources.add(model);
@@ -185,9 +185,9 @@ public class WorkflowBuilder {
 					if (tasks.stream().anyMatch(t-> t.getName().equals(taskName))){
 						String resource = matcher.group(2);
 						
-						AbstractResource derived = addDerivedResource(taskName + "." +resource);
+						IAbstractResource derived = addDerivedResource(taskName + "." +resource);
 						
-						ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+						IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 						ref.setResource(derived);
 
 						task.getConsumes().add(ref);
@@ -203,9 +203,9 @@ public class WorkflowBuilder {
 		}
 		
 		public TaskBuilder addInput(String resourceId, String... alias){
-			Optional<AbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
+			Optional<IAbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
 			if (res.isPresent()) {
-				ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+				IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 				ref.setResource(res.get());
 				Arrays.asList(alias).forEach(a-> ref.getAliases().add(a));
 				task.getConsumes().add(ref);
@@ -213,8 +213,8 @@ public class WorkflowBuilder {
 				String[] split = resourceId.split("\\.");
 				if (split.length == 2 && getBuilder().tasks.stream().anyMatch(t-> t.getName().equals(split[0]))){
 					
-					AbstractResource derived = addDerivedResource(resourceId);
-					ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+					IAbstractResource derived = addDerivedResource(resourceId);
+					IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 					ref.setResource(derived);
 					Arrays.asList(alias).forEach(a-> ref.getAliases().add(a));
 					task.getConsumes().add(ref);
@@ -229,9 +229,9 @@ public class WorkflowBuilder {
 		}
 	
 		public TaskBuilder addInout(String resourceId, String... alias){
-			Optional<AbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
+			Optional<IAbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
 			if (res.isPresent()) {
-				ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+				IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 				ref.setResource(res.get());
 				Arrays.asList(alias).forEach(a-> ref.getAliases().add(a));
 
@@ -239,8 +239,8 @@ public class WorkflowBuilder {
 			} else {
 				String[] split = resourceId.split("\\.");
 				if (split.length == 2 && getBuilder().tasks.stream().anyMatch(t-> t.getName().equals(split[0]))){
-					AbstractResource derived = addDerivedResource(resourceId);
-					ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+					IAbstractResource derived = addDerivedResource(resourceId);
+					IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 					ref.setResource(derived);
 					Arrays.asList(alias).forEach(a-> ref.getAliases().add(a));
 					task.getConsumes().add(ref);
@@ -254,9 +254,9 @@ public class WorkflowBuilder {
 		}
 
 		public TaskBuilder addOutput(String resourceId, String... alias){
-			Optional<AbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
+			Optional<IAbstractResource> res = getBuilder().resources.stream().filter(r ->r.getName().equals(resourceId)).findFirst();
 			if (res.isPresent()) {
-				ResourceReference ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+				IResourceReference ref = DomFactory.eINSTANCE.createResourceReference();
 				ref.setResource(res.get());
 				Arrays.asList(alias).forEach(a-> ref.getAliases().add(a));
 				task.getProduces().add(ref);				
@@ -277,9 +277,9 @@ public class WorkflowBuilder {
 	}
 	
 	public class ModelResourceBuilder extends SubBuilder {
-		protected ModelResource resource;
+		protected IModelResource resource;
 		
-		ModelResourceBuilder(WorkflowBuilder topBuilder, ModelResource resource){
+		ModelResourceBuilder(WorkflowBuilder topBuilder, IModelResource resource){
 			super(topBuilder);
 			this.resource = resource;
 		}
@@ -290,7 +290,7 @@ public class WorkflowBuilder {
 		}
 		
 		public ModelResourceBuilder addProperty(String key, Object value){
-			Property property = DomFactoryImpl.eINSTANCE.createProperty();
+			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(key);
 			if (value instanceof Path) {
 				property.setValue(((Path) value).normalize().toAbsolutePath().toString());
@@ -324,12 +324,12 @@ public class WorkflowBuilder {
 			return builder.addModelResource(name, type);
 		}
 		
-		public Workflow build() {
+		public IWorkflow build() {
 			save();
 			return builder.build();
 		}
 		
-		public Workflow build(String name) {
+		public IWorkflow build(String name) {
 			save();
 			return builder.build(name);
 		}

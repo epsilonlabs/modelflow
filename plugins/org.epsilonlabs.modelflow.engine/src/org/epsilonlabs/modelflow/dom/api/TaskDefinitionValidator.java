@@ -26,13 +26,13 @@ public class TaskDefinitionValidator {
 
 	private static final String UNNAMED = "unnamed";
 	
-	protected Class<? extends ITask> clazz;
+	protected Class<? extends ITaskInstance> clazz;
 	protected boolean valid = true;
 	protected List<String> messages = new ArrayList<>();
 
 	private FactoryIntrospector introspector;
 	
-	public TaskDefinitionValidator(Class<? extends ITask> clazz) {
+	public TaskDefinitionValidator(Class<? extends ITaskInstance> clazz) {
 		this.clazz = clazz;
 		this.introspector = new FactoryIntrospector(clazz);
 	}

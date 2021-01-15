@@ -23,10 +23,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
-import org.epsilonlabs.modelflow.dom.Task;
-
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
+import org.epsilonlabs.modelflow.execution.trace.Named;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
@@ -39,16 +37,36 @@ import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getInputModels <em>Input Models</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getOutputModels <em>Output Models</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getInputProperties <em>Input Properties</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getOutputProperties <em>Output Properties</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.TaskExecutionImpl#getTask <em>Task</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
 	/**
 	 * The cached value of the '{@link #getInputModels() <em>Input Models</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -88,16 +106,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	 * @ordered
 	 */
 	protected EList<PropertySnapshot> outputProperties;
-
-	/**
-	 * The cached value of the '{@link #getTask() <em>Task</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTask()
-	 * @generated
-	 * @ordered
-	 */
-	protected Task task;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -176,23 +184,8 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	 * @generated
 	 */
 	@Override
-	public Task getTask() {
-		return task;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetTask(Task newTask, NotificationChain msgs) {
-		Task oldTask = task;
-		task = newTask;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.TASK_EXECUTION__TASK, oldTask, newTask);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -201,18 +194,11 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	 * @generated
 	 */
 	@Override
-	public void setTask(Task newTask) {
-		if (newTask != task) {
-			NotificationChain msgs = null;
-			if (task != null)
-				msgs = ((InternalEObject)task).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.TASK_EXECUTION__TASK, null, msgs);
-			if (newTask != null)
-				msgs = ((InternalEObject)newTask).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.TASK_EXECUTION__TASK, null, msgs);
-			msgs = basicSetTask(newTask, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.TASK_EXECUTION__TASK, newTask, newTask));
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.TASK_EXECUTION__NAME, oldName, name));
 	}
 
 	/**
@@ -231,8 +217,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				return ((InternalEList<?>)getInputProperties()).basicRemove(otherEnd, msgs);
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_PROPERTIES:
 				return ((InternalEList<?>)getOutputProperties()).basicRemove(otherEnd, msgs);
-			case ExecutionTracePackage.TASK_EXECUTION__TASK:
-				return basicSetTask(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -245,6 +229,8 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case ExecutionTracePackage.TASK_EXECUTION__NAME:
+				return getName();
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				return getInputModels();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_MODELS:
@@ -253,8 +239,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				return getInputProperties();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_PROPERTIES:
 				return getOutputProperties();
-			case ExecutionTracePackage.TASK_EXECUTION__TASK:
-				return getTask();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -268,6 +252,9 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case ExecutionTracePackage.TASK_EXECUTION__NAME:
+				setName((String)newValue);
+				return;
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				getInputModels().clear();
 				getInputModels().addAll((Collection<? extends ResourceSnapshot>)newValue);
@@ -284,9 +271,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				getOutputProperties().clear();
 				getOutputProperties().addAll((Collection<? extends PropertySnapshot>)newValue);
 				return;
-			case ExecutionTracePackage.TASK_EXECUTION__TASK:
-				setTask((Task)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -299,6 +283,9 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case ExecutionTracePackage.TASK_EXECUTION__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				getInputModels().clear();
 				return;
@@ -310,9 +297,6 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				return;
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_PROPERTIES:
 				getOutputProperties().clear();
-				return;
-			case ExecutionTracePackage.TASK_EXECUTION__TASK:
-				setTask((Task)null);
 				return;
 		}
 		super.eUnset(featureID);
@@ -326,6 +310,8 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case ExecutionTracePackage.TASK_EXECUTION__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case ExecutionTracePackage.TASK_EXECUTION__INPUT_MODELS:
 				return inputModels != null && !inputModels.isEmpty();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_MODELS:
@@ -334,10 +320,56 @@ public class TaskExecutionImpl extends StatefulImpl implements TaskExecution {
 				return inputProperties != null && !inputProperties.isEmpty();
 			case ExecutionTracePackage.TASK_EXECUTION__OUTPUT_PROPERTIES:
 				return outputProperties != null && !outputProperties.isEmpty();
-			case ExecutionTracePackage.TASK_EXECUTION__TASK:
-				return task != null;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == Named.class) {
+			switch (derivedFeatureID) {
+				case ExecutionTracePackage.TASK_EXECUTION__NAME: return ExecutionTracePackage.NAMED__NAME;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == Named.class) {
+			switch (baseFeatureID) {
+				case ExecutionTracePackage.NAMED__NAME: return ExecutionTracePackage.TASK_EXECUTION__NAME;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //TaskExecutionImpl

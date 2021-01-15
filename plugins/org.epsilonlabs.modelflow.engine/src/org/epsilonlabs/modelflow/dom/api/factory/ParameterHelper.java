@@ -10,7 +10,7 @@ package org.epsilonlabs.modelflow.dom.api.factory;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import org.epsilonlabs.modelflow.dom.Property;
+import org.epsilonlabs.modelflow.dom.IProperty;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 
@@ -20,10 +20,10 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
  */
 public class ParameterHelper {
 
-	protected final Property property;
+	protected final IProperty property;
 	protected final IModelFlowContext ctx;
 	
-	public ParameterHelper(Property property, IModelFlowContext ctx) {
+	public ParameterHelper(IProperty property, IModelFlowContext ctx) {
 		this.property = property;
 		this.ctx = ctx;
 	}

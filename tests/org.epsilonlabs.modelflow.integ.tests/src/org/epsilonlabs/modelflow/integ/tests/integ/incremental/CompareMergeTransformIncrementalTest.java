@@ -15,7 +15,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
@@ -69,7 +69,7 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 	
 	@Override
 	protected void setupSource() {
-		Workflow w = ExampleWorkflows.getCompareMergeTransformComponent();
+		IWorkflow w = ExampleWorkflows.getCompareMergeTransformComponent();
 		module.setWorkflow(w);
 	}
 

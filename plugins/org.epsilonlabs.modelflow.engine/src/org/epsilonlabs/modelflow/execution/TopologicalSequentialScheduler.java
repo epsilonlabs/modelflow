@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
@@ -44,7 +44,7 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 		IExecutionGraph eg = ctx.getExecutionGraph();
 
 		// Locate Full Execution Trace
-		Workflow wf = ctx.getModule().getWorkflow();
+		IWorkflow wf = ctx.getModule().getWorkflow();
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		WorkflowExecution currentWorkflowExecution;
 		synchronized (updater) {

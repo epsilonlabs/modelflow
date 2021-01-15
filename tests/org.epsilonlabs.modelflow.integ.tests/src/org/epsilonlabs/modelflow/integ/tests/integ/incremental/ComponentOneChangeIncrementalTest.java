@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
@@ -149,7 +149,7 @@ public class ComponentOneChangeIncrementalTest extends IncrementalTest {
 
 	@Override
 	protected void setupSource() {
-		Workflow w = ExampleWorkflows.getComponentWorkflow();
+		IWorkflow w = ExampleWorkflows.getComponentWorkflow();
 		w.getTasks().stream()
 		.filter(t -> "m2t".equals(t.getName()))
 		.forEach(t -> t.getProperties().stream()

@@ -19,13 +19,13 @@ import org.eclipse.epsilon.eol.dom.StatementBlock;
 import org.eclipse.epsilon.eol.dom.StringLiteral;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.Property;
-import org.epsilonlabs.modelflow.dom.ResourceReference;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.TaskDependency;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.IProperty;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ITaskDependency;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class CompileTest extends AbstractParsingTest {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CompileTest.class);
-	protected Workflow producedWorkflow;
+	protected IWorkflow producedWorkflow;
 	protected Assertable result;
 
 	@Override
@@ -48,10 +48,10 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalModel();
 		result = w -> {
 			assertEquals(1,w.getResources().size());
-			AbstractResource res = w.getResources().get(0);
-			assertTrue(res instanceof ModelResource);
+			IAbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof IModelResource);
 			assertEquals("ModelA", res.getName());
-			assertEquals("EMF", ((ModelResource)res).getDefinition());
+			assertEquals("EMF", ((IModelResource)res).getDefinition());
 			return true;
 		};
 	}
@@ -62,10 +62,10 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalModelWithColonedType();
 		result = w -> {
 			assertEquals(1,w.getResources().size());
-			AbstractResource res = w.getResources().get(0);
-			assertTrue(res instanceof ModelResource);
+			IAbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof IModelResource);
 			assertEquals("ModelA", res.getName());
-			assertEquals("epsilon:emf", ((ModelResource)res).getDefinition());
+			assertEquals("epsilon:emf", ((IModelResource)res).getDefinition());
 			return true;
 		};
 	}
@@ -76,10 +76,10 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalModelWithColonEnd();
 		result = w -> {
 			assertEquals(1,w.getResources().size());
-			AbstractResource res = w.getResources().get(0);
-			assertTrue(res instanceof ModelResource);
+			IAbstractResource res = w.getResources().get(0);
+			assertTrue(res instanceof IModelResource);
 			assertEquals("ModelA", res.getName());
-			assertEquals("EMF", ((ModelResource)res).getDefinition());
+			assertEquals("EMF", ((IModelResource)res).getDefinition());
 			return true;
 		};
 		
@@ -92,15 +92,15 @@ public class CompileTest extends AbstractParsingTest {
 		super.testModelWithOneParameter();
 		result = new Assertable() {
 			@Override
-			public Boolean evaluate(Workflow w) {
-				AbstractResource resource = w.getResources().get(0);
+			public Boolean evaluate(IWorkflow w) {
+				IAbstractResource resource = w.getResources().get(0);
 				assertTrue(resource != null);
-				assertTrue(resource instanceof ModelResource);
-				ModelResource model = (ModelResource) resource;
+				assertTrue(resource instanceof IModelResource);
+				IModelResource model = (IModelResource) resource;
 				assertEquals("ModelA", model.getName());
 				assertEquals("EMF", model.getDefinition());
 				assertEquals(1, model.getProperties().size());
-				Property prop = model.getProperties().get(0);
+				IProperty prop = model.getProperties().get(0);
 				assertEquals("src", prop.getKey());
 				Object value = prop.getValue();
 				assertTrue(value instanceof StringLiteral);
@@ -121,14 +121,14 @@ public class CompileTest extends AbstractParsingTest {
 	public void testModelWithMoreThanOneParameter() {
 		super.testModelWithMoreThanOneParameter();
 		result = w -> {
-				AbstractResource resource = w.getResources().get(0);
+				IAbstractResource resource = w.getResources().get(0);
 				assertTrue(resource != null);
-				assertTrue(resource instanceof ModelResource);
-				ModelResource model = (ModelResource) resource;
+				assertTrue(resource instanceof IModelResource);
+				IModelResource model = (IModelResource) resource;
 				assertEquals("ModelA", model.getName());
 				assertEquals("EMF", model.getDefinition());
 				assertEquals(2, model.getProperties().size());
-				for (Property prop : model.getProperties()) {
+				for (IProperty prop : model.getProperties()) {
 					String key = prop.getKey();
 					assertTrue(Arrays.asList("src", "mm").contains(key));
 					Object value = prop.getValue();
@@ -154,7 +154,7 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalTask();
 		result = w -> {
 			assertEquals(1,w.getTasks().size());
-			Task task = w.getTasks().get(0);
+			ITask task = w.getTasks().get(0);
 			assertEquals("Task1", task.getName());
 			assertEquals("EOL", task.getDefinition());
 			return true;
@@ -167,8 +167,8 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalDisabledTask();
 		result = new Assertable() {
 			@Override
-			public Boolean evaluate(Workflow w) {
-				Task task = w.getTasks().get(0);
+			public Boolean evaluate(IWorkflow w) {
+				ITask task = w.getTasks().get(0);
 				assertTrue(task != null);
 				assertFalse(task.getEnabled());
 				return true;
@@ -182,8 +182,8 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalNonTraceableTask();
 		result = new Assertable() {
 			@Override
-			public Boolean evaluate(Workflow w) {
-				Task task = w.getTasks().get(0);
+			public Boolean evaluate(IWorkflow w) {
+				ITask task = w.getTasks().get(0);
 				assertTrue(task != null);
 				assertFalse(task.getTraceable());
 				return true;
@@ -198,7 +198,7 @@ public class CompileTest extends AbstractParsingTest {
 		super.testMinimalTaskWithColonEnd();
 		result = w -> {
 			assertEquals(1,w.getTasks().size());
-			Task task = w.getTasks().get(0);
+			ITask task = w.getTasks().get(0);
 			assertEquals("Task1", task.getName());
 			assertEquals("EOL", task.getDefinition());
 			return true;
@@ -210,11 +210,11 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskDependency() {
 		super.testTaskDependency();
 		result = w -> {
-			EList<TaskDependency> dependencies = w.getTaskDependencies();
+			EList<ITaskDependency> dependencies = w.getTaskDependencies();
 			assertTrue("One dependency", dependencies.size()==1);
-			TaskDependency dep = dependencies.get(0);
-			assertTrue("Task1 should be before", dep.getBefore().getName().equals("Task1"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			ITaskDependency dep = dependencies.get(0);
+			assertTrue("Task1 should be before", dep.getDependsOn().getName().equals("Task1"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			return true;
 		};
 	}
@@ -224,14 +224,14 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskDependencies() {
 		super.testTaskDependencies();
 		result = w -> {
-			EList<TaskDependency> dependencies = w.getTaskDependencies();
+			EList<ITaskDependency> dependencies = w.getTaskDependencies();
 			assertTrue("Two dependencies expected", dependencies.size()==2);
-			TaskDependency dep = dependencies.get(0);
-			assertTrue("Task1 should be before", dep.getBefore().getName().equals("Task1"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			ITaskDependency dep = dependencies.get(0);
+			assertTrue("Task1 should be before", dep.getDependsOn().getName().equals("Task1"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			dep = dependencies.get(1);
-			assertTrue("Task3 should be before", dep.getBefore().getName().equals("Task3"));
-			assertTrue("Task2 should go after", dep.getAfter().getName().equals("Task2"));
+			assertTrue("Task3 should be before", dep.getDependsOn().getName().equals("Task3"));
+			assertTrue("Task2 should go after", dep.getTask().getName().equals("Task2"));
 			return true;
 		};
 	}
@@ -242,13 +242,13 @@ public class CompileTest extends AbstractParsingTest {
 		super.testTaskWithOneParameter();
 		result = new Assertable() {
 			@Override
-			public Boolean evaluate(Workflow w) {
-				Task task = w.getTasks().get(0);
+			public Boolean evaluate(IWorkflow w) {
+				ITask task = w.getTasks().get(0);
 				assertTrue(task != null);
 				assertEquals("Invalid Task Name", "Task1", task.getName());
 				assertEquals("Invalid Task type", "EOL", task.getDefinition());
 				assertEquals("Invalid Number of properties", 1, task.getProperties().size());
-				Property prop = task.getProperties().get(0);
+				IProperty prop = task.getProperties().get(0);
 				assertEquals("Invalid Parameter key", "src", prop.getKey());
 				Object value = prop.getValue();
 				assertTrue("Invalid property value type", value instanceof StringLiteral);
@@ -271,13 +271,13 @@ public class CompileTest extends AbstractParsingTest {
 		super.testTaskWithMoreThanOneParameter();
 		result = new Assertable() {
 			@Override
-			public Boolean evaluate(Workflow w) {
-				Task task = w.getTasks().get(0);
+			public Boolean evaluate(IWorkflow w) {
+				ITask task = w.getTasks().get(0);
 				assertTrue(task != null);
 				assertEquals("Invalid Task Name", "Task1", task.getName());
 				assertEquals("Invalid Task type", "EOL", task.getDefinition());
 				assertEquals("Invalid Number of properties", 2, task.getProperties().size());
-				for (Property prop : task.getProperties()) {
+				for (IProperty prop : task.getProperties()) {
 					String key = prop.getKey();
 					assertTrue("Property key unknown", Arrays.asList("src", "src2").contains(key));
 					try {
@@ -307,12 +307,12 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskWithGuard() {
 		super.testTaskWithGuard();
 		result = (w) -> {
-			Task task = w.getTasks().get(0);
+			ITask task = w.getTasks().get(0);
 			assertTrue(task != null);
 			assertEquals("Invalid Task Name", "Task1", task.getName());
 			assertEquals("Invalid Task type", "EOL", task.getDefinition());
 			assertEquals("Invalid Number of properties", 1, task.getProperties().size());
-			Property prop = task.getProperties().get(0);
+			IProperty prop = task.getProperties().get(0);
 			assertEquals("Invalid Parameter key", "src", prop.getKey());
 			Object value = prop.getValue();
 			assertTrue("Invalid property value type", value instanceof StringLiteral);
@@ -405,7 +405,7 @@ public class CompileTest extends AbstractParsingTest {
 			assertEquals(5, w.getTasks().size());
 			for (int i=1; i == 5; i++) {				
 				String name = String.format("A@%d", i);
-				Task task = w.getTasks().get(i-1);
+				ITask task = w.getTasks().get(i-1);
 				assertEquals(name, task.getName());
 			}
 			return true;
@@ -439,13 +439,13 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskWithImplicitModelDependency() {
 		super.testTaskWithImplicitModelDependency();
 		result = w -> {
-			EList<Task> tasks = w.getTasks();
-			EList<AbstractResource> resources = w.getResources();
+			EList<ITask> tasks = w.getTasks();
+			EList<IAbstractResource> resources = w.getResources();
 			assertEquals(2,tasks.size());
 			assertEquals(1,resources.size());
-			AbstractResource resource = resources.get(0);
+			IAbstractResource resource = resources.get(0);
 			assertEquals("compare.comparison", resource.getName());
-			Task eolTask = tasks.get(1);
+			ITask eolTask = tasks.get(1);
 			assertEquals(1, eolTask.getConsumes().size());
 			assertEquals(resource, eolTask.getConsumes().get(0).getResource());
 			
@@ -458,15 +458,15 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskWithImplicitModelDependencyWithAlias() {
 		super.testTaskWithImplicitModelDependencyWithAlias();
 		result = w -> {
-			EList<Task> tasks = w.getTasks();
-			EList<AbstractResource> resources = w.getResources();
+			EList<ITask> tasks = w.getTasks();
+			EList<IAbstractResource> resources = w.getResources();
 			assertEquals(2,tasks.size());
 			assertEquals(1,resources.size());
-			AbstractResource resource = resources.get(0);
+			IAbstractResource resource = resources.get(0);
 			assertEquals("compare.comparison", resource.getName());
-			Task eolTask = tasks.get(1);
+			ITask eolTask = tasks.get(1);
 			assertEquals(1, eolTask.getConsumes().size());
-			ResourceReference consumed = eolTask.getConsumes().get(0);
+			IResourceReference consumed = eolTask.getConsumes().get(0);
 			assertEquals(resource, consumed.getResource());
 			assertTrue(consumed.getAliases().contains("Compare"));
 			

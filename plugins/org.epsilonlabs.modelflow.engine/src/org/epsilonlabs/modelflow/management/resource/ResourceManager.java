@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
@@ -28,13 +28,14 @@ import org.epsilonlabs.modelflow.repository.ResourceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ResourceManager {
+public class ResourceManager implements IResourceManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceManager.class);	
 
 	/** 
 	 * This method is called when the node has been marked ready for execution.
 	 */
+	@Override
 	public void processResourcesBeforeExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
 		// Create empty list of models for task to accept 
 		List<IModelWrapper> list = new ArrayList<>();
@@ -70,7 +71,7 @@ public class ResourceManager {
 			throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) rNode;
 		// Get (if already created) or create resource
-		IResource<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(resourceNode, ctx);
+		IResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(resourceNode, ctx);
 		// FIXME move alias logic to IModelWrapper
 		// Add edge aliases
 		new DependencyGraphHelper(ctx.getDependencyGraph()).getAliasFor(resourceNode, tNode).forEach(r::setAlias);
@@ -114,6 +115,7 @@ public class ResourceManager {
 	 * This method is called after the task has been executed.
 	 * @throws MFRuntimeException 
 	 */
+	@Override
 	public void processResourcesAfterExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
 		
 		// Prepare task execution trace 
@@ -141,9 +143,9 @@ public class ResourceManager {
 			final TaskExecution tExec, ResourceKind kind, IAbstractResourceNode value) throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) value;
 		ResourceRepository repo = ctx.getTaskRepository().getResourceRepository();
-		IResource<?> resource = null;
+		IResourceInstance<?> resource = null;
 		// Get resource from resource repository 
-		Optional<IResource<?>> opResource = repo.get(resourceNode);
+		Optional<IResourceInstance<?>> opResource = repo.get(resourceNode);
 		if (opResource.isPresent()) {							
 			resource = opResource.get();
 
@@ -186,7 +188,7 @@ public class ResourceManager {
 				result = tNode.getTaskInstance().getTrace();
 			// If other
 			} else {
-				result = tNode.getOutputParams().get(propertyName);
+				result = ctx.getParamManager().getOutputParameterHandler(tNode.getTaskInstance()).get(propertyName);
 			} 
 			// If present, save value in repository
 			if (result != null) {				

@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
 
 public class ModelWrapper implements IModelWrapper {
 
 	protected Object model;
-	protected AbstractResource resource;
+	protected IAbstractResource resource;
 	protected ResourceKind kind;
 	protected Collection<String> aliases = new ArrayList<>();
 
-	public ModelWrapper(ResourceKind kind, AbstractResource resource, Object model, String... aliases) {
+	public ModelWrapper(ResourceKind kind, IAbstractResource resource, Object model, String... aliases) {
 		this.model = model;
 		this.kind = kind;
 		this.aliases = Arrays.asList(aliases);
@@ -33,7 +33,7 @@ public class ModelWrapper implements IModelWrapper {
 	}
 	
 	@Override
-	public org.epsilonlabs.modelflow.dom.AbstractResource getResource() {
+	public org.epsilonlabs.modelflow.dom.IAbstractResource getResource() {
 		return this.resource;
 	}
 	

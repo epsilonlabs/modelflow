@@ -18,7 +18,7 @@ import org.eclipse.epsilon.picto.dom.PictoFactory;
 import org.eclipse.epsilon.picto.source.GraphvizSource;
 import org.eclipse.ui.IEditorPart;
 import org.epsilonlabs.modelflow.IModelFlowModule;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.dt.editor.ModelFlowEditor;
 
 /**
@@ -33,7 +33,7 @@ public class ModelFlowEditorPictoSource extends GraphvizSource {
 		ResourceSet rs = new ResourceSetImpl();		
 		Registry packageRegistry = rs.getPackageRegistry();
 		packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-		packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+		packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 		workflow = rs.createResource(URI.createURI("wf"));
 	}
 	

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="******************************************************************************&#xA;Copyright (c) 2020 The University of York.&#xA; &#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;******************************************************************************"
+    modelDirectory="/org.epsilonlabs.modelflow.engine/src-gen" modelPluginID="org.epsilonlabs.modelflow.engine"
+    modelName="ManagementTrace" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
+    testsDirectory="/org.epsilonlabs.modelflow.tests/src-gen" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="8.0" copyrightFields="false" testsPluginID="org.epsilonlabs.modelflow.tests"
+    operationReflection="true" importOrganizing="true">
+  <foreignModel>managementTrace.ecore</foreignModel>
+  <genPackages prefix="ManagementTrace" basePackage="org.epsilonlabs.modelflow.management"
+      resource="XMI" disposableProviderFactory="true" fileExtensions="trace" ecorePackage="managementTrace.ecore#/">
+    <genClasses ecoreClass="managementTrace.ecore#//ManagementTrace">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//ManagementTrace/tasks"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//TaskTrace">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute managementTrace.ecore#//TaskTrace/task"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//TaskTrace/traces"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//Trace">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//Trace/sources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//Trace/targets"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//Trace/link"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="managementTrace.ecore#//Element">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Element/resource"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Element/role"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//ModelElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//ModelElement/elementId"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//ModelElementProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//ModelElementProperty/property"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//ModelElementProperty/value"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//FileElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//FileElement/region"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//Region">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Region/offset"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Region/length"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//Link">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Link/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Link/operation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference managementTrace.ecore#//Link/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="managementTrace.ecore#//Property">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Property/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute managementTrace.ecore#//Property/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

@@ -16,8 +16,8 @@ import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
-import org.epsilonlabs.modelflow.management.resource.ResourceManager;
+import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
+import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.repository.TaskRepository;
 
@@ -160,14 +160,14 @@ public interface IModelFlowContext extends IErlContext{
 	 *
 	 * @return the resource manager
 	 */
-	ResourceManager getResourceManager();
+	IResourceManager getResourceManager();
 	
 	/**
 	 * Sets the resource manager.
 	 *
 	 * @param modelManager the new resource manager
 	 */
-	void setResourceManager(ResourceManager modelManager);
+	void setResourceManager(IResourceManager modelManager);
 
 	/* PARAM MANAGER */
 	
@@ -176,14 +176,14 @@ public interface IModelFlowContext extends IErlContext{
 	 *
 	 * @return the param manager
 	 */
-	TaskParamManager getParamManager();
+	ITaskParameterManager getParamManager();
 
 	/**
 	 * Sets the param manager.
 	 *
 	 * @param paramManager the new param manager
 	 */
-	void setParamManager(TaskParamManager paramManager);
+	void setParamManager(ITaskParameterManager paramManager);
 	
 	/* EXECUTION */
 	

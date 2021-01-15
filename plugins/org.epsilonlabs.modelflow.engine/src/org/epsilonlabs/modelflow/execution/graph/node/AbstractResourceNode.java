@@ -7,12 +7,12 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 
 import io.reactivex.subjects.PublishSubject;
 
-public abstract class AbstractResourceNode<T extends AbstractResource> implements IAbstractResourceNode {
+public abstract class AbstractResourceNode<T extends IAbstractResource> implements IAbstractResourceNode {
 	
 	protected T internalResource;
 	protected PublishSubject<?> statusUpdater = PublishSubject.create();

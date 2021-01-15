@@ -15,12 +15,12 @@ import static org.epsilonlabs.modelflow.tests.common.ResourceLocator.locateInTes
 import java.io.File;
 
 import org.eclipse.emf.ecore.EcorePackage;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 
 public class EpsilonTask {
 
-	public static final Workflow getFlockWorkflow() {
+	public static final IWorkflow getFlockWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Original", "epsilon:emf")
@@ -39,7 +39,7 @@ public class EpsilonTask {
 				.build();
 	}
 	
-	public static final Workflow getSimulinkWorkflow() {
+	public static final IWorkflow getSimulinkWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("M", "epsilon:simulink")
@@ -52,7 +52,7 @@ public class EpsilonTask {
 				.build();
 	}
 
-	public static final Workflow getEplWorkflow() {
+	public static final IWorkflow getEplWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Model", "epsilon:emf")
@@ -69,7 +69,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEolGenpackagesWorkflow() {
+	public static final IWorkflow getEolGenpackagesWorkflow() {
 		return new WorkflowBuilder()
 			
 				.addModelResource("ECore", "epsilon:emf")
@@ -83,7 +83,7 @@ public class EpsilonTask {
 		.build();
 	}
 	
-	public static final Workflow getEtlWorkflow() {
+	public static final IWorkflow getEtlWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Tree", "epsilon:emf")
@@ -106,7 +106,7 @@ public class EpsilonTask {
 				.build();
 	}
 	
-	public static final Workflow getEtlWorkflowWithAlias() {
+	public static final IWorkflow getEtlWorkflowWithAlias() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Source", "epsilon:emf")
@@ -129,7 +129,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEvlWorkflow() {
+	public static final IWorkflow getEvlWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Tree", "epsilon:emf")
@@ -145,7 +145,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEolLibrary() {
+	public static final IWorkflow getEolLibrary() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Library", "epsilon:emf")
@@ -161,8 +161,8 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEgxWorkflow() {
-		Workflow w = new WorkflowBuilder()
+	public static final IWorkflow getEgxWorkflow() {
+		IWorkflow w = new WorkflowBuilder()
 				
 				.addModelResource("Wakeup", "epsilon:emf")
 				.addProperty("src", locateAndCopyToTestDir("model/emf/wakeup.model"))
@@ -183,7 +183,7 @@ public class EpsilonTask {
 		return w;
 	}
 		
-	public static final Workflow getEglWorkflow() {
+	public static final IWorkflow getEglWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("OO", "epsilon:emf")
@@ -199,7 +199,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEclWorkflow() {
+	public static final IWorkflow getEclWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Source", "epsilon:emf")
@@ -218,7 +218,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEUnitWithModelWorkflow() {
+	public static final IWorkflow getEUnitWithModelWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("LoopingA", "epsilon:emf")
@@ -243,7 +243,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEUnitWithDataWorkflow() {
+	public static final IWorkflow getEUnitWithDataWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("Empty", "epsilon:emf")
@@ -257,7 +257,7 @@ public class EpsilonTask {
 				.build();
 	}
 		
-	public static final Workflow getEUnitWorkflow() {
+	public static final IWorkflow getEUnitWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addTask("test", "epsilon:eunit")

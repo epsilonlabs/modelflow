@@ -21,19 +21,19 @@ import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.DerivedResource;
-import org.epsilonlabs.modelflow.dom.ResourceReference;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IDerivedResource;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 
 /**
  * The Class ModelCallExpression.
  *
  * @author bea
  */
-public class ModelCallExpression extends FeatureCallExpression implements IDomElement<ResourceReference> {
+public class ModelCallExpression extends FeatureCallExpression implements IDomElement<IResourceReference> {
 
-	protected ResourceReference ref;
+	protected IResourceReference ref;
 
 	protected TaskRule taskRule;
 	protected List<NameExpression> aliases = new ArrayList<>();
@@ -72,11 +72,11 @@ public class ModelCallExpression extends FeatureCallExpression implements IDomEl
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			// Create resource reference
-			ref = DomFactoryImpl.eINSTANCE.createResourceReference();
+			ref = DomFactory.eINSTANCE.createResourceReference();
 			// Add the aliases to the resource reference 
 			aliases.forEach(a -> ref.getAliases().add(a.getName()));
 			// Locate the resource declaration that it comes from
-			List<AbstractResource> resources = ctx.getModule().getWorkflow().getResources().parallelStream()
+			List<IAbstractResource> resources = ctx.getModule().getWorkflow().getResources().parallelStream()
 				.filter(m -> m.getName().equalsIgnoreCase(nameExpression.getName())).collect(Collectors.toList());
 			
 			// Check if resource is pressent
@@ -85,7 +85,7 @@ public class ModelCallExpression extends FeatureCallExpression implements IDomEl
 				ref.setResource(resources.get(0));
  			} 
 			else if (resources.isEmpty() && getName().contains(".")) {
-				DerivedResource derivedResource = DomFactoryImpl.eINSTANCE.createDerivedResource();
+				IDerivedResource derivedResource = DomFactory.eINSTANCE.createDerivedResource();
 				derivedResource.setName(getName());
 				
 				ctx.getModule().getWorkflow().getResources().add(derivedResource);
@@ -112,7 +112,7 @@ public class ModelCallExpression extends FeatureCallExpression implements IDomEl
 	}
 
 	@Override
-	public Collection<ResourceReference> getDomElements() {
+	public Collection<IResourceReference> getDomElements() {
 		return Arrays.asList(ref);
 	}
 

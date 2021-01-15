@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import org.eclipse.epsilon.ecl.EclModule;
 import org.eclipse.epsilon.ecl.IEclModule;
 import org.eclipse.epsilon.ecl.trace.MatchTrace;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
@@ -23,7 +23,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EclTaskTrace;
 
-public class EpsilonEclTask extends AbstractEpsilonTask implements ITask {
+public class EpsilonEclTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	protected String matchTraceName;
 

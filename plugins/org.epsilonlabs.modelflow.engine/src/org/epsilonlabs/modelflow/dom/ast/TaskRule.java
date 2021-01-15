@@ -28,18 +28,18 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.types.EolAnyType;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Task;
+import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
-import org.epsilonlabs.modelflow.dom.impl.DomFactoryImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 
 /**
  * The Class TaskRule.
  */
-public class TaskRule extends ConfigurableRule<Task> {
+public class TaskRule extends ConfigurableRule<ITask> {
 
 	/** The task. */
-	protected Collection<Task> tasks = new ArrayList<>();
+	protected Collection<ITask> tasks = new ArrayList<>();
 
 	/** The guard. */
 	protected ExecutableBlock<Boolean> guard;
@@ -161,7 +161,7 @@ public class TaskRule extends ConfigurableRule<Task> {
 	 * @return the emf element
 	 */
 	@Override
-	public Collection<Task> getDomElements() {
+	public Collection<ITask> getDomElements() {
 		return tasks;
 	}
 
@@ -217,7 +217,7 @@ public class TaskRule extends ConfigurableRule<Task> {
 	}
 
 	protected void createTask(IModelFlowCompilationContext ctx, String name) {
-		Task task = DomFactoryImpl.eINSTANCE.createTask();
+		ITask task = DomFactory.eINSTANCE.createTask();
 		task.setName(name);
 		task.setDefinition(getType().getName());
 

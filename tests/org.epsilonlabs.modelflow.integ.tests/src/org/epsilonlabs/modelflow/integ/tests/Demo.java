@@ -10,7 +10,7 @@ package org.epsilonlabs.modelflow.integ.tests;
 import java.util.Scanner;
 
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
@@ -61,7 +61,7 @@ public class Demo {
 	
 	private ModelFlowModule getModule() {
 		ModelFlowModule module = new ModelFlowModule();
-		Workflow workflow = getWorkflow();
+		IWorkflow workflow = getWorkflow();
 		module.setWorkflow(workflow);
 		
 		Injector injector = Guice.createInjector(new EpsilonPlugin(), new EMFPlugin());
@@ -77,7 +77,7 @@ public class Demo {
 		return module;
 	}
 	
-	protected Workflow getWorkflow() {
+	protected IWorkflow getWorkflow() {
 		return ExampleWorkflows.getComponentWorkflow();
 		//return ExampleWorkflows.getMarkingMateWorkflow();
 		//return ExampleWorkflows.getEuGENiaWorkflow();

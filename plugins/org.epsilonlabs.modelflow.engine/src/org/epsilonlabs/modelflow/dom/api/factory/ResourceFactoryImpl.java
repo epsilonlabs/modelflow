@@ -12,9 +12,9 @@ import java.util.Map;
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.epsilonlabs.modelflow.dom.Configurable;
-import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.IConfigurable;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -31,8 +31,8 @@ public class ResourceFactoryImpl extends AbstractFactoryImpl {
 
 	protected final IModelResourceNode node;
 	protected final String name;
-	protected ModelResource resource;
-	protected IResource<?> iResource;
+	protected IModelResource resource;
+	protected IResourceInstance<?> iResource;
 
 	public ResourceFactoryImpl(IModelResourceFactory factory, IModelResourceNode node, String name, IModelFlowContext ctx) {
 		super(ctx, factory.getInstanceClass());
@@ -41,10 +41,10 @@ public class ResourceFactoryImpl extends AbstractFactoryImpl {
 		this.name = name;
 	}
 	
-	public IResource<?> create() throws MFInstantiationException {
+	public IResourceInstance<?> create() throws MFInstantiationException {
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		iResource = (IResource<?>) injector.getInstance(clazz);
+		iResource = (IResourceInstance<?>) injector.getInstance(clazz);
 		iResource.setName(name);
 		configure();
 		iResource.configure(node);
@@ -57,7 +57,7 @@ public class ResourceFactoryImpl extends AbstractFactoryImpl {
 	}
 	
 	@Override
-	protected Configurable getConfigurable(){
+	protected IConfigurable getConfigurable(){
 		return resource;
 	}
 

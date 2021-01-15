@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.eml.trace.Merge;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.AbstractEpsilonTask;
@@ -20,11 +20,11 @@ public class EmlTaskTrace implements ITrace {
 	protected final AbstractEpsilonTask task;
 	protected final Trace trace;
 
-	public EmlTaskTrace(Merge merge, ITask task) {
+	public EmlTaskTrace(Merge merge, ITaskInstance task) {
 		this(merge, task, null);
 	}
 	
-	private EmlTaskTrace(Merge merge, ITask task, Trace trace) {
+	private EmlTaskTrace(Merge merge, ITaskInstance task, Trace trace) {
 		this.merge = merge;
 		this.task = (AbstractEpsilonTask) task;
 		this.trace = trace;
@@ -43,9 +43,9 @@ public class EmlTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		String leftId = EpsilonTraceUtil.getElementId(task, merge.getMatch().getLeft());
-		AbstractResource leftModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
+		IAbstractResource leftModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
 		String rightId = EpsilonTraceUtil.getElementId(task, merge.getMatch().getRight());
-		AbstractResource rightModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
+		IAbstractResource rightModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
 
 		ManagementTraceBuilder builder = new ManagementTraceBuilder()
 				.managementLink("Merge", merge.getRule().getName())
@@ -54,7 +54,7 @@ public class EmlTaskTrace implements ITrace {
 		
 		merge.getTargets().forEach(target -> {
 			String targetId = EpsilonTraceUtil.getElementId(task, target);
-			AbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, target);
+			IAbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, target);
 			builder.addTargetModelElement(targetId, targetModel, null);
 		});
 		

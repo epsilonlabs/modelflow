@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.epsilonlabs.modelflow.dom.Configurable;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.IConfigurable;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.ast.TaskRule;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -44,8 +44,8 @@ public class TaskFactoryImpl extends AbstractFactoryImpl {
 	
 	protected final ITaskNode node;
 	protected final String name;
-	protected Task task;
-	protected ITask iTask;
+	protected ITask task;
+	protected ITaskInstance iTask;
 
 	public TaskFactoryImpl(ITaskFactory factory, ITaskNode node, String name, IModelFlowContext ctx) {
 		super(ctx, factory.getInstanceClass());
@@ -54,13 +54,13 @@ public class TaskFactoryImpl extends AbstractFactoryImpl {
 		this.name = name;
 	}
 	
-	public ITask create() throws MFInstantiationException {
+	public ITaskInstance create() throws MFInstantiationException {
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		ITask instance = (ITask) injector.getInstance(clazz);
+		ITaskInstance instance = (ITaskInstance) injector.getInstance(clazz);
 		injector.injectMembers(instance);
 		instance.configure(node);
-		iTask = (ITask) clazz.cast(instance); // Is this necessary?
+		iTask = (ITaskInstance) clazz.cast(instance); // Is this necessary?
 		configure(); // How to add info of the factory in the task
 		return iTask;
 	}
@@ -71,7 +71,7 @@ public class TaskFactoryImpl extends AbstractFactoryImpl {
 	}
 
 	@Override
-	protected Configurable getConfigurable(){
+	protected IConfigurable getConfigurable(){
 		return task;
 	}
 
@@ -88,7 +88,7 @@ public class TaskFactoryImpl extends AbstractFactoryImpl {
 	@Override
 	protected ModuleElement prepareFrameStack() {
 		Variable[] variables = new Variable[0];
-		Configurable configurable = getConfigurable();
+		IConfigurable configurable = getConfigurable();
 		TaskRule me = (TaskRule) configurable.getModuleElement();
 		if (me.isGenerator()) {
 			variables = me.getVars(configurable.getName());

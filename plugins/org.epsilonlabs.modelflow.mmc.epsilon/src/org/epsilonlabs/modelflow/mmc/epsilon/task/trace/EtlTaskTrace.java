@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.etl.trace.Transformation;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.AbstractEpsilonTask;
@@ -20,11 +20,11 @@ public class EtlTaskTrace implements ITrace {
 	protected final AbstractEpsilonTask task;
 	protected final Trace trace;
 
-	public EtlTaskTrace(Transformation transformation, ITask task) {
+	public EtlTaskTrace(Transformation transformation, ITaskInstance task) {
 		this(transformation, task, null);
 	}
 	
-	private EtlTaskTrace(Transformation transformation, ITask task, Trace trace) {
+	private EtlTaskTrace(Transformation transformation, ITaskInstance task, Trace trace) {
 		this.transformation = transformation;
 		this.task = (AbstractEpsilonTask) task;
 		this.trace = trace;
@@ -43,7 +43,7 @@ public class EtlTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		String sourceId = EpsilonTraceUtil.getElementId(task,transformation.getSource());
-		AbstractResource sourceModel = EpsilonTraceUtil.getContainerModel(task,transformation.getSource());
+		IAbstractResource sourceModel = EpsilonTraceUtil.getContainerModel(task,transformation.getSource());
 
 		ManagementTraceBuilder builder = new ManagementTraceBuilder()
 				.managementLink("Transformation", transformation.getRule().getName())
@@ -51,7 +51,7 @@ public class EtlTaskTrace implements ITrace {
 		
 		transformation.getTargets().forEach(target -> {
 			String targetId = EpsilonTraceUtil.getElementId(task,target);
-			AbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task,target);
+			IAbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task,target);
 			builder.addTargetModelElement(targetId, targetModel, null);
 		});
 		

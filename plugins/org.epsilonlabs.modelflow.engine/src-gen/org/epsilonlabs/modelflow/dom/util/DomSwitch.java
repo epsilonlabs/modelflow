@@ -26,7 +26,7 @@ import org.epsilonlabs.modelflow.dom.*;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see org.epsilonlabs.modelflow.dom.DomPackage
+ * @see org.epsilonlabs.modelflow.dom.IDomPackage
  * @generated
  */
 public class DomSwitch<T> extends Switch<T> {
@@ -36,7 +36,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static DomPackage modelPackage;
+	protected static IDomPackage modelPackage;
 
 	/**
 	 * Creates an instance of the switch.
@@ -46,7 +46,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 */
 	public DomSwitch() {
 		if (modelPackage == null) {
-			modelPackage = DomPackage.eINSTANCE;
+			modelPackage = IDomPackage.eINSTANCE;
 		}
 	}
 
@@ -73,62 +73,52 @@ public class DomSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case DomPackage.WORKFLOW: {
-				Workflow workflow = (Workflow)theEObject;
+			case IDomPackage.WORKFLOW: {
+				IWorkflow workflow = (IWorkflow)theEObject;
 				T result = caseWorkflow(workflow);
 				if (result == null) result = caseTask(workflow);
-				if (result == null) result = caseAbstractTask(workflow);
 				if (result == null) result = caseConfigurable(workflow);
 				if (result == null) result = caseNamed(workflow);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.NAMED: {
-				Named named = (Named)theEObject;
+			case IDomPackage.NAMED: {
+				INamed named = (INamed)theEObject;
 				T result = caseNamed(named);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.CONFIGURABLE: {
-				Configurable configurable = (Configurable)theEObject;
+			case IDomPackage.CONFIGURABLE: {
+				IConfigurable configurable = (IConfigurable)theEObject;
 				T result = caseConfigurable(configurable);
 				if (result == null) result = caseNamed(configurable);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.ABSTRACT_RESOURCE: {
-				AbstractResource abstractResource = (AbstractResource)theEObject;
+			case IDomPackage.ABSTRACT_RESOURCE: {
+				IAbstractResource abstractResource = (IAbstractResource)theEObject;
 				T result = caseAbstractResource(abstractResource);
 				if (result == null) result = caseConfigurable(abstractResource);
 				if (result == null) result = caseNamed(abstractResource);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.ABSTRACT_TASK: {
-				AbstractTask abstractTask = (AbstractTask)theEObject;
-				T result = caseAbstractTask(abstractTask);
-				if (result == null) result = caseConfigurable(abstractTask);
-				if (result == null) result = caseNamed(abstractTask);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DomPackage.TASK: {
-				Task task = (Task)theEObject;
+			case IDomPackage.TASK: {
+				ITask task = (ITask)theEObject;
 				T result = caseTask(task);
-				if (result == null) result = caseAbstractTask(task);
 				if (result == null) result = caseConfigurable(task);
 				if (result == null) result = caseNamed(task);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.RESOURCE_REFERENCE: {
-				ResourceReference resourceReference = (ResourceReference)theEObject;
+			case IDomPackage.RESOURCE_REFERENCE: {
+				IResourceReference resourceReference = (IResourceReference)theEObject;
 				T result = caseResourceReference(resourceReference);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.RESOURCE: {
-				Resource resource = (Resource)theEObject;
+			case IDomPackage.RESOURCE: {
+				IResource resource = (IResource)theEObject;
 				T result = caseResource(resource);
 				if (result == null) result = caseAbstractResource(resource);
 				if (result == null) result = caseConfigurable(resource);
@@ -136,8 +126,8 @@ public class DomSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.DERIVED_RESOURCE: {
-				DerivedResource derivedResource = (DerivedResource)theEObject;
+			case IDomPackage.DERIVED_RESOURCE: {
+				IDerivedResource derivedResource = (IDerivedResource)theEObject;
 				T result = caseDerivedResource(derivedResource);
 				if (result == null) result = caseAbstractResource(derivedResource);
 				if (result == null) result = caseConfigurable(derivedResource);
@@ -145,8 +135,8 @@ public class DomSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.MODEL_RESOURCE: {
-				ModelResource modelResource = (ModelResource)theEObject;
+			case IDomPackage.MODEL_RESOURCE: {
+				IModelResource modelResource = (IModelResource)theEObject;
 				T result = caseModelResource(modelResource);
 				if (result == null) result = caseResource(modelResource);
 				if (result == null) result = caseAbstractResource(modelResource);
@@ -155,30 +145,14 @@ public class DomSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.METAMODE_RESOURCE: {
-				MetamodeResource metamodeResource = (MetamodeResource)theEObject;
-				T result = caseMetamodeResource(metamodeResource);
-				if (result == null) result = caseResource(metamodeResource);
-				if (result == null) result = caseAbstractResource(metamodeResource);
-				if (result == null) result = caseConfigurable(metamodeResource);
-				if (result == null) result = caseNamed(metamodeResource);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DomPackage.TASK_DEPENDENCY: {
-				TaskDependency taskDependency = (TaskDependency)theEObject;
+			case IDomPackage.TASK_DEPENDENCY: {
+				ITaskDependency taskDependency = (ITaskDependency)theEObject;
 				T result = caseTaskDependency(taskDependency);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case DomPackage.RESOURCE_DEPENDENCY: {
-				ResourceDependency resourceDependency = (ResourceDependency)theEObject;
-				T result = caseResourceDependency(resourceDependency);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case DomPackage.PROPERTY: {
-				Property property = (Property)theEObject;
+			case IDomPackage.PROPERTY: {
+				IProperty property = (IProperty)theEObject;
 				T result = caseProperty(property);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -198,7 +172,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseWorkflow(Workflow object) {
+	public T caseWorkflow(IWorkflow object) {
 		return null;
 	}
 
@@ -213,7 +187,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNamed(Named object) {
+	public T caseNamed(INamed object) {
 		return null;
 	}
 
@@ -228,7 +202,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseConfigurable(Configurable object) {
+	public T caseConfigurable(IConfigurable object) {
 		return null;
 	}
 
@@ -243,22 +217,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAbstractResource(AbstractResource object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Abstract Task</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Abstract Task</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAbstractTask(AbstractTask object) {
+	public T caseAbstractResource(IAbstractResource object) {
 		return null;
 	}
 
@@ -273,7 +232,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTask(Task object) {
+	public T caseTask(ITask object) {
 		return null;
 	}
 
@@ -288,7 +247,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResourceReference(ResourceReference object) {
+	public T caseResourceReference(IResourceReference object) {
 		return null;
 	}
 
@@ -303,7 +262,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseResource(Resource object) {
+	public T caseResource(IResource object) {
 		return null;
 	}
 
@@ -318,7 +277,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseDerivedResource(DerivedResource object) {
+	public T caseDerivedResource(IDerivedResource object) {
 		return null;
 	}
 
@@ -333,22 +292,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseModelResource(ModelResource object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Metamode Resource</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Metamode Resource</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMetamodeResource(MetamodeResource object) {
+	public T caseModelResource(IModelResource object) {
 		return null;
 	}
 
@@ -363,22 +307,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseTaskDependency(TaskDependency object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Resource Dependency</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Resource Dependency</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseResourceDependency(ResourceDependency object) {
+	public T caseTaskDependency(ITaskDependency object) {
 		return null;
 	}
 
@@ -393,7 +322,7 @@ public class DomSwitch<T> extends Switch<T> {
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProperty(Property object) {
+	public T caseProperty(IProperty object) {
 		return null;
 	}
 

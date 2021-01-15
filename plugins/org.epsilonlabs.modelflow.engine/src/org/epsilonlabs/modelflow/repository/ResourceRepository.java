@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
@@ -29,7 +29,7 @@ public class ResourceRepository {
 
 	protected ResourceFactoryRegistry factoryRegistry;
 	protected Map<String, Object> derivedResources;
-	protected Map<String, IResource<?>> resources;
+	protected Map<String, IResourceInstance<?>> resources;
 	protected Map<String, String> hashes;
 	
 	public ResourceRepository(ResourceFactoryRegistry registry) {
@@ -50,7 +50,7 @@ public class ResourceRepository {
 		return derivedResources.get(node);
 	}
 	
-	public Optional<IResource<?>> get(IModelResourceNode node) throws MFRuntimeException {
+	public Optional<IResourceInstance<?>> get(IModelResourceNode node) throws MFRuntimeException {
 		String id = node.getName();
 		if (this.resources.containsKey(id)) {
 			return Optional.of(this.resources.get(id));
@@ -59,9 +59,9 @@ public class ResourceRepository {
 		}
 	}
 	
-	public IResource<?> getOrCreate(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		Optional<IResource<?>> optional = get(node);
-		IResource<?> iResource;
+	public IResourceInstance<?> getOrCreate(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
+		Optional<IResourceInstance<?>> optional = get(node);
+		IResourceInstance<?> iResource;
 		if (optional.isPresent()) {
 			iResource = optional.get();
 		} else {			
@@ -75,7 +75,7 @@ public class ResourceRepository {
 
 	public void clear() {
 		LOG.info("Clearing Resource Repository");
-		this.resources.values().stream().forEach(IResource::dispose);
+		this.resources.values().stream().forEach(IResourceInstance::dispose);
 		this.resources.clear();
 		this.derivedResources.clear();
 	}

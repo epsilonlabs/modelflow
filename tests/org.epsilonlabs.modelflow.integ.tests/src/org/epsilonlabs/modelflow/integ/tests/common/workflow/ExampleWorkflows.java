@@ -21,7 +21,7 @@ import org.eclipse.gmf.gmfgraph.GMFGraphPackage;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.tooldef.GMFToolPackage;
 import org.epsilonlabs.modelflow.dom.MapPropertyBuilder;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 
@@ -37,7 +37,7 @@ public class ExampleWorkflows {
 	 * 	So far emfatic is not a resource...
 	 * - Choose resource to start with (emf or ecore) depending on availability or change history
 	 */
-	public static Workflow getEuGENiaWorkflow() {
+	public static IWorkflow getEuGENiaWorkflow() {
 		return new WorkflowBuilder()
 				
 			/** ======== Resources ======== */
@@ -201,7 +201,7 @@ public class ExampleWorkflows {
 			.build("EuGENia");
 	}
 	
-	public static Workflow getCompareMergeTransformComponent() {
+	public static IWorkflow getCompareMergeTransformComponent() {
 		return new WorkflowBuilder()
 			
 			/** ======== Resources ======== */
@@ -249,7 +249,7 @@ public class ExampleWorkflows {
 			.build("mergeTransformComponent");
 	}
 
-	public static final Workflow getTwoTransformationsComponent() {
+	public static final IWorkflow getTwoTransformationsComponent() {
 		return new WorkflowBuilder()
 			
 			/** ======== Resources ======== */
@@ -297,7 +297,7 @@ public class ExampleWorkflows {
 			.build("twoTransformationComponent");
 	}
 	
-	public static Workflow getEglWorkflow() {
+	public static IWorkflow getEglWorkflow() {
 		return new WorkflowBuilder()
 			
 			.addModelResource("OO", "epsilon:emf")
@@ -314,7 +314,7 @@ public class ExampleWorkflows {
 	}
 	
 
-	public static Workflow getMmtTraceWorkflow() {
+	public static IWorkflow getMmtTraceWorkflow() {
 		return new WorkflowBuilder()
 			
 			.addModelResource("t", "epsilon:emf")
@@ -330,7 +330,7 @@ public class ExampleWorkflows {
 			.build("mgmTrace");
 	}
 	
-	public static Workflow getExecTraceWorkflow() {
+	public static IWorkflow getExecTraceWorkflow() {
 		return new WorkflowBuilder()
 			
 			.addModelResource("t", "epsilon:emf")
@@ -346,8 +346,8 @@ public class ExampleWorkflows {
 			.build("execTrace");
 	}
 	
-	public static Workflow getEgxWorkflow() {
-		Workflow w = new WorkflowBuilder()
+	public static IWorkflow getEgxWorkflow() {
+		IWorkflow w = new WorkflowBuilder()
 			
 			.addModelResource("Wakeup", "epsilon:emf")
 			.addProperty("src", locateAndCopyToTestDir("m/wakeup.model"))
@@ -369,7 +369,7 @@ public class ExampleWorkflows {
 		return w;
 	}
 	
-	public static Workflow getMarkersWorkflow() {
+	public static IWorkflow getMarkersWorkflow() {
 		String metamodel = locateInTestDir("markingMate/markingmate.ecore");
 		return new WorkflowBuilder()
 				
@@ -394,9 +394,9 @@ public class ExampleWorkflows {
 				
 	
 	
-	public static Workflow getMarkingMateWorkflow() {
+	public static IWorkflow getMarkingMateWorkflow() {
 		String metamodel = locateAndCopyToTestDir("markingMate/markingmate.ecore");
-		Workflow w = new WorkflowBuilder()
+		IWorkflow w = new WorkflowBuilder()
 				
 				.addModelResource("SEPR", "epsilon:emf")
 				.addProperty("src", locateAndCopyToTestDir("markingMate/model/sepr.model"))
@@ -470,8 +470,8 @@ public class ExampleWorkflows {
 	
 	private static final String RES = System.getProperty("user.dir") + "/../../examples/org.epsilonlabs.modelflow.component.example/resources/";
 
-	public static Workflow getComponentWorkflow() {
-		Workflow w = new WorkflowBuilder()
+	public static IWorkflow getComponentWorkflow() {
+		IWorkflow w = new WorkflowBuilder()
 			
 			.addModelResource("config", "epsilon:emf")
 			.addProperty("src", locateAndCopyToTestDir(RES + "m/config.model"))

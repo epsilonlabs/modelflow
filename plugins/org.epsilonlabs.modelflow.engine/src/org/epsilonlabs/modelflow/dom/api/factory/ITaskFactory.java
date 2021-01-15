@@ -7,7 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.api.factory;
 
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -18,9 +18,9 @@ public interface ITaskFactory extends IFactory {
 	 * Instantiates the task node
 	 * @throws MFInstantiationException
 	 */
-	ITask create(ITaskNode task, String name, IModelFlowContext ctx) throws MFInstantiationException;
+	ITaskInstance create(ITaskNode task, String name, IModelFlowContext ctx) throws MFInstantiationException;
 		
 	@Override
-	Class<? extends ITask> getInstanceClass();
+	Class<? extends ITaskInstance> getInstanceClass();
 		
 }
