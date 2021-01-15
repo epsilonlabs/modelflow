@@ -20,6 +20,8 @@ jobs:
     docker:
       - image: circleci/openjdk:stretch
     steps:
+      - attach_workspace:
+          at: ./
       - run: mvn -f pom-plain.xml clean install     
 
   publish-github-release:
@@ -40,7 +42,7 @@ jobs:
          
 workflows:
   version: 2
-  publish:
+  cibuild:
     jobs:
       - build
       - maven-integ:
