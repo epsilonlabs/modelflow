@@ -1,7 +1,6 @@
 package org.epsilonlabs.modelflow.mmc.gmf.task;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -12,20 +11,16 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.gmf.codegen.gmfgen.GenDiagram;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
-import org.eclipse.gmf.internal.common.migrate.ModelLoadHelper;
 import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -140,10 +135,7 @@ public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITa
 
 	@Output(key = "GeneratedFiles", hasher = FileHasher.class)
 	public Set<File> getFilies(){
-		Path base = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toFile().toPath();
-		return files.stream()
-				.map(f->base.resolve(f.toString().substring(1)).toFile())
-				.collect(Collectors.toSet());
+		return files.stream().collect(Collectors.toSet());
 	}
 
 	@Override
@@ -164,14 +156,18 @@ public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITa
 			if (m.getModel() instanceof EmfModel) {
 				resource = m.getResource();
 				EmfModel model = (EmfModel) m.getModel(); 
-				EObject eObject = m.getResource().eContents().get(0);
-				if (eObject instanceof GenEditorGenerator) {
-					this.myGenModel = (GenEditorGenerator) eObject;
+				EObject eObject = model.getResource().getContents().get(0);
+				if (eObject instanceof GenDiagram) {
+					myGenModel = ((GenDiagram) eObject).getEditorGen();
+				} else if (eObject instanceof GenEditorGenerator) {
+					myGenModel = (GenEditorGenerator) eObject;
+				}
+				if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
+					myGenModel.getDomainGenModel().reconcile();
 				}
 				modelFileUri = model.getModelFileUri();
 			}
 		});
-		loadGenModel();
 		Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);
 		if (!ValidationHelper.isOK(isGenModelValid)) {
 			throw new MFInvalidModelException(isGenModelValid.getException());
@@ -182,21 +178,5 @@ public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITa
 	public void afterExecute() {
 		LOG.debug("After execution");
 	}
-
-	private Diagnostic loadGenModel() {
-		ResourceSet srcResSet = new ResourceSetImpl();
-		ModelLoadHelper loadHelper = new ModelLoadHelper(srcResSet, modelFileUri);
-		Object root = loadHelper.getContentsRoot();
-		if (root instanceof GenDiagram) {
-			myGenModel = ((GenDiagram) root).getEditorGen();
-		} else if (root instanceof GenEditorGenerator) {
-			myGenModel = (GenEditorGenerator) root;
-		}
-		if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
-			myGenModel.getDomainGenModel().reconcile();
-		}
-		return ValidationHelper.createResourceProblemMarkers(loadHelper.getDiagnostics());
-	}
-
 
 }

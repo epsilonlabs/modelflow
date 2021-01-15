@@ -24,6 +24,7 @@ import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
@@ -84,11 +85,10 @@ public class EpsilonEglTask extends AbstractEglTask implements ITaskInstance {
 		}
 		eglTrace = new EglFineGrainedTraceContextAdaptor().adapt(getModule().getContext());
 	}
-		
+	
 	@Override
-	public void afterExecute() throws MFExecutionException {
-		super.afterExecute();
-		
+	public void execute(IModelFlowContext ctx) throws MFExecutionException {
+		super.execute(ctx);
 		if (target.isPresent()) {			
 			if (!outputRoot.isPresent()) {
 				// use basedir

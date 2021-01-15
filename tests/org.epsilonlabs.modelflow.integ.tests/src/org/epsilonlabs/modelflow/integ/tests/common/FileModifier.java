@@ -65,10 +65,12 @@ public class FileModifier {
 		StringBuilder inputBuffer = new StringBuilder();
 		try (BufferedReader reader = new BufferedReader(new FileReader(file))){
 			String line;
+			Boolean found = false;
 			while ((line = reader.readLine()) != null) {
 				Matcher matcher = pattern.matcher(line);
-				if (matcher.matches()) {					
+				if (matcher.matches() && !found) {					
 					line = matcher.replaceFirst(replacement);
+					found = true;
 				}
 				inputBuffer.append(line + "\n");					
 			}
@@ -88,10 +90,10 @@ public class FileModifier {
 		assertNotEquals("hashes are the same", hash1, hash2);
 	}
 	
-	public void copyFrom(String other) {
+	/*public void copyFrom(String other) {
 		String absolutePath = file.getAbsolutePath();
 		assertTrue("File not found", file.exists());
 		// TODO
-	}
+	}*/
 	
 }

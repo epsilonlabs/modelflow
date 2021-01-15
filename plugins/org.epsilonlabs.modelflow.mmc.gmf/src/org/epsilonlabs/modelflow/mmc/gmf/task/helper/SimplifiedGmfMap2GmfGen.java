@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.ExternalCrossReferencer;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.graphdef.codegen.MapModeCodeGenStrategy;
 import org.eclipse.gmf.internal.bridge.History;
@@ -41,6 +43,7 @@ import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
 import org.eclipse.gmf.internal.bridge.transform.VisualIdentifierDispenserProvider;
 import org.eclipse.gmf.internal.bridge.ui.Plugin;
 import org.eclipse.gmf.internal.codegen.util.GMFGenConfig;
+import org.eclipse.gmf.internal.common.ToolingResourceFactory.ToolResource;
 import org.eclipse.gmf.internal.common.reconcile.Reconciler;
 import org.eclipse.gmf.mappings.Mapping;
 import org.eclipse.m2m.internal.qvt.oml.trace.Trace;
@@ -164,6 +167,7 @@ public class SimplifiedGmfMap2GmfGen {
 			namer.traverse(genEditor); // dispense names to new elements
 
 			monitor.subTask(Messages.TransformToGenModelOperation_task_save);
+
 			Resource save = save(genEditor);
 			monitor.subTask(Messages.TransformToGenModelOperation_task_validate);
 			try {
@@ -352,13 +356,18 @@ public class SimplifiedGmfMap2GmfGen {
 
 	// FIXME do not save twice
 	protected Resource save(GenEditorGenerator genBurdern) throws IOException {
-		//HashMap<String, Object> saveOptions = new HashMap<String, Object>();
-		//saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
+		HashMap<String, Object> saveOptions = new HashMap<String, Object>();
+		saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
 		Resource gmfgenRes = getResourceSet().getResource(getGmfGenURI(), false);
+		//gmfgenRes.getDefaultSaveOptions().putAll(saveOptions);
 		try {
 			if (gmfgenRes == null) {
 				gmfgenRes = getResourceSet().createResource(getGmfGenURI(), "org.eclipse.gmf.gen");
 				gmfgenRes.load(getResourceSet().getLoadOptions());
+				if (gmfgenRes instanceof ToolResource) {
+					((ToolResource) gmfgenRes).getDefaultSaveOptions().putAll(saveOptions);
+				}
+				//gmfgenRes.getDefaultSaveOptions().putAll(saveOptions);
 			}
 			updateExistingResource(gmfgenRes, genBurdern);
 			// one might want to ignore dangling href on save when there are more than one
@@ -367,16 +376,22 @@ public class SimplifiedGmfMap2GmfGen {
 			if (gmfgenRes.getContents().size() > 1 && Plugin.ignoreDanglingHrefOnSave()) {
 				//saveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
 			}
-			//gmfgenRes.save(saveOptions);
+		//	gmfgenRes.save(saveOptions);
 		} catch (IOException ex) {
 			// load failed, no file exists
 			gmfgenRes.getContents().add(genBurdern);
-			//gmfgenRes.save(saveOptions);
+			if (gmfgenRes instanceof ToolResource) {
+				((ToolResource) gmfgenRes).getDefaultSaveOptions().putAll(saveOptions);
+			}
+		//	gmfgenRes.save(saveOptions);
 		} catch (RuntimeException ex) {
 			LOG.error(ex.getMessage(), ex);
 			// save anyway, for later examination
 			gmfgenRes.getContents().add(genBurdern);
-			//gmfgenRes.save(saveOptions);
+			if (gmfgenRes instanceof ToolResource) {
+				((ToolResource) gmfgenRes).getDefaultSaveOptions().putAll(saveOptions);
+			}
+		//	gmfgenRes.save(saveOptions);
 		}
 		return gmfgenRes;
 	}

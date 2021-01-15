@@ -45,9 +45,13 @@ public abstract class AbstractScheduler implements IScheduler {
 	
 	@Override
 	public WorkflowExecution execute(IModelFlowContext ctx) throws MFExecutionException {
-		ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
-		WorkflowExecution executeImpl = executeImpl(ctx);
-		ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+		WorkflowExecution executeImpl = null; 
+		try {
+			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			executeImpl = executeImpl(ctx);
+		} finally {
+			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+		}
 		return executeImpl;
 	}
 	
@@ -84,11 +88,11 @@ public abstract class AbstractScheduler implements IScheduler {
 			task.execute(ctx);
 		} catch (Exception e) {
 			processException(ctx, task, currentTaskExecution, updater.getCurrentWorkflowExecution(), e);
+		} finally {
+			/* Profiler end */
+			ctx.getProfiler().stop(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
 		}
 	
-		/* Profiler end */
-		ctx.getProfiler().stop(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
-
 		/* Successful Execution Status */
 		currentTaskExecution.setEndState(task.getState().toString());
 
@@ -109,9 +113,6 @@ public abstract class AbstractScheduler implements IScheduler {
 	 */
 	protected void processException(IModelFlowContext ctx, ITaskNode node, TaskExecution taskExecution, WorkflowExecution workflowExecution, Throwable exception)
 			throws MFExecutionException {
-		
-		/* Profile exception */
-		ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION, node, ctx);
 
 		/* End state */
 		taskExecution.setEndState(exception.getClass().getSimpleName());

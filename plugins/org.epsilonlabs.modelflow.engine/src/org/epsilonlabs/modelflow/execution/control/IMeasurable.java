@@ -7,6 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.control;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 
 /**
@@ -16,38 +20,55 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 public interface IMeasurable {
 
 	enum Stage {
-		DEPENDENCY_GRAPH("Workflow"), EXECUTION_GRAPH("Workflow"),EXECUTION_PROCESS("Workflow"),
-		TASK_EXECUTION_PROCESS("Workflow"),
-		LOAD("Model"), DISPOSE("Model"),
+		DEPENDENCY_GRAPH, 
+		EXECUTION_GRAPH,
+		EXECUTION_PROCESS,
+		TASK_EXECUTION_PROCESS,
+		EXECUTION,
+		LOAD, 
+		DISPOSE,
 		// Task
 		PROCESS_INPUTS, 
 		PROCESS_MODELS_BEFORE_EXECUTION, 
-		EXECUTION, 
+		ATOMIC_EXECUTION, 
 		PROCESS_OUTPUTS, 
-		CLEANUP, 
 		END_TO_END_TRACES, 
 		PROCESS_MODELS_AFTER_EXECUTION
 		;
 		
-		String group;
 		
-		Stage(String group){
-			this.group = group;
-		}
-		Stage(){
-			this.group= "Task";
+		public Stage getParent() {
+			switch (this) {
+			case EXECUTION:
+				return null;
+			case DEPENDENCY_GRAPH:
+			case EXECUTION_GRAPH:
+			case EXECUTION_PROCESS:
+				return EXECUTION;
+			case TASK_EXECUTION_PROCESS:
+				return EXECUTION_PROCESS;
+			case LOAD:
+				return PROCESS_MODELS_BEFORE_EXECUTION;
+			case DISPOSE:
+				return PROCESS_MODELS_AFTER_EXECUTION;
+			default:
+				return TASK_EXECUTION_PROCESS;
+			}
 		}
 		
-		public String getGroup(){
-			return group;
+		public static List<String> names(){
+			return Arrays.asList(Stage.values()).stream().map(Stage::name).collect(Collectors.toList());
+			
 		}
 	}
 	
 	String getNode();
 	
 	Stage getStage();
-	
+		
 	Class<? extends IGraphNode> getType();
 	
 	IMeasurable getParent();
+	
+	
 }
