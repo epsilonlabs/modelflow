@@ -10,19 +10,12 @@ jobs:
           command: |
             cd ./setup/org.epsilonlabs.modelflow.dependencies/ && ./download-dependencies.sh
       - run: mvn clean verify
+      - run: mvn -f pom-plain.xml clean install     
       - persist_to_workspace:
           root: ./
           paths:
           - releng/org.epsilonlabs.modelflow.updatesite/target/*.zip
           - tests/org.epsilonlabs.modelflow.jacoco/target/site/jacoco-aggregate/
-
-  maven-integ:
-    docker:
-      - image: circleci/openjdk:stretch
-    steps:
-      - attach_workspace:
-          at: ./
-      - run: mvn -f pom-plain.xml clean install     
 
   publish-github-release:
     docker:
@@ -45,9 +38,6 @@ workflows:
   cibuild:
     jobs:
       - build
-      - maven-integ:
-          requires:
-            - build
       - publish-github-release:
           requires:
             - build
