@@ -38,8 +38,14 @@ public class EmfTask {
 	public static IWorkflow getEmfatic2EcoreWorkflow() {
 		return new WorkflowBuilder()
 				
+				.addModelResource("ECore", "epsilon:emf")
+				.addProperty("src", location("ecore"))
+				.addProperty("metamodelUri", EcorePackage.eINSTANCE.getNsURI())
+				
 				.addTask("Emfatic2Ecore", "emf:emfatic2ecore")
+				.addOutput("ECore")
 				.addProperty("src", location("emf"))
+				
 				
 			.build();
 	}
