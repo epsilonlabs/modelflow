@@ -111,19 +111,22 @@ public class ConservativeExecutionHelper {
 					try {
 						IModelResourceInstance<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
 								.getOrCreate((IModelResourceNode) r, ctx);
-						Object hash;
+						Optional<Object> optHash;
 						if (!input || !iResource.isLoaded()) {
 							/* Reuse past trace to identify resources to compute hashes for */
-							hash = iResource.unloadedHash(pastStamp);
+							optHash = iResource.unloadedHash(pastStamp);
 						} else {
 							/* Compute from in-memory resource */
 							// FIXME for output resources we shouldn't use the loaded model because we are
 							// about to change it
-							hash = iResource.loadedHash();
+							optHash = iResource.loadedHash();
 						}
-						if (!pastStamp.equals(hash)) {
-							LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
-							return true;
+						if (optHash.isPresent()) {
+							Object hash = optHash.get();
+							if (!pastStamp.equals(hash)) {
+								LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
+								return true;
+							}
 						}
 					} catch (MFRuntimeException e) {
 						throw new IllegalStateException(e.getCause());
