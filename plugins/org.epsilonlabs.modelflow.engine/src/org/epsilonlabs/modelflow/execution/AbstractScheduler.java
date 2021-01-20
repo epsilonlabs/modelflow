@@ -73,12 +73,12 @@ public abstract class AbstractScheduler implements IScheduler {
 		executionListeners.parallelStream().forEach(l->l.preparingForExecution(this, task));
 	
 		/* New Task Execution Record */
-		TaskExecution currentTaskExecution = updater.createTaskExecution(task.getTaskDefinition());
+		TaskExecution currentTaskExecution = updater.createTaskExecution(task.getTaskElement());
 		
 		/* Notify executing */
 		executionListeners.parallelStream().forEach(l->l.executing(this, task));
 
-		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getTaskDefinition().getName());
+		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getTaskElement().getName());
 
 		/* Profiler start */
 		ctx.getProfiler().start(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
@@ -129,7 +129,7 @@ public abstract class AbstractScheduler implements IScheduler {
 		/* Clean in-memory repository */
 		ctx.getTaskRepository().clear();
 
-		ModuleElement moduleElement = ctx.getModule().getCompilationContext().getTaskModuleElement(node.getTaskDefinition());
+		ModuleElement moduleElement = ctx.getModule().getCompilationContext().getTaskModuleElement(node.getTaskElement());
 		throw new MFExecutionException(moduleElement,exception);
 	}
 

@@ -31,8 +31,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.epsilonlabs.modelflow.dom.IAbstractResource;
-import org.epsilonlabs.modelflow.dom.ITask;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
@@ -48,7 +46,6 @@ public class CustomGenerator extends Generator {
 		}
 	}
 
-	protected ITask task;
 	protected IAbstractResource resource;
 	protected List<Trace> traces = new ArrayList<>();
 	protected Set<URI> outputs = new LinkedHashSet<>();
@@ -110,10 +107,6 @@ public class CustomGenerator extends Generator {
           default:
         	  return "";
         }
-	}
-
-	public void setTask(ITaskInstance t) {
-		this.task = t.getTaskNode().getTaskDefinition();
 	}
 
 	public void setResource(IAbstractResource r) {

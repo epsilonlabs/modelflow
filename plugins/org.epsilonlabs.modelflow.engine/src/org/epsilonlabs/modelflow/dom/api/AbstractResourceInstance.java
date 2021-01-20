@@ -15,7 +15,7 @@ import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 
-public abstract class AbstractResourceInstance<M> implements IResourceInstance<M> {
+public abstract class AbstractResourceInstance<M> implements IModelResourceInstance<M> {
 
 	protected String name;
 	protected IResourceNode node; 
@@ -98,14 +98,14 @@ public abstract class AbstractResourceInstance<M> implements IResourceInstance<M
 	protected abstract void modelAsTransient();
 
 	@Override
-	public IResourceInstance<M> asInOut() {
+	public IModelResourceInstance<M> asInOut() {
 		kind = ResourceKind.INOUT;
 		modelAsInOut();
 		return this;
 	}
 	
 	@Override
-	public IResourceInstance<M> asInput() {
+	public IModelResourceInstance<M> asInput() {
 		ResourceKind pastKind = getKind(); // TODO something with past kind 
 		kind = ResourceKind.INPUT;
 		modelAsInput();
@@ -113,14 +113,14 @@ public abstract class AbstractResourceInstance<M> implements IResourceInstance<M
 	}
 	
 	@Override
-	public IResourceInstance<M> asOutput() {
+	public IModelResourceInstance<M> asOutput() {
 		kind = ResourceKind.OUTPUT;
 		modelAsOutput();
 		return this;
 	}
 	
 	@Override
-	public IResourceInstance<M> asTransient() {
+	public IModelResourceInstance<M> asTransient() {
 		kind = ResourceKind.TRANSIENT;
 		modelAsTransient();
 		return this;

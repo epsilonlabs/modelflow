@@ -8,10 +8,12 @@
 package org.epsilonlabs.modelflow.registry;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.dom.IResource;
-import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.factory.ResourceFactory;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
@@ -20,22 +22,24 @@ import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 
 import com.google.inject.Inject;
 
-public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResourceFactory>{
+@SuppressWarnings("unchecked")
+public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResourceInstance<?>>{
 	
 	@Inject
 	public ResourceFactoryRegistry(Set<IModelResourceFactory> resourceFactory) {
-		factoryRegistry = new FactoryMap<IModelResourceFactory>(resourceFactory);
+		super(resourceFactory.stream()
+				.map(f->(Class<IModelResourceInstance<?>>)f.getFactoryClass())
+				.collect(Collectors.toSet()));
 	}
-
-	public IResourceInstance<?> create(IModelResourceNode res, IModelFlowContext ctx) throws MFRuntimeException {
+	
+	public IModelResourceInstance<?> create(IModelResourceNode res, IModelFlowContext ctx) throws MFRuntimeException {
 			IResource r = res.getInternal();
-			IModelResourceFactory factory;
 			try {
-				factory = getFactory(r.getDefinition());
+				Class<IModelResourceInstance<?>> factory = getFactory(r.getDefinition());
+				return new ResourceFactory(factory, res, res.getName(), ctx).create();
 			} catch (MFInvalidFactoryException e) {
 				throw new MFResourceInstantiationException(e);
 			}
-			return factory.create(res, res.getName(), ctx);
 	}
 	
 }

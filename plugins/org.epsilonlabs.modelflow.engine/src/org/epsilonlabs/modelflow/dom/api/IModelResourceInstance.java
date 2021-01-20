@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.dom.api;
 
 import java.util.Collection;
+import java.util.Optional;
 
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
@@ -18,7 +19,7 @@ import org.epsilonlabs.modelflow.management.resource.ResourceKind;
  *
  * @param <M> the generic type
  */
-public interface IResourceInstance<M> {
+public interface IModelResourceInstance<M> {
 
 	/**
 	 * Gets the name.
@@ -53,28 +54,28 @@ public interface IResourceInstance<M> {
 	 *
 	 * @return the i resource
 	 */
-	IResourceInstance<M> asInput();
+	IModelResourceInstance<M> asInput();
 	
 	/**
 	 * As output.
 	 *
 	 * @return the i resource
 	 */
-	IResourceInstance<M> asOutput();
+	IModelResourceInstance<M> asOutput();
 	
 	/**
 	 * As in out.
 	 *
 	 * @return the i resource
 	 */
-	IResourceInstance<M> asInOut();
+	IModelResourceInstance<M> asInOut();
 	
 	/**
 	 * As transient.
 	 *
 	 * @return the i resource
 	 */
-	IResourceInstance<M> asTransient();
+	IModelResourceInstance<M> asTransient();
 	
 	/**
 	 * Sets the alias.
@@ -128,7 +129,7 @@ public interface IResourceInstance<M> {
 	 *
 	 * @return the object
 	 */
-	Object loadedHash();
+	Optional<Object> loadedHash();
 	
 	/**
 	 * Unloaded hash.
@@ -136,7 +137,7 @@ public interface IResourceInstance<M> {
 	 * @param trace the trace
 	 * @return the object
 	 */
-	Object unloadedHash(Object trace);
+	Optional<Object> unloadedHash(Object trace);
 
 	/**
 	 * Get resource kind

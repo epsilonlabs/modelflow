@@ -57,7 +57,7 @@ public class ExecutionTraceUpdater {
 	
 	public synchronized TaskExecution getCurrentTaskExecution(ITaskNode task){
 		for (TaskExecution t: getCurrentWorkflowExecution().getTasks()) {
-			if (t.getName().equals(task.getTaskDefinition().getName())) {
+			if (t.getName().equals(task.getTaskElement().getName())) {
 				return t;
 			} 
 		}
@@ -69,7 +69,7 @@ public class ExecutionTraceUpdater {
 		if (previousWorkflowExecution.isPresent()) {
 			WorkflowExecution workflowExecution = previousWorkflowExecution.get();
 			for (TaskExecution t: workflowExecution.getTasks()) {
-				if (t.getName().equals(task.getTaskDefinition().getName())) {
+				if (t.getName().equals(task.getTaskElement().getName())) {
 					return Optional.of(t);
 				} 
 			}

@@ -29,7 +29,7 @@ import org.eclipse.epsilon.eol.types.EolAnyType;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.ITask;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 
@@ -221,7 +221,7 @@ public class TaskRule extends ConfigurableRule<ITask> {
 		task.setName(name);
 		task.setDefinition(getType().getName());
 
-		ITaskFactory factory = null;
+		Class<ITaskInstance> factory = null;
 		try {
 			// Factory exists?
 			factory = ctx.getModule().getTaskFactoryRegistry().getFactory(getType().getName());

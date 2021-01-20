@@ -11,9 +11,10 @@ import java.lang.reflect.Field;
 import java.util.Optional;
 
 import org.eclipse.epsilon.emc.emf.xml.XmlModel;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonResourceFactory;
 
+@Definition(name = "epsilon:xml")
 public class EpsilonXmlModelResource extends EpsilonEmfModelResource {
 
 	protected Optional<File> xsdFile = Optional.empty();
@@ -48,28 +49,4 @@ public class EpsilonXmlModelResource extends EpsilonEmfModelResource {
 		super.configure();
 	}
 	
-	public static class Factory extends AbstractEpsilonResourceFactory {
-
-		public Factory() {
-			super(EpsilonXmlModelResource.class);
-		}
-
-		@Override
-		public String getName() {
-			return "xml";
-		}
-
-		@Override
-		public void beforeWorkflow() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void afterWorkflow() {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
 }

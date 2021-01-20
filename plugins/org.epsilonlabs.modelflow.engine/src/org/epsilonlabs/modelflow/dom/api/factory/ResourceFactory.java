@@ -14,7 +14,7 @@ import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.IConfigurable;
 import org.epsilonlabs.modelflow.dom.IModelResource;
-import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -27,24 +27,24 @@ import com.google.inject.Injector;
  * @author Betty Sanchez
  *
  */
-public class ResourceFactoryImpl extends AbstractFactoryImpl {
+public class ResourceFactory extends AbstractFactory {
 
 	protected final IModelResourceNode node;
 	protected final String name;
 	protected IModelResource resource;
-	protected IResourceInstance<?> iResource;
-
-	public ResourceFactoryImpl(IModelResourceFactory factory, IModelResourceNode node, String name, IModelFlowContext ctx) {
-		super(ctx, factory.getInstanceClass());
+	protected IModelResourceInstance<?> iResource;
+	
+	public ResourceFactory(Class<? extends IModelResourceInstance<?>> factory, IModelResourceNode node, String name, IModelFlowContext ctx) {
+		super(ctx, factory);
 		this.node = node;
 		this.resource = node.getInternal();
 		this.name = name;
 	}
 	
-	public IResourceInstance<?> create() throws MFInstantiationException {
+	public IModelResourceInstance<?> create() throws MFInstantiationException {
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		iResource = (IResourceInstance<?>) injector.getInstance(clazz);
+		iResource = (IModelResourceInstance<?>) injector.getInstance(clazz);
 		iResource.setName(name);
 		configure();
 		iResource.configure(node);

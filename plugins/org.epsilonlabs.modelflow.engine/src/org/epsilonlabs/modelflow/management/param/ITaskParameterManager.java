@@ -3,7 +3,6 @@
  */
 package org.epsilonlabs.modelflow.management.param;
 
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 
@@ -17,8 +16,8 @@ public interface ITaskParameterManager {
 
 	void processInputs(ITaskNode node, IModelFlowContext ctx);
 
-	ITaskPropertyHandler getOutputParameterHandler(ITaskInstance task);
+	ITaskPropertyHandler getOutputParameterHandler(ITaskNode task);
 
-	ITaskPropertyHandler getInputParameterHandler(ITaskInstance task);
+	ITaskPropertyHandler getInputParameterHandler(ITaskNode task);
 
 }

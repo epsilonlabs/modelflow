@@ -15,10 +15,11 @@ import org.eclipse.epsilon.etl.EtlModule;
 import org.eclipse.epsilon.etl.IEtlModule;
 import org.eclipse.epsilon.etl.trace.Transformation;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
 
+@Definition(name = "epsilon:etl")
 public class EpsilonEtlTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked")
@@ -30,21 +31,6 @@ public class EpsilonEtlTask extends AbstractEpsilonTask implements ITaskInstance
 		return (IEtlModule) this.module;
 	}
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEtlTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "etl";
-		}
-
-	}
-	
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
 		if (traces == null) {			

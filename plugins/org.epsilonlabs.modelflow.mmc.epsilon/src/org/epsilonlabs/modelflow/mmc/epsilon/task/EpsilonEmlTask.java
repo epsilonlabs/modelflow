@@ -20,11 +20,11 @@ import org.eclipse.epsilon.eml.IEmlModule;
 import org.eclipse.epsilon.eml.trace.MergeTrace;
 import org.eclipse.epsilon.etl.trace.TransformationTrace;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EmlTaskTrace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
 
@@ -33,6 +33,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
  * Produces a merge trace model and a transformation trace model
  * 
  */
+@Definition(name = "epsilon:eml")
 public class EpsilonEmlTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked")
@@ -42,21 +43,6 @@ public class EpsilonEmlTask extends AbstractEpsilonTask implements ITaskInstance
 			this.module = new EmlModule();
 		}
 		return (IEmlModule) this.module;
-	}
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEmlTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "eml";
-		}
-
 	}
 	
 	@Override

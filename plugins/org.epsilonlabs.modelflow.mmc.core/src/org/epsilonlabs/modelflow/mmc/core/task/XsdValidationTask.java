@@ -17,13 +17,13 @@ import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.core.factory.AbstractCoreTaskFactory;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -32,23 +32,9 @@ import org.xml.sax.SAXParseException;
  * @author Betty Sanchez
  *
  */
+@Definition(name = "core:xsdValidate")
 public class XsdValidationTask extends AbstractTaskInstance {
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractCoreTaskFactory {
-
-		public Factory() {
-			super(XsdValidationTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "xsdValidate";
-		}
-
-	}
-	
 	protected File xsd;
 	protected File xml;
 	

@@ -24,6 +24,7 @@ import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
 import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -32,31 +33,17 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.param.hash.FileHasher;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.gmf.factory.AbstractGMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.gmf.task.helper.SimplifiedDiagramGenerator;
 import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfDiagramTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
+@Definition(name = "gmf:genDiagram")
 public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GenerateDiagramCodeTask.class);
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractGMFTaskFactory {
-
-		public Factory() {
-			super(GenerateDiagramCodeTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "genDiagram";
-		}
-
-	}
 	private AtomicBoolean done = new AtomicBoolean();
 	protected GenEditorGenerator myGenModel;
 	protected URI modelFileUri ;

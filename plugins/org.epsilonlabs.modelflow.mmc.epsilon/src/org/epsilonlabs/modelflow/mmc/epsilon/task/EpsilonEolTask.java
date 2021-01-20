@@ -15,12 +15,13 @@ import org.eclipse.epsilon.eol.IEolModule;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.RuntimeTracer;
 
+@Definition(name = "epsilon:eol")
 public class EpsilonEolTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	@SuppressWarnings("unchecked") 
@@ -30,21 +31,6 @@ public class EpsilonEolTask extends AbstractEpsilonTask implements ITaskInstance
 			this.module = new EolModule();
 		}
 		return this.module;
-	}
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEolTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "eol";
-		}
-
 	}
 
 	protected RuntimeTracer tracer;

@@ -189,7 +189,7 @@ public class ModelFlowContext extends ErlContextParallel implements IModelFlowCo
 				.collect(Collectors.toSet());
 		if (!unknownTaskTypes.isEmpty()) {
 			String msg = "These tasks types are unknown: %s";
-			Set<String> unknowns = unknownTaskTypes.stream().map(n -> n.getTaskDefinition().getDefinition())
+			Set<String> unknowns = unknownTaskTypes.stream().map(n -> n.getTaskElement().getDefinition())
 					.collect(Collectors.toSet());
 			throw new MFExecutionException(String.format(msg, unknowns));
 		}

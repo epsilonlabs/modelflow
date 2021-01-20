@@ -33,8 +33,7 @@ Require-Bundle: org.epsilonlabs.modelflow.engine,
  org.eclipse.jdt.core;bundle-version="3.14.0",
  org.eclipse.gmf.common,
  org.eclipse.jface.text;bundle-version="3.13.0"
-Export-Package: org.epsilonlabs.modelflow.mmc.gmf.factory,
- org.epsilonlabs.modelflow.mmc.gmf.plugin,
+Export-Package: org.epsilonlabs.modelflow.mmc.gmf.plugin,
  org.epsilonlabs.modelflow.mmc.gmf.task,
  org.epsilonlabs.modelflow.mmc.gmf.task.helper,
  org.epsilonlabs.modelflow.mmc.gmf.task.monitor

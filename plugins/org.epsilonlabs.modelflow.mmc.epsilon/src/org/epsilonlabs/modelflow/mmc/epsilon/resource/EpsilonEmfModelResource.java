@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonResourceFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EmfHashUtil;
 
+@Definition(name = "epsilon:emf")
 public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 
 	protected List<File> metamodelFiles = new ArrayList<>();
@@ -112,37 +113,14 @@ public class EpsilonEmfModelResource extends AbstractEpsilonEmfModelResource {
 		return metamodelFiles;
 	}
 	
-	public static class Factory extends AbstractEpsilonResourceFactory {
-
-		public Factory() {
-			super(EpsilonEmfModelResource.class);
-		}
-
-		@Override
-		public String getName() {
-			return "emf";
-		}
-
-		@Override
-		public void beforeWorkflow() {
-			// Do nothing
-		}
-
-		@Override
-		public void afterWorkflow() {
-			// Do nothing
-		}
-		
-	}	
-	
 	@Override
-	public Object loadedHash(){
-		return EmfHashUtil.hash(getModel().getResource(), getModelFile(), getExpand());
+	public Optional<Object> loadedHash(){
+		return Optional.of(EmfHashUtil.hash(getModel().getResource(), getModelFile(), getExpand()));
 	}
 	
 	@Override
-	public Object unloadedHash(Object trace){
-		return EmfHashUtil.hash(trace, getModelFile(), getExpand());
+	public Optional<Object> unloadedHash(Object trace){
+		return Optional.of(EmfHashUtil.hash(trace, getModelFile(), getExpand()));
 	}
 	
 	@Override

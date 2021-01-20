@@ -16,13 +16,14 @@ import org.eclipse.epsilon.ecl.EclModule;
 import org.eclipse.epsilon.ecl.IEclModule;
 import org.eclipse.epsilon.ecl.trace.MatchTrace;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EclTaskTrace;
 
+@Definition(name = "epsilon:ecl")
 public class EpsilonEclTask extends AbstractEpsilonTask implements ITaskInstance {
 
 	protected String matchTraceName;
@@ -36,21 +37,6 @@ public class EpsilonEclTask extends AbstractEpsilonTask implements ITaskInstance
 		return (IEclModule) this.module;
 	}
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEclTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "ecl";
-		}
-
-	}
-	
 	@Override
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 		super.acceptModels(models);

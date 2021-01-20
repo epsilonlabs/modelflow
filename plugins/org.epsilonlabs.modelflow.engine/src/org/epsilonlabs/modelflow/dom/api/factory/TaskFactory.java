@@ -32,7 +32,7 @@ import com.google.inject.Injector;
  * @author Betty Sanchez
  *
  */
-public class TaskFactoryImpl extends AbstractFactoryImpl {
+public class TaskFactory extends AbstractFactory {
 
 	/** 
 	 * REGEX that identifies implicit references in parameters
@@ -46,11 +46,11 @@ public class TaskFactoryImpl extends AbstractFactoryImpl {
 	protected final String name;
 	protected ITask task;
 	protected ITaskInstance iTask;
-
-	public TaskFactoryImpl(ITaskFactory factory, ITaskNode node, String name, IModelFlowContext ctx) {
-		super(ctx, factory.getInstanceClass());
+	
+	public TaskFactory(Class<? extends ITaskInstance> factory, ITaskNode node, String name, IModelFlowContext ctx) {
+		super(ctx, factory);
 		this.node = node;
-		this.task = node.getTaskDefinition();
+		this.task = node.getTaskElement();
 		this.name = name;
 	}
 	

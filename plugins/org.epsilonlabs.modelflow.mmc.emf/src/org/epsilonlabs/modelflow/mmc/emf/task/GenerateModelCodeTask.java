@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -31,25 +32,10 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.param.hash.FileHasher;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.emf.factory.AbstractEMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.emf.task.custom.CustomGenerator;
 
+@Definition(name = "emf:genCode")
 public class GenerateModelCodeTask extends AbstractTaskInstance implements ITaskInstance {
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEMFTaskFactory {
-
-		public Factory() {
-			super(GenerateModelCodeTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "genCode";
-		}
-
-	}
 
 	protected Boolean generateModel 	= true;
 	protected Boolean generateEdit 		= false;
@@ -116,7 +102,6 @@ public class GenerateModelCodeTask extends AbstractTaskInstance implements ITask
 		genModel.setCanGenerate(true);
 
 		generator = new CustomGenerator(genModel, new BasicMonitor());
-		generator.setTask(this);
 		generator.setResource(modelRes.getResource());
 		
 		if (generateModel) {

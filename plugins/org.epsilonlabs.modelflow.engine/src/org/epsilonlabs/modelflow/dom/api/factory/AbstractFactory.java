@@ -32,12 +32,12 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
  * @author Betty Sanchez
  *
  */
-public abstract class AbstractFactoryImpl {
+public abstract class AbstractFactory {
 
 	protected final IModelFlowContext ctx;
 	protected final Class<?> clazz;
 
-	protected AbstractFactoryImpl(IModelFlowContext ctx, Class<?> clazz) {
+	protected AbstractFactory(IModelFlowContext ctx, Class<?> clazz) {
 		this.ctx = ctx;
 		this.clazz = clazz;
 	}
