@@ -13,7 +13,6 @@ import java.util.Optional;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
@@ -21,13 +20,6 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  * The Interface ITask.
  */
 public interface ITaskInstance {
-		
-	/**
-	 * Abstract task configuration after instantiation.
-	 *
-	 * @param task the task
-	 */
-	void configure(ITaskNode task);
 	
 	/**
 	 * After invoking the parameter setters of the tasks, 
@@ -80,6 +72,8 @@ public interface ITaskInstance {
 	 */
 	Optional<Collection<Trace>> getTrace();
 	
-	boolean isAlwaysExecute();
+	default boolean isAlwaysExecute() {
+		return false;
+	}
 	
 }

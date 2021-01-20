@@ -16,12 +16,11 @@ import java.util.stream.Collectors;
 import org.eclipse.epsilon.egl.EglTemplateFactory;
 import org.eclipse.epsilon.egl.engine.traceability.fine.trace.TraceLink;
 import org.eclipse.epsilon.egl.traceability.OutputFile;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EglTaskTrace;
 
-public abstract class AbstractEglTask  extends AbstractEpsilonTask implements ITaskInstance {
+public abstract class AbstractEglTask extends AbstractEpsilonTask {
 
 	protected org.eclipse.epsilon.egl.engine.traceability.fine.trace.Trace eglTrace;
 

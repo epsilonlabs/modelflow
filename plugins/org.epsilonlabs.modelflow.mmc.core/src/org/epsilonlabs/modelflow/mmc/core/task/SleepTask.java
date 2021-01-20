@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
@@ -21,7 +21,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  *
  */
 @Definition(name = "core:sleep")
-public class SleepTask extends AbstractTaskInstance {
+public class SleepTask implements ITaskInstance {
 	
 	protected TimeUnit unit = TimeUnit.MILLISECONDS;
 	protected Integer timeout = 200;

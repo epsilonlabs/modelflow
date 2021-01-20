@@ -24,7 +24,6 @@ import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
 import org.eclipse.gmf.internal.common.ToolingResourceFactory.ToolResource;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -42,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
 @Definition(name = "gmf:gmfMap2gmfGen")
-public class GmfMap2GmfGenTask extends AbstractTaskInstance implements ITaskInstance {
+public class GmfMap2GmfGenTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GmfMap2GmfGenTask.class);
 

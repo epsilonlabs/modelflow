@@ -21,7 +21,6 @@ import org.eclipse.epsilon.egl.dom.GenerationRule;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
@@ -34,7 +33,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.egl.EgxListenableTemplat
 
 @SuppressWarnings("unchecked")
 @Definition(name = "epsilon:egx")
-public class EpsilonEgxTask extends AbstractEglTask implements ITaskInstance {
+public class EpsilonEgxTask extends AbstractEglTask {
 
 	@Override
 	public IEgxModule getModule() {

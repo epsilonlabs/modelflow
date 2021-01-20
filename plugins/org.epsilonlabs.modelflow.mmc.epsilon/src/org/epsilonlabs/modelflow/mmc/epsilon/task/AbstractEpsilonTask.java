@@ -21,7 +21,6 @@ import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -33,7 +32,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractEpsilonTask extends AbstractTaskInstance implements ITaskInstance {
+public abstract class AbstractEpsilonTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractEpsilonTask.class);
 

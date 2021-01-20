@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
@@ -28,7 +27,7 @@ import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
 @Definition(name = "core:fileReader")
-public class FileReaderTask extends AbstractTaskInstance implements ITaskInstance {
+public class FileReaderTask implements ITaskInstance {
 
 	protected File file;
 	protected String contents;

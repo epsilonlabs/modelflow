@@ -19,7 +19,6 @@ import org.eclipse.epsilon.eml.EmlModule;
 import org.eclipse.epsilon.eml.IEmlModule;
 import org.eclipse.epsilon.eml.trace.MergeTrace;
 import org.eclipse.epsilon.etl.trace.TransformationTrace;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
@@ -34,7 +33,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EtlTaskTrace;
  * 
  */
 @Definition(name = "epsilon:eml")
-public class EpsilonEmlTask extends AbstractEpsilonTask implements ITaskInstance {
+public class EpsilonEmlTask extends AbstractEpsilonTask {
 
 	@SuppressWarnings("unchecked")
 	@Override

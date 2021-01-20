@@ -15,7 +15,6 @@ import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.epl.IEplModule;
 import org.eclipse.epsilon.epl.execute.PatternMatch;
 import org.eclipse.epsilon.epl.execute.context.IEplContext;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -27,7 +26,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EplTaskTrace;
  *
  */
 @Definition(name = "epsilon:epl")
-public class EpsilonEplTask extends AbstractEpsilonTask implements ITaskInstance {
+public class EpsilonEplTask extends AbstractEpsilonTask {
 
 	protected Integer maxLoops = -1;
 	protected Boolean repeatWhileMatches = false;

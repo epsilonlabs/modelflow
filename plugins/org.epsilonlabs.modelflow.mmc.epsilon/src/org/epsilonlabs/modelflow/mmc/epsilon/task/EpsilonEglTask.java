@@ -20,7 +20,6 @@ import org.eclipse.epsilon.egl.IEglModule;
 import org.eclipse.epsilon.egl.engine.traceability.fine.EglFineGrainedTraceContextAdaptor;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -30,7 +29,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
 
 @Definition(name = "epsilon:egl")
-public class EpsilonEglTask extends AbstractEglTask implements ITaskInstance {
+public class EpsilonEglTask extends AbstractEglTask {
 
 	protected Optional<String> target = Optional.empty();
 	

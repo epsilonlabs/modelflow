@@ -22,7 +22,6 @@ import org.eclipse.gmf.codegen.gmfgen.GenDiagram;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
 import org.epsilonlabs.modelflow.dom.IAbstractResource;
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
 @Definition(name = "gmf:genDiagram")
-public class GenerateDiagramCodeTask extends AbstractTaskInstance implements ITaskInstance {
+public class GenerateDiagramCodeTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GenerateDiagramCodeTask.class);
 

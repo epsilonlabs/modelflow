@@ -59,7 +59,6 @@ public class TaskFactory extends AbstractFactory {
 		injector.getAllBindings();
 		ITaskInstance instance = (ITaskInstance) injector.getInstance(clazz);
 		injector.injectMembers(instance);
-		instance.configure(node);
 		iTask = (ITaskInstance) clazz.cast(instance); // Is this necessary?
 		configure(); // How to add info of the factory in the task
 		return iTask;

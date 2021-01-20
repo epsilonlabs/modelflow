@@ -16,7 +16,6 @@ import java.util.Optional;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eunit.EUnitModule;
 import org.eclipse.epsilon.eunit.IEUnitModule;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -24,7 +23,7 @@ import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
 @Definition(name = "epsilon:eunit")
-public class EpsilonEunitTask extends AbstractEpsilonTask implements ITaskInstance {
+public class EpsilonEunitTask extends AbstractEpsilonTask {
 
 	@SuppressWarnings("unchecked")
 	@Override

@@ -14,7 +14,6 @@ import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.IEolModule;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -22,7 +21,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.RuntimeTracer;
 
 @Definition(name = "epsilon:eol")
-public class EpsilonEolTask extends AbstractEpsilonTask implements ITaskInstance {
+public class EpsilonEolTask extends AbstractEpsilonTask {
 
 	@SuppressWarnings("unchecked") 
 	@Override
