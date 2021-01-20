@@ -156,7 +156,4 @@ public abstract class AbstractFactory {
 	protected abstract Object handleMapProperty(Map<?,?> mapVal);
 	protected abstract Object handleStringProperty(String value);
 	
-
-	
-
 }

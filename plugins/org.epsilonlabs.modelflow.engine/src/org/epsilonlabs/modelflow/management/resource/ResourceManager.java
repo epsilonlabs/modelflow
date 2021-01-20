@@ -33,12 +33,6 @@ public class ResourceManager implements IResourceManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceManager.class);	
 
-	/*private IModelWrapper[] iModelResources;
-	private TaskNode task;
-	
-	public ResourceManager(TaskNode task){
-		this.task = task;
-	}*/
 	/** 
 	 * This method is called when the node has been marked ready for execution.
 	 */
@@ -96,7 +90,7 @@ public class ResourceManager implements IResourceManager {
 		// If model is of used as input (input or in/out) 
 		if (kind.isInout() || kind.isInput()) {					
 			// Store input model hash in execution trace  
-			ResourceSnapshot snapshot = updater.createResourceSnapshot(rNode.getInternal(), r.loadedHash().get());
+			ResourceSnapshot snapshot = updater.createResourceSnapshot(rNode.getModelElement(), r.loadedHash().get());
 			tExec.getInputModels().add(snapshot);
 			// Also record the current model snapshot in trace latest resources 
 			updater.addResourceToLatest(snapshot);
@@ -104,14 +98,13 @@ public class ResourceManager implements IResourceManager {
 	}
 
 	protected void handleDerivedResourceBeforeExecution(IModelFlowContext ctx, List<IModelWrapper> list,
-			IDerivedResourceNode node, ResourceKind kind) {
+			IDerivedResourceNode derRes, ResourceKind kind) {
 		// Exclusively input 
 		if (kind.isInput()) {
-			DerivedResourceNode derRes = (DerivedResourceNode) node;
 			// Locate its value from previous executions 
 			Object derived = ctx.getTaskRepository().getResourceRepository().getDerived(derRes);
 			// Wrap as model resource
-			IModelWrapper mRes = new ModelWrapper(kind,derRes.getInternal(), derived);
+			IModelWrapper mRes = new ModelWrapper(kind,derRes.getModelElement(), derived);
 			// Add to list of models for task to accept
 			list.add(mRes);
 		}
@@ -163,7 +156,7 @@ public class ResourceManager implements IResourceManager {
 					resource.save();
 					
 					// Store output model hash in execution trace 
-					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), resource.loadedHash().get());
+					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getModelElement(), resource.loadedHash().get());
 					tExec.getOutputModels().add(snapshot);
 					// Also record the current model snapshot in trace latest resources 
 					updater.addResourceToLatest(snapshot);					

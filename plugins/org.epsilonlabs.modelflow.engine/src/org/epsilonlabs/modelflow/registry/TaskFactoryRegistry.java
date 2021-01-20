@@ -33,10 +33,10 @@ public class TaskFactoryRegistry extends AbstractFactoryRegistry<ITaskInstance>{
 	}
 
 	public ITaskInstance create(ITaskNode node, String name, IModelFlowContext ctx) throws MFInvalidFactoryException, MFInstantiationException {
-		Class<ITaskInstance> factory;
+		Class<ITaskInstance> taskClazz;
 		try {
-			factory = getFactory(node.getTaskElement().getDefinition());
-			final ITaskInstance instance = new TaskFactory(factory, node, node.getName(), ctx).create();
+			taskClazz = getFactory(node.getTaskElement().getDefinition());
+			final ITaskInstance instance = new TaskFactory(taskClazz, node, node.getName(), ctx).create();
 			node.setInstance(instance);
 			return instance;
 		} catch (MFInvalidFactoryException e) {

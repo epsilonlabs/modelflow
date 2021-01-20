@@ -37,7 +37,7 @@ public class ResourceFactory extends AbstractFactory {
 	public ResourceFactory(Class<? extends IModelResourceInstance<?>> factory, IModelResourceNode node, String name, IModelFlowContext ctx) {
 		super(ctx, factory);
 		this.node = node;
-		this.resource = node.getInternal();
+		this.resource = node.getModelElement();
 		this.name = name;
 	}
 	

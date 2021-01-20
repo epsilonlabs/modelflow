@@ -26,7 +26,7 @@ public abstract class AbstractModelManager<M> implements IModelManager<M> {
 	
 	@Override
 	public void register(IModelResourceNode res) {
-		IResource r = res.getInternal();
+		IResource r = res.getModelElement();
 		if (!resources.containsKey(r.getName())) {
 			resources.put(r.getName(), r);
 		}

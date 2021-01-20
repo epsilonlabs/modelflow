@@ -16,8 +16,8 @@ public class ModelResourceNode extends ResourceNode implements IModelResourceNod
 	}
 
 	@Override
-	public IModelResource getInternal() {
-		return (IModelResource) super.getInternal();
+	public IModelResource getModelElement() {
+		return (IModelResource) super.getModelElement();
 	}
 
 }

@@ -173,7 +173,7 @@ public class ExecutionTraceUpdater {
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot inputModel : taskExecution.get().getInputModels()) {
-				if (inputModel.getName().equals(resource.getInternal().getName())) {
+				if (inputModel.getName().equals(resource.getModelElement().getName())) {
 					return Optional.of(inputModel);
 				}
 			}
@@ -185,7 +185,7 @@ public class ExecutionTraceUpdater {
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot outputModel : taskExecution.get().getOutputModels()) {
-				if (outputModel.getName().equals(resource.getInternal().getName())) {
+				if (outputModel.getName().equals(resource.getModelElement().getName())) {
 					return Optional.of(outputModel);
 				}
 			}

@@ -32,11 +32,11 @@ public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResou
 				.collect(Collectors.toSet()));
 	}
 	
-	public IModelResourceInstance<?> create(IModelResourceNode res, IModelFlowContext ctx) throws MFRuntimeException {
-			IResource r = res.getInternal();
+	public IModelResourceInstance<?> create(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
+			IResource r = node.getModelElement();
 			try {
-				Class<IModelResourceInstance<?>> factory = getFactory(r.getDefinition());
-				return new ResourceFactory(factory, res, res.getName(), ctx).create();
+				Class<IModelResourceInstance<?>> modelClazz = getFactory(r.getDefinition());
+				return new ResourceFactory(modelClazz, node, node.getName(), ctx).create();
 			} catch (MFInvalidFactoryException e) {
 				throw new MFResourceInstantiationException(e);
 			}

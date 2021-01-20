@@ -31,13 +31,13 @@ public abstract class AbstractResourceNode<T extends IAbstractResource> implemen
 		return obj instanceof AbstractResourceNode && ((AbstractResourceNode<?>) obj).getName().equals(getName());
 	}
 	
-	public T getInternal() {
+	public T getModelElement() {
 		return internalResource;
 	}
 	
 	@Override
 	public void subscribe(IModelFlowPublisher pub) {
-		statusUpdater.subscribe(state -> pub.resourceState(this.getInternal().getName(), state));
+		statusUpdater.subscribe(state -> pub.resourceState(this.getModelElement().getName(), state));
 	}
 
 }

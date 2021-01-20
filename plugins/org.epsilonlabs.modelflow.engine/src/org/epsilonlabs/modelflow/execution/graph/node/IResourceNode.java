@@ -21,7 +21,7 @@ public interface IResourceNode extends IAbstractResourceNode {
 	 *
 	 * @return the internal
 	 */
-	IResource getInternal();
+	IResource getModelElement();
 	
 	/**
 	 * Gets the aliases.

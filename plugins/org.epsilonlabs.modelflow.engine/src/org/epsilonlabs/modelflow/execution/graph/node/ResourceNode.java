@@ -21,7 +21,7 @@ public class ResourceNode extends AbstractResourceNode<IResource> implements IRe
 	
 	@Override
 	public String getType() {
-		return getInternal().getDefinition();
+		return getModelElement().getDefinition();
 	}
 
 	@Override
