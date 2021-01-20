@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 
 import org.epsilonlabs.modelflow.dom.IDerivedResource;
 
-public class DerivedResourceNode extends AbstractResourceNode<IDerivedResource> {
+public class DerivedResourceNode extends AbstractResourceNode<IDerivedResource> implements IDerivedResourceNode{
 
 	public DerivedResourceNode(IDerivedResource resource) {
 		super(resource);

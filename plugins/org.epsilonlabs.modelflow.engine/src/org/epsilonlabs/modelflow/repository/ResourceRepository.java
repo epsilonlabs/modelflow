@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
+import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.slf4j.Logger;
@@ -38,11 +38,11 @@ public class ResourceRepository {
 		derivedResources = new ConcurrentHashMap<>();
 	}
 
-	public void addDerived(DerivedResourceNode node, Object resource) {
+	public void addDerived(IDerivedResourceNode node, Object resource) {
 		derivedResources.put(node.getName(), resource);
 	}
 	
-	public Object getDerived(DerivedResourceNode node) {
+	public Object getDerived(IDerivedResourceNode node) {
 		return derivedResources.get(node.getName());
 	}
 	

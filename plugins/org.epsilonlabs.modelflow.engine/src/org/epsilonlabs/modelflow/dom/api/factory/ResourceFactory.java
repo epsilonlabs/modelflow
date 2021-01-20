@@ -47,7 +47,7 @@ public class ResourceFactory extends AbstractFactory {
 		iResource = (IModelResourceInstance<?>) injector.getInstance(clazz);
 		iResource.setName(name);
 		configure();
-		iResource.configure(node);
+		iResource.configure();
 		return iResource;
 	}
 	

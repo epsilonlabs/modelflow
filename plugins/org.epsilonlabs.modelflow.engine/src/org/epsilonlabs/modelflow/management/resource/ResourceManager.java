@@ -19,6 +19,7 @@ import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
+import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
@@ -58,11 +59,11 @@ public class ResourceManager implements IResourceManager {
 			ResourceKind kind = helper.getResourceKindForTask(rNode, tNode);
 			// If of type ModelResource 
 			if (rNode instanceof IModelResourceNode) {
-				handleModelResourceBeforeExecution(tNode, ctx, list, updater, tExec, rNode, kind);
+				handleModelResourceBeforeExecution(tNode, ctx, list, updater, tExec, (IModelResourceNode) rNode, kind);
 			} 
 			// If of type DerivedResource 
 			else if (rNode instanceof DerivedResourceNode) {
-				handleDerivedResourceBeforeExecution(ctx, list, rNode, kind);
+				handleDerivedResourceBeforeExecution(ctx, list, (DerivedResourceNode) rNode, kind);
 			}
 		}
 		
@@ -73,14 +74,13 @@ public class ResourceManager implements IResourceManager {
 	}
 
 	protected void handleModelResourceBeforeExecution(ITaskNode tNode, IModelFlowContext ctx, List<IModelWrapper> list,
-			ExecutionTraceUpdater updater, final TaskExecution tExec, IAbstractResourceNode rNode, ResourceKind kind)
+			ExecutionTraceUpdater updater, final TaskExecution tExec, IModelResourceNode rNode, ResourceKind kind)
 			throws MFRuntimeException {
-		IModelResourceNode resourceNode = (IModelResourceNode) rNode;
 		// Get (if already created) or create resource
-		IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(resourceNode, ctx);
+		IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(rNode, ctx);
 		// FIXME move alias logic to IModelWrapper
 		// Add edge aliases
-		new DependencyGraphHelper(ctx.getDependencyGraph()).getAliasFor(resourceNode, tNode).forEach(r::setAlias);
+		new DependencyGraphHelper(ctx.getDependencyGraph()).getAliasFor(rNode, tNode).forEach(r::setAlias);
 		// TODO... Add resource default alias
 		// Call Resource Type Before method
 		r.beforeTask();
@@ -88,7 +88,7 @@ public class ResourceManager implements IResourceManager {
 		// Load resource as indicated by the resource kind (in/out..)
 		IModelFlowProfiler profiler = ctx.getProfiler();
 		profiler.start(IMeasurable.Stage.LOAD, rNode, ctx);
-		IModelWrapper mRes = new ResourceLoader(kind,r).load(tNode);
+		IModelWrapper mRes = new ResourceLoader(kind,r, rNode).load(tNode);
 		profiler.stop(IMeasurable.Stage.LOAD, rNode, ctx);
 
 		// Add model to list of models for task to accept
@@ -96,7 +96,7 @@ public class ResourceManager implements IResourceManager {
 		// If model is of used as input (input or in/out) 
 		if (kind.isInout() || kind.isInput()) {					
 			// Store input model hash in execution trace  
-			ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), r.loadedHash().get());
+			ResourceSnapshot snapshot = updater.createResourceSnapshot(rNode.getInternal(), r.loadedHash().get());
 			tExec.getInputModels().add(snapshot);
 			// Also record the current model snapshot in trace latest resources 
 			updater.addResourceToLatest(snapshot);
@@ -104,7 +104,7 @@ public class ResourceManager implements IResourceManager {
 	}
 
 	protected void handleDerivedResourceBeforeExecution(IModelFlowContext ctx, List<IModelWrapper> list,
-			IAbstractResourceNode node, ResourceKind kind) {
+			IDerivedResourceNode node, ResourceKind kind) {
 		// Exclusively input 
 		if (kind.isInput()) {
 			DerivedResourceNode derRes = (DerivedResourceNode) node;

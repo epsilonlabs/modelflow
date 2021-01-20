@@ -13,7 +13,7 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTaskInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.TaskDefinitionValidator;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.EpsilonEclTask;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.EpsilonEglTask;
@@ -34,7 +34,7 @@ import org.junit.runners.Parameterized.Parameters;
 public class ValidTaskTest {
 
     @Parameters( name = "{index}: validate({0})" )
-    public static Collection<Class<? extends AbstractTaskInstance>> data() {
+    public static Collection<Class<? extends ITaskInstance>> data() {
         return Arrays.asList(
         		EpsilonEclTask.class,
         		EpsilonEglTask.class, 
@@ -49,9 +49,9 @@ public class ValidTaskTest {
     		);
     }
 
-    private Class<? extends AbstractTaskInstance> taskClass;
+    private Class<? extends ITaskInstance> taskClass;
 
-    public ValidTaskTest(Class<? extends AbstractTaskInstance> taskClass) {
+    public ValidTaskTest(Class<? extends ITaskInstance> taskClass) {
     	this.taskClass = taskClass;
     }
     

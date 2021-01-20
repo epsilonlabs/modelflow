@@ -12,13 +12,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 
 public abstract class AbstractResourceInstance<M> implements IModelResourceInstance<M> {
 
 	protected String name;
-	protected IResourceNode node; 
 	private boolean isLoaded = false;
 	protected Set<String> aliases = new HashSet<>();
 	protected ResourceKind kind = null;
@@ -32,18 +30,7 @@ public abstract class AbstractResourceInstance<M> implements IModelResourceInsta
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	@Override
-	public void configure(IResourceNode node) {
-		this.node = node;
-		configure();
-	}
-	
-	@Override
-	public IResourceNode getNode() {
-		return node;
-	}
-	
+		
 	@Override
 	public boolean isLoaded() {
 		return this.isLoaded;
@@ -84,9 +71,7 @@ public abstract class AbstractResourceInstance<M> implements IModelResourceInsta
 	protected abstract void loadImpl() throws MFRuntimeException;
 	
 	protected abstract void disposeImpl();
-		
-	protected abstract void configure();
-	
+			
 	@Override
 	public ResourceKind getKind() {
 		return kind;

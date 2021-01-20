@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.Optional;
 
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 
 /**
@@ -36,18 +35,10 @@ public interface IModelResourceInstance<M> {
 	void setName(String name);
 
 	/**
-	 * Gets the node.
-	 *
-	 * @return the node
-	 */
-	IResourceNode getNode();
-
-	/**
 	 * Configure.
 	 *
-	 * @param node the node
 	 */
-	void configure(IResourceNode node);
+	void configure();
 	
 	/**
 	 * As input.
