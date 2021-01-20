@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
+import java.util.Optional;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -25,11 +26,12 @@ import org.eclipse.epsilon.emc.simulink.engine.MatlabEngine;
 import org.eclipse.epsilon.emc.simulink.engine.MatlabEnginePool;
 import org.eclipse.epsilon.emc.simulink.exception.MatlabException;
 import org.eclipse.epsilon.emc.simulink.model.SimulinkModel;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonResourceFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+@Definition(name = "epsilon:simulink")
 public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelResource {
 
 	private Boolean showInMatlabEditor = false;
@@ -111,44 +113,21 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 		this.engineJarPath = engineJarPath;
 	}
 
-	public static class Factory extends AbstractEpsilonResourceFactory {
-
-		public Factory() {
-			super(EpsilonSimulinkModelResource.class);
-		}
-
-		@Override
-		public String getName() {
-			return "simulink";
-		}
-
-		@Override
-		public void beforeWorkflow() {
-			// Do nothing
-		}
-
-		@Override
-		public void afterWorkflow() {
-			// Do nothing
-
-		}
-	}
-
-
 	@Override
-	public Object loadedHash() {
+	public Optional<Object> loadedHash() {
 		try {
 			MatlabEngine engine = getModel().getEngine(); //loaded engine
 			String simulinkModelName = (file.exists()) ? file.getAbsolutePath() : getModel().getSimulinkModelName();
-			return engine.evalWithResult("Simulink.MDLInfo('?').ModelVersion", simulinkModelName);
+			Object hash = engine.evalWithResult("Simulink.MDLInfo('?').ModelVersion", simulinkModelName);
+			return Optional.of(hash);
 		} catch (MatlabException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 
 	@Override
-	public Object unloadedHash(Object trace) {
-		return extractRevisionFromSlx();
+	public Optional<Object> unloadedHash(Object trace) {
+		return Optional.of(extractRevisionFromSlx());
 	}
 
 	@Override

@@ -40,7 +40,7 @@ public interface ITaskNode extends IGraphNode {
 	 *
 	 * @return the task definition
 	 */
-	ITask getTaskDefinition();
+	ITask getTaskElement();
 
 	/**
 	 * Sets the instance.

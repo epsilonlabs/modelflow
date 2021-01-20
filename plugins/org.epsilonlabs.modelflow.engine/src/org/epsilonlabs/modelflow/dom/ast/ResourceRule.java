@@ -13,7 +13,7 @@ import java.util.Collection;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IModelResource;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 
 public class ResourceRule extends ConfigurableRule<IModelResource> {
@@ -34,7 +34,7 @@ public class ResourceRule extends ConfigurableRule<IModelResource> {
 			resource.setName(getName());
 			resource.setDefinition(getType().getName());
 			
-			IModelResourceFactory factory = null;
+			Class<IModelResourceInstance<?>> factory = null;
 			try {
 				// Factory exists?
 				factory = ctx.getModule().getResFactoryRegistry().getFactory(getType().getName());

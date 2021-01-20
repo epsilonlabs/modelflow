@@ -22,17 +22,18 @@ import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.egl.EgxEndToEndTraceContextAdaptor;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.egl.EgxListenableTemplateFactory;
 
 @SuppressWarnings("unchecked")
+@Definition(name = "epsilon:egx")
 public class EpsilonEgxTask extends AbstractEglTask implements ITaskInstance {
 
 	@Override
@@ -42,21 +43,6 @@ public class EpsilonEgxTask extends AbstractEglTask implements ITaskInstance {
 			this.module = new EgxModule(new EgxListenableTemplateFactory());
 		}
 		return (IEgxModule) this.module;
-	}
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEgxTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "egx";
-		}
-
 	}
 		
 	@Override

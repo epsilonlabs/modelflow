@@ -21,10 +21,7 @@
 	    <module>org.epsilonlabs.modelflow.mmc.emf</module>
 	    <module>org.epsilonlabs.modelflow.mmc.gmf</module>
 	    <module>org.epsilonlabs.modelflow.mmc.epsilon</module>
-	    <module>org.epsilonlabs.modelflow.mmc.acceleo</module>
 	    <module>org.epsilonlabs.modelflow.mmc.atl</module>
-	    <module>org.epsilonlabs.modelflow.mmc.qvto</module>
-	    <module>org.epsilonlabs.modelflow.mmc.xtext</module>
 	</modules>
 	
 </project>

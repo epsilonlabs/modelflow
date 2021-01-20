@@ -10,10 +10,10 @@ package org.epsilonlabs.modelflow.registry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskFactory;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.TaskDefinitionValidator;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.TaskFactory;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -21,32 +21,27 @@ import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 
 import com.google.inject.Inject;
 
-public class TaskFactoryRegistry extends AbstractFactoryRegistry<ITaskFactory>{
+@SuppressWarnings("unchecked")
+public class TaskFactoryRegistry extends AbstractFactoryRegistry<ITaskInstance>{
 
 	@Inject
 	public TaskFactoryRegistry(Set<ITaskFactory> tasks) {
-		/** Ensure task types are valid */
-		tasks = tasks.stream()
-			.filter(t->
-			new TaskDefinitionValidator(t.getInstanceClass()).isValid())
-			.collect(Collectors.toSet());
-		factoryRegistry = new FactoryMap<ITaskFactory>(tasks);
+		super(tasks.stream()
+			.map(f->(Class<ITaskInstance>)f.getFactoryClass())
+			.filter(t-> new TaskDefinitionValidator(t).isValid())
+			.collect(Collectors.toSet()));
 	}
 
-	public ITaskFactory getFactory(ITask t) throws MFInvalidFactoryException {
-		return super.getFactory(t.getDefinition());
-	}
-	
 	public ITaskInstance create(ITaskNode node, String name, IModelFlowContext ctx) throws MFInvalidFactoryException, MFInstantiationException {
-		ITaskFactory factory;
+		Class<ITaskInstance> factory;
 		try {
-			factory = getFactory(node.getTaskDefinition().getDefinition());
+			factory = getFactory(node.getTaskElement().getDefinition());
+			final ITaskInstance instance = new TaskFactory(factory, node, node.getName(), ctx).create();
+			node.setInstance(instance);
+			return instance;
 		} catch (MFInvalidFactoryException e) {
 			throw new MFInstantiationException(e);
 		}
-		ITaskInstance task = factory.create(node, name, ctx);
-		node.setInstance(task);
-		return task;
 	}
 
 }

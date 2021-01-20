@@ -15,17 +15,17 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
+import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 import org.epsilonlabs.modelflow.management.param.hash.IHasher;
 
 public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	
-	public TaskOutputPropertyHandler(ITaskInstance task) {
-		super(task);
+	public TaskOutputPropertyHandler(ITaskNode node) {
+		super(node.getTaskInstance(), node);
 	}
 		
 	@Override
@@ -58,7 +58,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	
 	@Override
 	public Map<String, Object> getHashes() {
-		if (this.task.getTaskNode().getState().hasBeenExecuted()) {
+		if (node.getState().hasBeenExecuted()) {
 			this.properties = new HashMap<String, Object>();
 			this.hashes = new HashMap<String, Object>();
 			for (Method m : annotatedMethods) {
@@ -93,7 +93,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getHashesFromTrace(TaskExecution taskExecution){
 		taskExecution = EcoreUtil.copy(taskExecution);
-		if (!this.task.getTaskNode().getState().hasBeenExecuted()) {
+		if (!node.getState().hasBeenExecuted()) {
 			this.hashes = new HashMap<String, Object>();
 			for (Method m : annotatedMethods) {
 				String key = getKey(m);

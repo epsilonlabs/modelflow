@@ -21,14 +21,15 @@ import org.eclipse.epsilon.egl.engine.traceability.fine.EglFineGrainedTraceConte
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
 
+@Definition(name = "epsilon:egl")
 public class EpsilonEglTask extends AbstractEglTask implements ITaskInstance {
 
 	protected Optional<String> target = Optional.empty();
@@ -51,21 +52,6 @@ public class EpsilonEglTask extends AbstractEglTask implements ITaskInstance {
 		return target.get();
 	}
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEglTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "egl";
-		}
-
-	}
-	
 	@Override
 	protected void beforeParse() throws MFExecutionException {
 		super.beforeParse();

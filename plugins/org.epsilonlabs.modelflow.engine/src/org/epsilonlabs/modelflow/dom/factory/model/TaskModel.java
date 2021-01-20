@@ -79,7 +79,7 @@ public class TaskModel extends JavaObjectModel {
 	
 	@Override
 	public String getName() {
-		return task.getName();
+		return "Task"; // FIXME
 	}
 	
 	@Override

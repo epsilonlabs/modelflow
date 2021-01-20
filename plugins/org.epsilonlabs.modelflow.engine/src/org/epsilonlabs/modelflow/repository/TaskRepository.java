@@ -37,7 +37,7 @@ public class TaskRepository {
 	
 	public Boolean hasFactory(ITaskNode node){
 		try{
-			this.taskFactoryRegistry.getFactory(node.getTaskDefinition());
+			this.taskFactoryRegistry.getFactory(node.getTaskElement().getDefinition());
 			return true;
 		} catch (MFInvalidFactoryException e) {
 			return false;

@@ -18,10 +18,7 @@
 	   	<module>org.epsilonlabs.modelflow.tests</module>
 	    <module>org.epsilonlabs.modelflow.mmc.core.tests</module>
 	    <module>org.epsilonlabs.modelflow.mmc.emf.tests</module>
-	    <module>org.epsilonlabs.modelflow.mmc.acceleo.tests</module>
 	    <module>org.epsilonlabs.modelflow.mmc.atl.tests</module>
-	    <module>org.epsilonlabs.modelflow.mmc.qvto.tests</module>
-	    <module>org.epsilonlabs.modelflow.mmc.xtext.tests</module>
 	    <!--<module>org.epsilonlabs.modelflow.mmc.gmf.tests</module>-->
 	    <module>org.epsilonlabs.modelflow.mmc.epsilon.tests</module>
 	   	<module>org.epsilonlabs.modelflow.integ.tests</module>

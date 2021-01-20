@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.mmc.emf.task.Emfatic2EcoreTask;
 import org.epsilonlabs.modelflow.mmc.emf.task.GenerateModelCodeTask;
 
@@ -28,13 +28,13 @@ public class EMFPlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
+	public List<Class<? extends IModelResourceInstance<?>>> getResourceFactories() {
 		return Arrays.asList();
 	}
 
 	@Override
-	public List<Class<? extends ITaskFactory>> getTaskFactories() {
-		return Arrays.asList(Emfatic2EcoreTask.Factory.class, GenerateModelCodeTask.Factory.class);
+	public List<Class<? extends ITaskInstance>> getTaskFactories() {
+		return Arrays.asList(Emfatic2EcoreTask.class, GenerateModelCodeTask.class);
 	}
 
 	@Override

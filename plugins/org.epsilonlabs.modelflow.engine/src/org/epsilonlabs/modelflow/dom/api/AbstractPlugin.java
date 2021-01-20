@@ -7,9 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.api;
 
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.Multibinder;
 
@@ -24,12 +21,12 @@ public abstract class AbstractPlugin extends AbstractModule implements IPlugin {
 	
 	public void registerResourceFactories() {
 		Multibinder<IModelResourceFactory> resourceBinder = Multibinder.newSetBinder(binder(), IModelResourceFactory.class);
-		getResourceFactories().stream().forEach(f -> resourceBinder.addBinding().to(f));
+		getResourceFactories().stream().forEach(f -> resourceBinder.addBinding().toInstance(()->f));
 	}
 	
 	public void registerTaskFactories() {
 		Multibinder<ITaskFactory> taskBinder = Multibinder.newSetBinder(binder(), ITaskFactory.class);
-		getTaskFactories().stream().forEach(f -> taskBinder.addBinding().to(f));
+		getTaskFactories().stream().forEach(f -> taskBinder.addBinding().toInstance(()->f));
 	}
 	
 }

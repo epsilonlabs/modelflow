@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.mmc.core.task.FileReaderTask;
 import org.epsilonlabs.modelflow.mmc.core.task.PrintTask;
 import org.epsilonlabs.modelflow.mmc.core.task.SleepTask;
@@ -37,13 +37,13 @@ public class CorePlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
+	public List<Class<? extends IModelResourceInstance<?>>> getResourceFactories() {
 		return Arrays.asList();
 	}
 
 	@Override
-	public List<Class<? extends ITaskFactory>> getTaskFactories() {
-		return Arrays.asList(FileReaderTask.Factory.class, PrintTask.Factory.class, SleepTask.Factory.class, XsdValidationTask.Factory.class);
+	public List<Class<? extends ITaskInstance>> getTaskFactories() {
+		return Arrays.asList(FileReaderTask.class, PrintTask.class, SleepTask.class, XsdValidationTask.class);
 	}
 
 	@Override

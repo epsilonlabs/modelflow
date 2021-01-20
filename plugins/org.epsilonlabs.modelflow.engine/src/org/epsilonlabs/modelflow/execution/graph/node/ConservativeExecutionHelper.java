@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
@@ -57,25 +57,25 @@ public class ConservativeExecutionHelper {
 
 	public boolean haveInputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task.getTaskInstance()).getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
 		return !equivalent(inputProperties, previousPropertiesHashes);
 	}
 
 	public List<String> getChangedInputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task.getTaskInstance()).getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
 		return getChangedProperties(inputProperties, previousPropertiesHashes);
 	}
 
 	public boolean haveOutputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task.getTaskInstance()).getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task).getHashesFromTrace(previousTaskExecution);
 		return !equivalent(outputProperties, previousPropertiesHashes);
 	}
 	
 	public List<String> getChangedOutputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task.getTaskInstance()).getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task).getHashesFromTrace(previousTaskExecution);
 		return getChangedProperties(outputProperties, previousPropertiesHashes);
 	}
 
@@ -109,21 +109,24 @@ public class ConservativeExecutionHelper {
 					Object pastStamp = pastResource.get().getStamp();
 					// What if past stamp is null
 					try {
-						IResourceInstance<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
+						IModelResourceInstance<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
 								.getOrCreate((IModelResourceNode) r, ctx);
-						Object hash;
+						Optional<Object> optHash;
 						if (!input || !iResource.isLoaded()) {
 							/* Reuse past trace to identify resources to compute hashes for */
-							hash = iResource.unloadedHash(pastStamp);
+							optHash = iResource.unloadedHash(pastStamp);
 						} else {
 							/* Compute from in-memory resource */
 							// FIXME for output resources we shouldn't use the loaded model because we are
 							// about to change it
-							hash = iResource.loadedHash();
+							optHash = iResource.loadedHash();
 						}
-						if (!pastStamp.equals(hash)) {
-							LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
-							return true;
+						if (optHash.isPresent()) {
+							Object hash = optHash.get();
+							if (!pastStamp.equals(hash)) {
+								LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
+								return true;
+							}
 						}
 					} catch (MFRuntimeException e) {
 						throw new IllegalStateException(e.getCause());

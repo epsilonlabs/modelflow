@@ -21,7 +21,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
  * The Interface ITask.
  */
 public interface ITaskInstance {
-	
+		
 	/**
 	 * Abstract task configuration after instantiation.
 	 *
@@ -79,20 +79,6 @@ public interface ITaskInstance {
 	 * @return the trace
 	 */
 	Optional<Collection<Trace>> getTrace();
-	
-	/**
-	 * Task Name.
-	 *
-	 * @return the name
-	 */
-	String getName();
-	
-	/**
-	 * Task Node.
-	 *
-	 * @return the task node
-	 */
-	ITaskNode getTaskNode();
 	
 	boolean isAlwaysExecute();
 	

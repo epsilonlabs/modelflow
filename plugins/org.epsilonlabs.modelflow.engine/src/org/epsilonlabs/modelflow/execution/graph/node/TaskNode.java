@@ -16,7 +16,7 @@ import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.ITask;
-import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
@@ -24,8 +24,6 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
 import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
-import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
-import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
 import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
@@ -47,9 +45,6 @@ public class TaskNode implements ITaskNode {
 	protected final CompletableSubject completable = CompletableSubject.create();
 
 	protected final PublishSubject<TaskState> statusUpdater = PublishSubject.create();
-
-	private TaskInputPropertyHandler taskInputs;
-	private TaskOutputPropertyHandler taskOutputs;
 	
 	public TaskNode(ITask task) {
 		this.taskDefintion = task;
@@ -68,7 +63,7 @@ public class TaskNode implements ITaskNode {
 	
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
-		LOG.debug("Called execute for {}", getTaskDefinition().getName());
+		LOG.debug("Called execute for {}", getTaskElement().getName());
 		
 		// Instantiate task and populate
 		this.taskInstance = ctx.getTaskRepository().create(this, ctx);
@@ -132,7 +127,7 @@ public class TaskNode implements ITaskNode {
 		if (ctx.isInteractive()) {
 			if (outputsChanged) {
 				// List them and prompt
-				String msg = String.format("The outputs of task %s have been modified from the previous execution.", getTaskDefinition().getName());
+				String msg = String.format("The outputs of task %s have been modified from the previous execution.", getTaskElement().getName());
 				String instructions = "Would you like to discard these changes and continue with the execution?\n"
 						+ "1 - discard changes and continue with execution\n"
 						+ "0 - only execute if inputs have changed\n"
@@ -274,7 +269,7 @@ public class TaskNode implements ITaskNode {
 					/** Dispose resource */
 					LOG.debug("Disposing {}", resource.getName());
 					try {
-						Optional<IResourceInstance<?>> optional = ctx.getTaskRepository().getResourceRepository().get(resource);
+						Optional<IModelResourceInstance<?>> optional = ctx.getTaskRepository().getResourceRepository().get(resource);
 						optional.ifPresent(res -> {
 							if (res.isLoaded()) {
 								/*
@@ -385,7 +380,7 @@ public class TaskNode implements ITaskNode {
 	}
 
 	@Override
-	public ITask getTaskDefinition() {
+	public ITask getTaskElement() {
 		return this.taskDefintion;
 	}
 	
@@ -403,7 +398,7 @@ public class TaskNode implements ITaskNode {
 	}
 	
 	protected synchronized void setState(TaskState state){
-		LOG.debug("Task {} is {}", getTaskDefinition().getName(), state.name());
+		LOG.debug("Task {} is {}", getTaskElement().getName(), state.name());
 		this.statusUpdater.onNext(state);
 		this.state = state;
 		switch (state) {

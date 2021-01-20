@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.IResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
@@ -77,7 +77,7 @@ public class ResourceManager implements IResourceManager {
 			throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) rNode;
 		// Get (if already created) or create resource
-		IResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(resourceNode, ctx);
+		IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(resourceNode, ctx);
 		// FIXME move alias logic to IModelWrapper
 		// Add edge aliases
 		new DependencyGraphHelper(ctx.getDependencyGraph()).getAliasFor(resourceNode, tNode).forEach(r::setAlias);
@@ -96,7 +96,7 @@ public class ResourceManager implements IResourceManager {
 		// If model is of used as input (input or in/out) 
 		if (kind.isInout() || kind.isInput()) {					
 			// Store input model hash in execution trace  
-			ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), r.loadedHash());
+			ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), r.loadedHash().get());
 			tExec.getInputModels().add(snapshot);
 			// Also record the current model snapshot in trace latest resources 
 			updater.addResourceToLatest(snapshot);
@@ -149,9 +149,9 @@ public class ResourceManager implements IResourceManager {
 			final TaskExecution tExec, ResourceKind kind, IAbstractResourceNode value) throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) value;
 		ResourceRepository repo = ctx.getTaskRepository().getResourceRepository();
-		IResourceInstance<?> resource = null;
+		IModelResourceInstance<?> resource = null;
 		// Get resource from resource repository 
-		Optional<IResourceInstance<?>> opResource = repo.get(resourceNode);
+		Optional<IModelResourceInstance<?>> opResource = repo.get(resourceNode);
 		if (opResource.isPresent()) {							
 			resource = opResource.get();
 
@@ -163,7 +163,7 @@ public class ResourceManager implements IResourceManager {
 					resource.save();
 					
 					// Store output model hash in execution trace 
-					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), resource.loadedHash());
+					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getInternal(), resource.loadedHash().get());
 					tExec.getOutputModels().add(snapshot);
 					// Also record the current model snapshot in trace latest resources 
 					updater.addResourceToLatest(snapshot);					
@@ -197,7 +197,7 @@ public class ResourceManager implements IResourceManager {
 				result = tNode.getTaskInstance().getTrace();
 			// If other
 			} else {
-				result = ctx.getParamManager().getOutputParameterHandler(tNode.getTaskInstance()).get(propertyName);
+				result = ctx.getParamManager().getOutputParameterHandler(tNode).get(propertyName);
 			} 
 			// If present, save value in repository
 			if (result != null) {				

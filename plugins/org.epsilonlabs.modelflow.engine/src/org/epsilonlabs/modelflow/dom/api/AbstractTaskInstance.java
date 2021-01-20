@@ -17,19 +17,9 @@ public abstract class AbstractTaskInstance implements ITaskInstance {
 	@Override
 	public void configure(ITaskNode task) {
 		this.node = task;
-		task.getTaskDefinition().getProperties();
-	}
-	
-	@Override
-	public ITaskNode getTaskNode() {
-		return node;
-	}   
-	
-	@Override
-	public String getName() {
-		return this.node.getTaskDefinition().getName();
-	}
-	
+		task.getTaskElement().getProperties();
+	} 
+
 	@Override
 	public boolean isAlwaysExecute() {
 		return alwaysExecute;

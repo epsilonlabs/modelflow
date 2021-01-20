@@ -2,8 +2,8 @@ package org.epsilonlabs.modelflow.tests.common;
 
 import java.util.Map;
 
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.junit.Before;
@@ -15,8 +15,8 @@ import com.google.inject.Module;
 
 public abstract class ExtensionPointTests {
 
-	protected Map<String, ITaskFactory> taskFactories;
-	protected Map<String, IModelResourceFactory> resourceFactories;
+	protected Map<String, Class<ITaskInstance>> taskFactories;
+	protected Map<String, Class<IModelResourceInstance<?>>> resourceFactories;
 	
 	@Before
 	public void retrieveExtensionPoints() {

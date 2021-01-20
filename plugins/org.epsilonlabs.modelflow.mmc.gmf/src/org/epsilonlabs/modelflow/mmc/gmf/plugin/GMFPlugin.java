@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.mmc.gmf.task.GenerateDiagramCodeTask;
 import org.epsilonlabs.modelflow.mmc.gmf.task.GmfMap2GmfGenTask;
 
@@ -28,13 +28,13 @@ public class GMFPlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
+	public List<Class<? extends IModelResourceInstance<?>>> getResourceFactories() {
 		return Arrays.asList();
 	}
 
 	@Override
-	public List<Class<? extends ITaskFactory>> getTaskFactories() {
-		return Arrays.asList(GenerateDiagramCodeTask.Factory.class, GmfMap2GmfGenTask.Factory.class);
+	public List<Class<? extends ITaskInstance>> getTaskFactories() {
+		return Arrays.asList(GenerateDiagramCodeTask.class, GmfMap2GmfGenTask.class);
 	}
 
 	@Override

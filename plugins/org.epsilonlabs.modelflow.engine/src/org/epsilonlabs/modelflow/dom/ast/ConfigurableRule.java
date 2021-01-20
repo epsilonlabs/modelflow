@@ -27,7 +27,7 @@ import org.eclipse.epsilon.erl.dom.NamedRule;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IConfigurable;
 import org.epsilonlabs.modelflow.dom.IProperty;
-import org.epsilonlabs.modelflow.dom.api.factory.IFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 
@@ -67,7 +67,7 @@ public abstract class ConfigurableRule<T> extends NamedRule
 	 * @param element
 	 * @param factory
 	 */
-	protected void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, IFactory factory) {
+	protected void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, Class<?> factory) {
 		for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
 			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(p.getKey().getName());
@@ -81,7 +81,7 @@ public abstract class ConfigurableRule<T> extends NamedRule
 			}
 			property.setValue(value);
 			element.getProperties().add(property);
-			if (factory != null && !factory.getParameters().contains(property.getKey())) {
+			if (factory != null && !new FactoryIntrospector(factory).getParameterNames().contains(property.getKey())) {
 				String msg = String.format("Parameter '%s' does not exist for task type '%s'", p.getKey().getName(), getType().getName());
 				ctx.addWarningMarker(p.getKey(), msg);
 			}
