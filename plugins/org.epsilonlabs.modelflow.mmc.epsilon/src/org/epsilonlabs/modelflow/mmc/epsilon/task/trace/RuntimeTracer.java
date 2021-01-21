@@ -68,10 +68,11 @@ public class RuntimeTracer {
 		return this.resources;
 	}
 	
-	protected Optional<IAbstractResource> getResource(IModel model){
+	protected Optional<String> getResource(IModel model){
 		return getResources().stream()
 				.map(IModelWrapper::getResource)
 				.filter(r->r.getName().equals(model.getName()))
+				.map(IAbstractResource::getName)
 				.findFirst();
 	}
 }

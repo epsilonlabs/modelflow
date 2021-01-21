@@ -70,10 +70,10 @@ public class GmfDiagramTrace {
 					Resource eResource = eObject.eResource();
 					if (eResource != null) {
 						String id = eResource.getURIFragment(eObject);
-						builder.addSourceModelElement(id, resource, null);
+						builder.addSourceModelElement(id, resource.getName(), null);
 					} else {
 						//FIXME check why are we getting here
-						builder.addSourceModelElement("!Invalid", resource, null);
+						builder.addSourceModelElement("!Invalid", resource.getName(), null);
 					}
 				}
 			});

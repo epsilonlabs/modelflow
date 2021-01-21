@@ -11,7 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.eclipse.epsilon.egl.engine.traceability.fine.trace.Region;
 import org.eclipse.epsilon.egl.engine.traceability.fine.trace.TextLocation;
 import org.eclipse.epsilon.egl.engine.traceability.fine.trace.TraceLink;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -49,7 +48,7 @@ public class EglTaskTrace implements ITrace {
 				.link("Generated");
 				
 		Object source= traceLink.getSource().getModelElement();
-		IAbstractResource container = EpsilonTraceUtil.getContainerModel(task,source);
+		String container = EpsilonTraceUtil.getContainerModel(task,source);
 		String id = EpsilonTraceUtil.getElementId(task,source);
 		builder.addSourceModelElementProperty(id, container, traceLink.getSource().getPropertyName(),null);
 		

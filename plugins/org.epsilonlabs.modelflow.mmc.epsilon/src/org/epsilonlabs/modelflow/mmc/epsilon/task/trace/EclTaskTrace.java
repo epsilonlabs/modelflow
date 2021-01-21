@@ -8,7 +8,6 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.ecl.trace.Match;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -44,14 +43,14 @@ public class EclTaskTrace implements ITrace {
 		
 		/** Source */
 		String sourceElement = EpsilonTraceUtil.getElementId(task, match.getLeft());
-		IAbstractResource sourceModel = EpsilonTraceUtil.getContainerModel(task, match.getLeft());
+		String sourceModel = EpsilonTraceUtil.getContainerModel(task, match.getLeft());
 		
 		/** Target */
 		String targetElement = EpsilonTraceUtil.getElementId(task, match.getRight());
-		IAbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, match.getRight());
+		String targetModel = EpsilonTraceUtil.getContainerModel(task, match.getRight());
 				
 		Trace trace = new ManagementTraceBuilder()
-				.managementLink("Comparison", match.getRule().getName())
+				.link("Comparison", match.getRule().getName())
 				.addProperty("isMatching", match.isMatching())
 				.addProperty("userSpecified", match.isUserSpecified())
 				.addSourceModelElement(sourceElement, sourceModel, null)

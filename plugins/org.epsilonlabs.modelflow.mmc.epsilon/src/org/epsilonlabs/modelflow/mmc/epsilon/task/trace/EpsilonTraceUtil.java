@@ -9,7 +9,6 @@ package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.ModelRepository;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.AbstractEpsilonTask;
 
@@ -26,12 +25,12 @@ public class EpsilonTraceUtil {
 		}
 	}
 
-	public static IAbstractResource getContainerModel(AbstractEpsilonTask task, Object element) {
+	public static String getContainerModel(AbstractEpsilonTask task, Object element) {
 		ModelRepository modelRepository = task.getModule().getContext().getModelRepository();
 		IModel model = modelRepository.getOwningModel(element);
 		for (IModelWrapper r : task.getResources()) {
 			if (model.equals(r.getModel())) {
-				return r.getResource();
+				return r.getResource().getName();
 			}
 		}
 		return null;

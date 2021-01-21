@@ -8,7 +8,6 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.eml.trace.Merge;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -43,18 +42,18 @@ public class EmlTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		String leftId = EpsilonTraceUtil.getElementId(task, merge.getMatch().getLeft());
-		IAbstractResource leftModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
+		String leftModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
 		String rightId = EpsilonTraceUtil.getElementId(task, merge.getMatch().getRight());
-		IAbstractResource rightModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
+		String rightModel = EpsilonTraceUtil.getContainerModel(task, merge.getMatch().getLeft());
 
 		ManagementTraceBuilder builder = new ManagementTraceBuilder()
-				.managementLink("Merge", merge.getRule().getName())
+				.link("Merge", merge.getRule().getName())
 				.addSourceModelElement(leftId, leftModel, "left")
 				.addSourceModelElement(rightId, rightModel, "right");
 		
 		merge.getTargets().forEach(target -> {
 			String targetId = EpsilonTraceUtil.getElementId(task, target);
-			IAbstractResource targetModel = EpsilonTraceUtil.getContainerModel(task, target);
+			String targetModel = EpsilonTraceUtil.getContainerModel(task, target);
 			builder.addTargetModelElement(targetId, targetModel, null);
 		});
 		

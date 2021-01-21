@@ -8,7 +8,6 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.epl.execute.PatternMatch;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -44,10 +43,10 @@ public class EplTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		ManagementTraceBuilder builder = new ManagementTraceBuilder()
-				.managementLink("Pattern", patternMatch.getPattern().getName());
+				.link("Pattern", patternMatch.getPattern().getName());
 		
 		patternMatch.getRoleBindings().forEach((k,v) -> {
-			IAbstractResource model = EpsilonTraceUtil.getContainerModel(task, v);
+			String model = EpsilonTraceUtil.getContainerModel(task, v);
 			String id = EpsilonTraceUtil.getElementId(task, v);
 			builder.addSourceModelElement(id, model, k);
 		});

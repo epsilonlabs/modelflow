@@ -8,7 +8,6 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.evl.trace.ConstraintTraceItem;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -43,10 +42,10 @@ public class EvlTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		String sourceId = EpsilonTraceUtil.getElementId(task, constraint.getInstance());
-		IAbstractResource sourceContainer = EpsilonTraceUtil.getContainerModel(task, constraint.getInstance());
+		String sourceContainer = EpsilonTraceUtil.getContainerModel(task, constraint.getInstance());
 		
 		Trace builtTrace = new ManagementTraceBuilder()
-				.managementLink("Invariant", constraint.getConstraint().getName())
+				.link("Invariant", constraint.getConstraint().getName())
 				.addSourceModelElement(sourceId, sourceContainer, null)
 				.addTargetModelElement(sourceId, sourceContainer, null)
 				.addProperty("result", constraint.getResult())

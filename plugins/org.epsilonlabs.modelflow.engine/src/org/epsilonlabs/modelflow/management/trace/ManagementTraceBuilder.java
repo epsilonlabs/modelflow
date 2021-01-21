@@ -10,8 +10,6 @@ package org.epsilonlabs.modelflow.management.trace;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.IResource;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImpl;
@@ -40,7 +38,7 @@ public class ManagementTraceBuilder {
 		return trace;
 	}
 	
-	public ManagementTraceBuilder managementLink(String type, String operation){
+	public ManagementTraceBuilder link(String type, String operation){
 		if (type!= null || operation!= null) {			
 			Link managementOp = ManagementTraceFactoryImpl.eINSTANCE.createLink();
 			if (type != null && !type.isEmpty())
@@ -63,10 +61,9 @@ public class ManagementTraceBuilder {
 		return this;
 	}
 	
-	private ModelElement modelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
+	private ModelElement modelElement(String elementId, @Nullable String container, @Nullable String role) {
 		ModelElement element = ManagementTraceFactoryImpl.eINSTANCE.createModelElement();
-		if (container instanceof IResource) 			
-			element.setResource(container.getName());
+		element.setResource(container);
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -74,10 +71,9 @@ public class ManagementTraceBuilder {
 		return element;
 	}
 	
-	private ModelElement modelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
+	private ModelElement modelElementProperty(String elementId, @Nullable String container, String name, @Nullable String role) {
 		ModelElementProperty element = ManagementTraceFactoryImpl.eINSTANCE.createModelElementProperty();
-		if (container instanceof IResource) 			
-			element.setResource(container.getName());
+		element.setResource(container);
 		if (elementId != null && !elementId.isEmpty()) 
 			element.setElementId(elementId);
 		if (role != null && !role.isEmpty()) 
@@ -106,26 +102,26 @@ public class ManagementTraceBuilder {
 		return element;
 	}
 	
-	public ManagementTraceBuilder addSourceModelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
-		ModelElement source = modelElement(elementId, EcoreUtil.copy(container), role);
+	public ManagementTraceBuilder addSourceModelElement(String elementId, @Nullable String container, @Nullable String role) {
+		ModelElement source = modelElement(elementId, container, role);
 		sources.add(source);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addTargetModelElement(String elementId, @Nullable IAbstractResource container, @Nullable String role) {
-		ModelElement target = modelElement(elementId, EcoreUtil.copy(container), role);
+	public ManagementTraceBuilder addTargetModelElement(String elementId, @Nullable String container, @Nullable String role) {
+		ModelElement target = modelElement(elementId, container, role);
 		targets.add(target);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addSourceModelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
-		ModelElement source = modelElementProperty(elementId, EcoreUtil.copy(container), name, role);
+	public ManagementTraceBuilder addSourceModelElementProperty(String elementId, @Nullable String container, String name, @Nullable String role) {
+		ModelElement source = modelElementProperty(elementId, container, name, role);
 		sources.add(source);
 		return this;
 	}
 	
-	public ManagementTraceBuilder addTargetModelElementProperty(String elementId, @Nullable IAbstractResource container, String name, @Nullable String role) {
-		ModelElement target = modelElementProperty(elementId, EcoreUtil.copy(container), name,  role);
+	public ManagementTraceBuilder addTargetModelElementProperty(String elementId, @Nullable String container, String name, @Nullable String role) {
+		ModelElement target = modelElementProperty(elementId, container, name,  role);
 		targets.add(target);
 		return this;
 	}
