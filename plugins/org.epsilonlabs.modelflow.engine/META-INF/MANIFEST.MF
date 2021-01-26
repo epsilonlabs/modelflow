@@ -39,7 +39,7 @@ Export-Package: org.epsilonlabs.modelflow,
  org.epsilonlabs.modelflow.parse,
  org.epsilonlabs.modelflow.registry,
  org.epsilonlabs.modelflow.repository
-Require-Bundle: org.epsilonlabs.modelflow.dependencies,
+Require-Bundle: org.epsilonlabs.modelflow.dependencies;visibility:=reexport,
  com.google.inject;visibility:=reexport,
  com.google.guava,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
@@ -47,8 +47,8 @@ Require-Bundle: org.epsilonlabs.modelflow.dependencies,
  org.apache.commons.csv,
  org.eclipse.equinox.common,
  org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport
+ org.eclipse.emf.ecore;visibility:=reexport,
+ javax.xml.bind;visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.inject.multibindings,
- javax.xml.bind,
  org.slf4j

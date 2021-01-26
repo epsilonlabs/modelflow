@@ -6,3 +6,4 @@
 **/.idea/**
 *.launch
 **/testOutput/**
+**/target-plain/**
