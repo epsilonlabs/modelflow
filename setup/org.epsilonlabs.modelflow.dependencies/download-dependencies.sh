@@ -4,12 +4,12 @@
 # Use latest versions
 # mvn versions:display-property-updates -Dversions.allowSnapshots=true -DallowMinorUpdates=false -DallowMajorUpdates=false -DallowIncrementalUpdates=false
 # mvn versions:update-properties -Dversions.allowSnapshots=true -DallowMinorUpdates=false -DallowMajorUpdates=false -DallowIncrementalUpdates=false
-
+circle=${CIRCLE_BRANCH:-false}
 rm -rf lib/
-if [[ ! -v CIRCLE_BRANCH ]]; then  #tests if we are in circleci
-    ./mvnw clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
+if [[ -z $circle ]]; then  #tests if we are in circleci
+    ./mvnw -f local-pom.xml clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
 else
-    mvn clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
+    mvn -f local-pom.xml clean dependency:copy-dependencies@dependencies dependency:copy-dependencies@sources
 fi
 # Add the new dependencies to the classpath. Crate then entry list in a separate file since modifying the .classpath file breakes eclipse
 rm -f jarEntries.tmp
