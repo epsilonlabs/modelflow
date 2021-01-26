@@ -47,13 +47,7 @@ Require-Bundle: org.epsilonlabs.modelflow.dependencies,
  org.apache.commons.csv,
  org.eclipse.equinox.common,
  org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport,
- org.eclipse.hawk.core;bundle-version="2.0.0",
- org.eclipse.hawk.localfolder;bundle-version="2.0.0",
- org.eclipse.hawk.graph;bundle-version="2.0.0",
- org.eclipse.hawk.orientdb;bundle-version="2.0.0",
- org.eclipse.hawk.emf;bundle-version="2.0.0",
- org.eclipse.hawk.epsilon;bundle-version="2.0.0"
+ org.eclipse.emf.ecore;visibility:=reexport
 Bundle-ActivationPolicy: lazy
 Import-Package: com.google.inject.multibindings,
  javax.xml.bind,

@@ -297,6 +297,23 @@ version(s), and exceptions or additional permissions here}.&quot;
          id="org.epsilonlabs.modelflow.feature"
          version="0.0.1.qualifier"/>
 
+   <requires>
+      <import plugin="org.epsilonlabs.modelflow.engine"/>
+      <import plugin="org.eclipse.epsilon.evl.engine"/>
+      <import plugin="org.eclipse.epsilon.etl.engine"/>
+      <import plugin="org.eclipse.epsilon.emc.emf"/>
+      <import plugin="org.eclipse.epsilon.emc.simulink"/>
+      <import plugin="org.eclipse.epsilon.eunit.engine"/>
+      <import plugin="org.eclipse.epsilon.ecl.engine"/>
+      <import plugin="org.eclipse.epsilon.flock.engine"/>
+      <import plugin="org.eclipse.epsilon.common.dt"/>
+      <import plugin="org.eclipse.epsilon.epl.engine"/>
+      <import plugin="org.eclipse.epsilon.eml.engine"/>
+      <import plugin="org.eclipse.epsilon.egl.traceability.fine"/>
+      <import plugin="org.apache.commons.io"/>
+      <import plugin="javax.xml.bind"/>
+   </requires>
+
    <plugin
          id="org.epsilonlabs.modelflow.mmc.epsilon"
          download-size="0"
