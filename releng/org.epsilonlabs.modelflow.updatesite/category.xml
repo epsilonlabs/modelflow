@@ -6,13 +6,19 @@
    <feature url="features/org.epsilonlabs.modelflow.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow"/>
    </feature>
-   <feature url="features/org.epsilonlabs.modelflow.atl.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.atl.feature" version="0.0.1.qualifier">
-      <category name="org.epsilonlabs.modelflow.mmc"/>
+   <feature id="org.epsilonlabs.modelflow.feature.source" version="0.0.1.qualifier">
+      <category name="org.epsilonlabs.modelflow"/>
    </feature>
    <feature url="features/org.epsilonlabs.modelflow.emf.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.emf.feature" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
    </feature>
+   <feature id="org.epsilonlabs.modelflow.emf.feature.source" version="0.0.1.qualifier">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </feature>
    <feature url="features/org.epsilonlabs.modelflow.epsilon.feature_0.0.1.qualifier.jar" id="org.epsilonlabs.modelflow.epsilon.feature" version="0.0.1.qualifier">
+      <category name="org.epsilonlabs.modelflow.mmc"/>
+   </feature>
+   <feature id="org.epsilonlabs.modelflow.epsilon.feature.source" version="0.0.1.qualifier">
       <category name="org.epsilonlabs.modelflow.mmc"/>
    </feature>
    <category-def name="org.epsilonlabs.modelflow" label="ModelfFlow">
@@ -25,6 +31,7 @@
          Model Management Tasks and Model Types
       </description>
    </category-def>
+   
    <repository-reference location="http://download.eclipse.org/emfatic/update" enabled="true" />
    <repository-reference location="http://download.eclipse.org/mmt/qvto/updates/releases" enabled="true" />
    <repository-reference location="https://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases" enabled="true" />
