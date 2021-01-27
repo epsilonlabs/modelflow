@@ -17,6 +17,7 @@ import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.FeatureCallExpression;
+import org.eclipse.epsilon.eol.dom.IEolVisitor;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
@@ -121,6 +122,11 @@ public class ModelCallExpression extends FeatureCallExpression implements IDomEl
 	 */
 	public void addAlias(NameExpression name) {
 		aliases.add(name);
+	}
+
+	@Override
+	public void accept(IEolVisitor visitor) {
+		// TODO
 	}
 
 }
