@@ -11,6 +11,7 @@ import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.Expression;
+import org.eclipse.epsilon.eol.dom.IEolVisitor;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.dom.TypeExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
@@ -106,6 +107,11 @@ public class ParameterDeclaration extends Expression {
 	
 	public void setNameExpression(NameExpression nameExpression) {
 		this.nameExpression = nameExpression;
+	}
+
+	@Override
+	public void accept(IEolVisitor visitor) {
+		// TODO
 	}
 
 }
