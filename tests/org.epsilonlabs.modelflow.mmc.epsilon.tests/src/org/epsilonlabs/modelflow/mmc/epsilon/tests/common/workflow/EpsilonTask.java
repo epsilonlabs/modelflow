@@ -39,6 +39,15 @@ public class EpsilonTask {
 				.build();
 	}
 	
+	public static final IWorkflow getEolNative() {
+		return new WorkflowBuilder()
+				
+				.addTask("test", "epsilon:eol")
+				.addProperty("code", "new Native(\"org.epsilonlabs.modelflow.mmc.epsilon.tests.integ.NativeTypeExample\").success().println();")
+				
+				.build();
+	}
+	
 	public static final IWorkflow getSimulinkWorkflow() {
 		return new WorkflowBuilder()
 				
