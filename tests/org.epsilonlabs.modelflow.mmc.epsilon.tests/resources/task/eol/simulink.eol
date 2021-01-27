@@ -1,1 +1,7 @@
-Block.all.collect(b|b.Name).println();
+var blocks = Block.all;
+blocks.collect(b|b.Name).println();
+if(mfTrace.isDefined()) {
+	mfTrace.trace(blocks.first(), blocks.last(), "link");
+}
+"Executing statement:".println();
+M.statement("2+2");
