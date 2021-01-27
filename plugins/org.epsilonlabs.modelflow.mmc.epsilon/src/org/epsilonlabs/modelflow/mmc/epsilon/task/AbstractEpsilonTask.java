@@ -16,7 +16,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.dt.ExtensionPointToolNativeTypeDelegate;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
@@ -194,6 +196,9 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
 		getModule().getContext().setOutputStream(ctx.getOutputStream());
 		getModule().getContext().setErrorStream(ctx.getErrorStream());
+		if (Platform.isRunning()) {			
+			getModule().getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
+		}
 		try {
 			result = getModule().execute();
 		} catch (EolRuntimeException e) {

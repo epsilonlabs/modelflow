@@ -59,6 +59,11 @@ public class EpsilonTaskTests extends WorkflowBuilderTest {
 	public void testEtlWithAlias() {
 		w = EpsilonTask.getEtlWorkflowWithAlias();
 	}
+	
+	@Test
+	public void testEolNative() {
+		w = EpsilonTask.getEolNative();
+	}
 
 	@Test
 	public void testEvl() {
