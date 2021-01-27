@@ -26,6 +26,7 @@ import org.eclipse.epsilon.emc.simulink.engine.MatlabEngine;
 import org.eclipse.epsilon.emc.simulink.engine.MatlabEnginePool;
 import org.eclipse.epsilon.emc.simulink.exception.MatlabException;
 import org.eclipse.epsilon.emc.simulink.model.SimulinkModel;
+import org.eclipse.epsilon.emc.simulink.model.element.SimulinkElement;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.w3c.dom.Document;
@@ -36,16 +37,30 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 
 	private Boolean showInMatlabEditor = false;
 	private Boolean followLinks = false;
+	private Boolean findOptimisations = true;
+	private Boolean enableTryCatch = true;
+	private Boolean comments = false;
+	//private Boolean lookUnderMasks;
 
 	private File workingDir;
 	private File file;
 	private String libraryPath;
 	private String engineJarPath;
 
+
 	@Override
 	public SimulinkModel getModel() {
 		if (model == null) {
-			this.model = new SimulinkModel();
+			this.model = new SimulinkModel() {
+				@Override
+				public String getElementId(Object instance) {
+					if (instance instanceof SimulinkElement) {
+						return ((SimulinkElement) instance).getPath();
+					} else {
+						return "unknown";
+					}
+				}
+			};
 		}
 		return (SimulinkModel) this.model;
 	}
@@ -56,7 +71,14 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 		getModel().setLibraryPath(libraryPath);
 		getModel().setEngineJarPath(engineJarPath);
 		getModel().setFile(file);
-		getModel().setCloseOnDispose(true);
+		getModel().setCloseOnDispose(false);
+
+		getModel().setFindOptimisationEnabled(findOptimisations);
+
+		getModel().setEnableTryCatch(enableTryCatch);
+		getModel().setFollowLinks(followLinks);
+		getModel().setIncludeCommented(comments);		
+		//getModel().setLookUnderMasks(lookUnderMasks);
 	}
 
 	public File getWorkingDir() {
@@ -84,6 +106,21 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 	@Param(key = "expand")
 	public void setFollowLinks(Boolean followLinks) {
 		this.followLinks = followLinks;
+	}
+	
+	@Param(key = "optimiseCollections")
+	public void setFindOptimisations(Boolean findOptimisations) {
+		this.findOptimisations = findOptimisations;
+	}
+	
+	@Param(key = "tryCatch")
+	public void setTryCatchEnabled(Boolean tryCatch) {
+		this.enableTryCatch = tryCatch;
+	}
+	
+	@Param(key = "includeComments")
+	public void seIncludeComments(Boolean comments) {
+		this.comments = comments;
 	}
 
 	public File getFile() {
@@ -140,14 +177,14 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 		// Do nothing
 	}
 	
-	@Override
+	/*	@Override
 	public void disposeImpl() {
 		try {
 			getModel().getEngine().close();
 		} catch (MatlabException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();

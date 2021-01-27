@@ -16,6 +16,7 @@ import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.Expression;
+import org.eclipse.epsilon.eol.dom.IEolVisitor;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
@@ -105,6 +106,11 @@ public class TaskDependencyExpression extends Expression implements IDomElement<
 	@Override
 	public Collection<ITaskDependency> getDomElements() {
 		return Arrays.asList(taskDependency);
+	}
+	
+	@Override
+	public void accept(IEolVisitor visitor) {
+		//TODO
 	}
 
 }

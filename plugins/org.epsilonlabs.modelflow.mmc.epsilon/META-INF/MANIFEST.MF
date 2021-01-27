@@ -25,4 +25,5 @@ Export-Package: org.epsilonlabs.modelflow.mmc.epsilon.plugin,
  org.epsilonlabs.modelflow.mmc.epsilon.task.trace,
  org.epsilonlabs.modelflow.mmc.epsilon.task.trace.egl
 Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.epsilon
-Import-Package: org.eclipse.epsilon.eol.dt
+Import-Package: org.eclipse.epsilon.eol.dt,
+ org.slf4j
