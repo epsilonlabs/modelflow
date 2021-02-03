@@ -42,6 +42,7 @@ public class ForEachModuleElement extends ForStatement {
 
 	@Override
 	public void compile(IEolCompilationContext context) {
+		iteratorParameter.compile(context);
 		iteratedExpression.compile(context);
 		context.getFrameStack().enterLocal(FrameType.UNPROTECTED, bodyStatementBlock,
 				new Variable("loopCount", EolPrimitiveType.Integer), new Variable("hasMore", EolPrimitiveType.Boolean));

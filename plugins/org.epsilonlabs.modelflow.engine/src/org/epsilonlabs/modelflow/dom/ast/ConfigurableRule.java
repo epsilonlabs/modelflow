@@ -75,7 +75,7 @@ public abstract class ConfigurableRule<T> extends NamedRule
 			if (value instanceof ICompilableModuleElement) {
 				ICompilableModuleElement moduleElement = (ICompilableModuleElement) value;
 				FrameStack frameStack = ctx.getFrameStack();
-				frameStack.enterLocal(FrameType.PROTECTED, (ModuleElement) moduleElement);
+				frameStack.enterLocal(FrameType.UNPROTECTED, (ModuleElement) moduleElement);
 				moduleElement.compile(ctx);
 				frameStack.leaveLocal((ModuleElement) moduleElement);
 			}

@@ -8,10 +8,13 @@
 package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
@@ -19,8 +22,8 @@ import org.eclipse.epsilon.common.util.AstUtil;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.dom.NameExpression;
+import org.eclipse.epsilon.eol.dom.Parameter;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-import org.eclipse.epsilon.eol.execute.context.EolContext;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
@@ -165,7 +168,7 @@ public class TaskRule extends ConfigurableRule<ITask> {
 		return tasks;
 	}
 
-	protected HashMap<String, Variable[]> map = new HashMap<>();
+	protected HashMap<String, Map<String, Object>> map = new HashMap<>();
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -179,7 +182,7 @@ public class TaskRule extends ConfigurableRule<ITask> {
 			if (forEach != null) {
 				forEach.compile(ctx);
 				try {
-					forEach.execute(new EolContext());
+					forEach.execute(ctx.getModule().getContext());
 					iterator = forEach.getIterator();
 				} catch (EolRuntimeException e) {
 					ctx.addErrorMarker(forEach, e.getMessage());
@@ -187,24 +190,32 @@ public class TaskRule extends ConfigurableRule<ITask> {
 			}
 			FrameStack frameStack = ctx.getFrameStack();
 			for (int loop = 1; iterator.hasNext(); loop++) {
+				final Map<String, Object> itMap = new HashMap<>();
 				Object next = iterator.next();				
 				String name = getName();
-				if (forEach != null){					
-					frameStack.enterLocal(FrameType.UNPROTECTED, this, getVariables(loop, next));
-					name += String.format("@%d", loop);
-					map.put(name, getVariables(loop, next));
-				}
-				createTask(ctx, name);
-				if (forEach != null){	
-					frameStack.leaveLocal(this);
+				try {
+					if (forEach != null){		
+						final Variable[] vars = getVariables(ctx.getModule().getContext(), loop, next);
+						frameStack.enterLocal(FrameType.UNPROTECTED, this, vars);
+						name += String.format("@%d", loop);
+						final Map<String, Object> varMap = Arrays.stream(vars).collect(Collectors.toMap(v -> v.getName(), v -> v.getValue()));
+						map.put(name, varMap);
+					}
+					createTask(ctx, name);
+					if (forEach != null){	
+						frameStack.leaveLocal(this);
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
 				}
 			}			
 			
 		}
 	}
 
-	private Variable[] getVariables(int loop, Object next) {
-		Variable itemVar = new Variable(forEach.getIteratorParameter().getName(), next, EolAnyType.Instance, false);
+	private Variable[] getVariables(IEolContext ctx, int loop, Object next) throws EolRuntimeException {
+		final Parameter iterator = forEach.getIteratorParameter();
+		Variable itemVar = new Variable(iterator.getName(), next, iterator.getType(ctx));
 		Variable countVar = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
 		return new Variable[] {itemVar, countVar};
 	}
@@ -212,8 +223,10 @@ public class TaskRule extends ConfigurableRule<ITask> {
 	/**
 	 * @return the iterator
 	 */
-	public Variable[] getVars(String name) {
-		return map.get(name);
+	public List<Variable> getVars(String name) {
+		return map.get(name).entrySet().stream()
+				.map(e->new Variable(e.getKey(), e.getValue(), EolAnyType.Instance, true))
+				.collect(Collectors.toList());
 	}
 
 	protected void createTask(IModelFlowCompilationContext ctx, String name) {
