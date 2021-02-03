@@ -35,5 +35,15 @@ operation Sequence edgeLabel(){
 	// TODOreturn self.name.replace("://", "-");
 }
 operation Any getIcon() {
-	return getImage("icons/" + self.definition.split(":").at(1) + ".png");
+	var icon = "icons/" + self.definition.split(":").at(1) + ".png";
+	var found = getImage(icon);
+	if (found.println("1:") <> icon){
+		return found;
+	} else {
+		found = "icons/" + self.definition.split(":").at(1) + ".gif";
+		if (found.println("2:") <> icon.replace("\\.png", ".gif")){
+			return found;
+		}
+		return getImage("icons/icon.png");
+	}
 }
