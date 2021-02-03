@@ -9,4 +9,14 @@ task B is epsilon:eol
 	forEach b in : Sequence{"a","b"}
 {
   src: b + '.eol' 
+task C is epsilon:eol 
+	forEach flag in : Sequence{true, false}
+{
+  code: "flag.println('Is: ');" 
+  params {
+  	var map = new Map;
+  	map.put("flag", flag);
+  	return map;
+  }
+  
 }

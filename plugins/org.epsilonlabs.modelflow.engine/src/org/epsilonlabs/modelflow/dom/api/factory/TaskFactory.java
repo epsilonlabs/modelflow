@@ -90,7 +90,7 @@ public class TaskFactory extends AbstractFactory {
 		IConfigurable configurable = getConfigurable();
 		TaskRule me = (TaskRule) configurable.getModuleElement();
 		if (me.isGenerator()) {
-			variables = me.getVars(configurable.getName());
+			variables = me.getVars(configurable.getName()).toArray(new Variable[0]);
 		}
 		ctx.getFrameStack().enterLocal(FrameType.PROTECTED, me, variables);
 		return me;
