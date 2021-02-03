@@ -37,11 +37,11 @@ operation Sequence edgeLabel(){
 operation Any getIcon() {
 	var icon = "icons/" + self.definition.split(":").at(1) + ".png";
 	var found = getImage(icon);
-	if (found.println("1:") <> icon){
+	if (found <> icon){
 		return found;
 	} else {
 		found = "icons/" + self.definition.split(":").at(1) + ".gif";
-		if (found.println("2:") <> icon.replace("\\.png", ".gif")){
+		if (found <> icon.replace("\\.png", ".gif")){
 			return found;
 		}
 		return getImage("icons/icon.png");
