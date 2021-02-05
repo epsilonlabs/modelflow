@@ -9,17 +9,12 @@ package org.epsilonlabs.modelflow.compile.context;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.compile.context.EolCompilationContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
-import org.epsilonlabs.modelflow.dom.IResource;
-import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
-import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
-import org.epsilonlabs.modelflow.dom.ast.TaskRule;
 
 /**
  * @author Betty Sanchez
@@ -29,51 +24,27 @@ public class ModelFlowCompilationContext extends EolCompilationContext implement
 
 	protected IModelFlowModule module;
 
-	protected Collection<ResourceRule> resourceDeclarations = new ArrayList<>();
-	protected Collection<TaskRule> taskDeclarations = new ArrayList<>();
+	protected Collection<IModelModuleElement> resourceDeclarations = new ArrayList<>();
+	protected Collection<ITaskModuleElement> taskDeclarations = new ArrayList<>();
 	protected Collection<ParameterDeclaration> parameterDeclarations = new ArrayList<>();
-
-
-	protected Map<String, ModuleElement> resourceToRuleMap = new HashMap<>();
-	protected Map<String, ModuleElement> taskToRuleMap = new HashMap<>();
 
 	public ModelFlowCompilationContext(IModelFlowModule module) {
 		this.module = module;
 	}
 	
 	@Override
-	public Collection<ResourceRule> getResourceDeclarations() {
+	public Collection<IModelModuleElement> getResourceDeclarations() {
 		return resourceDeclarations;
 	}
 	
 	@Override
-	public Collection<TaskRule> getTaskDeclarations() {
+	public Collection<ITaskModuleElement> getTaskDeclarations() {
 		return taskDeclarations;
 	}
 	
 	@Override
 	public IModelFlowModule getModule() {
 		return module;
-	}
-
-	@Override
-	public void registerResourceModelElement(IResource r, ModuleElement declaration) {
-		resourceToRuleMap.put(r.getName(), declaration);
-	}
-	
-	@Override
-	public void registerTaskModelElement(ITask r, ModuleElement declaration) {
-		taskToRuleMap.put(r.getName(), declaration);
-	}
-	
-	@Override
-	public ModuleElement getTaskModuleElement(ITask task){
-		return taskToRuleMap.get(task.getName());
-	}
-	
-	@Override
-	public ModuleElement getResourceModuleElement(IResource resource){
-		return resourceToRuleMap.get(resource.getName());
 	}
 
 	@Override

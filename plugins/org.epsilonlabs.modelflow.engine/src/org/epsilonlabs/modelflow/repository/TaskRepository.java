@@ -36,8 +36,12 @@ public class TaskRepository {
 	}
 	
 	public Boolean hasFactory(ITaskNode node){
+		return hasFactory(node.getTaskElement().getName());
+	}
+	
+	public Boolean hasFactory(String factoryName){
 		try{
-			this.taskFactoryRegistry.getFactory(node.getTaskElement().getDefinition());
+			this.taskFactoryRegistry.getFactory(factoryName);
 			return true;
 		} catch (MFInvalidFactoryException e) {
 			return false;
@@ -45,14 +49,9 @@ public class TaskRepository {
 	}
 	
 	public ITaskInstance create(ITaskNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		String id = uniqueId(node);
-		ITaskInstance task = this.taskFactoryRegistry.create(node, id, ctx);
-		this.tasks.put(id, task);
+		ITaskInstance task = this.taskFactoryRegistry.create(node, ctx);
+		this.tasks.put(task.getName(), task);
 		return task;
-	}
-
-	protected String uniqueId(ITaskNode node){
-		return node.getName();
 	}
 	
 	public void clear() {

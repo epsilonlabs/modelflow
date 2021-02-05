@@ -7,8 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
+import org.eclipse.epsilon.common.module.ModuleElement;
 import org.epsilonlabs.modelflow.dom.ITask;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 
@@ -20,7 +20,6 @@ import io.reactivex.Completable;
 public interface ITaskNode extends IGraphNode {
 
 	/**
-	 *  
 	 * Covers the whole execution process of a single task unit.
 	 *
 	 * @param context the context
@@ -41,24 +40,19 @@ public interface ITaskNode extends IGraphNode {
 	 * @return the task definition
 	 */
 	ITask getTaskElement();
+	
 
 	/**
-	 * Sets the instance.
+	 * Gets the task definition.
 	 *
-	 * @param task the new instance
+	 * @return the task definition
 	 */
-	void setInstance(ITaskInstance task);
+	ModuleElement getModuleElement();
 	
 	/**
-	 * Gets the task instance.
+	 * Gets the observable.
 	 *
-	 * @return the task instance
-	 */
-	ITaskInstance getTaskInstance();
-	
-	/**
-	 * 
-	 * @return
+	 * @return the observable
 	 */
 	Completable getObservable();
 	

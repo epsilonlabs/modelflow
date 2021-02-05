@@ -11,15 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
@@ -30,35 +29,15 @@ import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.Completable;
-import io.reactivex.subjects.CompletableSubject;
-import io.reactivex.subjects.PublishSubject;
-
-public class TaskNode implements ITaskNode { 
+public class TaskNode extends AbstractTaskNode { 
 
 	private static final Logger LOG = LoggerFactory.getLogger(TaskNode.class);
 	
 	protected ITask taskDefintion;
-	protected ITaskInstance taskInstance;
-	protected TaskState state;
-
-	protected final CompletableSubject completable = CompletableSubject.create();
-
-	protected final PublishSubject<TaskState> statusUpdater = PublishSubject.create();
 	
 	public TaskNode(ITask task) {
+		super();
 		this.taskDefintion = task;
-		setState(TaskState.CREATED);
-	}
-	
-	@Override
-	public Completable getObservable() {
-		return completable;
-	}
-	
-	@Override
-	public void subscribe(IModelFlowPublisher pub){
-		statusUpdater.subscribe(status -> pub.taskState(this.taskDefintion.getName(), status));
 	}
 	
 	@Override
@@ -77,33 +56,8 @@ public class TaskNode implements ITaskNode {
 			// Prepare for execution 
 			this.taskInstance.validateParameters();
 			// Assume it will execute
-			boolean execute = true;
-			
-			ConservativeExecutionHelper conservativeHelper = new ConservativeExecutionHelper(this, ctx);
-			if (conservativeHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
-				DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getDependencyGraph());
-				
-				if ( !(taskInstance.isAlwaysExecute() || taskDefintion.getAlwaysExecute()) 
-						&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(this)) )
-				{
-					boolean inputsChanged = conservativeHelper.haveInputPropertiesChanged() 
-							|| conservativeHelper.haveInputModelsChanged();
-					int shouldExecuteOutput = shouldExecuteBasedOnOutput(ctx, conservativeHelper);
-					switch (shouldExecuteOutput) {
-					case 0:
-						execute = inputsChanged;
-						break;
-					case -1:
-						if (inputsChanged) {
-							// WARN!
-						}
-						execute = false;
-						break;
-					default:
-						break;
-					}					
-				}
-			}
+			ConservativeExecutionHelper conservativeHelper = new ConservativeExecutionHelper(this.taskInstance, this, ctx);
+			boolean execute = shouldExecuteBasedOnTrace(ctx, conservativeHelper);
 			if (execute) {
 				doExecute(ctx);
 			} else {
@@ -113,6 +67,41 @@ public class TaskNode implements ITaskNode {
 		else { // Guard failed or task is disabled
 			skip();			
 		}
+	}
+
+	/**
+	 * @param ctx
+	 * @param conservativeHelper
+	 * @return
+	 */
+	protected boolean shouldExecuteBasedOnTrace(IModelFlowContext ctx, ConservativeExecutionHelper conservativeHelper) {
+		boolean execute = true;
+		
+		if (conservativeHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
+			DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getDependencyGraph());
+			
+			if ( !(taskInstance.isAlwaysExecute() || taskDefintion.getAlwaysExecute()) 
+					&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(this)) )
+			{
+				boolean inputsChanged = conservativeHelper.haveInputPropertiesChanged() 
+						|| conservativeHelper.haveInputModelsChanged();
+				int shouldExecuteOutput = shouldExecuteBasedOnOutput(ctx, conservativeHelper);
+				switch (shouldExecuteOutput) {
+				case 0:
+					execute = inputsChanged;
+					break;
+				case -1:
+					if (inputsChanged) {
+						// WARN!
+					}
+					execute = false;
+					break;
+				default:
+					break;
+				}					
+			}
+		}
+		return execute;
 	}
 
 	/**
@@ -201,14 +190,14 @@ public class TaskNode implements ITaskNode {
 		// Register inputs in execution trace
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-			pManager.processInputs(this, ctx);
+			pManager.processInputs(this.taskInstance, ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
 		}
 		// Assign Models Before Execution
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-			manager.processResourcesBeforeExecution(this, ctx);
+			manager.processResourcesBeforeExecution(this.taskInstance, ctx);
 		} finally {			
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
 		}
@@ -242,7 +231,7 @@ public class TaskNode implements ITaskNode {
 		// Record outputs in execution trace
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
-			pManager.processOutputs(this, ctx);
+			pManager.processOutputs(this.getTaskInstance(), ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
 		}
@@ -253,7 +242,7 @@ public class TaskNode implements ITaskNode {
 		// Process Models After Execution
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-			manager.processResourcesAfterExecution(this, ctx);
+			manager.processResourcesAfterExecution(this.taskInstance, ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 		}
@@ -363,11 +352,6 @@ public class TaskNode implements ITaskNode {
 		}
 		return ok;
 	}
-		
-	@Override
-	public synchronized TaskState getState() {
-		return this.state;
-	}
 	
 	@Override
 	public String getName() {
@@ -375,42 +359,13 @@ public class TaskNode implements ITaskNode {
 	}
 	
 	@Override
-	public String getType() {
+	public String getDefinition() {
 		return this.taskDefintion.getDefinition();
 	}
 
 	@Override
 	public ITask getTaskElement() {
 		return this.taskDefintion;
-	}
-	
-	@Override
-	public ITaskInstance getTaskInstance() {
-		if (getState().hasBeenInitialised()) {			
-			return this.taskInstance;
-		}
-		throw new IllegalStateException("Task has not been initialised yet"); 
-	}
-
-	@Override
-	public void setInstance(ITaskInstance instance) {
-		this.taskInstance = instance;
-	}
-	
-	protected synchronized void setState(TaskState state){
-		LOG.debug("Task {} is {}", getTaskElement().getName(), state.name());
-		this.statusUpdater.onNext(state);
-		this.state = state;
-		switch (state) {
-		case EXECUTED:
-		case SKIPPED:
-			this.statusUpdater.onComplete();
-			this.completable.onComplete();
-			break;
-		default: 
-			break;
-		}
-
 	}
 	
 	/** Unique Task identifiers by name */
@@ -424,4 +379,8 @@ public class TaskNode implements ITaskNode {
 		return this.getName();
 	}
 
+	@Override
+	public ModuleElement getModuleElement() {
+		return (ModuleElement) this.taskDefintion.getModuleElement();
+	}
 }

@@ -129,7 +129,8 @@ public abstract class AbstractScheduler implements IScheduler {
 		/* Clean in-memory repository */
 		ctx.getTaskRepository().clear();
 
-		ModuleElement moduleElement = ctx.getModule().getCompilationContext().getTaskModuleElement(node.getTaskElement());
+		
+		ModuleElement moduleElement = node.getModuleElement();
 		throw new MFExecutionException(moduleElement,exception);
 	}
 

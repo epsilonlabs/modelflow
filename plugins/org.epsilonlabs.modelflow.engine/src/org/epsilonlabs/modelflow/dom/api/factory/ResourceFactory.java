@@ -15,7 +15,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.IConfigurable;
 import org.epsilonlabs.modelflow.dom.IModelResource;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
-import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFResourceRule;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
@@ -64,10 +64,7 @@ public class ResourceFactory extends AbstractFactory {
 	@Override
 	protected ModuleElement prepareFrameStack() {
 		Variable[] variables = new Variable[0];
-		ResourceRule me = (ResourceRule) getConfigurable().getModuleElement();
-		/* if (me.isGenerator()) {
-			variables = me.getVars(getConfigurable().getName());
-		} */
+		EMFResourceRule me = (EMFResourceRule) getConfigurable().getModuleElement();
 		ctx.getFrameStack().enterLocal(FrameType.PROTECTED, me, variables);
 		return me;
 	}

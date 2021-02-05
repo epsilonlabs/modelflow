@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.dom.ast;
+package org.epsilonlabs.modelflow.dom.ast.emf;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,12 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.epsilon.common.module.IModule;
-import org.eclipse.epsilon.common.parse.AST;
-import org.eclipse.epsilon.common.util.AstUtil;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
-import org.eclipse.epsilon.eol.dom.ExecutableBlock;
-import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.dom.Parameter;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
@@ -31,138 +27,20 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.types.EolAnyType;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.ast.IModelCallExpression;
+import org.epsilonlabs.modelflow.dom.ast.TaskDeclaration;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
-import org.epsilonlabs.modelflow.parse.ModelFlowParser;
 
 /**
  * The Class TaskRule.
  */
-public class TaskRule extends ConfigurableRule<ITask> {
+public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask>{
 
-	/** The task. */
-	protected Collection<ITask> tasks = new ArrayList<>();
+	private Collection<ITask> tasks;
 
-	/** The guard. */
-	protected ExecutableBlock<Boolean> guard;
-	
-	/** For Each */
-	protected ForEachModuleElement forEach;
-
-	/** The inputs. */
-	protected List<ModelCallExpression> inputs = new ArrayList<>();
-	
-	protected List<ModelCallExpression> outputs = new ArrayList<>();
-	
-	protected List<ModelCallExpression> inouts = new ArrayList<>();
-	
-	protected List<TaskDependencyExpression> dependsOn = new ArrayList<>();
-
-	protected boolean enabled = true;
-	
-	protected boolean alwaysExecute = false;
-	
-	protected boolean trace = true;
-
-	/**
-	 * Builds the.
-	 *
-	 * @param cst    the cst
-	 * @param module the module
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void build(AST cst, IModule module) {
-		super.build(cst, module);
-		
-		// FOREACH
-		forEach = (ForEachModuleElement) module.createAst(AstUtil.getChild(cst, ModelFlowParser.FOREACH), this);
-		
-		// Guard
-		guard = (ExecutableBlock<Boolean>) module.createAst(AstUtil.getChild(cst, ModelFlowParser.GUARD), this);
-
-		// Inputs
-		process(cst, ModelFlowParser.INPUTS, inputs, module);
-		// Outputs
-		process(cst, ModelFlowParser.OUTPUTS, outputs, module);
-		// Inouts
-		process(cst, ModelFlowParser.INOUTS, inouts, module);
-
-		// Inputs
-		AST depends = AstUtil.getChild(cst, ModelFlowParser.DEPENDSON);
-		for (AST child : AstUtil.getChildren(depends)) {
-			TaskDependencyExpression exp = (TaskDependencyExpression) module.createAst(child, this);
-			dependsOn.add(exp);
-		}
-				
-		// @disabled 
-		if (getAnnotation("disabled") != null) enabled = false;
-		// @noTrace 
-		if (getAnnotation("noTrace") != null) trace = false;
-		// @always
-		if (getAnnotation("always") != null) alwaysExecute = true;
-	}
-	
-	protected void process(AST cst, Integer token, List<ModelCallExpression> destination, IModule module){
-		AST elements = AstUtil.getChild(cst, token);
-		if (elements != null) {			
-			AST list = elements.getFirstChild();
-			for (AST modelRef : list.getChildren()) {
-				ModelCallExpression element = null;
-				if (modelRef.getToken().getType() == ModelFlowParser.TASKRESOURCE) {
-					element = (ModelCallExpression) module.createAst(modelRef, this);
-				} else {					
-					AST ref = AstUtil.getChild(modelRef, ModelFlowParser.TASKRESOURCE);
-					element = (ModelCallExpression) module.createAst(ref, this);
-					
-					List<AST> aliases = AstUtil.getChildren(modelRef, ModelFlowParser.NAME);
-					for (AST alias : aliases) {
-						NameExpression name = (NameExpression) module.createAst(alias, this);
-						element.addAlias(name);
-					}				
-				}
-				if (element != null) {					
-					destination.add(element);
-				}
-			}
-		}
-	}
-	
-	public boolean isGenerator() {
-		return forEach != null;
-	}
-
-	/**
-	 * Gets the guard.
-	 *
-	 * @return the guard
-	 */
-	public ExecutableBlock<Boolean> getGuard() {
-		return guard;
-	}
-
-	/**
-	 * Sets the guard.
-	 *
-	 * @param guard the new guard
-	 */
-	public void setGuard(ExecutableBlock<Boolean> guard) {
-		this.guard = guard;
-	}
-
-	/**
-	 * @return the dependsOn
-	 */
-	public List<TaskDependencyExpression> getDependsOn() {
-		return dependsOn;
-	}
-	
-	/**
-	 * Gets the emf element.
-	 *
-	 * @return the emf element
-	 */
 	@Override
 	public Collection<ITask> getDomElements() {
 		return tasks;
@@ -173,6 +51,7 @@ public class TaskRule extends ConfigurableRule<ITask> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void compile(IEolCompilationContext context) {
+		super.compile(context);
 		if (context instanceof IModelFlowCompilationContext) {
 			IModelFlowCompilationContext ctx = (IModelFlowCompilationContext) context;
 
@@ -242,18 +121,36 @@ public class TaskRule extends ConfigurableRule<ITask> {
 			String msg = String.format("Unkown task factory '%s'", getType().getName());
 			ctx.addWarningMarker(getType(), msg);
 		}
-		setupConfigurableParameters(ctx, task, factory);
-		for (ModelCallExpression p : inputs) {
+		RuleUtil.setupConfigurableParameters(ctx, task, factory, this);
+		for (IModelCallExpression p : inputs) {
 			p.compile(ctx);
-			task.getConsumes().addAll(p.getDomElements());
+			final EList<IResourceReference> consumes = task.getConsumes();
+			if (p instanceof IEMFDomElement) {
+				((IEMFDomElement<?>) p).getDomElements().stream()
+					.filter(IResourceReference.class::isInstance)
+					.map(IResourceReference.class::cast)
+					.forEach(consumes::add);
+			}
 		}
-		for (ModelCallExpression p : inouts) {
+		for (IModelCallExpression p : inouts) {
 			p.compile(ctx);
-			task.getModifies().addAll(p.getDomElements());
+			final EList<IResourceReference> modifies = task.getModifies();
+			if (p instanceof IEMFDomElement) {
+				((IEMFDomElement<?>) p).getDomElements().stream()
+					.filter(IResourceReference.class::isInstance)
+					.map(IResourceReference.class::cast)
+					.forEach(modifies::add);
+			}
 		}
-		for (ModelCallExpression p : outputs) {
+		for (IModelCallExpression p : outputs) {
 			p.compile(ctx);
-			task.getProduces().addAll(p.getDomElements());
+			final EList<IResourceReference> produces = task.getProduces();
+			if (p instanceof IEMFDomElement) {
+				((IEMFDomElement<?>) p).getDomElements().stream()
+					.filter(IResourceReference.class::isInstance)
+					.map(IResourceReference.class::cast)
+					.forEach(produces::add);
+			}
 		}
 		if (guard != null) {
 			guard.compile(ctx);
@@ -272,11 +169,5 @@ public class TaskRule extends ConfigurableRule<ITask> {
 		task.setModuleElement(this);
 	}
 
-
-
-	@Override
-	public Object execute(IEolContext context) throws EolRuntimeException {
-		return null;
-	}
 
 }

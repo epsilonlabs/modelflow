@@ -13,9 +13,12 @@ import java.util.stream.Collectors;
 import org.epsilonlabs.modelflow.dom.api.ITaskFactory;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.TaskDefinitionValidator;
-import org.epsilonlabs.modelflow.dom.api.factory.TaskFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.EMFTaskFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.ModuleTaskFactory;
+import org.epsilonlabs.modelflow.dom.ast.TaskDeclaration;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
+import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 
@@ -32,13 +35,22 @@ public class TaskFactoryRegistry extends AbstractFactoryRegistry<ITaskInstance>{
 			.collect(Collectors.toSet()));
 	}
 
-	public ITaskInstance create(ITaskNode node, String name, IModelFlowContext ctx) throws MFInvalidFactoryException, MFInstantiationException {
+	public ITaskInstance create(ITaskNode node, IModelFlowContext ctx) throws MFInvalidFactoryException, MFInstantiationException {
 		Class<ITaskInstance> taskClazz;
 		try {
-			taskClazz = getFactory(node.getTaskElement().getDefinition());
-			final ITaskInstance instance = new TaskFactory(taskClazz, node, node.getName(), ctx).create();
-			node.setInstance(instance);
+			taskClazz = getFactory(node.getDefinition());
+			final ITaskInstance instance = new EMFTaskFactory(taskClazz, node, node.getName(), ctx).create();
 			return instance;
+		} catch (MFInvalidFactoryException e) {
+			throw new MFInstantiationException(e);
+		}
+	}
+	
+	public ITaskInstance create(TaskDeclaration declaration, IModelFlowContext ctx) throws MFRuntimeException {
+		Class<ITaskInstance> taskClazz;
+		try {
+			taskClazz = getFactory(declaration.getType().getName());
+			return new ModuleTaskFactory(taskClazz, declaration).create(ctx);
 		} catch (MFInvalidFactoryException e) {
 			throw new MFInstantiationException(e);
 		}

@@ -9,8 +9,8 @@ package org.epsilonlabs.modelflow.management.param;
 
 import java.util.Map;
 
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.slf4j.Logger;
@@ -21,32 +21,32 @@ public class AnnotationTaskParameterManager implements ITaskParameterManager {
 	private static final Logger LOG = LoggerFactory.getLogger(AnnotationTaskParameterManager.class);
 	
 	@Override
-	public ITaskPropertyHandler getInputParameterHandler(ITaskNode task){
+	public ITaskPropertyHandler getInputParameterHandler(ITaskInstance task){
 		return new TaskInputPropertyHandler(task);
 	}
 	
 	@Override
-	public ITaskPropertyHandler getOutputParameterHandler(ITaskNode task){
+	public ITaskPropertyHandler getOutputParameterHandler(ITaskInstance task){
 		return new TaskOutputPropertyHandler(task);
 	}
 	
 	@Override
-	public void processInputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = getInputParameterHandler(node).getHashes();
+	public void processInputs(ITaskInstance instance, IModelFlowContext ctx){
+		Map<String, Object> hashes = getInputParameterHandler(instance).getHashes();
 		LOG.debug("InputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {		
-			new ExecutionTraceUpdater(trace).addTaskInputProperties(node, hashes);
+			new ExecutionTraceUpdater(trace).addTaskInputProperties(instance.getName(), hashes);
 		}
 	}
 	
 	@Override
-	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = getOutputParameterHandler(node).getHashes();
+	public void processOutputs(ITaskInstance instance, IModelFlowContext ctx){
+		Map<String, Object> hashes = getOutputParameterHandler(instance).getHashes();
 		LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {			
-			new ExecutionTraceUpdater(trace).addTaskOutputProperties(node, hashes);
+			new ExecutionTraceUpdater(trace).addTaskOutputProperties(instance.getName(), hashes);
 		}
 	}
 	

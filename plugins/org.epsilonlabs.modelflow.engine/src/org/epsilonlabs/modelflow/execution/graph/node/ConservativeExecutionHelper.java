@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
@@ -30,26 +31,29 @@ public class ConservativeExecutionHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ConservativeExecutionHelper.class);
 
-	protected ITaskNode task;
+	protected ITaskInstance task;
+	protected ITaskNode node;
 	protected IModelFlowContext ctx;
 
 	protected ExecutionTraceUpdater updater;
 	protected TaskExecution currentTaskEecution;
 	protected TaskExecution previousTaskExecution;
+	
 
-	public ConservativeExecutionHelper(ITaskNode task, IModelFlowContext ctx) {
+	public ConservativeExecutionHelper(ITaskInstance task, ITaskNode node, IModelFlowContext ctx) {
 		this.task = task;
+		this.node = node;
 		this.ctx = ctx;
 	}
-
+	
 	/* CHECKER METHODS */
 
 	public boolean hasBeenPreviouslyExecuted() {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
-		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(task);
+		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(task.getName());
 		boolean present = optionalPastTaskExecution.isPresent();
 		if (present) {			
-			currentTaskEecution = updater.getCurrentTaskExecution(task);
+			currentTaskEecution = updater.getCurrentTaskExecution(task.getName());
 			previousTaskExecution = optionalPastTaskExecution.get();
 		}
 		return present;
@@ -90,20 +94,22 @@ public class ConservativeExecutionHelper {
 	// TODO check also model properties ?
 	protected boolean resourcesChanged(boolean input) {
 		Collection<IAbstractResourceNode> nodes;
+		
 		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
 		if (input) {
-			nodes = helper.getInputResourceNodes(task);
+			nodes = helper.getInputResourceNodes(node);
+			
 		} else {
-			nodes = helper.getOutputResourceNodes(task);
+			nodes = helper.getOutputResourceNodes(node);
 		}
 		for (IAbstractResourceNode r : nodes) {
 			if (r instanceof IModelResourceNode) {
 				IModelResourceNode resource = (IModelResourceNode) r;
 				Optional<ResourceSnapshot> pastResource;
 				if (input) {
-					pastResource = updater.getPastInputResource(task, resource);
+					pastResource = updater.getPastInputResource(task.getName(), resource.getName());
 				} else {
-					pastResource = updater.getPastOutputResource(task, resource);
+					pastResource = updater.getPastOutputResource(task.getName(), resource.getName());
 				}
 				if (pastResource.isPresent()) {
 					Object pastStamp = pastResource.get().getStamp();

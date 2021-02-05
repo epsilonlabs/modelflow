@@ -7,22 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.ast;
 
-import java.util.Collection;
-
-// TODO: Auto-generated Javadoc
-/**
- * The Interface IDomElement.
- *
- * @author Betty Sanchez
- * @param <T> the generic type
- */
-public interface IDomElement<T> {
-
-	/**
-	 * Gets the dom elements.
-	 *
-	 * @return the dom elements
-	 */
-	Collection<T> getDomElements();
+public class ModelDeclaration extends AbstractDeclaration implements IModelModuleElement {
 
 }

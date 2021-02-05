@@ -40,15 +40,15 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	
 	
 	@Override
-	public DependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
+	public IDependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
 		IModelFlowProfiler profiler = ctx.getProfiler();
 		profiler.start(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
-		DependencyGraph dg = buildImpl(ctx);
+		IDependencyGraph dg = buildImpl(ctx);
 		profiler.stop(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
 		return dg;
 	}
 	
-	protected abstract DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException;
+	protected abstract IDependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException;
 	
 	@Override
 	public Collection<IAbstractResourceNode> getResourceNodes() {

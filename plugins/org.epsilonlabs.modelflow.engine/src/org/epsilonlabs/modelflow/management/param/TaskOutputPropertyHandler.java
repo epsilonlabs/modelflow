@@ -15,17 +15,17 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 import org.epsilonlabs.modelflow.management.param.hash.IHasher;
 
 public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	
-	public TaskOutputPropertyHandler(ITaskNode node) {
-		super(node.getTaskInstance(), node);
+	public TaskOutputPropertyHandler(ITaskInstance instance) {
+		super(instance);
 	}
 		
 	@Override
@@ -58,34 +58,32 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	
 	@Override
 	public Map<String, Object> getHashes() {
-		if (node.getState().hasBeenExecuted()) {
-			this.properties = new HashMap<String, Object>();
-			this.hashes = new HashMap<String, Object>();
-			for (Method m : annotatedMethods) {
-				Object value = null; 
-				try {
-					value = m.invoke(task);
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					throw new IllegalStateException("Unable to retrieve input value");
-				}
-				if (value != null) {
-					try{
-						String key = getKey(m);
-						if (value instanceof Optional && ((Optional<?>)value).isPresent()) {
-							Object val = ((Optional<?>)value).get();
-							this.properties.put(key, val);
-						} else {
-							this.properties.put(key, value);
-						}						
-						@SuppressWarnings("unchecked")
-						IHasher<Object, Object> hasher = (IHasher<Object, Object>) m.getAnnotation(Output.class).hasher().newInstance();
-						this.hashes.put(key, hasher.fromTaskPopulatedParameter(this.properties.get(key)));
-					} catch (Exception e) {
-						throw new IllegalStateException("Unable to retrieve hasher for output property");
-					}
+		this.properties = new HashMap<String, Object>();
+		this.hashes = new HashMap<String, Object>();
+		for (Method m : annotatedMethods) {
+			Object value = null; 
+			try {
+				value = m.invoke(task);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				throw new IllegalStateException("Unable to retrieve input value");
+			}
+			if (value != null) {
+				try{
+					String key = getKey(m);
+					if (value instanceof Optional && ((Optional<?>)value).isPresent()) {
+						Object val = ((Optional<?>)value).get();
+						this.properties.put(key, val);
+					} else {
+						this.properties.put(key, value);
+					}						
+					@SuppressWarnings("unchecked")
+					IHasher<Object, Object> hasher = (IHasher<Object, Object>) m.getAnnotation(Output.class).hasher().newInstance();
+					this.hashes.put(key, hasher.fromTaskPopulatedParameter(this.properties.get(key)));
+				} catch (Exception e) {
+					throw new IllegalStateException("Unable to retrieve hasher for output property");
 				}
 			}
-		} 
+		}
 		return hashes;
 	}
 	
@@ -93,22 +91,20 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	@SuppressWarnings("unchecked")
 	public Map<String, Object> getHashesFromTrace(TaskExecution taskExecution){
 		taskExecution = EcoreUtil.copy(taskExecution);
-		if (!node.getState().hasBeenExecuted()) {
-			this.hashes = new HashMap<String, Object>();
-			for (Method m : annotatedMethods) {
-				String key = getKey(m);
-				Optional<Object> value = taskExecution.getOutputProperties().stream().filter(p->p.getName().equals(key)).map(PropertySnapshot::getStamp).findFirst();
-				if (value.isPresent()){
-					Object trace = value.get();
-					try {
-						IHasher<Object, Object> hasher = (IHasher<Object, Object>) m.getAnnotation(Output.class).hasher().newInstance();
-						this.hashes.put(key, hasher.fromExecutionTrace(trace));
-					} catch (Exception e) {
-						throw new IllegalStateException("Unable to retrieve hasher for output property from trace", e);
-					}
+		this.hashes = new HashMap<String, Object>();
+		for (Method m : annotatedMethods) {
+			String key = getKey(m);
+			Optional<Object> value = taskExecution.getOutputProperties().stream().filter(p->p.getName().equals(key)).map(PropertySnapshot::getStamp).findFirst();
+			if (value.isPresent()){
+				Object trace = value.get();
+				try {
+					IHasher<Object, Object> hasher = (IHasher<Object, Object>) m.getAnnotation(Output.class).hasher().newInstance();
+					this.hashes.put(key, hasher.fromExecutionTrace(trace));
+				} catch (Exception e) {
+					throw new IllegalStateException("Unable to retrieve hasher for output property from trace", e);
 				}
 			}
-		} 
+		}
 		return hashes;
 	}
 

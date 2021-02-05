@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
@@ -21,7 +22,6 @@ import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
@@ -37,23 +37,25 @@ public class ResourceManager implements IResourceManager {
 	 * This method is called when the node has been marked ready for execution.
 	 */
 	@Override
-	public void processResourcesBeforeExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
+	public void processResourcesBeforeExecution(ITaskInstance taskInstance, IModelFlowContext ctx) throws MFRuntimeException {
+		final String taskName = taskInstance.getName();
+
 		// Create empty list of models for task to accept 
 		List<IModelWrapper> list = new ArrayList<>();
 		
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		// Prepare task execution trace
-		final TaskExecution tExec = updater.getCurrentTaskExecution(tNode);
+		final TaskExecution tExec = updater.getCurrentTaskExecution(taskName);
 		tExec.getInputModels().clear();
 
 		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
 		// For all the resources connected to this task node
-		for (IAbstractResourceNode entry : helper.getResourceNodes(tNode)) {
+		for (IAbstractResourceNode entry : helper.getResourceNodes(taskInstance)) {
 			IAbstractResourceNode rNode = entry;
-			ResourceKind kind = helper.getResourceKindForTask(rNode, tNode);
+			ResourceKind kind = helper.getResourceKindForTask(rNode, taskInstance);
 			// If of type ModelResource 
 			if (rNode instanceof IModelResourceNode) {
-				handleModelResourceBeforeExecution(tNode, ctx, list, updater, tExec, (IModelResourceNode) rNode, kind);
+				handleModelResourceBeforeExecution(taskInstance, ctx, list, updater, tExec, (IModelResourceNode) rNode, kind);
 			} 
 			// If of type DerivedResource 
 			else if (rNode instanceof DerivedResourceNode) {
@@ -64,10 +66,10 @@ public class ResourceManager implements IResourceManager {
 		// List to Array 
 		IModelWrapper[] iModelResources = list.toArray(new IModelWrapper[0]);
 		// Assign models to task for review 
-		tNode.getTaskInstance().acceptModels(iModelResources);
+		taskInstance.acceptModels(iModelResources);
 	}
 
-	protected void handleModelResourceBeforeExecution(ITaskNode tNode, IModelFlowContext ctx, List<IModelWrapper> list,
+	protected void handleModelResourceBeforeExecution(ITaskInstance tNode, IModelFlowContext ctx, List<IModelWrapper> list,
 			ExecutionTraceUpdater updater, final TaskExecution tExec, IModelResourceNode rNode, ResourceKind kind)
 			throws MFRuntimeException {
 		// Get (if already created) or create resource
@@ -82,7 +84,7 @@ public class ResourceManager implements IResourceManager {
 		// Load resource as indicated by the resource kind (in/out..)
 		IModelFlowProfiler profiler = ctx.getProfiler();
 		profiler.start(IMeasurable.Stage.LOAD, rNode, ctx);
-		IModelWrapper mRes = new ResourceLoader(kind,r, rNode).load(tNode);
+		IModelWrapper mRes = new ResourceLoader(kind,r, rNode).load();
 		profiler.stop(IMeasurable.Stage.LOAD, rNode, ctx);
 
 		// Add model to list of models for task to accept
@@ -115,30 +117,31 @@ public class ResourceManager implements IResourceManager {
 	 * @throws MFRuntimeException 
 	 */
 	@Override
-	public void processResourcesAfterExecution(ITaskNode tNode, IModelFlowContext ctx) throws MFRuntimeException {
+	public void processResourcesAfterExecution(ITaskInstance taskInstance, IModelFlowContext ctx) throws MFRuntimeException {
+		final String taskName = taskInstance.getName();
 		
 		// Prepare task execution trace 
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
-		final TaskExecution tExec = updater.getCurrentTaskExecution(tNode);
+		final TaskExecution tExec = updater.getCurrentTaskExecution(taskName);
 		tExec.getOutputModels().clear();
 		
 		// For all the resources connected to this task node 
 		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
-		for (IAbstractResourceNode e : helper.getResourceNodes(tNode)) {
-			ResourceKind kind = helper.getResourceKindForTask(e, tNode);
+		for (IAbstractResourceNode e : helper.getResourceNodes(tNode2)) {
+			ResourceKind kind = helper.getResourceKindForTask(e, tNode2);
 			IAbstractResourceNode value = e;
 			// If of type ModelResourceNode 
 			if (value instanceof IModelResourceNode) {
-				handleModelResourceAfterExecution(tNode, ctx, updater, tExec, kind, value);
+				handleModelResourceAfterExecution(taskInstance, ctx, updater, tExec, kind, value);
 			}
 			// If type DerivedResource
 			else if (value instanceof DerivedResourceNode) {
-				handleDerivedResourceAfterExecution(tNode, ctx, kind, value);
+				handleDerivedResourceAfterExecution(taskInstance, ctx, kind, value);
 			}
 		}
 	}
 
-	protected void handleModelResourceAfterExecution(ITaskNode tNode, IModelFlowContext ctx, ExecutionTraceUpdater updater,
+	protected void handleModelResourceAfterExecution(ITaskInstance tNode, IModelFlowContext ctx, ExecutionTraceUpdater updater,
 			final TaskExecution tExec, ResourceKind kind, IAbstractResourceNode value) throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) value;
 		ResourceRepository repo = ctx.getTaskRepository().getResourceRepository();
@@ -177,7 +180,7 @@ public class ResourceManager implements IResourceManager {
 		}
 	}
 
-	protected void handleDerivedResourceAfterExecution(ITaskNode tNode, IModelFlowContext ctx, ResourceKind kind,
+	protected void handleDerivedResourceAfterExecution(ITaskInstance taskInstance, IModelFlowContext ctx, ResourceKind kind,
 			IAbstractResourceNode value) {
 		// Exclusively Output
 		if (kind.isOutput()) {			
@@ -187,10 +190,10 @@ public class ResourceManager implements IResourceManager {
 			// If result
 			Object result = null;
 			if ("trace".equals(propertyName)){
-				result = tNode.getTaskInstance().getTrace();
+				result = taskInstance.getTrace();
 			// If other
 			} else {
-				result = ctx.getParamManager().getOutputParameterHandler(tNode).get(propertyName);
+				result = ctx.getParamManager().getOutputParameterHandler(taskInstance).get(propertyName);
 			} 
 			// If present, save value in repository
 			if (result != null) {				

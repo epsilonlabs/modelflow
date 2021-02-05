@@ -38,21 +38,32 @@ import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.erl.ErlModule;
+import org.epsilonlabs.modelflow.compile.context.EMFModelFlowCompilationContext;
+import org.epsilonlabs.modelflow.compile.context.IEMFModelFlowCompilationContext;
+import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IModelResource;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.ITaskDependency;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.ast.ForEachModuleElement;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.ModelCallExpression;
+import org.epsilonlabs.modelflow.dom.ast.ModelDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.ParameterDeclaration;
-import org.epsilonlabs.modelflow.dom.ast.ResourceRule;
+import org.epsilonlabs.modelflow.dom.ast.TaskDeclaration;
 import org.epsilonlabs.modelflow.dom.ast.TaskDependencyExpression;
-import org.epsilonlabs.modelflow.dom.ast.TaskRule;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFModelCallExpression;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFResourceRule;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFTaskDependencyExpression;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFTaskRule;
+import org.epsilonlabs.modelflow.dom.ast.emf.IEMFDomElement;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.execution.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
+import org.epsilonlabs.modelflow.execution.context.ModelFlowEMFContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
@@ -91,12 +102,13 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	protected String hasher;
 	protected TaskFactoryRegistry taskFactoryRegistry;
 	protected ResourceFactoryRegistry resFactoryRegistry;
-	protected ModelFlowCompilationContext compilationCtx;
+	protected IModelFlowCompilationContext compilationCtx;
 	protected List<VariableDeclaration> parameterDeclarations;
 	protected IWorkflow workflow;
 	protected ModulePersistenceHelper traceHelper;
 	protected IModelFlowConfiguration config;
 
+	protected boolean EMF = false;
 	/*
 	 *******************************************
 	 * CONSTRUCTOR
@@ -104,7 +116,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	 */
 
 	public ModelFlowModule() {
-		this.context = new ModelFlowContext();
 		this.traceHelper = new ModulePersistenceHelper(this);
 		this.config = new ModelFlowConfiguration(this);
 	}
@@ -195,6 +206,9 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 	@Override
 	public IModelFlowContext getContext() {
+		if (context == null) {
+			this.context = EMF ? new ModelFlowEMFContext() : new ModelFlowContext();
+		}
 		return (IModelFlowContext) context;
 	}
 
@@ -257,14 +271,14 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		// Resources
 		List<AST> resourceChildrenAsts = AstUtil.getChildren(cst, ModelFlowParser.RESOURCEDECLARATION);
 		for (AST resource : resourceChildrenAsts) {
-			ResourceRule rule = (ResourceRule) module.createAst(resource, this);
+			IModelModuleElement rule = (IModelModuleElement) module.createAst(resource, this);
 			getCompilationContext().getResourceDeclarations().add(rule);
 		}
 
 		// Tasks
 		List<AST> taskChildrenAsts = AstUtil.getChildren(cst, ModelFlowParser.TASKDECLARATION);
 		for (AST taskAst : taskChildrenAsts) {
-			TaskRule task = (TaskRule) module.createAst(taskAst, this);
+			ITaskModuleElement task = (ITaskModuleElement) module.createAst(taskAst, this);
 			getCompilationContext().getTaskDeclarations().add(task);
 		}
 	}
@@ -274,13 +288,13 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		switch (cst.getType()) {
 		
 		case ModelFlowParser.RESOURCEDECLARATION:
-			return new ResourceRule();
-			
-		case ModelFlowParser.RULETYPE:
-			return new NameExpression(cst.getText());
+			return EMF ? new EMFResourceRule() : new ModelDeclaration();
 			
 		case ModelFlowParser.TASKDECLARATION:
-			return new TaskRule();
+			return EMF ? new EMFTaskRule() : new TaskDeclaration();
+
+		case ModelFlowParser.RULETYPE:
+			return new NameExpression(cst.getText());	
 		
 		case ModelFlowParser.GUARD:
 			return new ExecutableBlock<>(Boolean.class);
@@ -295,12 +309,12 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			return new NameExpression();
 		
 		case ModelFlowParser.NAME:
-			if (parentAst instanceof TaskRule) {
+			if (parentAst instanceof ITaskModuleElement) {
 				int parentToken = cst.getParent().getType();
 				if (parentToken == ModelFlowParser.DEPENDSON) {
-					return new TaskDependencyExpression((TaskRule) parentAst);
+					return EMF ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
 				} else if (parentToken == ModelFlowParser.TASKRESOURCE) {
-					return new ModelCallExpression((TaskRule) parentAst);
+					return EMF ? new EMFModelCallExpression() : new ModelCallExpression();
 				} else {
 					return super.adapt(cst, parentAst);
 				}
@@ -308,14 +322,14 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			break;
 		
 		case ModelFlowParser.DEPENDSON:
-			if (parentAst instanceof TaskRule) {
-				return new TaskDependencyExpression((TaskRule) parentAst);
+			if (parentAst instanceof ITaskModuleElement) {
+				return EMF ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
 			}
 			break;
 		
 		case ModelFlowParser.TASKRESOURCE:
-			if (parentAst instanceof TaskRule) {
-				return new ModelCallExpression((TaskRule) parentAst);
+			if (parentAst instanceof ITaskModuleElement) {
+				return EMF ? new EMFModelCallExpression() : new ModelCallExpression();
 			}
 			break;
 		
@@ -332,9 +346,9 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	 */
 
 	@Override
-	public ModelFlowCompilationContext getCompilationContext() {
+	public IModelFlowCompilationContext getCompilationContext() {
 		if (compilationCtx == null) {
-			compilationCtx = new ModelFlowCompilationContext(this);
+			compilationCtx = EMF ? new EMFModelFlowCompilationContext(this) : new ModelFlowCompilationContext(this);
 		}
 		compilationCtx.setRuntimeContext(getContext());
 		return compilationCtx;
@@ -342,24 +356,36 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 
 	@Override
 	public List<ModuleMarker> compile() {
-		ModelFlowCompilationContext context = getCompilationContext();
+		IModelFlowCompilationContext context = getCompilationContext();
 		workflow = DomFactory.eINSTANCE.createWorkflow();
-		for (ResourceRule modelDeclaration : context.getResourceDeclarations()) {
+		for (IModelModuleElement modelDeclaration : context.getResourceDeclarations()) {
 			modelDeclaration.compile(context);
-			Collection<IModelResource> resources = modelDeclaration.getDomElements();
-			workflow.getResources().addAll(resources);
-			resources.stream().forEach(r->context.registerResourceModelElement(r, modelDeclaration));
+			if (modelDeclaration instanceof IEMFDomElement && context instanceof IEMFModelFlowCompilationContext) {				
+				Collection<?> resources = ((IEMFDomElement<?>) modelDeclaration).getDomElements();
+				resources.stream().filter(IModelResource.class::isInstance).map(IModelResource.class::cast).forEach(r->{
+					((IEMFModelFlowCompilationContext) context).registerResourceModelElement(r, modelDeclaration);	
+					workflow.getResources().add(r);
+				});
+			}
 		}
-		for (TaskRule taskDeclaration : context.getTaskDeclarations()) {
+		for (ITaskModuleElement taskDeclaration : context.getTaskDeclarations()) {
 			taskDeclaration.compile(context);
-			Collection<ITask> tasks = taskDeclaration.getDomElements();
-			tasks.stream().forEach(t->context.registerTaskModelElement(t, taskDeclaration));
-			workflow.getTasks().addAll(tasks);
+			if (taskDeclaration instanceof IEMFDomElement) {
+				Collection<?> tasks = ((IEMFDomElement<?>) taskDeclaration).getDomElements();
+				tasks.stream().filter(ITask.class::isInstance).map(ITask.class::cast).forEach(t->{
+					((IEMFModelFlowCompilationContext) context).registerTaskModelElement(t, taskDeclaration);	
+					workflow.getTasks().add(t);
+				});
+			}
 		}
-		context.getTaskDeclarations().stream().map(TaskRule::getDependsOn).flatMap(Collection::stream).forEach(dep ->{
+		context.getTaskDeclarations().stream().map(ITaskModuleElement::getDependsOn).flatMap(Collection::stream).forEach(dep ->{
 			dep.compile(context);
-			Collection<ITaskDependency> domElements = dep.getDomElements();
-			workflow.getTaskDependencies().addAll(domElements);
+			if (dep instanceof IEMFDomElement) {
+				Collection<?> deps = ((IEMFDomElement<?>) dep).getDomElements();
+				deps.stream().filter(ITaskDependency.class::isInstance).map(ITaskDependency.class::cast).forEach(t->{
+					workflow.getTaskDependencies().add(t);
+				});
+			}
 		});
 		return super.compile();
 	}
@@ -427,8 +453,9 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	protected void prepareContext() throws EolRuntimeException {
 		super.prepareContext();
-		IModelFlowContext ctx = getContext();
-
+		
+		IModelFlowContext ctx = getContext();		
+		
 		if (getTaskFactoryRegistry() == null) {
 			throw new EolRuntimeException("The Task Factory Registry is null");
 		}
@@ -457,6 +484,11 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			ctx.setExecutor(new TopologicalSequentialScheduler());
 		}
 		
+		// Model Manager
+		if (ctx.getResourceManager() == null) {
+			ctx.setResourceManager(new ResourceManager());
+		}
+		
 		// Path Resolver
 		if (getCompilationContext().getRelativePathResolver() == null) {
 			getCompilationContext().setRelativePathResolver(
@@ -467,11 +499,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 					return relativePath;
 				}
 			);
-		}
-
-		// Model Manager
-		if (ctx.getResourceManager() == null) {
-			ctx.setResourceManager(new ResourceManager());
 		}
 
 		// Param Manager

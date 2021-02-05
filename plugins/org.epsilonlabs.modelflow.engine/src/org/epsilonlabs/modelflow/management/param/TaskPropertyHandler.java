@@ -15,20 +15,17 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 
 public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 
 	protected Set<Method> annotatedMethods;
 	protected ITaskInstance task;
-	protected ITaskNode node;
 	protected Map<String, Object> properties;
 	protected Map<String, Object> hashes;
 
-	public TaskPropertyHandler(ITaskInstance task, ITaskNode node) {
+	public TaskPropertyHandler(ITaskInstance task) {
 		this.task = task;
-		this.node = node;
 		this.annotatedMethods = getMethods();
 	}
 	
@@ -45,15 +42,11 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	@Override
 	public Map<String, Object> get(){
 		if (properties == null) {
-			if (node.getState().hasBeenInitialised()) {
-				this.properties = new HashMap<>();
-				for (Method m : annotatedMethods) {
-					Object assignableValue = getAssignableValue(m);
-					String key = getKey(m);
-					this.properties.put(key, assignableValue);
-				}
-			} else {
-				throw new IllegalStateException("Task has not been initialised yet");
+			this.properties = new HashMap<>();
+			for (Method m : annotatedMethods) {
+				Object assignableValue = getAssignableValue(m);
+				String key = getKey(m);
+				this.properties.put(key, assignableValue);
 			}
 		}
 		return this.properties;
@@ -79,14 +72,11 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	
 	@Override
 	public Map<String, Object> getHashes(){
-		if (node.getState().hasBeenInitialised()) {
-			if (this.hashes == null) {
-				hashes = new HashMap<>();
-				get().entrySet().forEach(e-> hashes.put(e.getKey(),Hasher.hash(e.getValue())) );
-			}
-			return hashes;
+		if (this.hashes == null) {
+			hashes = new HashMap<>();
+			get().entrySet().forEach(e-> hashes.put(e.getKey(),Hasher.hash(e.getValue())) );
 		}
-		throw new IllegalStateException("Task has not been initialised yet");
+		return hashes;
 	}
 	
 	protected abstract String getKey(Method method);

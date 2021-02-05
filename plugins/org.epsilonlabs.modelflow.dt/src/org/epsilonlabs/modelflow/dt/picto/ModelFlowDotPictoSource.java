@@ -23,6 +23,7 @@ import org.epsilonlabs.modelflow.dt.editor.ModelFlowEditor;
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
+import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 
 /**
  * @author Betty Sanchez
@@ -30,7 +31,7 @@ import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
  */
 public class ModelFlowDotPictoSource extends GraphvizSource {
 
-	protected Map<File, DependencyGraph> graphs = new HashMap<>();
+	protected Map<File, IDependencyGraph> graphs = new HashMap<>();
 	
 	@Override
 	public String getFileExtension() {
@@ -60,7 +61,7 @@ public class ModelFlowDotPictoSource extends GraphvizSource {
 							.collect(Collectors.toList())
 							.isEmpty();
 					if (noParseProblems && noCompilationErrors) {						
-						DependencyGraph dg = null;				
+						IDependencyGraph dg = null;				
 						try {
 							IModelFlowContext ctx = mfModule.getContext();
 							ctx.setModule(mfModule);					
@@ -84,7 +85,7 @@ public class ModelFlowDotPictoSource extends GraphvizSource {
 		if (iFile == null )
 			return createEmptyViewTree();
 		File modelFile = new File(iFile.getLocation().toOSString());
-		DependencyGraph dg = graphs.get(modelFile);
+		IDependencyGraph dg = graphs.get(modelFile);
 		if (dg == null) {
 			return createEmptyViewTree();
 		}

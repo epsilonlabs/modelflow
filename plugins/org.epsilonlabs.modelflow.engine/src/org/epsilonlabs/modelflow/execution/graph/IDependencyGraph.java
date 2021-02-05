@@ -30,7 +30,7 @@ public interface IDependencyGraph {
 	 * @return the dependency graph
 	 * @throws MFDependencyGraphException the MF dependency graph exception
 	 */
-	DependencyGraph build(IModelFlowContext context) throws MFDependencyGraphException;
+	IDependencyGraph build(IModelFlowContext context) throws MFDependencyGraphException;
 
 	/**
 	 * Gets the state.

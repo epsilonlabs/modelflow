@@ -8,7 +8,7 @@
 package org.epsilonlabs.modelflow;
 
 import org.eclipse.epsilon.erl.IErlModule;
-import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
+import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -50,7 +50,7 @@ public interface IModelFlowModule extends IErlModule {
 	 * @return the compilation context
 	 */
 	@Override
-	ModelFlowCompilationContext getCompilationContext();
+	IModelFlowCompilationContext getCompilationContext();
 
 	/**
 	 * Clear cache.
@@ -98,6 +98,5 @@ public interface IModelFlowModule extends IErlModule {
 	 * @return the configuration
 	 */
 	IModelFlowConfiguration getConfiguration();
-
 
 }

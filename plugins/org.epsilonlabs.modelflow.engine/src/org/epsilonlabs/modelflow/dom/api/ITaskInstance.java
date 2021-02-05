@@ -75,5 +75,20 @@ public interface ITaskInstance {
 	default boolean isAlwaysExecute() {
 		return false;
 	}
+
+	/**
+	 * 
+	 */
+	default void beforeExecute() {}
+	
+	/**
+	 * SubClasses should not implement this method
+	 * @return
+	 */
+	default String getName() {
+		return "";
+	}
+	
+	default void setName(String name) {} 
 	
 }

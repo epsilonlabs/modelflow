@@ -19,7 +19,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.IConfigurable;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
-import org.epsilonlabs.modelflow.dom.ast.TaskRule;
+import org.epsilonlabs.modelflow.dom.ast.emf.EMFTaskRule;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -32,7 +32,7 @@ import com.google.inject.Injector;
  * @author Betty Sanchez
  *
  */
-public class TaskFactory extends AbstractFactory {
+public class EMFTaskFactory extends AbstractFactory {
 
 	/** 
 	 * REGEX that identifies implicit references in parameters
@@ -47,7 +47,7 @@ public class TaskFactory extends AbstractFactory {
 	protected ITask task;
 	protected ITaskInstance iTask;
 	
-	public TaskFactory(Class<? extends ITaskInstance> factory, ITaskNode node, String name, IModelFlowContext ctx) {
+	public EMFTaskFactory(Class<? extends ITaskInstance> factory, ITaskNode node, String name, IModelFlowContext ctx) {
 		super(ctx, factory);
 		this.node = node;
 		this.task = node.getTaskElement();
@@ -88,7 +88,7 @@ public class TaskFactory extends AbstractFactory {
 	protected ModuleElement prepareFrameStack() {
 		Variable[] variables = new Variable[0];
 		IConfigurable configurable = getConfigurable();
-		TaskRule me = (TaskRule) configurable.getModuleElement();
+		EMFTaskRule me = (EMFTaskRule) configurable.getModuleElement();
 		if (me.isGenerator()) {
 			variables = me.getVars(configurable.getName()).toArray(new Variable[0]);
 		}

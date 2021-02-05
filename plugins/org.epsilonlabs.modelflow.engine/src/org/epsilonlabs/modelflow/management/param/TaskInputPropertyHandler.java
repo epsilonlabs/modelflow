@@ -11,15 +11,15 @@ import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 
 public class TaskInputPropertyHandler extends TaskPropertyHandler {
 
-	public TaskInputPropertyHandler(ITaskNode node) {
-		super(node.getTaskInstance(), node);
+	public TaskInputPropertyHandler(ITaskInstance instance) {
+		super(instance);
 	}
 		
 	@Override

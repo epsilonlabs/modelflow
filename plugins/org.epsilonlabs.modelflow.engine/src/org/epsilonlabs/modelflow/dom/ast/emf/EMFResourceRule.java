@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.dom.ast;
+package org.epsilonlabs.modelflow.dom.ast.emf;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,9 +14,10 @@ import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IModelResource;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.ast.ModelDeclaration;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 
-public class ResourceRule extends ConfigurableRule<IModelResource> {
+public class EMFResourceRule extends ModelDeclaration implements IEMFDomElement<IModelResource> {
 
 	protected IModelResource modelResource;
 
@@ -27,6 +28,7 @@ public class ResourceRule extends ConfigurableRule<IModelResource> {
 
 	@Override
 	public void compile(IEolCompilationContext context) {
+		super.compile(context);
 		if (context instanceof ModelFlowCompilationContext) {
 			ModelFlowCompilationContext ctx = (ModelFlowCompilationContext) context;
 			
@@ -43,7 +45,7 @@ public class ResourceRule extends ConfigurableRule<IModelResource> {
 				ctx.addWarningMarker(getType(), msg);
 			}
 			
-			setupConfigurableParameters(ctx, resource, factory);
+			RuleUtil.setupConfigurableParameters(ctx, resource, factory, this);
 			
 			/*for (Entry<NameExpression, ModuleElement> p : parameters.entrySet()) {
 				Property property = DomFactoryImpl.eINSTANCE.createProperty();

@@ -59,6 +59,14 @@ public class ResourceRepository {
 		}
 	}
 	
+	public Optional<IModelResourceInstance<?>> get(String id) throws MFRuntimeException {
+		if (this.resources.containsKey(id)) {
+			return Optional.of(this.resources.get(id));
+		} else {
+			return Optional.empty();
+		}
+	}
+	
 	public IModelResourceInstance<?> getOrCreate(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
 		Optional<IModelResourceInstance<?>> optional = get(node);
 		IModelResourceInstance<?> iResource;

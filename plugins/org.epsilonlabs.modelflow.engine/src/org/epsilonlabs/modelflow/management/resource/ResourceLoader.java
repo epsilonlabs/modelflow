@@ -10,7 +10,6 @@ package org.epsilonlabs.modelflow.management.resource;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ public class ResourceLoader {
 		this.node = node;
 	}
 	
-	public IModelWrapper load(ITaskNode taskNode) throws MFResourceInstantiationException {
+	public IModelWrapper load() throws MFResourceInstantiationException {
 		
 		IModelResourceInstance<?> resource = null;
 		switch (as) {

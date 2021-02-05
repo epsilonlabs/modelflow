@@ -22,8 +22,6 @@ import org.epsilonlabs.modelflow.dom.IResource;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementHandler;
-import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,21 +53,21 @@ public class ExecutionTraceUpdater {
 		}
 	}
 	
-	public synchronized TaskExecution getCurrentTaskExecution(ITaskNode task){
+	public synchronized TaskExecution getCurrentTaskExecution(String taskName){
 		for (TaskExecution t: getCurrentWorkflowExecution().getTasks()) {
-			if (t.getName().equals(task.getTaskElement().getName())) {
+			if (t.getName().equals(taskName)) {
 				return t;
 			} 
 		}
 		throw new IllegalStateException("A TaskExecution record should be accessible");
 	}
 	
-	public synchronized Optional<TaskExecution> getPreviousTaskExecution(ITaskNode task){
+	public synchronized Optional<TaskExecution> getPreviousTaskExecution(String taskName){
 		Optional<WorkflowExecution> previousWorkflowExecution = getPreviousWorkflowExecution();
 		if (previousWorkflowExecution.isPresent()) {
 			WorkflowExecution workflowExecution = previousWorkflowExecution.get();
 			for (TaskExecution t: workflowExecution.getTasks()) {
-				if (t.getName().equals(task.getTaskElement().getName())) {
+				if (t.getName().equals(taskName)) {
 					return Optional.of(t);
 				} 
 			}
@@ -78,11 +76,15 @@ public class ExecutionTraceUpdater {
 	}
 	
 	public synchronized WorkflowExecution createWorkflowExecution(IWorkflow w) {
+		return createWorkflowExecution(w.getName());
+	}
+	
+	public synchronized WorkflowExecution createWorkflowExecution(String workflowName) {
 		//Workflow copy = EcoreUtil.copy(w);
 		//serializableCopy(copy);
 		
 		WorkflowExecution currentWorkflowExecution = ExecutionTraceFactoryImpl.eINSTANCE.createWorkflowExecution();
-		currentWorkflowExecution.setStamp(w.getName()); //TODO use stamp
+		currentWorkflowExecution.setStamp(workflowName); //TODO use stamp
 		trace.getExecutions().add(currentWorkflowExecution);
 		return currentWorkflowExecution;
 	}
@@ -160,8 +162,8 @@ public class ExecutionTraceUpdater {
 		trace.getLatest().add(copy);
 	}
 		
-	public synchronized void addTaskInputProperties(ITaskNode node, Map<String, Object> map){
-		TaskExecution taskExecution = getCurrentTaskExecution(node);
+	public synchronized void addTaskInputProperties(String task, Map<String, Object> map){
+		TaskExecution taskExecution = getCurrentTaskExecution(task);
 		taskExecution.getInputProperties().clear();
 		for (Entry<String, Object> pair : map.entrySet()) {
 			PropertySnapshot propSnapshot = createPropertySnapshot(pair);
@@ -169,11 +171,11 @@ public class ExecutionTraceUpdater {
 		}
 	}
 	
-	public synchronized Optional<ResourceSnapshot> getPastInputResource(ITaskNode task, IResourceNode resource){
+	public synchronized Optional<ResourceSnapshot> getPastInputResource(String task, String resource){
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot inputModel : taskExecution.get().getInputModels()) {
-				if (inputModel.getName().equals(resource.getModelElement().getName())) {
+				if (inputModel.getName().equals(resource)) {
 					return Optional.of(inputModel);
 				}
 			}
@@ -181,11 +183,11 @@ public class ExecutionTraceUpdater {
 		return Optional.empty();
 	}
 	
-	public synchronized Optional<ResourceSnapshot> getPastOutputResource(ITaskNode task, IResourceNode resource){
+	public synchronized Optional<ResourceSnapshot> getPastOutputResource(String task, String resource){
 		Optional<TaskExecution> taskExecution = getPreviousTaskExecution(task);
 		if (taskExecution.isPresent()) {
 			for (ResourceSnapshot outputModel : taskExecution.get().getOutputModels()) {
-				if (outputModel.getName().equals(resource.getModelElement().getName())) {
+				if (outputModel.getName().equals(resource)) {
 					return Optional.of(outputModel);
 				}
 			}
@@ -193,8 +195,8 @@ public class ExecutionTraceUpdater {
 		return Optional.empty();
 	}
 
-	public synchronized void addTaskOutputProperties(ITaskNode node, Map<String, Object> map){
-		TaskExecution taskExecution = getCurrentTaskExecution(node);
+	public synchronized void addTaskOutputProperties(String task, Map<String, Object> map){
+		TaskExecution taskExecution = getCurrentTaskExecution(task);
 		taskExecution.getOutputProperties().clear();
 		for (Entry<String, Object> pair : map.entrySet()) {
 			PropertySnapshot propSnapshot = createPropertySnapshot(pair);
@@ -210,11 +212,11 @@ public class ExecutionTraceUpdater {
 		return propSnapshot;
 	}
 	
-	protected synchronized boolean hasChanged(ITaskNode task){
+	protected synchronized boolean hasChanged(String task){
 		return taskPropertiesHaveChanged(task);
 	}
 	
-	protected synchronized boolean taskPropertiesHaveChanged(ITaskNode task){
+	protected synchronized boolean taskPropertiesHaveChanged(String task){
 		Optional<TaskExecution> previousTaskExecution = getPreviousTaskExecution(task);
 		if (previousTaskExecution.isPresent()) {
 			TaskExecution current = getCurrentTaskExecution(task);

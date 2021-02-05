@@ -5,21 +5,24 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.execution.graph.node;
+package org.epsilonlabs.modelflow.dom.ast.emf;
 
-import org.epsilonlabs.modelflow.dom.IModelResource;
+import java.util.Collection;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Interface IModelResourceNode.
+ * The Interface IDomElement.
+ *
+ * @author Betty Sanchez
+ * @param <T> the generic type
  */
-public interface IModelResourceNode extends IResourceNode {
+public interface IEMFDomElement<T> {
 
 	/**
-	 * Gets the internal.
+	 * Gets the dom elements.
 	 *
-	 * @return the internal
+	 * @return the dom elements
 	 */
-	@Override
-	IModelResource getModelElement();
-		
+	Collection<T> getDomElements();
+
 }

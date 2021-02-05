@@ -21,7 +21,7 @@ public class DerivedResourceNode extends AbstractResourceNode<IDerivedResource> 
 	}
 
 	@Override
-	public String getType() {
+	public String getDefinition() {
 		return "derived";
 	}
 	

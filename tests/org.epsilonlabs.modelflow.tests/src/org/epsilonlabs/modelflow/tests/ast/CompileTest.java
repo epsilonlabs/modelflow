@@ -26,7 +26,7 @@ import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.ITaskDependency;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
-import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
+import org.epsilonlabs.modelflow.execution.context.ModelFlowEMFContext;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -327,7 +327,7 @@ public class CompileTest extends AbstractParsingTest {
 			assertTrue("Invalid guard type", guard instanceof ExecutableBlock);
 			try {
 				@SuppressWarnings("unchecked")
-				Boolean result = ((ExecutableBlock<Boolean>) guard).execute(new ModelFlowContext());
+				Boolean result = ((ExecutableBlock<Boolean>) guard).execute(new ModelFlowEMFContext());
 				assertTrue("Invalid expected guard value", result);
 			} catch (EolRuntimeException e) {
 				e.getMessage();
