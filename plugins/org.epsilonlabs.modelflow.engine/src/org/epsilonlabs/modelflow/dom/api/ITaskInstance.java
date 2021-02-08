@@ -81,14 +81,4 @@ public interface ITaskInstance {
 	 */
 	default void beforeExecute() {}
 	
-	/**
-	 * SubClasses should not implement this method
-	 * @return
-	 */
-	default String getName() {
-		return "";
-	}
-	
-	default void setName(String name) {} 
-	
 }

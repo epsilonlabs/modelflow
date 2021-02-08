@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.dom.api.factory;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
@@ -27,33 +28,26 @@ import com.google.inject.Injector;
  * @author Betty Sanchez
  *
  */
-public class ResourceFactory extends AbstractFactory {
+public class EMFModelResourceFactory extends AbstractFactory<IModelResourceInstance<?>, IModelResourceNode> {
 
-	protected final IModelResourceNode node;
-	protected final String name;
-	protected IModelResource resource;
-	protected IModelResourceInstance<?> iResource;
-	
-	public ResourceFactory(Class<? extends IModelResourceInstance<?>> factory, IModelResourceNode node, String name, IModelFlowContext ctx) {
-		super(ctx, factory);
-		this.node = node;
-		this.resource = node.getModelElement();
-		this.name = name;
-	}
-	
-	public IModelResourceInstance<?> create() throws MFInstantiationException {
-		Injector injector = Guice.createInjector();
-		injector.getAllBindings();
-		iResource = (IModelResourceInstance<?>) injector.getInstance(clazz);
-		iResource.setName(name);
-		configure();
-		iResource.configure();
-		return iResource;
-	}
+	protected IModelResource resource;	
 	
 	@Override
-	protected Object getIObject() {
-		return iResource;
+	public IModelResourceInstance<?> create(Class<? extends IModelResourceInstance<?>> factory, IModelResourceNode node, IModelFlowContext ctx) throws MFInstantiationException {
+		super.create(factory, node, ctx);
+		final Optional<IModelResource> optionalResource = ctx.getModule().getWorkflow().getResources().stream().filter(IModelResource.class::isInstance).filter(m->m.getName().equals(this.name)).map(IModelResource.class::cast).findFirst();
+		if (optionalResource.isPresent()) {
+			this.resource = optionalResource.get();
+		} else {			
+			throw new NullPointerException("Setup the resource from the dependency graph or scheduelr");
+		}
+		Injector injector = Guice.createInjector();
+		injector.getAllBindings();
+		instance = (IModelResourceInstance<?>) injector.getInstance(clazz);
+		instance.setName(name);
+		configure();
+		instance.configure();
+		return instance;
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.execution.graph;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,8 @@ import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
+import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
+import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 import org.jgrapht.Graph;
 
 import io.reactivex.subjects.PublishSubject;
@@ -34,10 +37,23 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 
 	protected PublishSubject<GraphState> statusUpdater = PublishSubject.create();
 	protected GraphState status = null;
+	
 	protected Graph<IGraphNode, DependencyEdge> graph;
 	protected Map<String, ITaskNode> tasks = new ConcurrentHashMap<>();
 	protected Map<String, IAbstractResourceNode> resources = new ConcurrentHashMap<>();
 	
+		
+	public AbstractDependencyGraph() {
+		updateStatus(GraphState.INSTANTIATED);
+	}
+	
+	protected void updateStatus(GraphState status) {
+		this.status = status;
+		this.statusUpdater.onNext(this.status);
+		if (this.status.equals(GraphState.POPULATED)) {
+			this.statusUpdater.onComplete();
+		}
+	}
 	
 	@Override
 	public IDependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
@@ -100,6 +116,47 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	@Override
 	public void subscribe(IModelFlowPublisher publisher) {
 		statusUpdater.subscribe(state -> publisher.dependencyGraph(getState()));
+	}
+	
+	@Override
+	public String toString() {
+		GraphizPrinter<IGraphNode, DependencyEdge> printer = new GraphizPrinter<>(getGraph());
+		return printer.toDot().toString();
+	}
+
+	@Override
+	public Collection<IAbstractResourceNode> getInputResourceNodes(ITaskNode taskNode) {
+		return new DependencyGraphHelper(this).getInputResourceNodes(taskNode);
+	}
+
+	@Override
+	public Collection<IAbstractResourceNode> getOutputResourceNodes(ITaskNode taskNode) {
+		return new DependencyGraphHelper(this).getOutputResourceNodes(taskNode);
+	}
+
+	@Override
+	public Collection<IAbstractResourceNode> getResourceNodes(ITaskNode taskNode) {
+		return new DependencyGraphHelper(this).getResourceNodes(taskNode);
+	}
+
+	@Override
+	public Collection<String> getAliasFor(IAbstractResourceNode rNode, ITaskNode tNode) {
+		return new DependencyGraphHelper(this).getAliasFor(rNode, tNode);
+	}
+
+	@Override
+	public Set<ITaskNode> usedBy(IAbstractResourceNode node) {
+		return new DependencyGraphHelper(this).usedBy(node);
+	}
+
+	@Override
+	public ResourceKind getResourceKindForTask(IAbstractResourceNode resourceNode, ITaskNode taskNode) {
+		return new DependencyGraphHelper(this).getResourceKindForTask(resourceNode, taskNode);
+	}
+	
+	@Override
+	public boolean hasDerivedOutputDependencies(ITaskNode tNode) {
+		return new DependencyGraphHelper(this).hasDerivedOutputDependencies(tNode);
 	}
 
 }

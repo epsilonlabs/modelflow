@@ -50,10 +50,10 @@ public class ConservativeExecutionHelper {
 
 	public boolean hasBeenPreviouslyExecuted() {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
-		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(task.getName());
+		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(node.getName());
 		boolean present = optionalPastTaskExecution.isPresent();
 		if (present) {			
-			currentTaskEecution = updater.getCurrentTaskExecution(task.getName());
+			currentTaskEecution = updater.getCurrentTaskExecution(node.getName());
 			previousTaskExecution = optionalPastTaskExecution.get();
 		}
 		return present;
@@ -95,7 +95,7 @@ public class ConservativeExecutionHelper {
 	protected boolean resourcesChanged(boolean input) {
 		Collection<IAbstractResourceNode> nodes;
 		
-		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
+		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
 		if (input) {
 			nodes = helper.getInputResourceNodes(node);
 			
@@ -107,9 +107,9 @@ public class ConservativeExecutionHelper {
 				IModelResourceNode resource = (IModelResourceNode) r;
 				Optional<ResourceSnapshot> pastResource;
 				if (input) {
-					pastResource = updater.getPastInputResource(task.getName(), resource.getName());
+					pastResource = updater.getPastInputResource(node.getName(), resource.getName());
 				} else {
-					pastResource = updater.getPastOutputResource(task.getName(), resource.getName());
+					pastResource = updater.getPastOutputResource(node.getName(), resource.getName());
 				}
 				if (pastResource.isPresent()) {
 					Object pastStamp = pastResource.get().getStamp();

@@ -27,25 +27,32 @@ import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFUnknownPropertyException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 
 /**
  * @author Betty Sanchez
+ * @param <I>
  *
  */
-public abstract class AbstractFactory {
+public abstract class AbstractFactory<I, N extends IGraphNode> implements IInstanceFactory<I, N>{
 
-	protected final IModelFlowContext ctx;
-	protected final Class<?> clazz;
-
-	protected AbstractFactory(IModelFlowContext ctx, Class<?> clazz) {
-		this.ctx = ctx;
-		this.clazz = clazz;
-	}
-
-	protected abstract Object getIObject();
+	protected IModelFlowContext ctx;
+	protected Class<? extends I> clazz;
+	protected N node;
+	protected String name;
+	protected I instance;
 
 	protected abstract IConfigurable getConfigurable();
 
+	@Override
+	public I create(Class<? extends I> factory, N node, IModelFlowContext ctx) throws MFInstantiationException {
+		this.clazz = factory;
+		this.node = node;
+		this.name = node.getName();
+		this.ctx = ctx;
+		return null;
+	}
+	
 	/**
 	 * This method is responsible of configuring the element
 	 */
@@ -60,7 +67,7 @@ public abstract class AbstractFactory {
 
 			IProperty prop = iterator.next();
 			String key = prop.getKey();
-			Object value = new ParameterHelper(prop, ctx).getEvaluatedValue();
+			Object value = new ParameterHelper(prop.getValue(), ctx).getEvaluatedValue();
 
 			/*
 			 * Look within the @Param annotated methods for one with the same key as the
@@ -78,7 +85,7 @@ public abstract class AbstractFactory {
 			
 			if (potentialMatchingMethods.isEmpty()) {
 				/* Unknown Property */
-				throw new MFUnknownPropertyException(key, getConfigurable().getName());
+				throw new MFUnknownPropertyException(key, getName());
 			}
 			
 			tryToAssignProperty(prop, value, potentialMatchingMethods);
@@ -92,9 +99,9 @@ public abstract class AbstractFactory {
 			Class<?> paramType = method.getParameterTypes()[0];
 			Object assignableValue =  getAssignableValue(value, paramType);
 			if (isAssignableFrom(method, assignableValue)) {
-				prop.setValue(assignableValue);
+				prop.setEvaluatedValue(assignableValue);
 				try {
-					method.invoke(getIObject(), assignableValue);
+					method.invoke(getInstance(), assignableValue);
 				} catch (Exception e) {
 					throw new MFInstantiationException(e);
 				}
@@ -104,13 +111,13 @@ public abstract class AbstractFactory {
 		}
 		if (!ok) {
 			String msg = "Unable to assign property %s to task %s";
-			throw new MFInstantiationException(String.format(msg, prop, getConfigurable().getName()));
+			throw new MFInstantiationException(String.format(msg, prop, getName()));
 		}
 	}
 
 	protected boolean isAssignableFrom(Method m, Object value) {
-		return m.getParameterTypes()[0].isAssignableFrom(value.getClass())
-				|| (m.getParameterTypes()[0].equals(File.class) && value.getClass().equals(String.class));
+		final Class<?> methodParam = m.getParameterTypes()[0];
+		return methodParam.isAssignableFrom(value.getClass()) || (methodParam.equals(File.class) && value instanceof String);
 	}
 	
 	protected Object getAssignableValue(Object value, Class<?> paramType) throws MFInstantiationException {
@@ -150,6 +157,14 @@ public abstract class AbstractFactory {
 		}
 		
 		return value;
+	}
+	
+	protected I getInstance() {
+		return instance;
+	}
+
+	protected String getName() {
+		return name;
 	}
 	
 	protected abstract ModuleElement prepareFrameStack();

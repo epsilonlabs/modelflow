@@ -42,7 +42,7 @@ public class GenerateModelCodeTask implements ITaskInstance {
 	protected Boolean generateTests 	= false;
 	protected Set<String> outputs = new HashSet<String>();
 	
-	protected IModelWrapper modelRes;
+	protected String modelResName;
 	protected GenModel genModel;
 	protected CustomGenerator generator;
 
@@ -101,7 +101,7 @@ public class GenerateModelCodeTask implements ITaskInstance {
 		genModel.setCanGenerate(true);
 
 		generator = new CustomGenerator(genModel, new BasicMonitor());
-		generator.setResource(modelRes.getResource());
+		generator.setResourceName(modelResName);
 		
 		if (generateModel) {
 			generator.generate(MODEL_PROJECT_TYPE);
@@ -141,7 +141,7 @@ public class GenerateModelCodeTask implements ITaskInstance {
 				Object first = resource.getContents().get(0);
 				if (first instanceof GenModel) {					
 					genModel = (GenModel) resource.getContents().get(0);				
-					modelRes = m;
+					modelResName = m.getResourceNode().getName();
 					return true;
 				}
 			}			

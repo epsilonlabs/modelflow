@@ -7,17 +7,22 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.EolModule;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
@@ -36,13 +41,13 @@ public class TaskNode extends AbstractTaskNode {
 	protected ITask taskDefintion;
 	
 	public TaskNode(ITask task) {
-		super();
 		this.taskDefintion = task;
+		setState(TaskState.CREATED);
 	}
 	
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
-		LOG.debug("Called execute for {}", getTaskElement().getName());
+		LOG.debug("Called execute for {}", taskDefintion.getName());
 		
 		// Instantiate task and populate
 		this.taskInstance = ctx.getTaskRepository().create(this, ctx);
@@ -78,7 +83,7 @@ public class TaskNode extends AbstractTaskNode {
 		boolean execute = true;
 		
 		if (conservativeHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
-			DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getDependencyGraph());
+			DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
 			
 			if ( !(taskInstance.isAlwaysExecute() || taskDefintion.getAlwaysExecute()) 
 					&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(this)) )
@@ -116,7 +121,7 @@ public class TaskNode extends AbstractTaskNode {
 		if (ctx.isInteractive()) {
 			if (outputsChanged) {
 				// List them and prompt
-				String msg = String.format("The outputs of task %s have been modified from the previous execution.", getTaskElement().getName());
+				String msg = String.format("The outputs of task %s have been modified from the previous execution.", getName());
 				String instructions = "Would you like to discard these changes and continue with the execution?\n"
 						+ "1 - discard changes and continue with execution\n"
 						+ "0 - only execute if inputs have changed\n"
@@ -190,14 +195,14 @@ public class TaskNode extends AbstractTaskNode {
 		// Register inputs in execution trace
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-			pManager.processInputs(this.taskInstance, ctx);
+			pManager.processInputs(this, ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
 		}
 		// Assign Models Before Execution
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-			manager.processResourcesBeforeExecution(this.taskInstance, ctx);
+			manager.processResourcesBeforeExecution(this, ctx);
 		} finally {			
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
 		}
@@ -231,7 +236,7 @@ public class TaskNode extends AbstractTaskNode {
 		// Record outputs in execution trace
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
-			pManager.processOutputs(this.getTaskInstance(), ctx);
+			pManager.processOutputs(this, ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
 		}
@@ -242,18 +247,18 @@ public class TaskNode extends AbstractTaskNode {
 		// Process Models After Execution
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-			manager.processResourcesAfterExecution(this.taskInstance, ctx);
+			manager.processResourcesAfterExecution(this, ctx);
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 		}
 	}
 
 	protected void safelyDispose(IModelFlowContext ctx) {
-		new DependencyGraphHelper(ctx.getDependencyGraph()).getResourceNodes(this).stream()
+		new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph()).getResourceNodes(this).stream()
 			.filter(r->r instanceof IModelResourceNode)
 			.forEach(r -> {
 				IModelResourceNode resource = (IModelResourceNode)r;
-				boolean finalUse = ctx.getExecutionGraph().isLastUseOf(resource, this, ctx.getDependencyGraph());
+				boolean finalUse = ctx.getScheduler().isLastUseOf(r.getName(), this.getName());
 				if (finalUse) {
 					/** Dispose resource */
 					LOG.debug("Disposing {}", resource.getName());
@@ -362,11 +367,6 @@ public class TaskNode extends AbstractTaskNode {
 	public String getDefinition() {
 		return this.taskDefintion.getDefinition();
 	}
-
-	@Override
-	public ITask getTaskElement() {
-		return this.taskDefintion;
-	}
 	
 	/** Unique Task identifiers by name */
 	@Override
@@ -380,7 +380,20 @@ public class TaskNode extends AbstractTaskNode {
 	}
 
 	@Override
-	public ModuleElement getModuleElement() {
-		return (ModuleElement) this.taskDefintion.getModuleElement();
+	public ITaskModuleElement getModuleElement() {
+		return (ITaskModuleElement) this.taskDefintion.getModuleElement();
+	}
+	
+	@Override
+	public Set<String> getResourceAliases(String resourceNode) {
+		final ArrayList<IResourceReference> list = new ArrayList<>();
+		list.addAll(taskDefintion.getConsumes());
+		list.addAll(taskDefintion.getProduces());
+		list.addAll(taskDefintion.getModifies());
+		final Optional<IResourceReference> optional = list.stream().filter(r->r.getResource().getName().equals(resourceNode)).findAny();
+		if (optional.isPresent()) {
+			return optional.get().getAliases().stream().collect(Collectors.toSet());
+		}
+		return Collections.emptySet();
 	}
 }

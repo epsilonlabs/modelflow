@@ -12,7 +12,6 @@ import java.util.List;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -27,7 +26,7 @@ public class GmfDiagramTrace {
 	protected String label;
 	protected List<File> outputs = new ArrayList<>();
 	protected ITaskInstance itask;
-	protected IAbstractResource resource;
+	protected String resource;
 	protected final Path base = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toFile().toPath();
 
 	public Object[] getSources() {
@@ -54,7 +53,7 @@ public class GmfDiagramTrace {
 		return this;
 	}
 	
-	public GmfDiagramTrace setResourceName(IAbstractResource resource){
+	public GmfDiagramTrace setResourceName(String resource){
 		this.resource = resource;
 		return this;
 	}
@@ -70,10 +69,10 @@ public class GmfDiagramTrace {
 					Resource eResource = eObject.eResource();
 					if (eResource != null) {
 						String id = eResource.getURIFragment(eObject);
-						builder.addSourceModelElement(id, resource.getName(), null);
+						builder.addSourceModelElement(id, resource, null);
 					} else {
 						//FIXME check why are we getting here
-						builder.addSourceModelElement("!Invalid", resource.getName(), null);
+						builder.addSourceModelElement("!Invalid", resource, null);
 					}
 				}
 			});

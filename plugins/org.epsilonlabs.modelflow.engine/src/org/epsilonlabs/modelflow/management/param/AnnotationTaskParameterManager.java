@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.slf4j.Logger;
@@ -31,22 +32,22 @@ public class AnnotationTaskParameterManager implements ITaskParameterManager {
 	}
 	
 	@Override
-	public void processInputs(ITaskInstance instance, IModelFlowContext ctx){
-		Map<String, Object> hashes = getInputParameterHandler(instance).getHashes();
+	public void processInputs(ITaskNode node, IModelFlowContext ctx){
+		Map<String, Object> hashes = getInputParameterHandler(node.getTaskInstance()).getHashes();
 		LOG.debug("InputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {		
-			new ExecutionTraceUpdater(trace).addTaskInputProperties(instance.getName(), hashes);
+			new ExecutionTraceUpdater(trace).addTaskInputProperties(node.getName(), hashes);
 		}
 	}
 	
 	@Override
-	public void processOutputs(ITaskInstance instance, IModelFlowContext ctx){
-		Map<String, Object> hashes = getOutputParameterHandler(instance).getHashes();
+	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
+		Map<String, Object> hashes = getOutputParameterHandler(node.getTaskInstance()).getHashes();
 		LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {			
-			new ExecutionTraceUpdater(trace).addTaskOutputProperties(instance.getName(), hashes);
+			new ExecutionTraceUpdater(trace).addTaskOutputProperties(node.getName(), hashes);
 		}
 	}
 	

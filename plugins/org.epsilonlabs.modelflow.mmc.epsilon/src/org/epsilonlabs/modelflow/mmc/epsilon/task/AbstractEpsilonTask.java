@@ -78,6 +78,11 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 		this.src = Optional.ofNullable(src);
 	}
 	
+	@Param(key="src")
+	public void setSrc(String src) {
+		this.src = Optional.ofNullable(new File(src));
+	}
+	
 	@Input(key="src")
 	public File getSrc() {
 		return src.orElse(null);
@@ -144,7 +149,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 			
 			Object m = model.getModel();
 			if (m instanceof IModel) {				
-				LOG.info("{} as {}",model.getResource().getName(), model.getResourceKind().toString().toLowerCase());
+				LOG.info("{} as {}",model.getResourceNode().getName(), model.getResourceKind().toString().toLowerCase());
 				/*if (model.getExtraLabel().isPresent()) 
 					System.out.println(model.getExtraLabel().get());*/
 				getModule().getContext().getModelRepository().addModel((IModel) m);

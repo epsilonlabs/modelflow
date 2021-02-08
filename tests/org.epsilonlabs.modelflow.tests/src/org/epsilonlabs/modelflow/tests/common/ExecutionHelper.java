@@ -93,8 +93,8 @@ public class ExecutionHelper {
 	}
 
 	public void saveGraphs(String outputName){
-		String dg = module.getContext().getDependencyGraph().toString();
-		String eg = module.getContext().getExecutionGraph().toString();
+		String dg = module.getContext().getScheduler().getDependencyGraph().toString();
+		String eg = module.getContext().getScheduler().getExecutionGraph().toString();
 		String dgLoc= Paths.get(USER_DIR, TARGET, "wf", outputName + "-dg.dot").toAbsolutePath().toString();
 		String egLoc= Paths.get(USER_DIR, TARGET, "wf", outputName + "-eg.dot").toAbsolutePath().toString();
 		try {

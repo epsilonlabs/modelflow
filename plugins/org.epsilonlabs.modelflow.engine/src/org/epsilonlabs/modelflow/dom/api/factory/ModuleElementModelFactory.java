@@ -17,13 +17,14 @@ import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
-import org.epsilonlabs.modelflow.dom.ast.TaskDeclaration;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.exception.MFUnknownPropertyException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -32,28 +33,27 @@ import com.google.inject.Injector;
  * @author bea
  *
  */
-public class ModuleTaskFactory {
+public class ModuleElementModelFactory implements IInstanceFactory<IModelResourceInstance<?>, IModelResourceNode>{
 
-	protected final Class<?> clazz;
-	private TaskDeclaration declaration;
-	private ITaskInstance instance;
+	protected Class<?> clazz;
+	protected IModelModuleElement declaration;
+	protected IModelResourceInstance<?> instance;
+	protected IModelResourceNode node;
 
-	public ModuleTaskFactory(Class<? extends ITaskInstance> factory, TaskDeclaration declaration) {
+	@Override
+	public IModelResourceInstance<?> create(Class<? extends IModelResourceInstance<?>> factory, IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
 		this.clazz = factory;
-		this.declaration = declaration;
-	}
-	
-	public ITaskInstance create(IModelFlowContext ctx) throws MFRuntimeException {
+		this.node = node;
+		this.declaration = node.getModuleElement();
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		instance = (ITaskInstance) injector.getInstance(clazz);
+		instance = (IModelResourceInstance<?>) injector.getInstance(clazz);
 		injector.injectMembers(instance);
-		instance.setName(getName(ctx));
 		configure(ctx);
 		return instance;
 	}
 
-	public String getName(IModelFlowContext ctx) {
+	protected String getName(IModelFlowContext ctx) {
 		if (declaration.isGenerator() && ctx.getFrameStack().contains("taskName")) {			
 			return (String) ctx.getFrameStack().get("taskName").getValue();
 		} else {

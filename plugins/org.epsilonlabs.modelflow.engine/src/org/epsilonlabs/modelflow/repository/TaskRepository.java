@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -36,7 +37,7 @@ public class TaskRepository {
 	}
 	
 	public Boolean hasFactory(ITaskNode node){
-		return hasFactory(node.getTaskElement().getName());
+		return hasFactory(node.getName());
 	}
 	
 	public Boolean hasFactory(String factoryName){
@@ -49,9 +50,15 @@ public class TaskRepository {
 	}
 	
 	public ITaskInstance create(ITaskNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		ITaskInstance task = this.taskFactoryRegistry.create(node, ctx);
-		this.tasks.put(task.getName(), task);
-		return task;
+		Class<ITaskInstance> taskClazz;
+		try {
+			taskClazz = taskFactoryRegistry.getFactory(node.getDefinition());
+			final ITaskInstance instance = ctx.getScheduler().getTaskInstanceFactory().create(taskClazz, node, ctx);
+			this.tasks.put(node.getName(), instance);
+			return instance;
+		} catch (MFInvalidFactoryException e) {
+			throw new MFInstantiationException(e);
+		}
 	}
 	
 	public void clear() {

@@ -57,7 +57,7 @@ public class ResourceLoader {
 				throw new MFResourceInstantiationException(e);
 			}
 		}
-		return new ModelWrapper(as, node.getModelElement(), resource.get());
+		return new ModelWrapper(as, node, resource.get());
 	}
 
 }

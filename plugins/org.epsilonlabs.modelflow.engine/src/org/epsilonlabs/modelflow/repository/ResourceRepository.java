@@ -15,6 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
+import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
@@ -74,8 +76,13 @@ public class ResourceRepository {
 			iResource = optional.get();
 		} else {			
 			String id = node.getName();
-			iResource = this.factoryRegistry.create(node, ctx);
-			this.resources.put(id, iResource);
+			try {
+				Class<IModelResourceInstance<?>> modelClazz = factoryRegistry.getFactory(node.getDefinition());
+				iResource = ctx.getScheduler().getModelInstanceFactory().create(modelClazz, node, ctx);
+				this.resources.put(id, iResource);
+			} catch (MFInvalidFactoryException e) {
+				throw new MFResourceInstantiationException(e);
+			}
 		}
 		iResource.clearAliases();
 		return iResource;

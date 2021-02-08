@@ -17,13 +17,10 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.edge.ExecutionEdge;
-import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
-import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
  * @author Betty Sanchez
@@ -85,11 +82,8 @@ public abstract class AbstractExecutionGraph implements IExecutionGraph {
 	 * determine whether it can be safely disposed.
 	 */
 
-	@Override
-	public boolean isLastUseOf(IAbstractResourceNode resourceNode, ITaskNode here, IDependencyGraph dg) {
-		return new DependencyGraphHelper(dg).usedBy(resourceNode).parallelStream().filter(tn -> !tn.equals(here))
-				.allMatch(tn -> tn.getState().getVal() >= TaskState.INITIALIZED.getVal());
-	}
+	
+
 
 	@Override
 	public String toString() {
@@ -111,11 +105,5 @@ public abstract class AbstractExecutionGraph implements IExecutionGraph {
 		this.state = state;
 	}
 
-	@Override
-	public void reset() {
-		this.graph = new SimpleDirectedGraph<>(ExecutionEdge.class);
-		setState(GraphState.CREATED);
-		this.tasks.clear();
-	}
 
 }

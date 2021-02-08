@@ -24,7 +24,7 @@ public interface ITaskPropertyHandler {
 	 *
 	 * @return the task
 	 */
-	ITaskInstance getTask();
+	ITaskInstance getTaskInstance();
 
 	/**
 	 * Checks for any.

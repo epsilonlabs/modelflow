@@ -20,18 +20,18 @@ import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 
 	protected Set<Method> annotatedMethods;
-	protected ITaskInstance task;
+	protected ITaskInstance instance;
 	protected Map<String, Object> properties;
 	protected Map<String, Object> hashes;
 
 	public TaskPropertyHandler(ITaskInstance task) {
-		this.task = task;
+		this.instance = task;
 		this.annotatedMethods = getMethods();
 	}
 	
 	@Override
-	public ITaskInstance getTask() {
-		return task;
+	public ITaskInstance getTaskInstance() {
+		return instance;
 	}
 	
 	@Override
@@ -55,7 +55,7 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	protected Object getAssignableValue(Method m) {
 		Object value = null; 
 		try {
-			value = m.invoke(task);
+			value = m.invoke(instance);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new IllegalStateException("Unable to retrieve input value");
 		}

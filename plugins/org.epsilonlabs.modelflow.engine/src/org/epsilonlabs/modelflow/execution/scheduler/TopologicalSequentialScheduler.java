@@ -5,16 +5,18 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.execution;
+package org.epsilonlabs.modelflow.execution.scheduler;
 
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
+import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
+import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.edge.ExecutionEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePrinter;
-import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 import org.slf4j.Logger;
@@ -30,6 +32,29 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 	/** The Constant LOG. */
 	private static final Logger LOG = LoggerFactory.getLogger(TopologicalSequentialScheduler.class);
 
+	protected IDependencyGraph dg;
+	protected IExecutionGraph eg;
+	
+	public TopologicalSequentialScheduler () {
+		dg = new DependencyGraph();
+		eg = new ExecutionGraph();
+	}
+	
+	@Override
+	public IDependencyGraph getDependencyGraph(){
+		return dg;
+	}
+	
+	@Override
+	public IExecutionGraph getExecutionGraph() {
+		return eg;
+	}
+	
+	@Override
+	public void build(IModelFlowContext ctx) throws Exception {
+		dg.build(ctx);
+		eg.build(ctx);
+	}
 	/**
 	 * Execute.
 	 *
@@ -41,11 +66,8 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 	protected WorkflowExecution executeImpl(IModelFlowContext ctx) throws MFExecutionException {
 		ctx.validate();
 
-		IExecutionGraph eg = ctx.getExecutionGraph();
-
 		// Locate Full Execution Trace
 		IWorkflow wf = ctx.getModule().getWorkflow();
-		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		WorkflowExecution currentWorkflowExecution;
 		synchronized (updater) {
 			currentWorkflowExecution = updater.createWorkflowExecution(wf);
@@ -65,7 +87,7 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 				
 				synchronized (updater) {
 					try {
-						executeTask(ctx, updater, task);
+						executeTask(ctx, task);
 					} catch (Exception e) {
 						throw e;
 					}

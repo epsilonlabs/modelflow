@@ -24,7 +24,6 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ModelResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskNode;
-import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,17 +33,9 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	private static final Logger LOG = LoggerFactory.getLogger(DependencyGraph.class);
 
 	public DependencyGraph() {
+		super();
 		this.graph = new SimpleDirectedWeightedGraph<>(DependencyEdge.class);
-		updateStatus(GraphState.CREATED);
-	}
-
-	protected void updateStatus(GraphState status) {
-		this.status = status;
-		this.statusUpdater.onNext(this.status);
-		if (this.status.equals(GraphState.POPULATED)) {
-			this.statusUpdater.onComplete();
-		}
-	}
+	}	
 
 	@Override
 	public DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException {
@@ -162,22 +153,5 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		}
 	}
 
-	/**
-	 * Prints the graph in graphviz-dot notation
-	 */
-	@Override
-	public String toString() {
-		GraphizPrinter<IGraphNode, DependencyEdge> printer = new GraphizPrinter<>(getGraph());
-		return printer.toDot().toString();
-	}
-
-	// FIXME return new instead of reseting
-	@Override
-	public void reset() {
-		updateStatus(GraphState.CREATED);
-		this.graph = new SimpleDirectedWeightedGraph<>(DependencyEdge.class);
-		tasks.clear();
-		resources.clear();
-	}
 
 }

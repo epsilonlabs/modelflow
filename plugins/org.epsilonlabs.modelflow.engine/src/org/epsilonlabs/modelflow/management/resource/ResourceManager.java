@@ -17,11 +17,13 @@ import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
-import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
+import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
+import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
+import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
@@ -33,26 +35,50 @@ public class ResourceManager implements IResourceManager {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceManager.class);	
 
-	/** 
-	 * This method is called when the node has been marked ready for execution.
-	 */
-	@Override
-	public void processResourcesBeforeExecution(ITaskInstance taskInstance, IModelFlowContext ctx) throws MFRuntimeException {
-		final String taskName = taskInstance.getName();
+	protected ITaskInstance taskInstance;
+	protected String taskInstanceName;
+	protected ITaskNode taskNode;
+	
+	protected IScheduler scheduler;
+	protected ExecutionTraceUpdater updater;
+	protected IModelFlowContext ctx;
+	protected ResourceRepository resourceRepository;
+
+	public ResourceManager(){
+		
+	}
+	private ResourceManager(ITaskNode taskNode, IModelFlowContext ctx){
+		this.ctx = ctx;
+		this.taskNode = taskNode;
+		this.updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
+		this.resourceRepository = ctx.getTaskRepository().getResourceRepository();
+		this.scheduler = ctx.getScheduler();
+		this.taskInstance = taskNode.getTaskInstance();
+		this.taskInstanceName = taskNode.getName();
+	}
+	
+	public 	void processResourcesBeforeExecution(ITaskNode taskNode, IModelFlowContext ctx) throws MFRuntimeException{
+		new ResourceManager(taskNode, ctx).processResourcesBeforeExecution();
+	}
+	public 	void processResourcesAfterExecution(ITaskNode taskNode, IModelFlowContext ctx) throws MFRuntimeException{
+		new ResourceManager(taskNode, ctx).processResourcesAfterExecution();
+	}
+
+	private void processResourcesBeforeExecution() throws MFRuntimeException {
 
 		// Create empty list of models for task to accept 
 		List<IModelWrapper> list = new ArrayList<>();
 		
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		// Prepare task execution trace
-		final TaskExecution tExec = updater.getCurrentTaskExecution(taskName);
+		final TaskExecution tExec = updater.getCurrentTaskExecution(taskInstanceName);
 		tExec.getInputModels().clear();
 
-		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
+		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
 		// For all the resources connected to this task node
-		for (IAbstractResourceNode entry : helper.getResourceNodes(taskInstance)) {
+		for (IAbstractResourceNode entry : dg.getResourceNodes(taskNode)) {
 			IAbstractResourceNode rNode = entry;
-			ResourceKind kind = helper.getResourceKindForTask(rNode, taskInstance);
+			ResourceKind kind = dg.getResourceKindForTask(rNode, taskNode);
 			// If of type ModelResource 
 			if (rNode instanceof IModelResourceNode) {
 				handleModelResourceBeforeExecution(taskInstance, ctx, list, updater, tExec, (IModelResourceNode) rNode, kind);
@@ -76,7 +102,7 @@ public class ResourceManager implements IResourceManager {
 		IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(rNode, ctx);
 		// FIXME move alias logic to IModelWrapper
 		// Add edge aliases
-		new DependencyGraphHelper(ctx.getDependencyGraph()).getAliasFor(rNode, tNode).forEach(r::setAlias);
+		ctx.getScheduler().getDependencyGraph().getAliasFor(rNode, taskNode).forEach(r::setAlias);
 		// TODO... Add resource default alias
 		// Call Resource Type Before method
 		r.beforeTask();
@@ -92,7 +118,7 @@ public class ResourceManager implements IResourceManager {
 		// If model is of used as input (input or in/out) 
 		if (kind.isInout() || kind.isInput()) {					
 			// Store input model hash in execution trace  
-			ResourceSnapshot snapshot = updater.createResourceSnapshot(rNode.getModelElement(), r.loadedHash().get());
+			ResourceSnapshot snapshot = updater.createResourceSnapshot(rNode, r.loadedHash().get());
 			tExec.getInputModels().add(snapshot);
 			// Also record the current model snapshot in trace latest resources 
 			updater.addResourceToLatest(snapshot);
@@ -106,7 +132,7 @@ public class ResourceManager implements IResourceManager {
 			// Locate its value from previous executions 
 			Object derived = ctx.getTaskRepository().getResourceRepository().getDerived(derRes);
 			// Wrap as model resource
-			IModelWrapper mRes = new ModelWrapper(kind,derRes.getModelElement(), derived);
+			IModelWrapper mRes = new ModelWrapper(kind,derRes, derived);
 			// Add to list of models for task to accept
 			list.add(mRes);
 		}
@@ -116,19 +142,16 @@ public class ResourceManager implements IResourceManager {
 	 * This method is called after the task has been executed.
 	 * @throws MFRuntimeException 
 	 */
-	@Override
-	public void processResourcesAfterExecution(ITaskInstance taskInstance, IModelFlowContext ctx) throws MFRuntimeException {
-		final String taskName = taskInstance.getName();
-		
+	private void processResourcesAfterExecution() throws MFRuntimeException {		
 		// Prepare task execution trace 
 		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
-		final TaskExecution tExec = updater.getCurrentTaskExecution(taskName);
+		final TaskExecution tExec = updater.getCurrentTaskExecution(taskInstanceName);
 		tExec.getOutputModels().clear();
 		
 		// For all the resources connected to this task node 
-		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
-		for (IAbstractResourceNode e : helper.getResourceNodes(tNode2)) {
-			ResourceKind kind = helper.getResourceKindForTask(e, tNode2);
+		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
+		for (IAbstractResourceNode e : dg.getResourceNodes(taskNode)) {
+			ResourceKind kind = dg.getResourceKindForTask(e, taskNode);
 			IAbstractResourceNode value = e;
 			// If of type ModelResourceNode 
 			if (value instanceof IModelResourceNode) {
@@ -159,13 +182,13 @@ public class ResourceManager implements IResourceManager {
 					resource.save();
 					
 					// Store output model hash in execution trace 
-					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode.getModelElement(), resource.loadedHash().get());
+					ResourceSnapshot snapshot = updater.createResourceSnapshot(resourceNode, resource.loadedHash().get());
 					tExec.getOutputModels().add(snapshot);
 					// Also record the current model snapshot in trace latest resources 
 					updater.addResourceToLatest(snapshot);					
 			}
 			// Check if this task uses the resource for its last time 
-			boolean finalUse = ctx.getExecutionGraph().isLastUseOf(resourceNode, tNode, ctx.getDependencyGraph());
+			boolean finalUse = ctx.getScheduler().isLastUseOf(resourceNode.getName(), taskInstanceName);
 			if (finalUse) {
 				// Dispose resource 
 				IModelFlowProfiler profiler = ctx.getProfiler();

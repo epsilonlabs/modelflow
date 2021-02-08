@@ -5,16 +5,26 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.execution;
+package org.epsilonlabs.modelflow.execution.scheduler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.epsilon.common.module.ModuleElement;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.factory.EMFModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.EMFTaskFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.IInstanceFactory;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.execution.IExecutionListener;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
+import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
+import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
@@ -31,6 +41,7 @@ public abstract class AbstractScheduler implements IScheduler {
 	static final Logger LOG = LoggerFactory.getLogger(AbstractScheduler.class);
 	
 	protected List<IExecutionListener> executionListeners = new ArrayList<>();
+	protected ExecutionTraceUpdater updater;
 	
 	@Override
 	public void addExecutionListener(IExecutionListener listener) {
@@ -45,6 +56,7 @@ public abstract class AbstractScheduler implements IScheduler {
 	
 	@Override
 	public WorkflowExecution execute(IModelFlowContext ctx) throws MFExecutionException {
+		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
 		WorkflowExecution executeImpl = null; 
 		try {
 			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
@@ -55,7 +67,14 @@ public abstract class AbstractScheduler implements IScheduler {
 		return executeImpl;
 	}
 	
-	protected abstract WorkflowExecution executeImpl(IModelFlowContext ctx) throws MFExecutionException;
+	@Override
+	public WorkflowExecution execute(String task, IModelFlowContext ctx) throws MFExecutionException {
+		throw new UnsupportedOperationException("Executing single a target task is not supported yet");
+	}
+	
+	protected WorkflowExecution executeImpl(IModelFlowContext ctx) throws MFExecutionException {
+		return null;
+	}
 	
 	/**
 	 * 
@@ -67,18 +86,18 @@ public abstract class AbstractScheduler implements IScheduler {
 	 * @param task                     the task to be executed
 	 * @throws MFExecutionException the MF execution exception
 	 */
-	protected void executeTask(IModelFlowContext ctx, ExecutionTraceUpdater updater, ITaskNode task) throws MFExecutionException {
-
+	protected void executeTask(IModelFlowContext ctx, ITaskNode task) throws MFExecutionException {
+		
 		/* Notify about to execute */
 		executionListeners.parallelStream().forEach(l->l.preparingForExecution(this, task));
 	
 		/* New Task Execution Record */
-		TaskExecution currentTaskExecution = updater.createTaskExecution(task.getTaskElement());
+		TaskExecution currentTaskExecution = updater.createTaskExecution(task.getName());
 		
 		/* Notify executing */
 		executionListeners.parallelStream().forEach(l->l.executing(this, task));
 
-		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getTaskElement().getName());
+		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getName());
 
 		/* Profiler start */
 		ctx.getProfiler().start(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
@@ -133,5 +152,27 @@ public abstract class AbstractScheduler implements IScheduler {
 		ModuleElement moduleElement = node.getModuleElement();
 		throw new MFExecutionException(moduleElement,exception);
 	}
+	
+	@Override
+	public boolean isLastUseOf(String resourceName, String taskName) {
+		final Optional<IAbstractResourceNode> optionalResource = getDependencyGraph().getResourceNodes().stream().filter(r->r.getName().equals(resourceName)).findFirst();
+		if (optionalResource.isPresent()) {
+			final IAbstractResourceNode resource = optionalResource.get();
+			return getDependencyGraph().usedBy(resource).parallelStream().filter(tn -> !tn.getName().equals(taskName))
+					.allMatch(tn -> tn.getState().getVal() >= TaskState.INITIALIZED.getVal());
+		}
+		// If not found, assume is last use
+		return true;
+	}
 
+	@Override
+	public IInstanceFactory<ITaskInstance, ITaskNode> getTaskInstanceFactory() {
+		return new EMFTaskFactory();
+	}
+	
+	@Override
+	public IInstanceFactory<IModelResourceInstance<?>, IModelResourceNode> getModelInstanceFactory() {
+		return new EMFModelResourceFactory();
+	}
+	
 }

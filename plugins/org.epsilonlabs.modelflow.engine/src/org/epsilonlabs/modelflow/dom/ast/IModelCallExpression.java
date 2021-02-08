@@ -24,5 +24,9 @@ public interface IModelCallExpression extends ModuleElement, ICompilableModuleEl
 	 * @param name
 	 */
 	void addAlias(NameExpression name);
+	
+	default String getName() {
+		return getModel().getName();
+	}
 
 }

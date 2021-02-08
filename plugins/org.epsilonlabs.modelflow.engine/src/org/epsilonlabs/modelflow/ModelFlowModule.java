@@ -60,19 +60,18 @@ import org.epsilonlabs.modelflow.dom.ast.emf.EMFTaskDependencyExpression;
 import org.epsilonlabs.modelflow.dom.ast.emf.EMFTaskRule;
 import org.epsilonlabs.modelflow.dom.ast.emf.IEMFDomElement;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
-import org.epsilonlabs.modelflow.execution.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowEMFContext;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
-import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
-import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
-import org.epsilonlabs.modelflow.execution.graph.GraphState;
+import org.epsilonlabs.modelflow.execution.scheduler.TaskStackScheduler;
+import org.epsilonlabs.modelflow.execution.scheduler.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
 import org.epsilonlabs.modelflow.management.param.AnnotationTaskParameterManager;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 import org.epsilonlabs.modelflow.management.resource.ResourceManager;
+import org.epsilonlabs.modelflow.management.resource.TaskResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImpl;
 import org.epsilonlabs.modelflow.parse.ModelFlowLexer;
@@ -108,7 +107,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	protected ModulePersistenceHelper traceHelper;
 	protected IModelFlowConfiguration config;
 
-	protected boolean EMF = false;
+	protected boolean EMF = true;
 	/*
 	 *******************************************
 	 * CONSTRUCTOR
@@ -469,24 +468,14 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			ctx.setTaskRepository(taskRepository);
 		}
 
-		// Dependency Graph
-		if (ctx.getDependencyGraph() == null) {
-			ctx.setDependencyGraph(new DependencyGraph());
-		}
-
-		// Execution Graph
-		if (ctx.getExecutionGraph() == null) {
-			ctx.setExecutionGraph(new ExecutionGraph());
-		}
-
 		// Executor 
-		if (ctx.getExecutor() == null) {
-			ctx.setExecutor(new TopologicalSequentialScheduler());
+		if (ctx.getScheduler() == null) {
+			ctx.setScheduler(EMF ? new TopologicalSequentialScheduler() : new TaskStackScheduler());
 		}
 		
 		// Model Manager
 		if (ctx.getResourceManager() == null) {
-			ctx.setResourceManager(new ResourceManager());
+			ctx.setResourceManager(EMF ? new ResourceManager() : new TaskResourceManager());
 		}
 		
 		// Path Resolver
@@ -511,7 +500,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		
 		// Mamnagement Trace		
 		traceHelper.prepareEndToEndTrace();
-
 	}
 
 	/**
@@ -525,9 +513,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			compile();
 		}
 		IModelFlowContext ctx = getContext();
-
-		ctx.getDependencyGraph().reset();
-		ctx.getExecutionGraph().reset();
 
 		// Make model management trace available during execution as "trace"
 		Variable traceVariable = Variable.createReadOnlyVariable("trace", ctx.getManagementTrace());
@@ -554,17 +539,15 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			ctx.getProfiler().track();
 		}
 				
-		if (!ctx.getDependencyGraph().getState().equals(GraphState.POPULATED)) {
-			LOG.debug("Building Dependency Graph");
-			ctx.getDependencyGraph().build(ctx);
+		try {
+			ctx.getScheduler().build(ctx);
+		} catch (Exception e) {
+			throw new EolRuntimeException(e);
 		}
-		if (!ctx.getExecutionGraph().getState().equals(GraphState.POPULATED)) {
-			LOG.debug("Building Execution Graph");
-			ctx.getExecutionGraph().build(ctx);
-		}
+		
 		LOG.debug("Executing");
 		try {
-			ctx.getExecutor().execute(ctx);
+			ctx.getScheduler().execute(ctx);
 		} finally {
 			LOG.debug("Updating Execution Trace");
 			traceHelper.updateExecutionTrace();
@@ -601,7 +584,8 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		ctx.setManagementTrace(mTrace);
 
 		// Model Manager
-		ctx.setResourceManager(new ResourceManager());
+		ctx.getTaskRepository().getResourceRepository().flush();
+		ctx.getTaskRepository().clear();
 	}
 
 }

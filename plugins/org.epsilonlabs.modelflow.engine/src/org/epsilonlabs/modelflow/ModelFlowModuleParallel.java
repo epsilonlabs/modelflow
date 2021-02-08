@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow;
 
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-import org.epsilonlabs.modelflow.execution.concurrent.TopologicalConcurrentScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.scheduler.TopologicalConcurrentScheduler;
 
 /**
  * @author Betty Sanchez
@@ -21,6 +21,6 @@ public class ModelFlowModuleParallel extends ModelFlowModule {
 	protected void prepareContext() throws EolRuntimeException {
 		super.prepareContext();
 		IModelFlowContext ctx = getContext();
-		ctx.setExecutor(new TopologicalConcurrentScheduler());
+		ctx.setScheduler(new TopologicalConcurrentScheduler());
 	}
 }

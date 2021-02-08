@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.dom.api.factory;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -32,7 +33,7 @@ import com.google.inject.Injector;
  * @author Betty Sanchez
  *
  */
-public class EMFTaskFactory extends AbstractFactory {
+public class EMFTaskFactory extends AbstractFactory<ITaskInstance, ITaskNode> {
 
 	/** 
 	 * REGEX that identifies implicit references in parameters
@@ -42,34 +43,26 @@ public class EMFTaskFactory extends AbstractFactory {
 	
 	public static final Pattern REF_VAR_PATTERN = Pattern.compile(REFERENCE_VARIABLE);
 	
-	protected final ITaskNode node;
-	protected final String name;
 	protected ITask task;
-	protected ITaskInstance iTask;
 	
-	public EMFTaskFactory(Class<? extends ITaskInstance> factory, ITaskNode node, String name, IModelFlowContext ctx) {
-		super(ctx, factory);
-		this.node = node;
-		this.task = node.getTaskElement();
-		this.name = name;
-	}
-	
-	public ITaskInstance create() throws MFInstantiationException {
+	@Override
+	public ITaskInstance create(Class<? extends ITaskInstance> factory, ITaskNode node, IModelFlowContext ctx) throws MFInstantiationException {
+		super.create(factory, node, ctx);
+		final Optional<ITask> optionalResource = ctx.getModule().getWorkflow().getTasks().stream().filter(ITask.class::isInstance).filter(t->t.getName().equals(this.name)).map(ITask.class::cast).findFirst();
+		if (optionalResource.isPresent()) {
+			this.task = optionalResource.get();
+		} else {			
+			throw new NullPointerException("Setup the task from the dependency graph or scheduelr");
+		}
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		ITaskInstance instance = (ITaskInstance) injector.getInstance(clazz);
+		instance = (ITaskInstance) injector.getInstance(clazz);
 		injector.injectMembers(instance);
-		iTask = (ITaskInstance) clazz.cast(instance); // Is this necessary?
+		instance = (ITaskInstance) clazz.cast(instance); // Is this necessary?
 		configure(); // How to add info of the factory in the task
-		return iTask;
+		return instance;
 	}
 
-	@Override
-	protected Object getIObject() {
-		return iTask;
-	}
-
-	@Override
 	protected IConfigurable getConfigurable(){
 		return task;
 	}
@@ -90,7 +83,7 @@ public class EMFTaskFactory extends AbstractFactory {
 		IConfigurable configurable = getConfigurable();
 		EMFTaskRule me = (EMFTaskRule) configurable.getModuleElement();
 		if (me.isGenerator()) {
-			variables = me.getVars(configurable.getName()).toArray(new Variable[0]);
+			variables = me.getVars(getName()).toArray(new Variable[0]);
 		}
 		ctx.getFrameStack().enterLocal(FrameType.PROTECTED, me, variables);
 		return me;

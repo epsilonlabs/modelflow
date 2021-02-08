@@ -1,12 +1,15 @@
-package org.epsilonlabs.modelflow.execution.strategy;
+package org.epsilonlabs.modelflow.execution.graph.node;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 
-import org.eclipse.epsilon.common.module.ModuleElement;
+import org.eclipse.epsilon.common.util.Multimap;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.dom.ModelDeclaration;
 import org.eclipse.epsilon.eol.dom.Parameter;
@@ -14,27 +17,34 @@ import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
-import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.ast.ForEachModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.AbstractTaskNode;
-import org.epsilonlabs.modelflow.execution.graph.node.ConservativeExecutionHelper;
 import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
 import org.epsilonlabs.modelflow.management.resource.IResourceManager;
+import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
+import com.google.common.collect.Maps;
 
-public class TaskExecutor extends AbstractTaskNode {
+
+public class TaskModuleElementNode extends AbstractTaskNode {
 
 	protected ITaskModuleElement declaration;
+	protected String name;
+	
+	protected Map<String, TaskModuleElementNode> subNodes = Maps.newHashMap();
 
-	public TaskExecutor(ITaskModuleElement declaration) {
+	public TaskModuleElementNode(ITaskModuleElement declaration) {
+		this(declaration, declaration.getName());
+	}
+	protected TaskModuleElementNode(ITaskModuleElement declaration, String name) {
 		this.declaration = declaration; 
+		this.name = name;
 	}
 	
 	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
@@ -53,6 +63,10 @@ public class TaskExecutor extends AbstractTaskNode {
 		
 	}
 
+	public Map<String, TaskModuleElementNode> getSubNodes() {
+		return subNodes;
+	}
+
 	/**
 	 * @param ctx
 	 * @return
@@ -60,6 +74,8 @@ public class TaskExecutor extends AbstractTaskNode {
 	 * @throws EolRuntimeException
 	 */
 	public Optional<Collection<Trace>> attemptIndividualExecution(IModelFlowContext ctx) throws MFRuntimeException {
+		resolveModelNodes(ctx);
+		
 		Optional<Collection<Trace>> traces;
 		// Preparation for any situation 
 		ITaskInstance instance = ctx.getTaskRepository().create(this, ctx);
@@ -80,31 +96,45 @@ public class TaskExecutor extends AbstractTaskNode {
 		return traces;
 	}
 
+	protected Multimap<ResourceKind, IModelResourceNode> models = new Multimap<>();
+	
+	protected void resolveModelNodes(IModelFlowContext ctx) {
+		declaration.getInputs().stream().map(m->new ModelModuleElementNode(m, ctx)).forEach(input-> models.put(ResourceKind.INPUT, input));
+		declaration.getInouts().stream().map(m->new ModelModuleElementNode(m, ctx)).forEach(inout-> models.put(ResourceKind.INOUT, inout));
+		declaration.getOutputs().stream().map(m->new ModelModuleElementNode(m, ctx)).forEach(output-> models.put(ResourceKind.OUTPUT, output));
+	}
+	
+	public Multimap<ResourceKind, IModelResourceNode> getModels(){
+		return models;
+	}
+
 	public Optional<Collection<Trace>> attemptForEachExecution(IModelFlowContext ctx) throws MFRuntimeException {
-		final ForEachModuleElement forEach = declaration.getForEach();
+		final ForEachModuleElement forEachModuleElement = declaration.getForEach();
 		try {				
-			forEach.execute(ctx);
+			forEachModuleElement.execute(ctx);
 		} catch (Exception e) {
 			final String msg = "Exception when evaluating forEach statement of task %s";
 			final String formatted = String.format(msg,declaration.getName());
-			throw new MFRuntimeException(formatted, forEach);
+			throw new MFRuntimeException(formatted, forEachModuleElement);
 		} 
-		final Iterator<Object> iterator = forEach.getIterator();
+		final Iterator<Object> iterator = forEachModuleElement.getIterator();
 		Collection<Trace> traces = new ArrayList<>();
-		final Parameter iteratorParameter = forEach.getIteratorParameter();
+		final Parameter iteratorParameter = forEachModuleElement.getIteratorParameter();
 		for (int loop = 1; iterator.hasNext(); loop++) {
 			try {
 				final Object next = iterator.next();
-				Variable self = new Variable(iteratorParameter.getName(), next, iteratorParameter.getType(ctx));
-				Variable loopCount = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
-				Variable taskName = new Variable("taskName", declaration.getName() + "@" + loopCount, EolPrimitiveType.String, true);
-				ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, forEach, self, loopCount, taskName);
+				Variable selfVar = new Variable(iteratorParameter.getName(), next, iteratorParameter.getType(ctx));
+				Variable loopCountVar = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
+				final String taskName = declaration.getName() + "@" + loopCountVar;
+				Variable taskNameVar = new Variable("taskName", taskName, EolPrimitiveType.String, true);
+				ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, forEachModuleElement, selfVar, loopCountVar, taskNameVar);
 				try {
-					final TaskExecutor executor = new TaskExecutor(declaration);
-					final Optional<Collection<Trace>> optional = executor.attemptIndividualExecution(ctx);
+					final TaskModuleElementNode node = new TaskModuleElementNode(declaration, taskName);
+					subNodes.put(taskName, node);
+					final Optional<Collection<Trace>> optional = node.attemptIndividualExecution(ctx);
 					optional.ifPresent(traces::addAll);
 				} finally {
-					ctx.getFrameStack().leaveLocal(forEach);
+					ctx.getFrameStack().leaveLocal(forEachModuleElement);
 				}
 			} catch (EolRuntimeException e) {
 				throw new MFRuntimeException(e);
@@ -115,14 +145,14 @@ public class TaskExecutor extends AbstractTaskNode {
 	
 	protected Optional<Collection<Trace>> execute(ITaskInstance instance, IModelFlowContext ctx) throws MFRuntimeException {
 		
-		IResourceManager manager = ctx.getResourceManager(); 
+		IResourceManager modelManager = ctx.getResourceManager(); 
 		ITaskParameterManager pManager = ctx.getParamManager();
 		
 		// Register inputs in execution trace
-		pManager.processInputs(instance, ctx);
+		pManager.processInputs(this, ctx);
 		
 		// Assign Models Before Execution
-		manager.processResourcesBeforeExecution(instance, ctx);
+		modelManager.processResourcesBeforeExecution(this, ctx);
 		
 		// -- EXECUTING --
 		// Cleanup if necessary 
@@ -137,13 +167,13 @@ public class TaskExecutor extends AbstractTaskNode {
 		// -- POST PROCESSING -- 
 		
 		// Record outputs in execution trace
-		pManager.processOutputs(instance, ctx);
+		pManager.processOutputs(this, ctx);
 
 		// Traces
-		Optional<Collection<Trace>> traces = processManagementTraces(instance, ctx);
+		Optional<Collection<Trace>> traces = processManagementTraces(this.getTaskInstance(), ctx);
 		
 		// Process Models After Execution
-		manager.processResourcesAfterExecution(instance, ctx);
+		modelManager.processResourcesAfterExecution(this, ctx);
 		
 		return traces;
 	}
@@ -198,7 +228,7 @@ public class TaskExecutor extends AbstractTaskNode {
 			final Optional<Collection<Trace>> trace = instance.getTrace();
 			trace.ifPresent(traces -> {
 				ManagementTrace fullTrace= ctx.getManagementTrace();
-				ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(fullTrace, instance.getName());
+				ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(fullTrace, getName());
 				traceUpdater.update(traces);
 			});
 			return trace;
@@ -208,7 +238,7 @@ public class TaskExecutor extends AbstractTaskNode {
 
 	@Override
 	public String getName() {
-		return declaration.getName();
+		return name;
 	}
 
 	@Override
@@ -217,14 +247,20 @@ public class TaskExecutor extends AbstractTaskNode {
 	}
 	
 	@Override
-	public ModuleElement getModuleElement() {
+	public ITaskModuleElement getModuleElement() {
 		return declaration;
 	}
 	
-	// TODO remove from interface
 	@Override
-	public ITask getTaskElement() {
-		return null;
+	public Set<String> getResourceAliases(String resourceNode) {
+		final Optional<IModelResourceNode> optional = getModels().entrySet().stream()
+				.map(Entry::getValue)
+				.flatMap(Collection::stream)
+				.filter(m->m.getName().equals(resourceNode)).findAny();
+		if (optional.isPresent()) {
+			return optional.get().getAliases();
+		}
+		return Collections.emptySet();
 	}
 
 }

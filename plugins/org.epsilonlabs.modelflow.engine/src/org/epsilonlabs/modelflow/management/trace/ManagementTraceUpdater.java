@@ -16,7 +16,7 @@ import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImp
 public class ManagementTraceUpdater {
 
 	public final ManagementTrace trace;
-	public final String task;
+	public final String taskName;
 	
 	public ManagementTraceUpdater(ManagementTrace trace, ITask task) {
 		this(trace, task.getName());
@@ -24,17 +24,17 @@ public class ManagementTraceUpdater {
 	
 	public ManagementTraceUpdater(ManagementTrace trace, String taskName) {
 		this.trace = trace;
-		this.task = taskName;
+		this.taskName = taskName;
 	}
 	
 	public void update(Collection<Trace> traces){
 		TaskTrace taskTrace = null;
 		Optional<TaskTrace> previousRecord = trace.getTasks().stream().filter(t->{
-			return t.getTask().equals(task);
+			return t.getTask().equals(taskName);
 		}).findFirst();
 		if (!previousRecord.isPresent()) {
 			taskTrace = ManagementTraceFactoryImpl.eINSTANCE.createTaskTrace();
-			taskTrace.setTask(task);
+			taskTrace.setTask(taskName);
 			taskTrace.getTraces().addAll(traces);
 			trace.getTasks().add(taskTrace);
 		} else {

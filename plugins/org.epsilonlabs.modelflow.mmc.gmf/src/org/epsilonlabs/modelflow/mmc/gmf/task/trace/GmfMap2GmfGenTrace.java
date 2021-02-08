@@ -56,8 +56,8 @@ public class GmfMap2GmfGenTrace {
 			Map<MetricRule, GenMetricRule> myMetricMap = (Map<MetricRule, GenMetricRule>) getField("myMetricMap",
 					History.class, trace);
 
-			String sourceRes = task.getResources().get(GMFMapPackage.eNS_URI).getResource().getName();
-			String targetRes = task.getResources().get(GMFGenPackage.eNS_URI).getResource().getName();
+			String sourceRes = task.getResources().get(GMFMapPackage.eNS_URI).getResourceNode().getName();
+			String targetRes = task.getResources().get(GMFGenPackage.eNS_URI).getResourceNode().getName();
 			
 			myTopNodeMap.entrySet().stream().map(e -> createTrace(sourceRes, targetRes, e.getKey(), e.getValue(), "topNode"))
 					.collect(Collectors.toCollection(() -> traces));

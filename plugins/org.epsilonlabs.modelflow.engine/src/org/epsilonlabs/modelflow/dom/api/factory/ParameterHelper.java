@@ -10,7 +10,6 @@ package org.epsilonlabs.modelflow.dom.api.factory;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
-import org.epsilonlabs.modelflow.dom.IProperty;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 
@@ -20,16 +19,16 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
  */
 public class ParameterHelper {
 
-	protected final IProperty property;
+	protected final Object propertyValue;
 	protected final IModelFlowContext ctx;
 	
-	public ParameterHelper(IProperty property, IModelFlowContext ctx) {
-		this.property = property;
+	public ParameterHelper(Object propertyValue, IModelFlowContext ctx) {
+		this.propertyValue = propertyValue;
 		this.ctx = ctx;
 	}
 	
 	public Object getEvaluatedValue() throws MFInstantiationException {
-		Object value = this.property.getValue();
+		Object value = this.propertyValue;
 		if (value instanceof Callable) {
 			try {
 				return ((Callable<?>) value).call();

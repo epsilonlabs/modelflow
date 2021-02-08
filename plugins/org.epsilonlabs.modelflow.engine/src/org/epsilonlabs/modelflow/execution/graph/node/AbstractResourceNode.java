@@ -14,16 +14,25 @@ import io.reactivex.subjects.PublishSubject;
 
 public abstract class AbstractResourceNode<T extends IAbstractResource> implements IAbstractResourceNode {
 	
-	protected T internalResource;
+	protected String name;
 	protected PublishSubject<?> statusUpdater = PublishSubject.create();
+	protected String definition;
+	protected T resource;
 	
 	public AbstractResourceNode(T resource) {
-		this.internalResource = resource;
+		this.name = resource.getName();
+		this.definition = resource.getDefinition();
+		this.resource = resource;
 	}
 
 	@Override
 	public String getName() {
-		return this.internalResource.getName();
+		return this.name;
+	}
+	
+	@Override
+	public String getDefinition() {
+		return this.definition;
 	}
 
 	@Override
@@ -31,13 +40,9 @@ public abstract class AbstractResourceNode<T extends IAbstractResource> implemen
 		return obj instanceof AbstractResourceNode && ((AbstractResourceNode<?>) obj).getName().equals(getName());
 	}
 	
-	public T getModelElement() {
-		return internalResource;
-	}
-	
 	@Override
 	public void subscribe(IModelFlowPublisher pub) {
-		statusUpdater.subscribe(state -> pub.resourceState(this.getModelElement().getName(), state));
+		statusUpdater.subscribe(state -> pub.resourceState(getName(), state));
 	}
 
 }

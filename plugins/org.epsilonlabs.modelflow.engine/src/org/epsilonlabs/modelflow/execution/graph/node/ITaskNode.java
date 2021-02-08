@@ -7,8 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.eclipse.epsilon.common.module.ModuleElement;
-import org.epsilonlabs.modelflow.dom.ITask;
+import java.util.Set;
+
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 
@@ -32,22 +34,14 @@ public interface ITaskNode extends IGraphNode {
 	 *
 	 * @return the state
 	 */
-	TaskState getState();
+	TaskState getState();	
 
 	/**
 	 * Gets the task definition.
 	 *
 	 * @return the task definition
 	 */
-	ITask getTaskElement();
-	
-
-	/**
-	 * Gets the task definition.
-	 *
-	 * @return the task definition
-	 */
-	ModuleElement getModuleElement();
+	ITaskModuleElement getModuleElement();
 	
 	/**
 	 * Gets the observable.
@@ -55,5 +49,9 @@ public interface ITaskNode extends IGraphNode {
 	 * @return the observable
 	 */
 	Completable getObservable();
+	
+	ITaskInstance getTaskInstance();
+	
+	Set<String> getResourceAliases(String resourceNode);
 	
 }

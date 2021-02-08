@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.execution.graph.node;
 
 import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
 
 public class ModelResourceNode extends ResourceNode implements IModelResourceNode {
 	
@@ -16,8 +17,8 @@ public class ModelResourceNode extends ResourceNode implements IModelResourceNod
 	}
 
 	@Override
-	public IModelResource getModelElement() {
-		return (IModelResource) super.getModelElement();
+	public IModelModuleElement getModuleElement() {
+		return (IModelModuleElement) resource.getModuleElement();
 	}
 
 }

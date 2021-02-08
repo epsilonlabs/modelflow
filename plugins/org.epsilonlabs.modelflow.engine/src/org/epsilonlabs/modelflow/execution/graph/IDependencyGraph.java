@@ -21,7 +21,7 @@ import org.jgrapht.Graph;
 /**
  * The Interface IDependencyGraph.
  */
-public interface IDependencyGraph {
+public interface IDependencyGraph extends IDependencyHelper{
 	
 	/**
 	 * Builds the.
@@ -80,11 +80,6 @@ public interface IDependencyGraph {
 	 * @return the task dependency edges
 	 */
 	Collection<DependencyEdge> getTaskDependencyEdges();	
-
-	/**
-	 * Reset.
-	 */
-	void reset();
 
 	/**
 	 * @param publisher

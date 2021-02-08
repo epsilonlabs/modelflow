@@ -26,10 +26,6 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	protected final CompletableSubject completable = CompletableSubject.create();
 	protected final PublishSubject<TaskState> statusUpdater = PublishSubject.create();
 	
-	public AbstractTaskNode() {
-		setState(TaskState.CREATED);
-	}
-	
 	@Override
 	public Completable getObservable() {
 		return completable;
@@ -41,7 +37,7 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	}
 	
 	protected synchronized void setState(TaskState state){
-		LOG.debug("Task {} is {}", getTaskElement().getName(), state.name());
+		LOG.debug("Task {} is {}", getName(), state.name());
 		this.statusUpdater.onNext(state);
 		this.state = state;
 		switch (state) {
@@ -60,6 +56,7 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		return this.state;
 	}
 	
+	@Override
 	public ITaskInstance getTaskInstance() {
 		return this.taskInstance;
 	}

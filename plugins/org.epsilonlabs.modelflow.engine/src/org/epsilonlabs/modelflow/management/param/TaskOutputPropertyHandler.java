@@ -30,7 +30,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 		
 	@Override
 	protected Set<Method> getMethods(){
-		return new FactoryIntrospector(task.getClass()).getOutputMethods();
+		return new FactoryIntrospector(instance.getClass()).getOutputMethods();
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 		for (Method m : annotatedMethods) {
 			Object value = null; 
 			try {
-				value = m.invoke(task);
+				value = m.invoke(instance);
 			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				throw new IllegalStateException("Unable to retrieve input value");
 			}

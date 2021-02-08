@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.models.ModelRepository;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
@@ -70,9 +70,9 @@ public class RuntimeTracer {
 	
 	protected Optional<String> getResource(IModel model){
 		return getResources().stream()
-				.map(IModelWrapper::getResource)
+				.map(IModelWrapper::getResourceNode)
 				.filter(r->r.getName().equals(model.getName()))
-				.map(IAbstractResource::getName)
+				.map(IAbstractResourceNode::getName)
 				.findFirst();
 	}
 }

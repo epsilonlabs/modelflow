@@ -15,13 +15,8 @@ import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.epsilon.common.module.ModuleElement;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
-import org.epsilonlabs.modelflow.dom.IProperty;
-import org.epsilonlabs.modelflow.dom.IResource;
-import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
-import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementHandler;
+import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.execution.trace.impl.ExecutionTraceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +36,8 @@ public class ExecutionTraceUpdater {
 	}
 	
 	public synchronized WorkflowExecution getCurrentWorkflowExecution(){
-		return trace.getExecutions().get(trace.getExecutions().size()-1);
+		final EList<WorkflowExecution> executions = trace.getExecutions();
+		return executions.get(executions.size()-1);
 	}
 	
 	public synchronized Optional<WorkflowExecution> getPreviousWorkflowExecution(){
@@ -90,56 +86,17 @@ public class ExecutionTraceUpdater {
 	}
 	
 
-	public synchronized TaskExecution createTaskExecution(ITask task) {
+	public synchronized TaskExecution createTaskExecution(String task) {
 		
 		TaskExecution exec = ExecutionTraceFactory.eINSTANCE.createTaskExecution();
-		exec.setName(task.getName());
+		exec.setName(task);
 
 		getCurrentWorkflowExecution().getTasks().add(exec);
 		return exec;
 	}
 	
-	protected synchronized void serializableCopy(ITask task) {
-		Object guard = task.getGuard();
-		if (guard instanceof ModuleElement) {
-			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)guard);
-			task.setGuard(wrapper);
-		}
-		for (IProperty p : task.getProperties()) {
-			serializableCopy(p);
-		}
-	}
-	
-	protected synchronized void serializableCopy(IResource resource) {
-		for (IProperty p : resource.getProperties()) {
-			serializableCopy(p);
-		}
-	}
-	
-	protected synchronized void serializableCopy(IProperty p) {
-		Object value = p.getValue();
-		if (value instanceof ModuleElement) {
-			ModuleElementHandler wrapper = new ModuleElementHandler((ModuleElement)value);
-			p.setValue(wrapper);
-		}
-	}
-	
-	protected synchronized void serializableCopy(IWorkflow w) {
-		for (ITask t : w.getTasks()) {
-			serializableCopy(t);
-		}
-		for (IAbstractResource r : w.getResources()) {
-			if (r instanceof IResource) {				
-				serializableCopy((IResource) r);
-			}
-		}
-		for (IProperty p : w.getProperties()) {
-			serializableCopy(p);
-		}		
-	}
-
-	public synchronized ResourceSnapshot createResourceSnapshot(IResource res, Object stamp) {
-	
+	public synchronized ResourceSnapshot createResourceSnapshot(IResourceNode res, Object stamp) {
+		
 		ResourceSnapshot snapshot = ExecutionTraceFactory.eINSTANCE.createResourceSnapshot();
 		snapshot.setName(res.getName());
 		snapshot.setTimestamp(System.nanoTime());
@@ -147,6 +104,7 @@ public class ExecutionTraceUpdater {
 		LOG.debug("Stamp of {} is {}",res.getName(), stamp);
 		return snapshot;
 	}
+	
 	
 	public synchronized void addResourceToLatest(ResourceSnapshot snapshot){
 		// Find the resource with same identifier 

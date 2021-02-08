@@ -5,7 +5,7 @@
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
  ******************************************************************************/
-package org.epsilonlabs.modelflow.execution.concurrent;
+package org.epsilonlabs.modelflow.execution.scheduler;
 
 import java.util.Collection;
 import java.util.Deque;
@@ -14,13 +14,14 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.AbstractScheduler;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.graph.DependencyGraph;
+import org.epsilonlabs.modelflow.execution.graph.ExecutionGraph;
+import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.edge.ExecutionEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePrinter;
-import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.WorkflowExecution;
 import org.jgrapht.traverse.TopologicalOrderIterator;
 import org.slf4j.Logger;
@@ -38,6 +39,30 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 		
 	protected ConcurrentExecutorManager manager = new ConcurrentExecutorManager();
 	
+	protected IDependencyGraph dg;
+	protected IExecutionGraph eg;
+	
+	public TopologicalConcurrentScheduler () {
+		dg = new DependencyGraph();
+		eg = new ExecutionGraph();
+	}
+	
+	@Override
+	public IDependencyGraph getDependencyGraph(){
+		return dg;
+	}
+	
+	@Override
+	public IExecutionGraph getExecutionGraph() {
+		return eg;
+	}
+	
+	@Override
+	public void build(IModelFlowContext ctx) throws Exception {
+		dg.build(ctx);
+		eg.build(ctx);
+	}
+	
 	/**
 	 * Execute.
 	 *
@@ -49,11 +74,8 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 	protected WorkflowExecution executeImpl(IModelFlowContext ctx) throws MFExecutionException {
 		ctx.validate();
 
-		IExecutionGraph eg = ctx.getExecutionGraph();
-
 		// Locate Full Execution Trace
 		IWorkflow wf = ctx.getModule().getWorkflow();
-		ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
 		WorkflowExecution currentWorkflowExecution = updater.createWorkflowExecution(wf);
 
 
@@ -69,7 +91,7 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 				// Next Task on iterator
 				ITaskNode task = iterator.next();
 				
-				new ConcurrentTaskExecutor(task, updater, ctx).init();
+				new ConcurrentTaskExecutor(task, ctx).init();
 				
 			} // END WHILE
 			
@@ -98,16 +120,14 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 		private ITaskNode task;
 		private Deque<ITaskNode> que = new ConcurrentLinkedDeque<>();
 		private IModelFlowContext ctx;
-		private ExecutionTraceUpdater updater;
 
-		public ConcurrentTaskExecutor(ITaskNode task, ExecutionTraceUpdater updater, IModelFlowContext ctx) {
+		public ConcurrentTaskExecutor(ITaskNode task, IModelFlowContext ctx) {
 			this.task = task;
 			this.ctx = ctx;
-			this.updater = updater;
 		}
 
 		public void init() {
-			Collection<ITaskNode> dependencies = ctx.getExecutionGraph().getPredecessorTasks(task);
+			Collection<ITaskNode> dependencies = eg.getPredecessorTasks(task);
 			this.que.addAll(dependencies);
 			int count = manager.increment();
 			LOG.debug("Thread Count: {}", count);
@@ -130,7 +150,7 @@ public class TopologicalConcurrentScheduler extends AbstractScheduler {
 				manager.submit(() -> {
 					LOG.debug("Executing {}", task.getName());
 					try {
-						executeTask(ctx, updater, task);
+						executeTask(ctx, task);
 					} catch (MFRuntimeException e) {
 						manager.handleException(e);
 					}

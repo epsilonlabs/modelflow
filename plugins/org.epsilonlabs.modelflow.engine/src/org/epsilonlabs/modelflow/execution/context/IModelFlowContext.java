@@ -11,10 +11,8 @@ import org.eclipse.epsilon.erl.execute.context.IErlContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
-import org.epsilonlabs.modelflow.execution.IScheduler;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
-import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
-import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
+import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
 import org.epsilonlabs.modelflow.management.resource.IResourceManager;
@@ -71,34 +69,6 @@ public interface IModelFlowContext extends IErlContext{
 	 */
 
 	/**
-	 * Gets the dependency graph.
-	 *
-	 * @return the dependency graph
-	 */
-	IDependencyGraph getDependencyGraph();
-
-	/**
-	 * Sets the dependency graph.
-	 *
-	 * @param dependencyGraph the new dependency graph
-	 */
-	void setDependencyGraph(IDependencyGraph dependencyGraph);
-
-	/**
-	 * Sets the execution graph.
-	 *
-	 * @param executionGraph the new execution graph
-	 */
-	void setExecutionGraph(IExecutionGraph executionGraph);
-
-	/**
-	 * Gets the execution graph.
-	 *
-	 * @return the execution graph
-	 */
-	IExecutionGraph getExecutionGraph();
-	
-	/**
 	 * Validate.
 	 *
 	 * @throws MFExecutionException the MF execution exception
@@ -112,14 +82,14 @@ public interface IModelFlowContext extends IErlContext{
 	 *
 	 * @return the executor
 	 */
-	IScheduler getExecutor();
+	IScheduler getScheduler();
 	
 	/**
 	 * Sets the executor.
 	 *
 	 * @param executor the new executor
 	 */
-	void setExecutor(IScheduler executor);
+	void setScheduler(IScheduler executor);
 
 	/**
 	 * Gets the publisher.

@@ -30,7 +30,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
-import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
@@ -46,7 +45,7 @@ public class CustomGenerator extends Generator {
 		}
 	}
 
-	protected IAbstractResource resource;
+	protected String name;
 	protected List<Trace> traces = new ArrayList<>();
 	protected Set<URI> outputs = new LinkedHashSet<>();
 
@@ -109,8 +108,8 @@ public class CustomGenerator extends Generator {
         }
 	}
 
-	public void setResource(IAbstractResource r) {
-		this.resource = r;
+	public void setResourceName(String name) {
+		this.name = name;
 	}
 
 	public Map<String, String> getJavaOptions() {
@@ -193,7 +192,7 @@ public class CustomGenerator extends Generator {
 	public void generatedOutput(URI workspacePath) {
 		EObject eObject = (EObject) currentObject;
 		String id = eObject.eResource().getURIFragment(eObject);
-		Trace trace = new ManagementTraceBuilder().addSourceModelElement(id, this.resource.getName(), null)
+		Trace trace = new ManagementTraceBuilder().addSourceModelElement(id, this.name, null)
 				.addTargetElement(workspacePath.toString(), -1, -1)
 				.link("generate", currentProjectType.toString()).build();
 		traces.add(trace);

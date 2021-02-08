@@ -24,7 +24,7 @@ public class TaskInputPropertyHandler extends TaskPropertyHandler {
 		
 	@Override
 	protected Set<Method> getMethods(){
-		return new FactoryIntrospector(task.getClass()).getInputMethods();
+		return new FactoryIntrospector(instance.getClass()).getInputMethods();
 
 	}
 	

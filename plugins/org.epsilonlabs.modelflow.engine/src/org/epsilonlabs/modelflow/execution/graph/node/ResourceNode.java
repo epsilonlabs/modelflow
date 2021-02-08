@@ -14,14 +14,10 @@ import org.epsilonlabs.modelflow.dom.IResource;
 
 public class ResourceNode extends AbstractResourceNode<IResource> implements IResourceNode {
 	protected Set<String> aliases = Collections.emptySet();
+	
 
 	public ResourceNode(IResource resource) {
 		super(resource);
-	}
-	
-	@Override
-	public String getDefinition() {
-		return getModelElement().getDefinition();
 	}
 
 	@Override
