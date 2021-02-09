@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.SimpleWorkflows;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
@@ -106,7 +107,14 @@ public class TraceTest extends WorkflowBuilderTest {
 	
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(workflow);
+		final String program = new WorkflowProgramBuilder(workflow).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 }

@@ -70,8 +70,12 @@ public class TaskDeclaration extends AbstractDeclaration implements ITaskModuleE
 	public void compile(IEolCompilationContext context) {
 		super.compile(context);
 		
-		forEach.compile(context);
-		guard.compile(context);
+		if (forEach != null) {
+			forEach.compile(context);
+		}
+		if (guard != null) {			
+			guard.compile(context);
+		}
 		inputs.forEach(m->m.compile(context));
 		outputs.forEach(m->m.compile(context));
 		inouts.forEach(m->m.compile(context));
@@ -105,17 +109,32 @@ public class TaskDeclaration extends AbstractDeclaration implements ITaskModuleE
 	
 	protected void setupAnnotations() {
 		// @disabled 
-		if (getAnnotation("disabled") != null) enabled = false;
-		if (getAnnotation("skip") != null) enabled = false;
-		if (getAnnotation("enabled") != null) enabled = true;
+		if (getAnnotation("disabled") != null) {
+			enabled = false;
+		}
+		if (getAnnotation("skip") != null) {
+			enabled = false;
+		}
+		if (getAnnotation("enabled") != null) {
+			enabled = true;
+		}
 
 		// @noTrace 
-		if (getAnnotation("noTrace") != null) trace = false;
-		if (getAnnotation("trace") != null) trace = true;
+		if (getAnnotation("noTrace") != null) {
+			trace = false;
+		}
+		if (getAnnotation("trace") != null) {
+			trace = true;
+		}
 		
 		// @always
-		if (getAnnotation("always") != null) alwaysExecute = true;
-		if (getAnnotation("never") != null) alwaysExecute = false; enabled = false;
+		if (getAnnotation("always") != null) {
+			alwaysExecute = true;
+		}
+		if (getAnnotation("never") != null) {
+			alwaysExecute = false; 
+			enabled = false;
+		}
 	}
 	
 	@Override

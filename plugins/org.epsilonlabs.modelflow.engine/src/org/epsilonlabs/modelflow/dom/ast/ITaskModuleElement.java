@@ -12,6 +12,10 @@ import org.eclipse.epsilon.eol.dom.ExecutableBlock;
  *
  */
 public interface ITaskModuleElement extends IDeclaration {
+	/**
+	 * Name of the parameter which indicates how to name multi task instances.
+	 */
+	public static final String TASK_NAME = "taskName";
 
 	boolean isTrace();
 

@@ -15,6 +15,7 @@ import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
@@ -105,7 +106,14 @@ public class TaskTest  {
 	
 	@After
 	public void execute() throws Exception{
-		module.setWorkflow(w);
+		try {
+			//module.setWorkflow(w);
+			final String program = new WorkflowProgramBuilder(w).build();
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Parsing issues");	
+		}
 		try {
 			module.execute();
 		} catch (Exception e) {

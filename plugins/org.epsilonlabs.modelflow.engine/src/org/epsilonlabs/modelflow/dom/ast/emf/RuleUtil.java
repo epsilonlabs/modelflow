@@ -11,7 +11,9 @@ import java.util.Map.Entry;
 
 import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.dom.ICompilableModuleElement;
+import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.dom.NameExpression;
+import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
@@ -19,7 +21,9 @@ import org.epsilonlabs.modelflow.dom.IConfigurable;
 import org.epsilonlabs.modelflow.dom.IProperty;
 import org.epsilonlabs.modelflow.dom.api.factory.FactoryIntrospector;
 import org.epsilonlabs.modelflow.dom.ast.AbstractDeclaration;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.dom.impl.DomFactory;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 
 /**
  * @author bea
@@ -27,7 +31,7 @@ import org.epsilonlabs.modelflow.dom.impl.DomFactory;
  */
 public abstract class RuleUtil  {
 	
-	protected static void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, Class<?> factory, AbstractDeclaration declaration) {
+	public static void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, Class<?> factory, AbstractDeclaration declaration) {
 		for (Entry<NameExpression, ModuleElement> p : declaration.getParameters().entrySet()) {
 			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(p.getKey().getName());
@@ -47,6 +51,25 @@ public abstract class RuleUtil  {
 			}
 		}
 	}
+	
+	public static void setupConfigurableParameters(IModelFlowContext ctx, IConfigurable element, ITaskModuleElement declaration) throws EolRuntimeException {
+		for (Entry<NameExpression, ModuleElement> p : declaration.getParameters().entrySet()) {
+			IProperty property = DomFactory.eINSTANCE.createProperty();
+			property.setKey(p.getKey().getName());
+			ModuleElement value = p.getValue();
+			final Object result;
+			if (value instanceof IExecutableModuleElement) {
+				IExecutableModuleElement moduleElement = (IExecutableModuleElement) value;
+				FrameStack frameStack = ctx.getFrameStack();
+				frameStack.enterLocal(FrameType.UNPROTECTED, (ModuleElement) moduleElement);
+				result = moduleElement.execute(ctx);
+				frameStack.leaveLocal((ModuleElement) moduleElement);
+				property.setValue(result);
+				element.getProperties().add(property);
+			}
+		}
+	}
+	
 
 
 }

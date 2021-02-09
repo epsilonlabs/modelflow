@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -53,5 +54,14 @@ public interface ITaskNode extends IGraphNode {
 	ITaskInstance getTaskInstance();
 	
 	Set<String> getResourceAliases(String resourceNode);
+
+	/**
+	 * @return
+	 */
+	Map<String, ITaskNode> getSubNodes();
+	
+	ITaskNode getParentNode();
+	
+	void setParentNode(ITaskNode parent);
 	
 }

@@ -227,9 +227,9 @@ public class TaskStackScheduler extends AbstractScheduler {
 	/**
 	 * @return the dispatchedNodes
 	 */
-	public Map<String, TaskModuleElementNode> getAllDispatchedNodes() {
-		final Map<String, TaskModuleElementNode> all = dispatchedNodes.stream()
-				.map(TaskModuleElementNode::getSubNodes)
+	public Map<String, ITaskNode> getAllDispatchedNodes() {
+		final Map<String, ITaskNode> all = dispatchedNodes.stream()
+				.map(ITaskNode::getSubNodes)
 				.map(Map::entrySet)
 				.flatMap(Set::stream)
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue));

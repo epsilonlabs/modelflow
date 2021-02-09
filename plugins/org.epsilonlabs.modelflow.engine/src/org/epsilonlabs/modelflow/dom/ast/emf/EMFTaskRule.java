@@ -8,7 +8,6 @@
 package org.epsilonlabs.modelflow.dom.ast.emf;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,7 +20,6 @@ import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.eclipse.epsilon.eol.dom.Parameter;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
-import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.types.EolAnyType;
@@ -39,7 +37,7 @@ import org.epsilonlabs.modelflow.dom.impl.DomFactory;
  */
 public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask>{
 
-	private Collection<ITask> tasks;
+	private Collection<ITask> tasks = new ArrayList<>();
 
 	@Override
 	public Collection<ITask> getDomElements() {
@@ -62,33 +60,35 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 				forEach.compile(ctx);
 				try {
 					forEach.execute(ctx.getModule().getContext());
-					iterator = forEach.getIterator();
+					//iterator = forEach.getIterator();
 				} catch (EolRuntimeException e) {
 					ctx.addErrorMarker(forEach, e.getMessage());
 				}
 			}
 			FrameStack frameStack = ctx.getFrameStack();
-			for (int loop = 1; iterator.hasNext(); loop++) {
-				final Map<String, Object> itMap = new HashMap<>();
-				Object next = iterator.next();				
-				String name = getName();
-				try {
-					if (forEach != null){		
-						final Variable[] vars = getVariables(ctx.getModule().getContext(), loop, next);
-						frameStack.enterLocal(FrameType.UNPROTECTED, this, vars);
-						name += String.format("@%d", loop);
-						final Map<String, Object> varMap = Arrays.stream(vars).collect(Collectors.toMap(v -> v.getName(), v -> v.getValue()));
-						map.put(name, varMap);
+			createTask(ctx, getName());
+			/*
+			if (iterator != null) {
+				for (int loop = 1; iterator.hasNext(); loop++) {
+					final Map<String, Object> itMap = new HashMap<>();
+					Object next = iterator.next();				
+					String name = getName();
+					try {
+						if (forEach != null){		
+							final Variable[] vars = getVariables(ctx.getModule().getContext(), loop, next);
+							frameStack.enterLocal(FrameType.UNPROTECTED, this, vars);
+							name += String.format("@%d", loop);
+							final Map<String, Object> varMap = Arrays.stream(vars).collect(Collectors.toMap(v -> v.getName(), v -> v.getValue()));
+							map.put(name, varMap);
+						}
+						if (forEach != null){	
+							frameStack.leaveLocal(this);
+						}
+					} catch (Exception e) {
+						// TODO: handle exception
 					}
-					createTask(ctx, name);
-					if (forEach != null){	
-						frameStack.leaveLocal(this);
-					}
-				} catch (Exception e) {
-					// TODO: handle exception
 				}
-			}			
-			
+			}*/
 		}
 	}
 
@@ -108,7 +108,7 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 				.collect(Collectors.toList());
 	}
 
-	protected void createTask(IModelFlowCompilationContext ctx, String name) {
+	public void createTask(IModelFlowCompilationContext ctx, String name) {
 		ITask task = DomFactory.eINSTANCE.createTask();
 		task.setName(name);
 		task.setDefinition(getType().getName());
@@ -121,7 +121,10 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 			String msg = String.format("Unkown task factory '%s'", getType().getName());
 			ctx.addWarningMarker(getType(), msg);
 		}
-		RuleUtil.setupConfigurableParameters(ctx, task, factory, this);
+		if (forEach == null) {			
+			RuleUtil.setupConfigurableParameters(ctx, task, factory, this);
+		} // wait for runtime to setup
+		
 		for (IModelCallExpression p : inputs) {
 			p.compile(ctx);
 			final EList<IResourceReference> consumes = task.getConsumes();
@@ -152,22 +155,20 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 					.forEach(produces::add);
 			}
 		}
+		
 		if (guard != null) {
 			guard.compile(ctx);
 			task.setGuard(guard);
 		}
-		if (!enabled) {
-			task.setEnabled(false);
-		}
-		if (!trace) {
-			task.setTraceable(false);
-		}
-		if (alwaysExecute) {
-			task.setAlwaysExecute(true);
-		}
+		task.setEnabled(enabled);
+		task.setTraceable(trace);
+		task.setAlwaysExecute(alwaysExecute);
 		tasks.add(task);
 		task.setModuleElement(this);
 	}
+	
+	
+	
 
 
 }

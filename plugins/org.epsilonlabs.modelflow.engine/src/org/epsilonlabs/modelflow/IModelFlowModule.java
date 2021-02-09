@@ -25,14 +25,6 @@ public interface IModelFlowModule extends IErlModule {
 	 * @return the workflow
 	 */
 	IWorkflow getWorkflow();
-
-	/**
-	 * Sets the workflow.
-	 *
-	 * @param workflow the new workflow
-	 */
-	void setWorkflow(IWorkflow workflow);
-
 	
 	/**
 	 * Gets the context.

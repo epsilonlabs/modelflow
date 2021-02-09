@@ -75,10 +75,14 @@ public class ResourceManager implements IResourceManager {
 		tExec.getInputModels().clear();
 
 		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
+		ITaskNode graphNode = taskNode;
+		if (taskNode.getParentNode() != null) {
+			graphNode = taskNode.getParentNode();
+		}
 		// For all the resources connected to this task node
-		for (IAbstractResourceNode entry : dg.getResourceNodes(taskNode)) {
+		for (IAbstractResourceNode entry : dg.getResourceNodes(graphNode)) {
 			IAbstractResourceNode rNode = entry;
-			ResourceKind kind = dg.getResourceKindForTask(rNode, taskNode);
+			ResourceKind kind = dg.getResourceKindForTask(rNode, graphNode);
 			// If of type ModelResource 
 			if (rNode instanceof IModelResourceNode) {
 				handleModelResourceBeforeExecution(taskInstance, ctx, list, updater, tExec, (IModelResourceNode) rNode, kind);
@@ -150,8 +154,12 @@ public class ResourceManager implements IResourceManager {
 		
 		// For all the resources connected to this task node 
 		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
-		for (IAbstractResourceNode e : dg.getResourceNodes(taskNode)) {
-			ResourceKind kind = dg.getResourceKindForTask(e, taskNode);
+		ITaskNode graphNode = taskNode;
+		if (taskNode.getParentNode() != null) {
+			graphNode = taskNode.getParentNode();
+		}
+		for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
+			ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
 			IAbstractResourceNode value = e;
 			// If of type ModelResourceNode 
 			if (value instanceof IModelResourceNode) {

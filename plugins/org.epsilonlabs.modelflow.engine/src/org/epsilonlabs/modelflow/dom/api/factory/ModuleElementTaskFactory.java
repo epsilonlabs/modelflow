@@ -51,16 +51,7 @@ public class ModuleElementTaskFactory implements IInstanceFactory<ITaskInstance,
 		injector.injectMembers(instance);
 		configure(ctx);
 		return instance;
-	}
-
-	protected String getName(IModelFlowContext ctx) {
-		if (declaration.isGenerator() && ctx.getFrameStack().contains("taskName")) {			
-			return (String) ctx.getFrameStack().get("taskName").getValue();
-		} else {
-			return declaration.getName();
-		}
-	}
-	
+	}	
 	protected void configure(IModelFlowContext ctx) throws MFRuntimeException {
 		List<Method> paramMethods = Stream.of(clazz.getMethods())
 				.filter(m -> m.getAnnotationsByType(Param.class).length != 0)
@@ -114,11 +105,11 @@ public class ModuleElementTaskFactory implements IInstanceFactory<ITaskInstance,
 			throws MFInstantiationException {
 		for (Method method : potentialMatchingMethods) {
 			Class<?> paramType = method.getParameterTypes()[0];
-			Object assignableValue =  getAssignableValue(value, paramType, ctx);
+			Object assignableValue = getAssignableValue(value, paramType, ctx);
 			if (isAssignableFrom(method, assignableValue)) {
 				try {
 					method.invoke(instance, assignableValue);
-					break;
+					return;
 				} catch (Exception e) {
 					throw new MFInstantiationException(e);
 				}

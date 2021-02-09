@@ -15,8 +15,8 @@ import org.eclipse.epsilon.common.module.ModuleElement;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.factory.EMFModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.EMFTaskFactory;
 import org.epsilonlabs.modelflow.dom.api.factory.IInstanceFactory;
+import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementTaskFactory;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.IExecutionListener;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -89,13 +89,13 @@ public abstract class AbstractScheduler implements IScheduler {
 	protected void executeTask(IModelFlowContext ctx, ITaskNode task) throws MFExecutionException {
 		
 		/* Notify about to execute */
-		executionListeners.parallelStream().forEach(l->l.preparingForExecution(this, task));
+		executionListeners.stream().forEach(l->l.preparingForExecution(this, task));
 	
 		/* New Task Execution Record */
 		TaskExecution currentTaskExecution = updater.createTaskExecution(task.getName());
 		
 		/* Notify executing */
-		executionListeners.parallelStream().forEach(l->l.executing(this, task));
+		executionListeners.stream().forEach(l->l.executing(this, task));
 
 		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getName());
 
@@ -167,7 +167,7 @@ public abstract class AbstractScheduler implements IScheduler {
 
 	@Override
 	public IInstanceFactory<ITaskInstance, ITaskNode> getTaskInstanceFactory() {
-		return new EMFTaskFactory();
+		return new ModuleElementTaskFactory();
 	}
 	
 	@Override

@@ -7,7 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.core.tests.integ;
 
+import static org.junit.Assert.fail;
+
 import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
 import org.epsilonlabs.modelflow.mmc.core.tests.common.workflow.CoreTask;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -58,7 +61,14 @@ public class CoreTaskTest extends WorkflowBuilderTest {
 
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(w);
+		final String program = new WorkflowProgramBuilder(w).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 }

@@ -38,12 +38,15 @@ public class ConservativeExecutionHelper {
 	protected ExecutionTraceUpdater updater;
 	protected TaskExecution currentTaskEecution;
 	protected TaskExecution previousTaskExecution;
-	
 
 	public ConservativeExecutionHelper(ITaskInstance task, ITaskNode node, IModelFlowContext ctx) {
 		this.task = task;
 		this.node = node;
 		this.ctx = ctx;
+	}
+	
+	public ConservativeExecutionHelper(ITaskNode node, IModelFlowContext ctx) {
+		this(node.getTaskInstance(), node, ctx);
 	}
 	
 	/* CHECKER METHODS */
@@ -96,11 +99,15 @@ public class ConservativeExecutionHelper {
 		Collection<IAbstractResourceNode> nodes;
 		
 		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
+		ITaskNode graphNode = node;
+		if (node.getParentNode() != null) {
+			graphNode = node.getParentNode();
+		}
 		if (input) {
-			nodes = helper.getInputResourceNodes(node);
+			nodes = helper.getInputResourceNodes(graphNode);
 			
 		} else {
-			nodes = helper.getOutputResourceNodes(node);
+			nodes = helper.getOutputResourceNodes(graphNode);
 		}
 		for (IAbstractResourceNode r : nodes) {
 			if (r instanceof IModelResourceNode) {

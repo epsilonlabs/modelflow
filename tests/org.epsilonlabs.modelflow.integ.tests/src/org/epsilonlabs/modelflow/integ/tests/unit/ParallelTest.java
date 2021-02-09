@@ -4,6 +4,7 @@
 package org.epsilonlabs.modelflow.integ.tests.unit;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,11 +12,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
 import org.epsilonlabs.modelflow.execution.scheduler.TopologicalConcurrentScheduler;
 import org.epsilonlabs.modelflow.execution.scheduler.TopologicalSequentialScheduler;
-import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
@@ -124,7 +126,14 @@ public class ParallelTest extends WorkflowBuilderTest {
 
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(w);
+		final String program = new WorkflowProgramBuilder(w).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		module.getContext().setProfilingEnabled(true);
 		module.getContext().setScheduler(scheduler);
 	}

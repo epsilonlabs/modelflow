@@ -399,12 +399,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	public IWorkflow getWorkflow() {
 		return workflow;
 	}
-
-	@Override
-	public void setWorkflow(IWorkflow workflow) {
-		this.workflow = workflow;
-	}
-
 	/*
 	 *******************************************
 	 * REGISTRIES

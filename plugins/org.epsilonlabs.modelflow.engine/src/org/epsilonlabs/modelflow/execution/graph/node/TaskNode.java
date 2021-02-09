@@ -10,27 +10,25 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.epsilon.eol.EolModule;
-import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
-import org.eclipse.epsilon.eol.execute.context.FrameType;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
+import org.epsilonlabs.modelflow.dom.ast.emf.RuleUtil;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
-import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
-import org.epsilonlabs.modelflow.management.resource.IResourceManager;
-import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
-import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,56 +39,106 @@ public class TaskNode extends AbstractTaskNode {
 	protected ITask taskDefintion;
 	
 	public TaskNode(ITask task) {
+		super((ITaskModuleElement)task.getModuleElement(), task.getName());
 		this.taskDefintion = task;
 		setState(TaskState.CREATED);
 	}
 	
+	public TaskNode(ITaskModuleElement task, String name) {
+		super(task, name);
+		setState(TaskState.CREATED);
+	}
+	
+	public ITask getTaskDefintion() {
+		return taskDefintion;
+	}
+	
+	public void setTaskDefintion(ITask taskDefintion) {
+		this.taskDefintion = taskDefintion;
+	}
+	
 	@Override
-	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
-		LOG.debug("Called execute for {}", taskDefintion.getName());
-		
-		// Instantiate task and populate
-		this.taskInstance = ctx.getTaskRepository().create(this, ctx);
-		setState(TaskState.INITIALIZED);
-		
-		/*
-		 * Check if it should execute 
-		 * i.e. task is enabled && guard is OK 
-		 */
-		if (shouldExecute(ctx)) {
-			// Prepare for execution 
-			this.taskInstance.validateParameters();
-			// Assume it will execute
-			ConservativeExecutionHelper conservativeHelper = new ConservativeExecutionHelper(this.taskInstance, this, ctx);
-			boolean execute = shouldExecuteBasedOnTrace(ctx, conservativeHelper);
-			if (execute) {
-				doExecute(ctx);
-			} else {
-				noNeedToExecute(ctx, conservativeHelper);
+	protected ITaskNode createSubNode(ITaskModuleElement declaration, String name) {
+		return new TaskNode(declaration, name);
+	}
+	
+	public void attemptIndividualExecution(IModelFlowContext ctx) throws MFRuntimeException {
+		if (parentNode != null && parentNode instanceof TaskNode) {
+			final ITask parentTask = ((TaskNode)parentNode).getTaskDefintion();
+			EcoreUtil.Copier copier = new EcoreUtil.Copier(); 
+			final ITask copy = (ITask) copier.copy(parentTask); //Improve copy
+			((IWorkflow)parentTask.eContainer()).getTasks().add(copy);
+			copier.copyReferences();
+			
+			this.taskDefintion = copy;
+			this.taskDefintion.setName(getName());
+			try {
+				RuleUtil.setupConfigurableParameters(ctx, copy, taskDeclaration);
+			} catch (Exception e) {
+				throw new MFRuntimeException(e);
 			}
+			
 		}
-		else { // Guard failed or task is disabled
-			skip();			
+		super.attemptIndividualExecution(ctx);
+	}
+	protected void postFor(IModelFlowContext ctx) {
+		if (parentNode != null && parentNode instanceof TaskNode) {
+			final ITask task = ((TaskNode)parentNode).getTaskDefintion();
+			final EList<ITask> taskList = ((IWorkflow) task.eContainer()).getTasks();
+			final Iterator<ITask> taskIterator = taskList.iterator();
+			List<ITask> toRemove = new ArrayList<>();
+			while (taskIterator.hasNext()) {
+				final ITask next = taskIterator.next();
+				if (next.getName().equals(task.getName())) {
+					toRemove.add(next);
+				}
+			}
+			toRemove.forEach(taskList::remove);
 		}
 	}
+	
+	@Override
+	protected ExecutableBlock<Boolean> getGuard() {
+		if (this.taskDeclaration != null) {
+			return super.getGuard();
+		} else if (this.taskDefintion != null) {
+			// TODO fixme
+		}
+		return null;
+	}
 
+	@Override
+	protected boolean isEnabled() {
+		return (taskDeclaration != null && taskDeclaration.isEnabled()) || (taskDefintion != null && taskDefintion.getEnabled());
+	}
+	
+	@Override
+	public String getDefinition() {
+		if (taskDeclaration != null) {
+			return super.getDefinition();
+		} else if (taskDefintion != null) {
+			return taskDefintion.getDefinition();
+		}
+		throw new IllegalStateException("Should build the workflow from model or by parsing the program");
+	}
+	
 	/**
 	 * @param ctx
-	 * @param conservativeHelper
+	 * @param conservativeExecutionHelper
 	 * @return
 	 */
-	protected boolean shouldExecuteBasedOnTrace(IModelFlowContext ctx, ConservativeExecutionHelper conservativeHelper) {
+	protected boolean shouldExecuteBasedOnTrace(IModelFlowContext ctx) {
 		boolean execute = true;
 		
-		if (conservativeHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
+		if (conservativeExecutionHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
 			DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
 			
-			if ( !(taskInstance.isAlwaysExecute() || taskDefintion.getAlwaysExecute()) 
-					&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(this)) )
+			if ( !(taskDeclaration.isAlwaysExecute()) 
+					/*&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(parentNode)) */)
 			{
-				boolean inputsChanged = conservativeHelper.haveInputPropertiesChanged() 
-						|| conservativeHelper.haveInputModelsChanged();
-				int shouldExecuteOutput = shouldExecuteBasedOnOutput(ctx, conservativeHelper);
+				boolean inputsChanged = conservativeExecutionHelper.haveInputPropertiesChanged() 
+						|| conservativeExecutionHelper.haveInputModelsChanged();
+				int shouldExecuteOutput = shouldExecuteBasedOnOutputs(ctx);
 				switch (shouldExecuteOutput) {
 				case 0:
 					execute = inputsChanged;
@@ -111,13 +159,13 @@ public class TaskNode extends AbstractTaskNode {
 
 	/**
 	 * @param ctx
-	 * @param conservativeHelper
+	 * @param conservativeExecutionHelper
 	 * @return 0 ignore, 1 must execute, -1 must not execute
 	 */
-	protected int shouldExecuteBasedOnOutput(IModelFlowContext ctx, ConservativeExecutionHelper conservativeHelper) {
+	protected int shouldExecuteBasedOnOutputs(IModelFlowContext ctx) {
 		// Determine which outputs have changed
-		boolean outputsChanged = conservativeHelper.haveOutputPropertiesChanged() 
-				|| conservativeHelper.haveOutputModelsChanged();
+		boolean outputsChanged = conservativeExecutionHelper.haveOutputPropertiesChanged() 
+				|| conservativeExecutionHelper.haveOutputModelsChanged();
 		if (ctx.isInteractive()) {
 			if (outputsChanged) {
 				// List them and prompt
@@ -147,17 +195,17 @@ public class TaskNode extends AbstractTaskNode {
 	/**
 	 * Actions taken when the task does not need to execute
 	 * @param ctx 	the ModelFlow context
-	 * @param incremental
+	 * @param conservativeExecutionHelper
 	 */
-	protected void noNeedToExecute(IModelFlowContext ctx, ConservativeExecutionHelper incremental) {
+	protected void noNeedToExecute(IModelFlowContext ctx) {
 		// -- SKIPPING --
 		skip();
 		
 		// Copy Execution Trace 
-		incremental.copyFromPrevious();
+		conservativeExecutionHelper.copyFromPrevious();
 		
 		// End-To-End Traces
-		processEndToEndTraces(ctx); // Do nothing for the time being
+		processManagementTraces(ctx); // Do nothing for the time being
 		
 		// Check if tasks depend on my execution results
 		/*if (new DependencyGraphHelper(ctx.getDependencyGraph()).hasDerivedOutputDependencies(this)) {
@@ -172,85 +220,6 @@ public class TaskNode extends AbstractTaskNode {
 		ctx.getFrameStack().put(
 			Variable.createReadOnlyVariable(getName(), this)
 		);
-	}
-
-	/**
-	 * 
-	 * @param ctx
-	 * @param manager
-	 * @param pManager
-	 * @throws MFRuntimeException
-	 */
-	protected void doExecute(IModelFlowContext ctx)
-			throws MFRuntimeException {
-		
-		IResourceManager manager = ctx.getResourceManager(); 
-		ITaskParameterManager pManager = ctx.getParamManager();
-		/*
-		 * TODO if any derived outputs are contributed, 
-		 * then either check its stamp has not changed or 
-		 * re-execute  
-		 */
-		
-		// Register inputs in execution trace
-		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-			pManager.processInputs(this, ctx);
-		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
-		}
-		// Assign Models Before Execution
-		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-			manager.processResourcesBeforeExecution(this, ctx);
-		} finally {			
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
-		}
-		setState(TaskState.RESOLVED);		
-		
-		// -- EXECUTING --
-		
-		// Execute 
-		try {
-			setState(TaskState.EXECUTING);
-			ctx.getProfiler().start(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
-			this.taskInstance.execute(ctx);
-			setState(TaskState.EXECUTED);
-		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
-		}
-
-		ctx.getFrameStack().put(
-			Variable.createReadOnlyVariable(getName(), taskInstance)
-		);
-		
-		
-		// Cleanup if necessary 
-		try {
-			this.taskInstance.afterExecute();
-		} finally {
-		}
-		
-		// -- POST PROCESSING -- 
-		
-		// Record outputs in execution trace
-		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
-			pManager.processOutputs(this, ctx);
-		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
-		}
-
-		// Traces
-		processEndToEndTraces(ctx);
-		
-		// Process Models After Execution
-		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-			manager.processResourcesAfterExecution(this, ctx);
-		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-		}
 	}
 
 	protected void safelyDispose(IModelFlowContext ctx) {
@@ -280,120 +249,31 @@ public class TaskNode extends AbstractTaskNode {
 			});
 	}
 	
-	public boolean shouldExecute(IModelFlowContext ctx) throws MFRuntimeException {
-		return this.taskDefintion.getEnabled() && isGuardSatisfied(ctx);
-	}
-
-	public void skip() {
-		setState(TaskState.SKIPPED);
-		LOG.info("Skipping {}", taskDefintion.getName());
-	}
-
-	protected void processEndToEndTraces(IModelFlowContext ctx) {
-		boolean endToEndTracing = ctx.isEndToEndTracing();
-		boolean traceable = this.taskDefintion.getTraceable();
-		if (endToEndTracing && traceable) {
-			if (!getState().isSkpped()) {
-				// Check if task produced traces
-				this.taskInstance.getTrace().ifPresent(traces -> {
-					try {
-						ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
-						ManagementTrace trace = ctx.getManagementTrace();
-						ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(trace, this.taskDefintion);
-						traceUpdater.update(traces);
-					} finally {
-						ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
-					}
-				});
-			} else {
-				// Should remain the same
-			}
+	protected boolean isTrace(){
+		if (this.taskDeclaration != null) {
+			return super.isTrace();
+		} else {
+			return this.taskDefintion.getTraceable();
 		}
 	}
 	
-	protected Boolean isGuardSatisfied(IModelFlowContext ctx) throws MFRuntimeException{
-  		Object guard = this.taskDefintion.getGuard();
-		Boolean ok = true;
-		if (guard instanceof String) {
-			ok = evaluateStringGuard(ctx, guard, ok);
-		} else if (guard instanceof Boolean) {
-			ok = (Boolean) guard;
-		} else if (guard instanceof IExecutableModuleElement) {
-			IExecutableModuleElement exp = (IExecutableModuleElement) guard;
-			Variable self = Variable.createReadOnlyVariable("self", taskInstance);
-			ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, exp, self);
-			try {				
-				Object result = exp.execute(ctx);
-				if (result instanceof Boolean) {
-					ok = (Boolean) result;
-				}
-				ctx.getFrameStack().leaveLocal(exp);
-			} catch (Exception e) {
-				ctx.getFrameStack().leaveLocal(exp);
-				throw new MFRuntimeException(String.format("Exception when evaluating guard of task %s",taskDefintion.getName()), e);
-			}
-		}
-		return ok;
-	}
-
-	protected Boolean evaluateStringGuard(IModelFlowContext ctx, Object guard, Boolean ok)
-			throws MFRuntimeException {
-		String stringGuard = (String) guard;
-		if (!stringGuard.trim().isEmpty()) {
-			EolModule eolModule = new EolModule();
-			eolModule.getContext().setFrameStack(ctx.getFrameStack());
-			eolModule.getContext().getFrameStack().put(
-				Variable.createReadOnlyVariable("self", taskInstance)
-			);
-			try {
-				if (!stringGuard.contains(";") && !stringGuard.trim().startsWith("return")) {
-					stringGuard = "return " + stringGuard + ";";
-				}
-				eolModule.parse(stringGuard);
-				ok = (Boolean) eolModule.execute();
-			} catch (Exception e) {
-				throw new MFRuntimeException("Invalid guard", e);
-			}
-		}
-		return ok;
-	}
 	
-	@Override
-	public String getName() {
-		return this.taskDefintion.getName();
-	}
-	
-	@Override
-	public String getDefinition() {
-		return this.taskDefintion.getDefinition();
-	}
-	
-	/** Unique Task identifiers by name */
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof TaskNode && getName().equals(((TaskNode)obj).getName());
-	}
-	
-	@Override
-	public String toString() {
-		return this.getName();
-	}
-
-	@Override
-	public ITaskModuleElement getModuleElement() {
-		return (ITaskModuleElement) this.taskDefintion.getModuleElement();
-	}
 	
 	@Override
 	public Set<String> getResourceAliases(String resourceNode) {
-		final ArrayList<IResourceReference> list = new ArrayList<>();
-		list.addAll(taskDefintion.getConsumes());
-		list.addAll(taskDefintion.getProduces());
-		list.addAll(taskDefintion.getModifies());
-		final Optional<IResourceReference> optional = list.stream().filter(r->r.getResource().getName().equals(resourceNode)).findAny();
-		if (optional.isPresent()) {
-			return optional.get().getAliases().stream().collect(Collectors.toSet());
+		if (taskDeclaration != null) {
+			return super.getResourceAliases(resourceNode);
+		} else {			
+			final ArrayList<IResourceReference> list = new ArrayList<>();
+			list.addAll(taskDefintion.getConsumes());
+			list.addAll(taskDefintion.getProduces());
+			list.addAll(taskDefintion.getModifies());
+			final Optional<IResourceReference> optional = list.stream().filter(r->r.getResource().getName().equals(resourceNode)).findAny();
+			if (optional.isPresent()) {
+				return optional.get().getAliases().stream().collect(Collectors.toSet());
+			}
+			return Collections.emptySet();
 		}
-		return Collections.emptySet();
 	}
+	
 }

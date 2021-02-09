@@ -402,12 +402,7 @@ public class CompileTest extends AbstractParsingTest {
 	public void testTaskForEachSequence() {
 		super.testTaskForEachSequence();
 		result = w -> {
-			assertEquals(5, w.getTasks().size());
-			for (int i=1; i == 5; i++) {				
-				String name = String.format("A@%d", i);
-				ITask task = w.getTasks().get(i-1);
-				assertEquals(name, task.getName());
-			}
+			assertEquals(1, w.getTasks().size());
 			return true;
 		};
 	}

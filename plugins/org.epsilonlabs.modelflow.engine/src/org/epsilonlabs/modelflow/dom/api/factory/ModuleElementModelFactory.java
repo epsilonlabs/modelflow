@@ -54,8 +54,8 @@ public class ModuleElementModelFactory implements IInstanceFactory<IModelResourc
 	}
 
 	protected String getName(IModelFlowContext ctx) {
-		if (declaration.isGenerator() && ctx.getFrameStack().contains("taskName")) {			
-			return (String) ctx.getFrameStack().get("taskName").getValue();
+		if (ctx.getFrameStack().contains("modelName")) {			
+			return (String) ctx.getFrameStack().get("modelName").getValue();
 		} else {
 			return declaration.getName();
 		}
