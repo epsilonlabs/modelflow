@@ -8,7 +8,7 @@
 package org.epsilonlabs.modelflow.execution.graph;
 
 public enum GraphState {
-	CREATED, POPULATED;
+	INSTANTIATED, POPULATED;
 
 	public boolean isPopulated() {
 		return this.equals(POPULATED);

@@ -16,14 +16,14 @@ import java.util.Optional;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eunit.EUnitModule;
 import org.eclipse.epsilon.eunit.IEUnitModule;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 
-public class EpsilonEunitTask extends AbstractEpsilonTask implements ITask {
+@Definition(name = "epsilon:eunit")
+public class EpsilonEunitTask extends AbstractEpsilonTask {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -32,21 +32,6 @@ public class EpsilonEunitTask extends AbstractEpsilonTask implements ITask {
 			this.module = new EUnitModule();
 		}
 		return (IEUnitModule) this.module;
-	}
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEunitTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "eunit";
-		}
-
 	}
 
 	protected String packageName = "default";

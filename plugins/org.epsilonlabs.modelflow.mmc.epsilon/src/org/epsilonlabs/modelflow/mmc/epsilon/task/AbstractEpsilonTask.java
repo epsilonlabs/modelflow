@@ -16,13 +16,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.dt.ExtensionPointToolNativeTypeDelegate;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -33,7 +34,7 @@ import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractEpsilonTask extends AbstractTask implements ITask {
+public abstract class AbstractEpsilonTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractEpsilonTask.class);
 
@@ -75,6 +76,11 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 	@Param(key="src")
 	public void setSrc(File src) {
 		this.src = Optional.ofNullable(src);
+	}
+	
+	@Param(key="src")
+	public void setSrc(String src) {
+		this.src = Optional.ofNullable(new File(src));
 	}
 	
 	@Input(key="src")
@@ -143,7 +149,7 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 			
 			Object m = model.getModel();
 			if (m instanceof IModel) {				
-				LOG.info("{} as {}",model.getResource().getName(), model.getResourceKind().toString().toLowerCase());
+				LOG.info("{} as {}",model.getResourceNode().getName(), model.getResourceKind().toString().toLowerCase());
 				/*if (model.getExtraLabel().isPresent()) 
 					System.out.println(model.getExtraLabel().get());*/
 				getModule().getContext().getModelRepository().addModel((IModel) m);
@@ -195,7 +201,11 @@ public abstract class AbstractEpsilonTask extends AbstractTask implements ITask 
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
 		getModule().getContext().setOutputStream(ctx.getOutputStream());
 		getModule().getContext().setErrorStream(ctx.getErrorStream());
+		if (Platform.isRunning()) {			
+			getModule().getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
+		}
 		try {
+			getModule().getContext().getModelRepository().getModels().stream().forEach(m->System.out.println(m.getName()));
 			result = getModule().execute();
 		} catch (EolRuntimeException e) {
 			throw new MFExecutionException(e.getReason(), e);

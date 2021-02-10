@@ -38,11 +38,11 @@ public class BenchmarkUtils {
 	 * @param resultsFile
 	 * @return
 	 */
-	public static File getResultsFile() {
+	public static File getResultsFile(String prefix, Date date) {
 		String pattern = "yyyy-MM-dd-hh:mm:ss";
-		String dateOfExperiment = new SimpleDateFormat(pattern).format(new Date());
+		String dateOfExperiment = new SimpleDateFormat(pattern).format(date);
 		return Paths.get(System.getProperty("user.dir")).resolve("results")
-				.resolve(String.format("results-%s.csv", dateOfExperiment)).toFile();
+				.resolve(String.format("%s-%s.csv", prefix, dateOfExperiment)).toFile();
 	}
 
 	/** 

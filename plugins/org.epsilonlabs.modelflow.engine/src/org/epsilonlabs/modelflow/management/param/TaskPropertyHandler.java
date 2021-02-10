@@ -14,24 +14,24 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 
 public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 
 	protected Set<Method> annotatedMethods;
-	protected ITask task;
+	protected ITaskInstance instance;
 	protected Map<String, Object> properties;
 	protected Map<String, Object> hashes;
 
-	public TaskPropertyHandler(ITask task) {
-		this.task = task;
+	public TaskPropertyHandler(ITaskInstance task) {
+		this.instance = task;
 		this.annotatedMethods = getMethods();
 	}
 	
 	@Override
-	public ITask getTask() {
-		return task;
+	public ITaskInstance getTaskInstance() {
+		return instance;
 	}
 	
 	@Override
@@ -42,15 +42,11 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	@Override
 	public Map<String, Object> get(){
 		if (properties == null) {
-			if (this.task.getTaskNode().getState().hasBeenInitialised()) {
-				this.properties = new HashMap<>();
-				for (Method m : annotatedMethods) {
-					Object assignableValue = getAssignableValue(m);
-					String key = getKey(m);
-					this.properties.put(key, assignableValue);
-				}
-			} else {
-				throw new IllegalStateException("Task has not been initialised yet");
+			this.properties = new HashMap<>();
+			for (Method m : annotatedMethods) {
+				Object assignableValue = getAssignableValue(m);
+				String key = getKey(m);
+				this.properties.put(key, assignableValue);
 			}
 		}
 		return this.properties;
@@ -59,7 +55,7 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	protected Object getAssignableValue(Method m) {
 		Object value = null; 
 		try {
-			value = m.invoke(task);
+			value = m.invoke(instance);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			throw new IllegalStateException("Unable to retrieve input value");
 		}
@@ -76,14 +72,11 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	
 	@Override
 	public Map<String, Object> getHashes(){
-		if (this.task.getTaskNode().getState().hasBeenInitialised()) {
-			if (this.hashes == null) {
-				hashes = new HashMap<>();
-				get().entrySet().forEach(e-> hashes.put(e.getKey(),Hasher.hash(e.getValue())) );
-			}
-			return hashes;
+		if (this.hashes == null) {
+			hashes = new HashMap<>();
+			get().entrySet().forEach(e-> hashes.put(e.getKey(),Hasher.hash(e.getValue())) );
 		}
-		throw new IllegalStateException("Task has not been initialised yet");
+		return hashes;
 	}
 	
 	protected abstract String getKey(Method method);

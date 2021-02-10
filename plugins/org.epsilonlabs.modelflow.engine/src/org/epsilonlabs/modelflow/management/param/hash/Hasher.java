@@ -59,6 +59,8 @@ public class Hasher {
 			return ((Map<?,?>) object).entrySet().stream().collect(Collectors.toMap(Entry::getKey,e->hash(e.getValue())));
 		} else if (object instanceof Set) {
 			return ((Set<?>) object).stream().map(Hasher::hash).collect(Collectors.toSet());
+		} else if (object == null) {
+			return null;
 		} else {
 			LOG.error("Usupported type {} for hashing", object.getClass());
 		}

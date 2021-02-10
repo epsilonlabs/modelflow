@@ -9,10 +9,6 @@ package org.epsilonlabs.modelflow.dom.api;
 
 import java.util.List;
 
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
-
-// TODO: Auto-generated Javadoc
 /**
  * The Interface IPlugin.
  */
@@ -44,14 +40,14 @@ public interface IPlugin {
 	 *
 	 * @return the resource factories
 	 */
-	List<Class<? extends IModelResourceFactory>> getResourceFactories();
+	List<Class<? extends IModelResourceInstance<?>>> getResourceFactories();
 	
 	/**
 	 * Task Factories.
 	 *
 	 * @return the task factories
 	 */
-	List<Class<? extends ITaskFactory>> getTaskFactories();
+	List<Class<? extends ITaskInstance>> getTaskFactories();
 	
 	/**
 	 * Gets the resource interfaces.

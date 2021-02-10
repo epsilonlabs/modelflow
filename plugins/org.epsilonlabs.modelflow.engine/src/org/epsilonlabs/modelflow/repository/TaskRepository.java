@@ -7,10 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.repository;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -22,13 +20,11 @@ public class TaskRepository {
 
 	protected TaskFactoryRegistry taskFactoryRegistry;
 	protected ResourceRepository resourceRepository;
-	protected Map<String, ITask> tasks;
 
 
 	public TaskRepository(TaskFactoryRegistry registry, ResourceFactoryRegistry resRegistry) {
 		this.taskFactoryRegistry = registry;
 		this.resourceRepository = new ResourceRepository(resRegistry);
-		this.tasks = new ConcurrentHashMap<>();
 	}
 	
 	public ResourceRepository getResourceRepository() {
@@ -36,27 +32,30 @@ public class TaskRepository {
 	}
 	
 	public Boolean hasFactory(ITaskNode node){
+		return hasFactory(node.getName());
+	}
+	
+	public Boolean hasFactory(String factoryName){
 		try{
-			this.taskFactoryRegistry.getFactory(node.getTaskDefinition());
+			this.taskFactoryRegistry.getFactory(factoryName);
 			return true;
 		} catch (MFInvalidFactoryException e) {
 			return false;
 		}
 	}
 	
-	public ITask create(ITaskNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		String id = uniqueId(node);
-		ITask task = this.taskFactoryRegistry.create(node, id, ctx);
-		this.tasks.put(id, task);
-		return task;
-	}
-
-	protected String uniqueId(ITaskNode node){
-		return node.getName();
+	public ITaskInstance create(ITaskNode node, IModelFlowContext ctx) throws MFRuntimeException {
+		Class<ITaskInstance> taskClazz;
+		try {
+			taskClazz = taskFactoryRegistry.getFactory(node.getDefinition());
+			final ITaskInstance instance = ctx.getScheduler().getTaskInstanceFactory().create(taskClazz, node, ctx);
+			return instance;
+		} catch (MFInvalidFactoryException e) {
+			throw new MFInstantiationException(e);
+		}
 	}
 	
 	public void clear() {
-		this.tasks.clear();
 		this.resourceRepository.clear();
 	}
 

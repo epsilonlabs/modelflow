@@ -73,6 +73,7 @@
         <executions>
           <execution>
             <id>plugin-source</id>
+            <phase>package</phase>
             <goals>
               <goal>plugin-source</goal>
             </goals>
@@ -84,22 +85,43 @@
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+          <groupId>org.eclipse.tycho.extras</groupId>
+          <artifactId>tycho-source-feature-plugin</artifactId>
+          <version>${tycho.version}</version>
+          <executions>
+              <execution>
+                  <id>source-feature</id>
+                  <phase>package</phase>
+                  <goals>
+                      <goal>source-feature</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <configuration>
+              <excludes>
+              <plugin id="org.epsilonlabs.modelflow.target" />
+              <plugin id="org.epsilonlabs.modelflow.updatesite" />
+              <plugin id="org.epsilonlabs.modelflow.logback" />
+              <plugin id="org.epsilonlabs.modelflow.dependencies" />
+              <plugin id="org.epsilonlabs.modelflow.jacoco" />
+              </excludes>
+          </configuration>
+      </plugin>
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
-        <artifactId>tycho-packaging-plugin</artifactId>
+        <artifactId>tycho-p2-plugin</artifactId>
         <version>${tycho.version}</version>
         <executions>
-          <execution>
-            <phase>package</phase>
-            <id>package-feature</id>
-            <configuration>
-              <finalName>${project.artifactId}_${unqualifiedVersion}.${buildQualifier}</finalName>
-            </configuration>
-          </execution>
+            <execution>
+                <id>attach-p2-metadata</id>
+                <phase>package</phase>
+                <goals>
+                    <goal>p2-metadata</goal>
+                </goals>
+            </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>org.eclipse.tycho</groupId>
         <artifactId>target-platform-configuration</artifactId>

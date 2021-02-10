@@ -7,10 +7,13 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests;
 
+import static org.junit.Assert.fail;
+
 import java.util.Scanner;
 
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
@@ -61,8 +64,15 @@ public class Demo {
 	
 	private ModelFlowModule getModule() {
 		ModelFlowModule module = new ModelFlowModule();
-		Workflow workflow = getWorkflow();
-		module.setWorkflow(workflow);
+		IWorkflow workflow = getWorkflow();
+		final String program = new WorkflowProgramBuilder(workflow).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 		
 		Injector injector = Guice.createInjector(new EpsilonPlugin(), new EMFPlugin());
 		TaskFactoryRegistry taskFactoryRegistry = injector.getInstance(TaskFactoryRegistry.class);
@@ -77,7 +87,7 @@ public class Demo {
 		return module;
 	}
 	
-	protected Workflow getWorkflow() {
+	protected IWorkflow getWorkflow() {
 		return ExampleWorkflows.getComponentWorkflow();
 		//return ExampleWorkflows.getMarkingMateWorkflow();
 		//return ExampleWorkflows.getEuGENiaWorkflow();

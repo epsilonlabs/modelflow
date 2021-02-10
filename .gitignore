@@ -3,6 +3,7 @@
 **/.settings/**
 **/.metadata/**
 **/todelete/**
-
+**/.idea/**
 *.launch
 **/testOutput/**
+**/target-plain/**

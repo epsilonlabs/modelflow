@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Input;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -25,24 +25,9 @@ import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.core.factory.AbstractCoreTaskFactory;
 
-public class FileReaderTask extends AbstractTask implements ITask {
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractCoreTaskFactory {
-
-		public Factory() {
-			super(FileReaderTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "fileReader";
-		}
-
-	}
+@Definition(name = "core:fileReader")
+public class FileReaderTask implements ITaskInstance {
 
 	protected File file;
 	protected String contents;

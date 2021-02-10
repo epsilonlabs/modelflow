@@ -7,23 +7,32 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 
 import io.reactivex.subjects.PublishSubject;
 
-public abstract class AbstractResourceNode<T extends AbstractResource> implements IAbstractResourceNode {
+public abstract class AbstractResourceNode<T extends IAbstractResource> implements IAbstractResourceNode {
 	
-	protected T internalResource;
+	protected String name;
 	protected PublishSubject<?> statusUpdater = PublishSubject.create();
+	protected String definition;
+	protected T resource;
 	
 	public AbstractResourceNode(T resource) {
-		this.internalResource = resource;
+		this.name = resource.getName();
+		this.definition = resource.getDefinition();
+		this.resource = resource;
 	}
 
 	@Override
 	public String getName() {
-		return this.internalResource.getName();
+		return this.name;
+	}
+	
+	@Override
+	public String getDefinition() {
+		return this.definition;
 	}
 
 	@Override
@@ -31,13 +40,9 @@ public abstract class AbstractResourceNode<T extends AbstractResource> implement
 		return obj instanceof AbstractResourceNode && ((AbstractResourceNode<?>) obj).getName().equals(getName());
 	}
 	
-	public T getInternal() {
-		return internalResource;
-	}
-	
 	@Override
 	public void subscribe(IModelFlowPublisher pub) {
-		statusUpdater.subscribe(state -> pub.resourceState(this.getInternal().getName(), state));
+		statusUpdater.subscribe(state -> pub.resourceState(getName(), state));
 	}
 
 }

@@ -13,8 +13,9 @@ import static org.junit.Assert.fail;
 import org.eclipse.emf.common.util.EList;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
@@ -43,7 +44,7 @@ public class TaskTest  {
 	protected static TaskFactoryRegistry taskFactoryRegistry;
 	protected static ResourceFactoryRegistry resFactoryRegistry;
 	protected ModelFlowModule module;
-	protected Workflow w ;
+	protected IWorkflow w ;
 	protected IValidate validator;
 	
 	@BeforeClass
@@ -91,8 +92,8 @@ public class TaskTest  {
 				WorkflowExecution execution = executionTrace.getExecutions().get(0);
 				EList<TaskExecution> tasks = execution.getTasks();
 				assertTrue(tasks.size() ==2);
-				assertTrue("print".equals(tasks.get(0).getTask().getName()));
-				assertTrue("print2".equals(tasks.get(1).getTask().getName()));
+				assertTrue("print".equals(tasks.get(0).getName()));
+				assertTrue("print2".equals(tasks.get(1).getName()));
 				return true;
 			}
 			
@@ -105,7 +106,14 @@ public class TaskTest  {
 	
 	@After
 	public void execute() throws Exception{
-		module.setWorkflow(w);
+		try {
+			//module.setWorkflow(w);
+			final String program = new WorkflowProgramBuilder(w).build();
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Parsing issues");	
+		}
 		try {
 			module.execute();
 		} catch (Exception e) {

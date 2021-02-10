@@ -14,10 +14,12 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
+import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
+import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.slf4j.Logger;
@@ -29,7 +31,7 @@ public class ResourceRepository {
 
 	protected ResourceFactoryRegistry factoryRegistry;
 	protected Map<String, Object> derivedResources;
-	protected Map<String, IResource<?>> resources;
+	protected Map<String, IModelResourceInstance<?>> resources;
 	protected Map<String, String> hashes;
 	
 	public ResourceRepository(ResourceFactoryRegistry registry) {
@@ -38,11 +40,11 @@ public class ResourceRepository {
 		derivedResources = new ConcurrentHashMap<>();
 	}
 
-	public void addDerived(DerivedResourceNode node, Object resource) {
+	public void addDerived(IDerivedResourceNode node, Object resource) {
 		derivedResources.put(node.getName(), resource);
 	}
 	
-	public Object getDerived(DerivedResourceNode node) {
+	public Object getDerived(IDerivedResourceNode node) {
 		return derivedResources.get(node.getName());
 	}
 	
@@ -50,7 +52,7 @@ public class ResourceRepository {
 		return derivedResources.get(node);
 	}
 	
-	public Optional<IResource<?>> get(IModelResourceNode node) throws MFRuntimeException {
+	public Optional<IModelResourceInstance<?>> get(IModelResourceNode node) throws MFRuntimeException {
 		String id = node.getName();
 		if (this.resources.containsKey(id)) {
 			return Optional.of(this.resources.get(id));
@@ -59,15 +61,28 @@ public class ResourceRepository {
 		}
 	}
 	
-	public IResource<?> getOrCreate(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
-		Optional<IResource<?>> optional = get(node);
-		IResource<?> iResource;
+	public Optional<IModelResourceInstance<?>> get(String id) throws MFRuntimeException {
+		if (this.resources.containsKey(id)) {
+			return Optional.of(this.resources.get(id));
+		} else {
+			return Optional.empty();
+		}
+	}
+	
+	public IModelResourceInstance<?> getOrCreate(IModelResourceNode node, IModelFlowContext ctx) throws MFRuntimeException {
+		Optional<IModelResourceInstance<?>> optional = get(node);
+		IModelResourceInstance<?> iResource;
 		if (optional.isPresent()) {
 			iResource = optional.get();
 		} else {			
 			String id = node.getName();
-			iResource = this.factoryRegistry.create(node, ctx);
-			this.resources.put(id, iResource);
+			try {
+				Class<IModelResourceInstance<?>> modelClazz = factoryRegistry.getFactory(node.getDefinition());
+				iResource = ctx.getScheduler().getModelInstanceFactory().create(modelClazz, node, ctx);
+				this.resources.put(id, iResource);
+			} catch (MFInvalidFactoryException e) {
+				throw new MFResourceInstantiationException(e);
+			}
 		}
 		iResource.clearAliases();
 		return iResource;
@@ -75,7 +90,7 @@ public class ResourceRepository {
 
 	public void clear() {
 		LOG.info("Clearing Resource Repository");
-		this.resources.values().stream().forEach(IResource::dispose);
+		this.resources.values().stream().forEach(IModelResourceInstance::dispose);
 		this.resources.clear();
 		this.derivedResources.clear();
 	}

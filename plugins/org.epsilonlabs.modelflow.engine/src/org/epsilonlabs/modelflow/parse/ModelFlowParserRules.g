@@ -133,7 +133,7 @@ forEach
 		$tree.getExtraTokens().add($fe);
 	}
 	:
-	fe='forEach'^ formalParameter 'in'! expressionOrStatementBlock
+	fe='forEach'^ formalParameter ('as'! expressionOrStatementBlock)? 'in'! expressionOrStatementBlock
 	{$fe.setType(FOREACH);}
 	;
 	

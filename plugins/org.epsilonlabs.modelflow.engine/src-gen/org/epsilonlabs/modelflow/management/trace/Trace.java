@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.Trace#getSources <em>Sources</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.Trace#getTargets <em>Targets</em>}</li>
  *   <li>{@link org.epsilonlabs.modelflow.management.trace.Trace#getLink <em>Link</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.Trace#getProperties <em>Properties</em>}</li>
  * </ul>
  *
  * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getTrace()
@@ -80,17 +79,5 @@ public interface Trace extends EObject {
 	 * @generated
 	 */
 	void setLink(Link value);
-
-	/**
-	 * Returns the value of the '<em><b>Properties</b></em>' containment reference list.
-	 * The list contents are of type {@link org.epsilonlabs.modelflow.management.trace.Property}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Properties</em>' containment reference list.
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getTrace_Properties()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<Property> getProperties();
 
 } // Trace

@@ -7,6 +7,7 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.exception;
 
+import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 
 public class MFRuntimeException extends EolRuntimeException {
@@ -18,6 +19,9 @@ public class MFRuntimeException extends EolRuntimeException {
 	}
 	
 	public MFRuntimeException(String message, Throwable cause) {
+		super(message, cause);
+	}
+	public MFRuntimeException(String message, ModuleElement cause) {
 		super(message, cause);
 	}
 	

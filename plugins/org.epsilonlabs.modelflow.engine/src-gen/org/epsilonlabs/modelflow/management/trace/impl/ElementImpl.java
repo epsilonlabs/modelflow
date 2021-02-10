@@ -10,15 +10,9 @@
 package org.epsilonlabs.modelflow.management.trace.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.epsilonlabs.modelflow.dom.Resource;
-
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
 
@@ -30,22 +24,49 @@ import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl#getContainer <em>Container</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl#getRole <em>Role</em>}</li>
  * </ul>
  *
  * @generated
  */
 public abstract class ElementImpl extends MinimalEObjectImpl.Container implements Element {
 	/**
-	 * The cached value of the '{@link #getContainer() <em>Container</em>}' containment reference.
+	 * The default value of the '{@link #getResource() <em>Resource</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getContainer()
+	 * @see #getResource()
 	 * @generated
 	 * @ordered
 	 */
-	protected Resource container;
-
+	protected static final String RESOURCE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getResource() <em>Resource</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getResource()
+	 * @generated
+	 * @ordered
+	 */
+	protected String resource = RESOURCE_EDEFAULT;
+	/**
+	 * The default value of the '{@link #getRole() <em>Role</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRole()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String ROLE_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getRole() <em>Role</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRole()
+	 * @generated
+	 * @ordered
+	 */
+	protected String role = ROLE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -71,23 +92,8 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
-	public Resource getContainer() {
-		return container;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetContainer(Resource newContainer, NotificationChain msgs) {
-		Resource oldContainer = container;
-		container = newContainer;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ManagementTracePackage.ELEMENT__CONTAINER, oldContainer, newContainer);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public String getResource() {
+		return resource;
 	}
 
 	/**
@@ -96,18 +102,11 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
-	public void setContainer(Resource newContainer) {
-		if (newContainer != container) {
-			NotificationChain msgs = null;
-			if (container != null)
-				msgs = ((InternalEObject)container).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ManagementTracePackage.ELEMENT__CONTAINER, null, msgs);
-			if (newContainer != null)
-				msgs = ((InternalEObject)newContainer).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ManagementTracePackage.ELEMENT__CONTAINER, null, msgs);
-			msgs = basicSetContainer(newContainer, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.ELEMENT__CONTAINER, newContainer, newContainer));
+	public void setResource(String newResource) {
+		String oldResource = resource;
+		resource = newResource;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.ELEMENT__RESOURCE, oldResource, resource));
 	}
 
 	/**
@@ -116,12 +115,21 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ManagementTracePackage.ELEMENT__CONTAINER:
-				return basicSetContainer(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRole(String newRole) {
+		String oldRole = role;
+		role = newRole;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.ELEMENT__ROLE, oldRole, role));
 	}
 
 	/**
@@ -132,8 +140,10 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ManagementTracePackage.ELEMENT__CONTAINER:
-				return getContainer();
+			case ManagementTracePackage.ELEMENT__RESOURCE:
+				return getResource();
+			case ManagementTracePackage.ELEMENT__ROLE:
+				return getRole();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -146,8 +156,11 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ManagementTracePackage.ELEMENT__CONTAINER:
-				setContainer((Resource)newValue);
+			case ManagementTracePackage.ELEMENT__RESOURCE:
+				setResource((String)newValue);
+				return;
+			case ManagementTracePackage.ELEMENT__ROLE:
+				setRole((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -161,8 +174,11 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ManagementTracePackage.ELEMENT__CONTAINER:
-				setContainer((Resource)null);
+			case ManagementTracePackage.ELEMENT__RESOURCE:
+				setResource(RESOURCE_EDEFAULT);
+				return;
+			case ManagementTracePackage.ELEMENT__ROLE:
+				setRole(ROLE_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -176,10 +192,30 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ManagementTracePackage.ELEMENT__CONTAINER:
-				return container != null;
+			case ManagementTracePackage.ELEMENT__RESOURCE:
+				return RESOURCE_EDEFAULT == null ? resource != null : !RESOURCE_EDEFAULT.equals(resource);
+			case ManagementTracePackage.ELEMENT__ROLE:
+				return ROLE_EDEFAULT == null ? role != null : !ROLE_EDEFAULT.equals(role);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (resource: ");
+		result.append(resource);
+		result.append(", role: ");
+		result.append(role);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ElementImpl

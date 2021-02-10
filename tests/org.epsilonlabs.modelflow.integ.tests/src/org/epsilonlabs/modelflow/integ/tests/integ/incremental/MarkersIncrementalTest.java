@@ -7,7 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests.integ.incremental;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import static org.junit.Assert.fail;
+
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.ExampleWorkflows;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
@@ -37,8 +40,15 @@ public class MarkersIncrementalTest extends IncrementalTest {
 	
 	@Override
 	protected void setupSource() {
-		Workflow w = ExampleWorkflows.getMarkersWorkflow();
-		module.setWorkflow(w);
+		IWorkflow w = ExampleWorkflows.getMarkersWorkflow();
+		final String program = new WorkflowProgramBuilder(w).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 	
 	@Ignore

@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="trace" nsURI="http://eclipse.org/epsilon/modelflow/management/trace/1.0"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="trace" nsURI="http://eclipse.org/epsilon/modelflow/management/trace/1.1"
     nsPrefix="managementTrace">
-  <eClassifiers xsi:type="ecore:EClass" name="EStringToObjectMapEntry" instanceClassName="java.util.Map$Entry">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaObject"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ManagementTrace">
     <eStructuralFeatures xsi:type="ecore:EReference" name="tasks" upperBound="-1"
         eType="#//TaskTrace" containment="true"/>
@@ -15,8 +11,7 @@
       <details key="classIcon" value="operation"/>
       <details key="label" value="return self.task.name + ' trace';"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="task" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Task"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="task" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="traces" upperBound="-1"
         eType="#//Trace" containment="true"/>
   </eClassifiers>
@@ -37,12 +32,10 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="link" eType="#//Link" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
-        eType="#//Property" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Element" abstract="true">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="container" eType="ecore:EClass http://eclipse.org/epsilon/modelflow/1.0#//Resource"
-        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="resource" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="role" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElement" eSuperTypes="#//Element">
     <eAnnotations source="exeed">
@@ -50,7 +43,6 @@
       <details key="label" value="return self.container.name + '::' + self.elementId;"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="elementId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="role" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ModelElementProperty" eSuperTypes="#//ModelElement">
     <eAnnotations source="exeed">
@@ -80,14 +72,10 @@
     <eAnnotations source="exeed">
       <details key="classIcon" value="link"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="link" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ManagementOperation" eSuperTypes="#//Link">
-    <eAnnotations source="exeed">
-      <details key="classIcon" value="operation"/>
-      <details key="label" value="return self.link + ':' + self.managementOperation;"/>
-    </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="managementOperation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="properties" upperBound="-1"
+        eType="#//Property" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Property">
     <eAnnotations source="exeed">

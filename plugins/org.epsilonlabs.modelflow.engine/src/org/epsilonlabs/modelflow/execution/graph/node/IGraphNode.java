@@ -27,7 +27,7 @@ public interface IGraphNode {
 	 *
 	 * @return the type
 	 */
-	String getType();
+	String getDefinition();
 
 	/**
 	 * Subscribe.

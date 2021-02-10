@@ -10,7 +10,6 @@ package org.epsilonlabs.modelflow.management.resource;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface IModelManager.
  *

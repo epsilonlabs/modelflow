@@ -8,34 +8,21 @@
 package org.epsilonlabs.modelflow.registry;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.api.IResource;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
-import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
-import org.epsilonlabs.modelflow.exception.MFRuntimeException;
-import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 
 import com.google.inject.Inject;
 
-public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResourceFactory>{
+@SuppressWarnings("unchecked")
+public class ResourceFactoryRegistry extends AbstractFactoryRegistry<IModelResourceInstance<?>>{
 	
 	@Inject
 	public ResourceFactoryRegistry(Set<IModelResourceFactory> resourceFactory) {
-		factoryRegistry = new FactoryMap<IModelResourceFactory>(resourceFactory);
+		super(resourceFactory.stream()
+				.map(f->(Class<IModelResourceInstance<?>>)f.getFactoryClass())
+				.collect(Collectors.toSet()));
 	}
 
-	public IResource<?> create(IModelResourceNode res, IModelFlowContext ctx) throws MFRuntimeException {
-			Resource r = res.getInternal();
-			IModelResourceFactory factory;
-			try {
-				factory = getFactory(r.getDefinition());
-			} catch (MFInvalidFactoryException e) {
-				throw new MFResourceInstantiationException(e);
-			}
-			return factory.create(res, res.getName(), ctx);
-	}
-	
 }

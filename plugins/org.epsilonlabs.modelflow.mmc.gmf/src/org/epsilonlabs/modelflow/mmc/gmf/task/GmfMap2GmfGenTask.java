@@ -24,8 +24,8 @@ import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
 import org.eclipse.gmf.internal.common.ToolingResourceFactory.ToolResource;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
@@ -33,7 +33,6 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.gmf.factory.AbstractGMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.gmf.task.helper.SimplifiedGmfMap2GmfGen;
 import org.epsilonlabs.modelflow.mmc.gmf.task.monitor.GmfMap2GmfGenMonitor;
 import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfMap2GmfGenTrace;
@@ -41,24 +40,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("restriction")
-public class GmfMap2GmfGenTask extends AbstractTask implements ITask {
+@Definition(name = "gmf:gmfMap2gmfGen")
+public class GmfMap2GmfGenTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GmfMap2GmfGenTask.class);
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractGMFTaskFactory {
-
-		public Factory() {
-			super(GmfMap2GmfGenTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "gmfMap2gmfGen";
-		}
-
-	}
 
 	protected SimplifiedGmfMap2GmfGen transformation;
 

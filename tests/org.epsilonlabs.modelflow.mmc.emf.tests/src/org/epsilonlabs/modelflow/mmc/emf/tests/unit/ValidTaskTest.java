@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.TaskDefinitionValidator;
 import org.epsilonlabs.modelflow.mmc.emf.task.Emfatic2EcoreTask;
 import org.epsilonlabs.modelflow.mmc.emf.task.GenerateModelCodeTask;
@@ -25,16 +25,16 @@ import org.junit.runners.Parameterized.Parameters;
 public class ValidTaskTest {
 
     @Parameters( name = "{index}: validate({0})" )
-    public static Collection<Class<? extends AbstractTask>> data() {
+    public static Collection<Class<? extends ITaskInstance>> data() {
         return Arrays.asList(
         		Emfatic2EcoreTask.class,
         		GenerateModelCodeTask.class
     		);
     }
 
-    private Class<? extends AbstractTask> taskClass;
+    private Class<? extends ITaskInstance> taskClass;
 
-    public ValidTaskTest(Class<? extends AbstractTask> taskClass) {
+    public ValidTaskTest(Class<? extends ITaskInstance> taskClass) {
     	this.taskClass = taskClass;
     }
     

@@ -9,7 +9,5 @@ Require-Bundle: org.epsilonlabs.modelflow.engine,
  org.apache.commons.io,
  org.eclipse.m2m.atl,
  org.eclipse.m2m.atl.emftvm
-Export-Package: org.epsilonlabs.modelflow.mmc.atl.plugin,
- org.epsilonlabs.modelflow.mmc.atl.resource,
- org.epsilonlabs.modelflow.mmc.atl.task
+Export-Package: org.epsilonlabs.modelflow.mmc.atl.plugin
 Automatic-Module-Name: org.epsilonlabs.modelflow.mmc.atl

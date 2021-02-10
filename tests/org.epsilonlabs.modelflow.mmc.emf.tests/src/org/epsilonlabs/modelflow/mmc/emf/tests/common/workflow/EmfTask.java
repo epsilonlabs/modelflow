@@ -10,7 +10,7 @@ package org.epsilonlabs.modelflow.mmc.emf.tests.common.workflow;
 
 import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 
@@ -20,7 +20,7 @@ public class EmfTask {
 		return ResourceLocator.locateAndCopyToTestDir("filesystem." + name);
 	}
 	
-	public static Workflow getEmfatic2EcoreWithModelWorkflow() {
+	public static IWorkflow getEmfatic2EcoreWithModelWorkflow() {
 		return new WorkflowBuilder()
 				
 				.addModelResource("ECore", "epsilon:emf")
@@ -35,16 +35,22 @@ public class EmfTask {
 	}
 		
 		
-	public static Workflow getEmfatic2EcoreWorkflow() {
+	public static IWorkflow getEmfatic2EcoreWorkflow() {
 		return new WorkflowBuilder()
 				
+				.addModelResource("ECore", "epsilon:emf")
+				.addProperty("src", location("ecore"))
+				.addProperty("metamodelUri", EcorePackage.eINSTANCE.getNsURI())
+				
 				.addTask("Emfatic2Ecore", "emf:emfatic2ecore")
+				.addOutput("ECore")
 				.addProperty("src", location("emf"))
+				
 				
 			.build();
 	}
 	
-	public static Workflow genCodeWorkflow() {
+	public static IWorkflow genCodeWorkflow() {
 		return new WorkflowBuilder()
 			
 				.addModelResource("GenModel", "epsilon:emf")

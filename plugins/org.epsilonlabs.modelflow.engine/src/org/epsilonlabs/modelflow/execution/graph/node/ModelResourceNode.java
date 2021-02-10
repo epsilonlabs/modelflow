@@ -7,17 +7,18 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.ModelResource;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
 
 public class ModelResourceNode extends ResourceNode implements IModelResourceNode {
 	
-	public ModelResourceNode(ModelResource resource) {
+	public ModelResourceNode(IModelResource resource) {
 		super(resource);
 	}
 
 	@Override
-	public ModelResource getInternal() {
-		return (ModelResource) super.getInternal();
+	public IModelModuleElement getModuleElement() {
+		return (IModelModuleElement) resource.getModuleElement();
 	}
 
 }

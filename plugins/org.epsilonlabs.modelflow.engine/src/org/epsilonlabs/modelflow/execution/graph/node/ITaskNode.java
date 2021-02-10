@@ -7,12 +7,13 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import java.util.Map;
+import java.util.Set;
+
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.management.param.TaskInputPropertyHandler;
-import org.epsilonlabs.modelflow.management.param.TaskOutputPropertyHandler;
 
 import io.reactivex.Completable;
 
@@ -22,7 +23,6 @@ import io.reactivex.Completable;
 public interface ITaskNode extends IGraphNode {
 
 	/**
-	 *  
 	 * Covers the whole execution process of a single task unit.
 	 *
 	 * @param context the context
@@ -35,47 +35,33 @@ public interface ITaskNode extends IGraphNode {
 	 *
 	 * @return the state
 	 */
-	TaskState getState();
+	TaskState getState();	
 
 	/**
 	 * Gets the task definition.
 	 *
 	 * @return the task definition
 	 */
-	Task getTaskDefinition();
-
-	/**
-	 * Sets the instance.
-	 *
-	 * @param task the new instance
-	 */
-	void setInstance(ITask task);
+	ITaskModuleElement getModuleElement();
 	
 	/**
-	 * Gets the task instance.
+	 * Gets the observable.
 	 *
-	 * @return the task instance
-	 */
-	ITask getTaskInstance();
-
-	/**
-	 * Gets the input params.
-	 *
-	 * @return the input params
-	 */
-	TaskInputPropertyHandler getInputParams();
-
-	/**
-	 * Gets the output params.
-	 *
-	 * @return the output params
-	 */
-	TaskOutputPropertyHandler getOutputParams();
-	
-	/**
-	 * 
-	 * @return
+	 * @return the observable
 	 */
 	Completable getObservable();
+	
+	ITaskInstance getTaskInstance();
+	
+	Set<String> getResourceAliases(String resourceNode);
+
+	/**
+	 * @return
+	 */
+	Map<String, ITaskNode> getSubNodes();
+	
+	ITaskNode getParentNode();
+	
+	void setParentNode(ITaskNode parent);
 	
 }

@@ -7,25 +7,21 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.context;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.erl.execute.context.concurrent.ErlContextParallel;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
-import org.epsilonlabs.modelflow.execution.IScheduler;
 import org.epsilonlabs.modelflow.execution.Publisher;
 import org.epsilonlabs.modelflow.execution.control.DefaultModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.control.ModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
+import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
-import org.epsilonlabs.modelflow.management.param.TaskParamManager;
-import org.epsilonlabs.modelflow.management.resource.ResourceManager;
+import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
+import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.repository.TaskRepository;
 
@@ -41,8 +37,8 @@ public class ModelFlowContext extends ErlContextParallel implements IModelFlowCo
 	protected ManagementTrace managementTrace;
 
 	protected TaskRepository taskRepository;
-	protected ResourceManager modelManager;
-	protected TaskParamManager paramManager;
+	protected IResourceManager modelManager;
+	protected ITaskParameterManager paramManager;
 
 	protected Boolean endToEndTracing = true;
 	protected Boolean interactive = true;
@@ -83,26 +79,6 @@ public class ModelFlowContext extends ErlContextParallel implements IModelFlowCo
 	}
 
 	@Override
-	public IDependencyGraph getDependencyGraph() {
-		return dependencyGraph;
-	}
-
-	@Override
-	public void setDependencyGraph(IDependencyGraph dependencyGraph) {
-		this.dependencyGraph = dependencyGraph;
-	}
-
-	@Override
-	public IExecutionGraph getExecutionGraph() {
-		return executionGraph;
-	}
-
-	@Override
-	public void setExecutionGraph(IExecutionGraph executionGraph) {
-		this.executionGraph = executionGraph;
-	}
-
-	@Override
 	public TaskRepository getTaskRepository() {
 		return this.taskRepository;
 	}
@@ -113,32 +89,32 @@ public class ModelFlowContext extends ErlContextParallel implements IModelFlowCo
 	}
 
 	@Override
-	public ResourceManager getResourceManager() {
+	public IResourceManager getResourceManager() {
 		return modelManager;
 	}
 
 	@Override
-	public void setResourceManager(ResourceManager modelManager) {
+	public void setResourceManager(IResourceManager modelManager) {
 		this.modelManager = modelManager;
 	}
 
 	@Override
-	public void setExecutor(IScheduler executor) {
+	public void setScheduler(IScheduler executor) {
 		this.executor = executor;
 	}
 
 	@Override
-	public IScheduler getExecutor() {
+	public IScheduler getScheduler() {
 		return this.executor;
 	}
 
 	@Override
-	public TaskParamManager getParamManager() {
+	public ITaskParameterManager getParamManager() {
 		return paramManager;
 	}
 
 	@Override
-	public void setParamManager(TaskParamManager paramManager) {
+	public void setParamManager(ITaskParameterManager paramManager) {
 		this.paramManager = paramManager;
 	}
 
@@ -184,15 +160,15 @@ public class ModelFlowContext extends ErlContextParallel implements IModelFlowCo
 
 	@Override
 	public void validate() throws MFExecutionException {
-		TaskRepository repo = getTaskRepository();
+		/*TaskRepository repo = getTaskRepository();
 		Set<ITaskNode> unknownTaskTypes = getExecutionGraph().getTasks().stream().filter(t -> !repo.hasFactory(t))
 				.collect(Collectors.toSet());
 		if (!unknownTaskTypes.isEmpty()) {
 			String msg = "These tasks types are unknown: %s";
-			Set<String> unknowns = unknownTaskTypes.stream().map(n -> n.getTaskDefinition().getDefinition())
+			Set<String> unknowns = unknownTaskTypes.stream().map(n -> n.getTaskElement().getDefinition())
 					.collect(Collectors.toSet());
 			throw new MFExecutionException(String.format(msg, unknowns));
-		}
+		}*/
 	}
 
 	@Override

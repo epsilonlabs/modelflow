@@ -10,12 +10,14 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
@@ -30,26 +32,32 @@ public class ConservativeExecutionHelper {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ConservativeExecutionHelper.class);
 
-	protected ITaskNode task;
+	protected ITaskInstance task;
+	protected ITaskNode node;
 	protected IModelFlowContext ctx;
 
 	protected ExecutionTraceUpdater updater;
 	protected TaskExecution currentTaskEecution;
 	protected TaskExecution previousTaskExecution;
 
-	public ConservativeExecutionHelper(ITaskNode task, IModelFlowContext ctx) {
+	public ConservativeExecutionHelper(ITaskInstance task, ITaskNode node, IModelFlowContext ctx) {
 		this.task = task;
+		this.node = node;
 		this.ctx = ctx;
 	}
-
+	
+	public ConservativeExecutionHelper(ITaskNode node, IModelFlowContext ctx) {
+		this(node.getTaskInstance(), node, ctx);
+	}
+	
 	/* CHECKER METHODS */
 
 	public boolean hasBeenPreviouslyExecuted() {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace());
-		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(task);
+		Optional<TaskExecution> optionalPastTaskExecution = updater.getPreviousTaskExecution(node.getName());
 		boolean present = optionalPastTaskExecution.isPresent();
 		if (present) {			
-			currentTaskEecution = updater.getCurrentTaskExecution(task);
+			currentTaskEecution = updater.getCurrentTaskExecution(node.getName());
 			previousTaskExecution = optionalPastTaskExecution.get();
 		}
 		return present;
@@ -57,25 +65,25 @@ public class ConservativeExecutionHelper {
 
 	public boolean haveInputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = task.getInputParams().getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
 		return !equivalent(inputProperties, previousPropertiesHashes);
 	}
 
 	public List<String> getChangedInputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = task.getInputParams().getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
 		return getChangedProperties(inputProperties, previousPropertiesHashes);
 	}
 
 	public boolean haveOutputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = task.getOutputParams().getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task).getHashesFromTrace(previousTaskExecution);
 		return !equivalent(outputProperties, previousPropertiesHashes);
 	}
 	
 	public List<String> getChangedOutputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getOutputProperties();
-		Map<String, Object> outputProperties = task.getOutputParams().getHashesFromTrace(previousTaskExecution);
+		Map<String, Object> outputProperties = ctx.getParamManager().getOutputParameterHandler(task).getHashesFromTrace(previousTaskExecution);
 		return getChangedProperties(outputProperties, previousPropertiesHashes);
 	}
 
@@ -90,40 +98,49 @@ public class ConservativeExecutionHelper {
 	// TODO check also model properties ?
 	protected boolean resourcesChanged(boolean input) {
 		Collection<IAbstractResourceNode> nodes;
-		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getDependencyGraph());
+		
+		DependencyGraphHelper helper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
+		ITaskNode graphNode = node;
+		if (node.getParentNode() != null) {
+			graphNode = node.getParentNode();
+		}
 		if (input) {
-			nodes = helper.getInputResourceNodes(task);
+			nodes = helper.getInputResourceNodes(graphNode);
+			
 		} else {
-			nodes = helper.getOutputResourceNodes(task);
+			nodes = helper.getOutputResourceNodes(graphNode);
 		}
 		for (IAbstractResourceNode r : nodes) {
 			if (r instanceof IModelResourceNode) {
 				IModelResourceNode resource = (IModelResourceNode) r;
 				Optional<ResourceSnapshot> pastResource;
 				if (input) {
-					pastResource = updater.getPastInputResource(task, resource);
+					pastResource = updater.getPastInputResource(node.getName(), resource.getName());
 				} else {
-					pastResource = updater.getPastOutputResource(task, resource);
+					pastResource = updater.getPastOutputResource(node.getName(), resource.getName());
 				}
 				if (pastResource.isPresent()) {
 					Object pastStamp = pastResource.get().getStamp();
 					// What if past stamp is null
 					try {
-						IResource<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
+						IModelResourceInstance<?> iResource = this.ctx.getTaskRepository().getResourceRepository()
 								.getOrCreate((IModelResourceNode) r, ctx);
-						Object hash;
+						Optional<Object> optHash;
 						if (!input || !iResource.isLoaded()) {
 							/* Reuse past trace to identify resources to compute hashes for */
-							hash = iResource.unloadedHash(pastStamp);
+							optHash = iResource.unloadedHash(pastStamp);
 						} else {
 							/* Compute from in-memory resource */
 							// FIXME for output resources we shouldn't use the loaded model because we are
 							// about to change it
-							hash = iResource.loadedHash();
+							optHash = iResource.loadedHash();
 						}
-						if (!pastStamp.equals(hash)) {
-							LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
-							return true;
+						if (optHash.isPresent()) {
+							Object hash = optHash.get();
+							if (!pastStamp.equals(hash)) {
+								LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
+								return true;
+							}
 						}
 					} catch (MFRuntimeException e) {
 						throw new IllegalStateException(e.getCause());
@@ -155,8 +172,8 @@ public class ConservativeExecutionHelper {
 			EList<PropertySnapshot> previousProperties) {
 		boolean sameNumberOfElements = previousProperties.size() == currentProperties.size();
 		boolean allElementsEqual = previousProperties.stream().allMatch(e -> {
-			String key = e.getKey();
-			return currentProperties.containsKey(key) && e.getStamp().equals(currentProperties.get(key));
+			String key = e.getName();
+			return currentProperties.containsKey(key) && Objects.equals(currentProperties.get(key), e.getStamp());
 		});
 		return sameNumberOfElements && allElementsEqual;
 	}
@@ -166,9 +183,9 @@ public class ConservativeExecutionHelper {
 		boolean sameNumberOfElements = previousProperties.size() == currentProperties.size();
 		if (sameNumberOfElements) {
 			return previousProperties.parallelStream().filter(e -> {
-				String key = e.getKey();
-				return currentProperties.containsKey(key) && !e.getStamp().equals(currentProperties.get(key));
-			}).map(PropertySnapshot::getKey).collect(Collectors.toList());
+				String key = e.getName();
+				return currentProperties.containsKey(key) && ! Objects.equals(currentProperties.get(key), e.getStamp());
+			}).map(PropertySnapshot::getName).collect(Collectors.toList());
 		} else {
 			throw new IllegalArgumentException();
 		}

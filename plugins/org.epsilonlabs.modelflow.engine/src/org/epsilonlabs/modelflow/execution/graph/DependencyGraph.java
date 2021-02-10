@@ -7,15 +7,14 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.DerivedResource;
-import org.epsilonlabs.modelflow.dom.ModelResource;
-import org.epsilonlabs.modelflow.dom.Resource;
-import org.epsilonlabs.modelflow.dom.ResourceDependency;
-import org.epsilonlabs.modelflow.dom.ResourceReference;
-import org.epsilonlabs.modelflow.dom.Task;
-import org.epsilonlabs.modelflow.dom.TaskDependency;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IAbstractResource;
+import org.epsilonlabs.modelflow.dom.IDerivedResource;
+import org.epsilonlabs.modelflow.dom.IModelResource;
+import org.epsilonlabs.modelflow.dom.IResource;
+import org.epsilonlabs.modelflow.dom.IResourceReference;
+import org.epsilonlabs.modelflow.dom.ITask;
+import org.epsilonlabs.modelflow.dom.ITaskDependency;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
@@ -25,7 +24,6 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ModelResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskNode;
-import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,21 +33,13 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	private static final Logger LOG = LoggerFactory.getLogger(DependencyGraph.class);
 
 	public DependencyGraph() {
+		super();
 		this.graph = new SimpleDirectedWeightedGraph<>(DependencyEdge.class);
-		updateStatus(GraphState.CREATED);
-	}
-
-	protected void updateStatus(GraphState status) {
-		this.status = status;
-		this.statusUpdater.onNext(this.status);
-		if (this.status.equals(GraphState.POPULATED)) {
-			this.statusUpdater.onComplete();
-		}
-	}
+	}	
 
 	@Override
 	public DependencyGraph buildImpl(IModelFlowContext ctx) throws MFDependencyGraphException {
-		Workflow workflow = ctx.getModule().getWorkflow();
+		IWorkflow workflow = ctx.getModule().getWorkflow();
 		workflow.getResources().forEach(r -> this.addResource(r, ctx));
 		workflow.getTasks().forEach(t -> this.addTask(t, ctx));
 		//workflow.getResourceDependencies().forEach(this::addResourceDependencies);
@@ -65,8 +55,8 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 	 * 
 	 * @param workflow
 	 */
-	protected void processImplicitResources(Workflow workflow) {
-		workflow.getResources().stream().filter(r -> r instanceof DerivedResource).forEach(r -> {
+	protected void processImplicitResources(IWorkflow workflow) {
+		workflow.getResources().stream().filter(r -> r instanceof IDerivedResource).forEach(r -> {
 			// already added,
 			String[] split = r.getName().split("\\.");
 			IAbstractResourceNode resourceNode = getResource(r);
@@ -80,7 +70,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		});
 	}
 
-	protected ITaskNode addTask(Task t, IModelFlowContext ctx) {
+	protected ITaskNode addTask(ITask t, IModelFlowContext ctx) {
 		ITaskNode task = new TaskNode(t);
 		task.subscribe(ctx.getPublisher());
 		getGraph().addVertex(task);
@@ -92,13 +82,13 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		return task;
 	}
 
-	protected void addResource(AbstractResource r, IModelFlowContext ctx) {
+	protected void addResource(IAbstractResource r, IModelFlowContext ctx) {
 		IAbstractResourceNode node = null;
 
-		if (r instanceof DerivedResource) {
-			node = new DerivedResourceNode((DerivedResource) r);
-		} else if (r instanceof ModelResource) {
-			node = new ModelResourceNode((ModelResource) r);
+		if (r instanceof IDerivedResource) {
+			node = new DerivedResourceNode((IDerivedResource) r);
+		} else if (r instanceof IModelResource) {
+			node = new ModelResourceNode((IModelResource) r);
 		}
 		if (node != null) {
 			node.subscribe(ctx.getPublisher());
@@ -107,7 +97,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		}
 	}
 
-	protected void addTaskDependencies(TaskDependency d) {
+	protected void addTaskDependencies(ITaskDependency d) {
 		// Source Node that requires this dependency
 		ITaskNode node = getTask(d.getTask());
 		// Dependency
@@ -116,25 +106,19 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		getGraph().addEdge(node, dependency, new DependencyEdge(DependencyEdge.Kind.TASK));
 	}
 
-	protected void addResourceDependencies(ResourceDependency rd) {
-		IAbstractResourceNode source = getResource(rd.getSource());
-		IAbstractResourceNode target = getResource(rd.getTarget());
-		getGraph().addEdge(source, target, new DependencyEdge(DependencyEdge.Kind.RESOURCE));
-	}
-
-	protected void addProducesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addProducesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(taskNode, resourceNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
 	}
 
-	protected void addConsumesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addConsumesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(resourceNode, taskNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
 	}
 
-	protected void addModifiesEdge(ITaskNode taskNode, ResourceReference resource) {
+	protected void addModifiesEdge(ITaskNode taskNode, IResourceReference resource) {
 		IAbstractResourceNode resourceNode = getResource(resource.getResource());
 		getGraph().addEdge(resourceNode, taskNode,
 				new DependencyEdge(DependencyEdge.Kind.TASK_RESOURCE, resource.getAliases()));
@@ -144,11 +128,11 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 
 	/* GETTERS */
 
-	protected IAbstractResourceNode getResource(AbstractResource resource) {
+	protected IAbstractResourceNode getResource(IAbstractResource resource) {
 		IAbstractResourceNode resourceNode;
-		if (resource instanceof DerivedResource) {
+		if (resource instanceof IDerivedResource) {
 			resourceNode = this.resources.get(resource.getName().replace(".", "_"));
-		} else if (resource instanceof Resource) {
+		} else if (resource instanceof IResource) {
 			resourceNode = this.resources.get(resource.getName());
 		} else {
 			return null;
@@ -157,7 +141,7 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		return resourceNode;
 	}
 
-	protected ITaskNode getTask(Task task) {
+	protected ITaskNode getTask(ITask task) {
 		return this.tasks.get(task.getName());
 	}
 
@@ -169,22 +153,5 @@ public class DependencyGraph extends AbstractDependencyGraph implements IDepende
 		}
 	}
 
-	/**
-	 * Prints the graph in graphviz-dot notation
-	 */
-	@Override
-	public String toString() {
-		GraphizPrinter<IGraphNode, DependencyEdge> printer = new GraphizPrinter<>(getGraph());
-		return printer.toDot().toString();
-	}
-
-	// FIXME return new instead of reseting
-	@Override
-	public void reset() {
-		updateStatus(GraphState.CREATED);
-		this.graph = new SimpleDirectedWeightedGraph<>(DependencyEdge.class);
-		tasks.clear();
-		resources.clear();
-	}
 
 }

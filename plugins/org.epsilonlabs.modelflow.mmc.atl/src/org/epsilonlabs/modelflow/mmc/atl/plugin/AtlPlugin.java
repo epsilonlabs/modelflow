@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 
 public class AtlPlugin extends AbstractPlugin {
 
@@ -33,12 +33,12 @@ public class AtlPlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
+	public List<Class<? extends IModelResourceInstance<?>>> getResourceFactories() {
 		return Arrays.asList();
 	}
 
 	@Override
-	public List<Class<? extends ITaskFactory>> getTaskFactories() {
+	public List<Class<? extends ITaskInstance>> getTaskFactories() {
 		return Arrays.asList();
 	}
 

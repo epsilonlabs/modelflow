@@ -1,41 +1,35 @@
-@namespace(uri="http://eclipse.org/epsilon/modelflow/management/trace/1.0", prefix="managementTrace")
+@namespace(uri="http://eclipse.org/epsilon/modelflow/management/trace/1.1", prefix="managementTrace")
 package trace;
 
-import "http://eclipse.org/epsilon/modelflow/1.0";
-
-class EStringToObjectMapEntry : java.util.Map$Entry {
-  attr String key;
-  attr EJavaObject value;
-}
-
 class ManagementTrace {
-	val TaskTrace[*] tasks;  
+  val TaskTrace[*] tasks;
 }
 
 @exeed(classIcon="operation", label="return self.task.name + ' trace';")
-class TaskTrace{
-	val dom.Task task;
-	val Trace[*] traces;	
+class TaskTrace {
+  attr String task;
+  val Trace[*] traces;
 }
 
 @exeed(classIcon="transition")
 class Trace {
+
   @exeed(featureLabel="source")
   val Element[*] sources;
+
   @exeed(featureLabel="return 'target';")
   val Element[*] targets;
   val Link link;
-  val Property[*] properties;
 }
 
 abstract class Element {
-	val dom.Resource container;
+  attr String resource;
+  attr String role;
 }
 
 @exeed(classIcon="model", label="return self.container.name + '::' + self.elementId;")
 class ModelElement extends Element {
   attr String elementId;
-  attr String role;
 }
 
 @exeed(classIcon="parameter", label="return self.container.name + '::' + self.elementId + '::' + self.property;")
@@ -57,12 +51,9 @@ class Region {
 
 @exeed(classIcon="link")
 class Link {
-	attr String link;	
-}
-
-@exeed(classIcon="operation", label="return self.link + ':' + self.managementOperation;")
-class ManagementOperation extends Link {
-  attr String managementOperation;
+  attr String type;
+  attr String operation;
+  val Property[*] properties;
 }
 
 @exeed(classIcon="private", label="return self.key + '=' + self.value;")
@@ -70,3 +61,4 @@ class Property {
   attr String key;
   attr EJavaObject value;
 }
+

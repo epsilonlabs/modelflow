@@ -17,10 +17,9 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
@@ -35,6 +34,7 @@ import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImp
  */
 public class ModulePersistenceHelper {
 
+	
 	protected final IModelFlowModule module;
 	protected ResourceSet rs;
 	
@@ -42,12 +42,32 @@ public class ModulePersistenceHelper {
 		this.module = module;
 	}
 	
+	Map<String, Object> saveOptions;
+	Map<String, Object> loadOptions;
+	
+	protected Map<String, Object> getSaveOptions(){
+		if (saveOptions == null) {
+			saveOptions = new HashMap<>();
+			//saveOptions.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
+			//saveOptions.put(XMLResource.OPTION_BINARY, true);
+		}
+		return saveOptions;
+	}
+	
+	protected Map<String, Object> getLoadOptions(){
+		if (loadOptions == null) {
+			//loadOptions = new HashMap<>();
+			//loadOptions.put(XMLResource.OPTION_BINARY, true);
+		}
+		return loadOptions;
+	}
+	
 	protected ResourceSet getResourceSet() {
 		if (rs == null) {
 			rs = new ResourceSetImpl();		
 			Registry packageRegistry = rs.getPackageRegistry();
 			packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-			packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+			packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 			packageRegistry.put(ExecutionTracePackage.eNS_URI, ExecutionTracePackage.eINSTANCE);
 			packageRegistry.put(ManagementTracePackage.eNS_URI, ManagementTracePackage.eINSTANCE);
 			
@@ -69,7 +89,7 @@ public class ModulePersistenceHelper {
 					URI fileUri = URI.createFileURI(file.getAbsolutePath());
 					Resource traceResource = getResourceSet().createResource(fileUri);
 					try {
-						traceResource.load(null);
+						traceResource.load(getLoadOptions());
 						managementTrace = (ManagementTrace) traceResource.getContents().get(0);
 						
 					} catch (Exception e) {
@@ -102,9 +122,7 @@ public class ModulePersistenceHelper {
 				ManagementTrace managementTrace = ctx.getManagementTrace();
 				traceResource.getContents().add(managementTrace);				
 				try {
-					Map<String, String> options = new HashMap<>();
-					options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-					traceResource.save(options);
+					traceResource.save(getSaveOptions());
 					String msg = String.format("End-to-End Trace saved in: %s", fileUri.toFileString());
 					ctx.getOutputStream().println(msg);
 				} catch (Exception e) {
@@ -125,7 +143,7 @@ public class ModulePersistenceHelper {
 			URI fileUri = URI.createFileURI(file.getAbsolutePath());
 			Resource traceResource = getResourceSet().createResource(fileUri);
 			try {
-				traceResource.load(null);
+				traceResource.load(getLoadOptions());
 				executionTrace = (ExecutionTrace) traceResource.getContents().get(0);
 				ctx.setExecutionTrace(executionTrace);
 			} catch (Exception e) {
@@ -151,9 +169,7 @@ public class ModulePersistenceHelper {
 			traceResource.getContents().add(executionTrace);
 			
 			try {
-				Map<String, String> options = new HashMap<>();
-				options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_RECORD);
-				traceResource.save(options);
+				traceResource.save(getSaveOptions());
 				String msg = String.format("Execution trace saved in: %s", fileUri.toFileString());
 				ctx.getOutputStream().println(msg);				
 			} catch (Exception e) {

@@ -10,18 +10,14 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 import java.util.Collections;
 import java.util.Set;
 
-import org.epsilonlabs.modelflow.dom.Resource;
+import org.epsilonlabs.modelflow.dom.IResource;
 
-public class ResourceNode extends AbstractResourceNode<Resource> implements IResourceNode {
+public class ResourceNode extends AbstractResourceNode<IResource> implements IResourceNode {
 	protected Set<String> aliases = Collections.emptySet();
-
-	public ResourceNode(Resource resource) {
-		super(resource);
-	}
 	
-	@Override
-	public String getType() {
-		return getInternal().getDefinition();
+
+	public ResourceNode(IResource resource) {
+		super(resource);
 	}
 
 	@Override

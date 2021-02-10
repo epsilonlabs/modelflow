@@ -7,19 +7,13 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
-import org.epsilonlabs.modelflow.dom.ModelResource;
+import org.epsilonlabs.modelflow.dom.ast.IModelModuleElement;
 
 /**
  * The Interface IModelResourceNode.
  */
 public interface IModelResourceNode extends IResourceNode {
 
-	/**
-	 * Gets the internal.
-	 *
-	 * @return the internal
-	 */
-	@Override
-	ModelResource getInternal();
-	
+	IModelModuleElement getModuleElement();
+		
 }

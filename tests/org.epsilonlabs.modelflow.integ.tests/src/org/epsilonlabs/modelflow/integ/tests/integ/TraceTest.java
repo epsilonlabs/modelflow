@@ -14,7 +14,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.integ.tests.common.workflow.SimpleWorkflows;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
@@ -46,7 +47,7 @@ public class TraceTest extends WorkflowBuilderTest {
 	
 	@Parameters(name = "{index}: tracesOf({2}({0}))")
 	public static Collection<Object[]> data() {
-		List<Workflow> workflows = Arrays.asList(
+		List<IWorkflow> workflows = Arrays.asList(
 				SimpleWorkflows.ONE_TASK_NO_RESOURCE,
 				SimpleWorkflows.ONE_TASK_TWO_RESOURCES,
 				SimpleWorkflows.TWO_TASKS_THREE_RESOURCES
@@ -55,7 +56,7 @@ public class TraceTest extends WorkflowBuilderTest {
 		int max = 3;
 
 		List<Object[]> result = new ArrayList<Object[]>();
-		for (Workflow workflow : workflows) {
+		for (IWorkflow workflow : workflows) {
 			for (int times = 1; times <= max; times++) {
 				Object[] test = new Object[3];
 				test[0] = times;
@@ -68,10 +69,10 @@ public class TraceTest extends WorkflowBuilderTest {
 	}
 
 	private Integer times;
-	private Workflow workflow;
+	private IWorkflow workflow;
 	private String name;
 	
-	public TraceTest(Integer times, Workflow workflow, String name) {
+	public TraceTest(Integer times, IWorkflow workflow, String name) {
 		this.times = times;
 		this.workflow = workflow;
 		this.name= name;
@@ -106,7 +107,14 @@ public class TraceTest extends WorkflowBuilderTest {
 	
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(workflow);
+		final String program = new WorkflowProgramBuilder(workflow).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 }

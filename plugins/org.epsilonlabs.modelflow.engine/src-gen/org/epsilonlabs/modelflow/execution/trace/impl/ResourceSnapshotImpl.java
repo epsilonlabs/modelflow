@@ -10,15 +10,10 @@
 package org.epsilonlabs.modelflow.execution.trace.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
-import org.epsilonlabs.modelflow.dom.Resource;
-
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
+import org.epsilonlabs.modelflow.execution.trace.Named;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 
 /**
@@ -29,21 +24,30 @@ import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.ResourceSnapshotImpl#getResource <em>Resource</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.execution.trace.impl.ResourceSnapshotImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapshot {
 	/**
-	 * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference.
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getResource()
+	 * @see #getName()
 	 * @generated
 	 * @ordered
 	 */
-	protected Resource resource;
+	protected static final String NAME_EDEFAULT = null;
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -70,23 +74,8 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	 * @generated
 	 */
 	@Override
-	public Resource getResource() {
-		return resource;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetResource(Resource newResource, NotificationChain msgs) {
-		Resource oldResource = resource;
-		resource = newResource;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE, oldResource, newResource);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public String getName() {
+		return name;
 	}
 
 	/**
@@ -95,32 +84,11 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	 * @generated
 	 */
 	@Override
-	public void setResource(Resource newResource) {
-		if (newResource != resource) {
-			NotificationChain msgs = null;
-			if (resource != null)
-				msgs = ((InternalEObject)resource).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE, null, msgs);
-			if (newResource != null)
-				msgs = ((InternalEObject)newResource).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE, null, msgs);
-			msgs = basicSetResource(newResource, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE, newResource, newResource));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE:
-				return basicSetResource(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME, oldName, name));
 	}
 
 	/**
@@ -131,8 +99,8 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE:
-				return getResource();
+			case ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME:
+				return getName();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -145,8 +113,8 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE:
-				setResource((Resource)newValue);
+			case ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME:
+				setName((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -160,8 +128,8 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE:
-				setResource((Resource)null);
+			case ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME:
+				setName(NAME_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -175,10 +143,58 @@ public class ResourceSnapshotImpl extends SnapshotImpl implements ResourceSnapsh
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ExecutionTracePackage.RESOURCE_SNAPSHOT__RESOURCE:
-				return resource != null;
+			case ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == Named.class) {
+			switch (derivedFeatureID) {
+				case ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME: return ExecutionTracePackage.NAMED__NAME;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == Named.class) {
+			switch (baseFeatureID) {
+				case ExecutionTracePackage.NAMED__NAME: return ExecutionTracePackage.RESOURCE_SNAPSHOT__NAME;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //ResourceSnapshotImpl

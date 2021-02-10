@@ -45,7 +45,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	String eNS_URI = "http://eclipse.org/epsilon/modelflow/management/trace/1.0";
+	String eNS_URI = "http://eclipse.org/epsilon/modelflow/management/trace/1.1";
 
 	/**
 	 * The package namespace name.
@@ -64,52 +64,6 @@ public interface ManagementTracePackage extends EPackage {
 	ManagementTracePackage eINSTANCE = org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl.init();
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.EStringToObjectMapEntryImpl <em>EString To Object Map Entry</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.EStringToObjectMapEntryImpl
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getEStringToObjectMapEntry()
-	 * @generated
-	 */
-	int ESTRING_TO_OBJECT_MAP_ENTRY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ESTRING_TO_OBJECT_MAP_ENTRY__KEY = 0;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ESTRING_TO_OBJECT_MAP_ENTRY__VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>EString To Object Map Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ESTRING_TO_OBJECT_MAP_ENTRY_FEATURE_COUNT = 2;
-
-	/**
-	 * The number of operations of the '<em>EString To Object Map Entry</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ESTRING_TO_OBJECT_MAP_ENTRY_OPERATION_COUNT = 0;
-
-	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceImpl <em>Management Trace</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -117,7 +71,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getManagementTrace()
 	 * @generated
 	 */
-	int MANAGEMENT_TRACE = 1;
+	int MANAGEMENT_TRACE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Tasks</b></em>' containment reference list.
@@ -154,10 +108,10 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getTaskTrace()
 	 * @generated
 	 */
-	int TASK_TRACE = 2;
+	int TASK_TRACE = 1;
 
 	/**
-	 * The feature id for the '<em><b>Task</b></em>' containment reference.
+	 * The feature id for the '<em><b>Task</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -200,7 +154,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getTrace()
 	 * @generated
 	 */
-	int TRACE = 3;
+	int TRACE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Sources</b></em>' containment reference list.
@@ -230,22 +184,13 @@ public interface ManagementTracePackage extends EPackage {
 	int TRACE__LINK = 2;
 
 	/**
-	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int TRACE__PROPERTIES = 3;
-
-	/**
 	 * The number of structural features of the '<em>Trace</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TRACE_FEATURE_COUNT = 4;
+	int TRACE_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Trace</em>' class.
@@ -264,16 +209,25 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getElement()
 	 * @generated
 	 */
-	int ELEMENT = 4;
+	int ELEMENT = 3;
 
 	/**
-	 * The feature id for the '<em><b>Container</b></em>' containment reference.
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT__CONTAINER = 0;
+	int ELEMENT__RESOURCE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Role</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ELEMENT__ROLE = 1;
 
 	/**
 	 * The number of structural features of the '<em>Element</em>' class.
@@ -282,7 +236,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_FEATURE_COUNT = 1;
+	int ELEMENT_FEATURE_COUNT = 2;
 
 	/**
 	 * The number of operations of the '<em>Element</em>' class.
@@ -301,16 +255,25 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getModelElement()
 	 * @generated
 	 */
-	int MODEL_ELEMENT = 5;
+	int MODEL_ELEMENT = 4;
 
 	/**
-	 * The feature id for the '<em><b>Container</b></em>' containment reference.
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT__CONTAINER = ELEMENT__CONTAINER;
+	int MODEL_ELEMENT__RESOURCE = ELEMENT__RESOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Role</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT__ROLE = ELEMENT__ROLE;
 
 	/**
 	 * The feature id for the '<em><b>Element Id</b></em>' attribute.
@@ -322,22 +285,13 @@ public interface ManagementTracePackage extends EPackage {
 	int MODEL_ELEMENT__ELEMENT_ID = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Role</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT__ROLE = ELEMENT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>Model Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 2;
+	int MODEL_ELEMENT_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Model Element</em>' class.
@@ -356,25 +310,16 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getModelElementProperty()
 	 * @generated
 	 */
-	int MODEL_ELEMENT_PROPERTY = 6;
+	int MODEL_ELEMENT_PROPERTY = 5;
 
 	/**
-	 * The feature id for the '<em><b>Container</b></em>' containment reference.
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MODEL_ELEMENT_PROPERTY__CONTAINER = MODEL_ELEMENT__CONTAINER;
-
-	/**
-	 * The feature id for the '<em><b>Element Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MODEL_ELEMENT_PROPERTY__ELEMENT_ID = MODEL_ELEMENT__ELEMENT_ID;
+	int MODEL_ELEMENT_PROPERTY__RESOURCE = MODEL_ELEMENT__RESOURCE;
 
 	/**
 	 * The feature id for the '<em><b>Role</b></em>' attribute.
@@ -384,6 +329,15 @@ public interface ManagementTracePackage extends EPackage {
 	 * @ordered
 	 */
 	int MODEL_ELEMENT_PROPERTY__ROLE = MODEL_ELEMENT__ROLE;
+
+	/**
+	 * The feature id for the '<em><b>Element Id</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MODEL_ELEMENT_PROPERTY__ELEMENT_ID = MODEL_ELEMENT__ELEMENT_ID;
 
 	/**
 	 * The feature id for the '<em><b>Property</b></em>' attribute.
@@ -429,16 +383,25 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getFileElement()
 	 * @generated
 	 */
-	int FILE_ELEMENT = 7;
+	int FILE_ELEMENT = 6;
 
 	/**
-	 * The feature id for the '<em><b>Container</b></em>' containment reference.
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILE_ELEMENT__CONTAINER = ELEMENT__CONTAINER;
+	int FILE_ELEMENT__RESOURCE = ELEMENT__RESOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Role</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE_ELEMENT__ROLE = ELEMENT__ROLE;
 
 	/**
 	 * The feature id for the '<em><b>Region</b></em>' containment reference.
@@ -475,7 +438,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getRegion()
 	 * @generated
 	 */
-	int REGION = 8;
+	int REGION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Offset</b></em>' attribute.
@@ -521,16 +484,34 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getLink()
 	 * @generated
 	 */
-	int LINK = 9;
+	int LINK = 8;
 
 	/**
-	 * The feature id for the '<em><b>Link</b></em>' attribute.
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LINK__LINK = 0;
+	int LINK__TYPE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Operation</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__OPERATION = 1;
+
+	/**
+	 * The feature id for the '<em><b>Properties</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LINK__PROPERTIES = 2;
 
 	/**
 	 * The number of structural features of the '<em>Link</em>' class.
@@ -539,7 +520,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int LINK_FEATURE_COUNT = 1;
+	int LINK_FEATURE_COUNT = 3;
 
 	/**
 	 * The number of operations of the '<em>Link</em>' class.
@@ -551,52 +532,6 @@ public interface ManagementTracePackage extends EPackage {
 	int LINK_OPERATION_COUNT = 0;
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ManagementOperationImpl <em>Management Operation</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementOperationImpl
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getManagementOperation()
-	 * @generated
-	 */
-	int MANAGEMENT_OPERATION = 10;
-
-	/**
-	 * The feature id for the '<em><b>Link</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MANAGEMENT_OPERATION__LINK = LINK__LINK;
-
-	/**
-	 * The feature id for the '<em><b>Management Operation</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MANAGEMENT_OPERATION__MANAGEMENT_OPERATION = LINK_FEATURE_COUNT + 0;
-
-	/**
-	 * The number of structural features of the '<em>Management Operation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MANAGEMENT_OPERATION_FEATURE_COUNT = LINK_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of operations of the '<em>Management Operation</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int MANAGEMENT_OPERATION_OPERATION_COUNT = LINK_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.PropertyImpl <em>Property</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -604,7 +539,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getProperty()
 	 * @generated
 	 */
-	int PROPERTY = 11;
+	int PROPERTY = 9;
 
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
@@ -644,40 +579,6 @@ public interface ManagementTracePackage extends EPackage {
 
 
 	/**
-	 * Returns the meta object for class '{@link java.util.Map.Entry <em>EString To Object Map Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>EString To Object Map Entry</em>'.
-	 * @see java.util.Map.Entry
-	 * @model keyDataType="org.eclipse.emf.ecore.EString"
-	 *        valueDataType="org.eclipse.emf.ecore.EJavaObject"
-	 * @generated
-	 */
-	EClass getEStringToObjectMapEntry();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getEStringToObjectMapEntry()
-	 * @generated
-	 */
-	EAttribute getEStringToObjectMapEntry_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link java.util.Map.Entry <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see java.util.Map.Entry
-	 * @see #getEStringToObjectMapEntry()
-	 * @generated
-	 */
-	EAttribute getEStringToObjectMapEntry_Value();
-
-	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.ManagementTrace <em>Management Trace</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -709,15 +610,15 @@ public interface ManagementTracePackage extends EPackage {
 	EClass getTaskTrace();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.management.trace.TaskTrace#getTask <em>Task</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.TaskTrace#getTask <em>Task</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Task</em>'.
+	 * @return the meta object for the attribute '<em>Task</em>'.
 	 * @see org.epsilonlabs.modelflow.management.trace.TaskTrace#getTask()
 	 * @see #getTaskTrace()
 	 * @generated
 	 */
-	EReference getTaskTrace_Task();
+	EAttribute getTaskTrace_Task();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.management.trace.TaskTrace#getTraces <em>Traces</em>}'.
@@ -774,17 +675,6 @@ public interface ManagementTracePackage extends EPackage {
 	EReference getTrace_Link();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.management.trace.Trace#getProperties <em>Properties</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Properties</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Trace#getProperties()
-	 * @see #getTrace()
-	 * @generated
-	 */
-	EReference getTrace_Properties();
-
-	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.Element <em>Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -795,15 +685,26 @@ public interface ManagementTracePackage extends EPackage {
 	EClass getElement();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.management.trace.Element#getContainer <em>Container</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Element#getResource <em>Resource</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Container</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Element#getContainer()
+	 * @return the meta object for the attribute '<em>Resource</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.Element#getResource()
 	 * @see #getElement()
 	 * @generated
 	 */
-	EReference getElement_Container();
+	EAttribute getElement_Resource();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Element#getRole <em>Role</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Role</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.Element#getRole()
+	 * @see #getElement()
+	 * @generated
+	 */
+	EAttribute getElement_Role();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.ModelElement <em>Model Element</em>}'.
@@ -825,17 +726,6 @@ public interface ManagementTracePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getModelElement_ElementId();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.ModelElement#getRole <em>Role</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Role</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.ModelElement#getRole()
-	 * @see #getModelElement()
-	 * @generated
-	 */
-	EAttribute getModelElement_Role();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.ModelElementProperty <em>Model Element Property</em>}'.
@@ -933,36 +823,37 @@ public interface ManagementTracePackage extends EPackage {
 	EClass getLink();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Link#getLink <em>Link</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Link#getType <em>Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Link</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Link#getLink()
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.Link#getType()
 	 * @see #getLink()
 	 * @generated
 	 */
-	EAttribute getLink_Link();
+	EAttribute getLink_Type();
 
 	/**
-	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.ManagementOperation <em>Management Operation</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Link#getOperation <em>Operation</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Management Operation</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementOperation
+	 * @return the meta object for the attribute '<em>Operation</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.Link#getOperation()
+	 * @see #getLink()
 	 * @generated
 	 */
-	EClass getManagementOperation();
+	EAttribute getLink_Operation();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.ManagementOperation#getManagementOperation <em>Management Operation</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.epsilonlabs.modelflow.management.trace.Link#getProperties <em>Properties</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Management Operation</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementOperation#getManagementOperation()
-	 * @see #getManagementOperation()
+	 * @return the meta object for the containment reference list '<em>Properties</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.Link#getProperties()
+	 * @see #getLink()
 	 * @generated
 	 */
-	EAttribute getManagementOperation_ManagementOperation();
+	EReference getLink_Properties();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.Property <em>Property</em>}'.
@@ -1020,32 +911,6 @@ public interface ManagementTracePackage extends EPackage {
 	 */
 	interface Literals {
 		/**
-		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.EStringToObjectMapEntryImpl <em>EString To Object Map Entry</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.EStringToObjectMapEntryImpl
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getEStringToObjectMapEntry()
-		 * @generated
-		 */
-		EClass ESTRING_TO_OBJECT_MAP_ENTRY = eINSTANCE.getEStringToObjectMapEntry();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ESTRING_TO_OBJECT_MAP_ENTRY__KEY = eINSTANCE.getEStringToObjectMapEntry_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ESTRING_TO_OBJECT_MAP_ENTRY__VALUE = eINSTANCE.getEStringToObjectMapEntry_Value();
-
-		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceImpl <em>Management Trace</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1074,12 +939,12 @@ public interface ManagementTracePackage extends EPackage {
 		EClass TASK_TRACE = eINSTANCE.getTaskTrace();
 
 		/**
-		 * The meta object literal for the '<em><b>Task</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Task</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference TASK_TRACE__TASK = eINSTANCE.getTaskTrace_Task();
+		EAttribute TASK_TRACE__TASK = eINSTANCE.getTaskTrace_Task();
 
 		/**
 		 * The meta object literal for the '<em><b>Traces</b></em>' containment reference list feature.
@@ -1124,14 +989,6 @@ public interface ManagementTracePackage extends EPackage {
 		EReference TRACE__LINK = eINSTANCE.getTrace_Link();
 
 		/**
-		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference TRACE__PROPERTIES = eINSTANCE.getTrace_Properties();
-
-		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ElementImpl <em>Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1142,12 +999,20 @@ public interface ManagementTracePackage extends EPackage {
 		EClass ELEMENT = eINSTANCE.getElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Container</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Resource</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference ELEMENT__CONTAINER = eINSTANCE.getElement_Container();
+		EAttribute ELEMENT__RESOURCE = eINSTANCE.getElement_Resource();
+
+		/**
+		 * The meta object literal for the '<em><b>Role</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ELEMENT__ROLE = eINSTANCE.getElement_Role();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ModelElementImpl <em>Model Element</em>}' class.
@@ -1166,14 +1031,6 @@ public interface ManagementTracePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MODEL_ELEMENT__ELEMENT_ID = eINSTANCE.getModelElement_ElementId();
-
-		/**
-		 * The meta object literal for the '<em><b>Role</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute MODEL_ELEMENT__ROLE = eINSTANCE.getModelElement_Role();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ModelElementPropertyImpl <em>Model Element Property</em>}' class.
@@ -1256,30 +1113,28 @@ public interface ManagementTracePackage extends EPackage {
 		EClass LINK = eINSTANCE.getLink();
 
 		/**
-		 * The meta object literal for the '<em><b>Link</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute LINK__LINK = eINSTANCE.getLink_Link();
+		EAttribute LINK__TYPE = eINSTANCE.getLink_Type();
 
 		/**
-		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.ManagementOperationImpl <em>Management Operation</em>}' class.
+		 * The meta object literal for the '<em><b>Operation</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementOperationImpl
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getManagementOperation()
 		 * @generated
 		 */
-		EClass MANAGEMENT_OPERATION = eINSTANCE.getManagementOperation();
+		EAttribute LINK__OPERATION = eINSTANCE.getLink_Operation();
 
 		/**
-		 * The meta object literal for the '<em><b>Management Operation</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Properties</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute MANAGEMENT_OPERATION__MANAGEMENT_OPERATION = eINSTANCE.getManagementOperation_ManagementOperation();
+		EReference LINK__PROPERTIES = eINSTANCE.getLink_Properties();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.PropertyImpl <em>Property</em>}' class.

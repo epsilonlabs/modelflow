@@ -7,7 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.emf.tests.integ;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import static org.junit.Assert.fail;
+
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.mmc.emf.plugin.EMFPlugin;
 import org.epsilonlabs.modelflow.mmc.emf.tests.common.workflow.EmfTask;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
@@ -31,7 +34,7 @@ public class EmfTaskTests extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 	
-	protected Workflow w;
+	protected IWorkflow w;
 	
 	@Test 
 	public void test_emfatic2ecoreWithOutput() {
@@ -99,7 +102,14 @@ java.lang.NullPointerException
 
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(w);
+		final String program = new WorkflowProgramBuilder(w).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 		
 }

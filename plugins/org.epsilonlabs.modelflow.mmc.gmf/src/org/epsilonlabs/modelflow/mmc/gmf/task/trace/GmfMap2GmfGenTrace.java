@@ -22,7 +22,6 @@ import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.LinkMapping;
 import org.eclipse.gmf.mappings.MetricRule;
 import org.eclipse.gmf.mappings.NodeMapping;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.gmf.task.GmfMap2GmfGenTask;
@@ -57,8 +56,8 @@ public class GmfMap2GmfGenTrace {
 			Map<MetricRule, GenMetricRule> myMetricMap = (Map<MetricRule, GenMetricRule>) getField("myMetricMap",
 					History.class, trace);
 
-			AbstractResource sourceRes = task.getResources().get(GMFMapPackage.eNS_URI).getResource();
-			AbstractResource targetRes = task.getResources().get(GMFGenPackage.eNS_URI).getResource();
+			String sourceRes = task.getResources().get(GMFMapPackage.eNS_URI).getResourceNode().getName();
+			String targetRes = task.getResources().get(GMFGenPackage.eNS_URI).getResourceNode().getName();
 			
 			myTopNodeMap.entrySet().stream().map(e -> createTrace(sourceRes, targetRes, e.getKey(), e.getValue(), "topNode"))
 					.collect(Collectors.toCollection(() -> traces));
@@ -82,19 +81,19 @@ public class GmfMap2GmfGenTrace {
 		return this;
 	}
 
-	protected Trace createTrace(AbstractResource sourceRes, AbstractResource targetRes, EObject key, Object value, String rule) {
+	protected Trace createTrace(String sourceRes, String targetRes, EObject key, Object value, String rule) {
 		String sourceId = key.eResource().getURIFragment(key);
 		if (value instanceof EObject) {			
 			String targetId = ((EObject) value).eResource().getURIFragment((EObject) value);
 			return new ManagementTraceBuilder()
 				.addSourceModelElement(sourceId, sourceRes, "")
 				.addTargetModelElement(targetId, targetRes, "")
-				.managementLink("transform", rule)
+				.link("transform", rule)
 				.build();
 		} else if (value instanceof Collection) {
 			ManagementTraceBuilder builder = new ManagementTraceBuilder()
 					.addSourceModelElement(sourceId, sourceRes, "")
-					.managementLink("transform", rule);
+					.link("transform", rule);
 			((Collection<?>) value).forEach(e -> {
 				if (value instanceof EObject) {
 					String targetId = ((EObject) value).eResource().getURIFragment((EObject) value);

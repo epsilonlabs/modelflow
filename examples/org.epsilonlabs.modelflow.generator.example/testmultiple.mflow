@@ -1,12 +1,43 @@
+@skip
 task A is epsilon:eol 
 	forEach b in : Sequence{1..5}
 {
   src: loopCount + '.eol' 
 }
-
-
+@skip
 task B is epsilon:eol 
 	forEach b in : Sequence{"a","b"}
 {
   src: b + '.eol' 
 }
+@skip
+task C is epsilon:eol 
+	forEach flag in : Sequence{true, false}
+{
+  code: "flag.println('Is: ');" 
+  params {
+  	var map = new Map;
+  	map.put("flag", flag);
+  	return map;
+  }
+}
+model modelA is epsilon:emf {
+	src: "exam.model"
+	metamodelFile: "markingmate.ecore"	
+}
+// TODO  Do not iterate if skipped
+task D is epsilon:eol
+	in modelA 
+	forEach q in : modelA!Question.all()
+{
+  code: ("\""+q.description.println() + "\".println('Question: ');").println("Statement") 
+}
+
+// TODO  Do not iterate if skipped
+task E is epsilon:eol
+	in modelA 
+	forEach q as: q.title in: modelA!Question.all()
+{
+  code: ("\""+q.description.println() + "\".println('Question: ');").println("Statement") 
+}
+

@@ -1,3 +1,87 @@
+
+// Element
+
+operation Element color() : String{
+	return self.resource.color();
+}
+operation Element id() : String{
+	if (self.isTypeOf(ModelElementProperty)){
+		return self.propertyId();
+	} else if (self.isTypeOf(FileElement)){
+		return self.fileId();
+	} else if (self.isTypeOf(ModelElement)){
+		return self.elemId();
+	}
+}
+operation Element label() : String{
+	if (self.isTypeOf(ModelElementProperty)){
+		return self.propertyLabel();
+	} else if (self.isTypeOf(FileElement)){
+		return self.fileLabel();
+	} else if (self.isTypeOf(ModelElement)){
+		return self.elemLabel();
+	}
+}
+
+// File Element
+
+operation FileElement fileId() : String {
+	var id = self.resource.id();
+	if (self.hasValidRegion()){
+		id = id + "+" + self.region.offset + "::" + self.region.length;
+	}
+	return id;
+}
+operation FileElement fileLabel() : String{
+	if (self.hasValidRegion()){
+		return self.region.offset + "::" + self.region.length;
+	} else {
+		return "-1:-1";
+	}
+}
+operation FileElement hasValidRegion() : Boolean {
+	return self.region <> null and self.region.offset >= 0 and self.region.length>0;
+}
+
+// Model Element
+
+operation ModelElement elemId() : String {
+	return self.resource.id() + "::" + self.elementId.safe();
+}
+operation ModelElement elemLabel() : String{
+	return self.elementId;
+}
+
+
+// Model Element Property
+
+operation ModelElementProperty propertyId() : String {
+	return self.resource.id() + "::" + self.elementId.safe() + "::" + self.property.safe();
+}
+operation ModelElementProperty propertyLabel() : String{
+	return self.property.asString();
+}
+
+// Resource
+
+operation String id() : String{
+	return self.replace("/","_").safe();
+}
+operation String label() : String{
+	return self.split("/").last();
+}
+operation String color() : String{
+	return getColor(self);
+}
+
+// Utils
+
+operation String safe() : String {
+	if (self == null){
+		return "";
+	}
+	return self.replace("\\.","_").replace("@","__");
+}
 operation getColor(p : String) : String{
 	if (not colors.containsKey(p)){
 		var color = getRandomColor();
@@ -9,13 +93,6 @@ operation getColor(p : String) : String{
 	}
 	return colors.get(p);
 }
-operation Element color() : String{
-	return self.container.color();
-}
-operation dom::Resource color() : String{
-	return getColor(self.name);
-}
-
 operation getRandomColor() : String{
 	var chars = 5.to(9);
 	chars.addAll(Sequence{"a","b","c","d","f"});
@@ -25,76 +102,15 @@ operation getRandomColor() : String{
 	}
 	return color;
 }
-operation Element id() : String{
-	if (self.isTypeOf(ModelElementProperty)){
-		return self.propertyId();
-	} else if (self.isTypeOf(FileElement)){
-		return self.fileId();
-	} else if (self.isTypeOf(ModelElement)){
-		return self.elemId();
-	}
+operation labelOf(p : String) : String{
+	return p.split("/").last();
 }
-
-operation FileElement fileId() : String {
-	var id = self.container.id();
-	if (self.hasValidRegion()){
-		id = id + "+" + self.region.offset + "::" + self.region.length;
-	}
-	return id;
-}
-operation ModelElementProperty propertyId() : String {
-	return self.elemId() + "::" + self.property.safe();
-}
-operation ModelElement elemId() : String {
-	return self.container.id() + "::" + self.elementId.safe();
-}
-operation dom::Resource id() : String{
-	return self.name.replace("/","_").safe();
-}
-
-operation FileElement hasValidRegion() : Boolean {
-	return self.region <> null and self.region.offset >= 0 and self.region.length>0;
-}
-operation String safe() : String {
-	if (self == null){
-		return "";
-	}
-	return self.replace("\\.","_").replace("@","__");
-}
-operation Element label() : String{
-	if (self.isTypeOf(ModelElementProperty)){
-		return self.propertyLabel();
-	} else if (self.isTypeOf(FileElement)){
-		return self.fileLabel();
-	} else if (self.isTypeOf(ModelElement)){
-		return self.elemLabel();
-	}
-}
-operation ModelElementProperty propertyLabel() : String{
-	return self.property;
-}
-operation FileElement fileLabel() : String{
-	if (self.hasValidRegion()){
-		return self.region.offset + "::" + self.region.length;
-	} else {
-		return "-1:-1";
-	}
-}
-operation ModelElement elemLabel() : String{
-	return self.elementId;
-}
-operation labelOf(p : dom::Resource) : String{
-	return p.name.split("/").last();
-}
-operation dom::Resource label() : String{
-	return self.name.split("/").last();
-}
-operation simpleName(e : FileElement) : String{
-	var split = e.container.name.split("/");
-	if (split.size()>0){
+operation simpleName(e : FileElement) : String {
+	var split = e.resource.split("/");
+	if (split.size() > 0){
 		return split.last();
 	} else {
-	return e.container.name;
+		return e.resource;
 	}
 }
 operation isLayerActive(id : String) {

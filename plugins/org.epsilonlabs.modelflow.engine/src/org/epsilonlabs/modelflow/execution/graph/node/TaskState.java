@@ -8,16 +8,14 @@
 package org.epsilonlabs.modelflow.execution.graph.node;
 
 /*
- * 	SUCCESS, 
-	SUCCESS_WITH_RETRY, 
-	FAILED, 
+ * 	SUCCESS_WITH_RETRY, 
 	FAILED_AND_SCHEDULING_FAILED, 
 	SCHEDULING_FAILED, 
-	NOT_RUN, 
 	MISSING_EXTERNAL_DEPENDENCIES;
  */
 public enum TaskState { // FAILED?
-	CREATED(0), INITIALIZED(1), RESOLVED(2), EXECUTING(3), EXECUTED(4), SKIPPED(6);
+	// ---, 	---, 			-----, 		RUNNING, 		SUCCESS, 	NOT RUN		, FAILED
+	CREATED(0), INITIALIZED(1), RESOLVED(2), EXECUTING(3), EXECUTED(4), SKIPPING(6), SKIPPED(6), FAILED(7);
 
 	private int val;
 
@@ -31,6 +29,10 @@ public enum TaskState { // FAILED?
 	
 	public boolean isCreated(){
 		return this == CREATED;
+	}
+	
+	public boolean isNotDone(){
+		return this != EXECUTED || this != SKIPPED || this != FAILED;
 	}
 	
 	public boolean hasBeenCreated(){

@@ -10,28 +10,31 @@ package org.epsilonlabs.modelflow.management.trace;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.epsilonlabs.modelflow.dom.Task;
+import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.management.trace.impl.ManagementTraceFactoryImpl;
 
 public class ManagementTraceUpdater {
 
 	public final ManagementTrace trace;
-	public final Task task;
+	public final String taskName;
 	
-	public ManagementTraceUpdater(ManagementTrace trace, Task task) {
+	public ManagementTraceUpdater(ManagementTrace trace, ITask task) {
+		this(trace, task.getName());
+	}
+	
+	public ManagementTraceUpdater(ManagementTrace trace, String taskName) {
 		this.trace = trace;
-		this.task = task;
+		this.taskName = taskName;
 	}
 	
 	public void update(Collection<Trace> traces){
 		TaskTrace taskTrace = null;
 		Optional<TaskTrace> previousRecord = trace.getTasks().stream().filter(t->{
-			return t.getTask().getName().equals(task.getName());
+			return t.getTask().equals(taskName);
 		}).findFirst();
 		if (!previousRecord.isPresent()) {
 			taskTrace = ManagementTraceFactoryImpl.eINSTANCE.createTaskTrace();
-			taskTrace.setTask(EcoreUtil.copy(task));
+			taskTrace.setTask(taskName);
 			taskTrace.getTraces().addAll(traces);
 			trace.getTasks().add(taskTrace);
 		} else {

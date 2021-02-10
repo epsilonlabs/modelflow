@@ -10,35 +10,21 @@ package org.epsilonlabs.modelflow.mmc.core.task;
 import java.util.Collection;
 import java.util.Optional;
 
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.core.factory.AbstractCoreTaskFactory;
 
 /**
  * @author Betty Sanchez
  *
  */
-public class PrintTask extends AbstractTask {
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractCoreTaskFactory {
-
-		public Factory() {
-			super(PrintTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "print";
-		}
-
-	}
+@Definition(name = "core:print")
+public class PrintTask implements ITaskInstance {
 	
 	protected String string = "";
 	

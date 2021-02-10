@@ -9,7 +9,7 @@ package org.epsilonlabs.modelflow.management.resource;
 
 import java.util.Collection;
 
-import org.epsilonlabs.modelflow.dom.AbstractResource;
+import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 
 /**
  * The Interface IModelWrapper.
@@ -42,5 +42,5 @@ public interface IModelWrapper {
 	 *
 	 * @return the resource
 	 */
-	AbstractResource getResource();
+	IAbstractResourceNode getResourceNode();
 }

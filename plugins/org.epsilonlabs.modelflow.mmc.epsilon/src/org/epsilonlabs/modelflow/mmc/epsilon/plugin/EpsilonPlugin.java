@@ -12,8 +12,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.dom.api.AbstractPlugin;
-import org.epsilonlabs.modelflow.dom.api.factory.IModelResourceFactory;
-import org.epsilonlabs.modelflow.dom.api.factory.ITaskFactory;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonEmfModelResource;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonSimulinkModelResource;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.EpsilonXmlModelResource;
@@ -46,17 +46,17 @@ public class EpsilonPlugin extends AbstractPlugin {
 	}
 
 	@Override
-	public List<Class<? extends IModelResourceFactory>> getResourceFactories() {
-		return Arrays.asList(EpsilonEmfModelResource.Factory.class, EpsilonXmlModelResource.Factory.class,
-				EpsilonSimulinkModelResource.Factory.class);
+	public List<Class<? extends IModelResourceInstance<?>>> getResourceFactories() {
+		return Arrays.asList(EpsilonEmfModelResource.class, EpsilonXmlModelResource.class,
+				EpsilonSimulinkModelResource.class);
 	}
 
 	@Override
-	public List<Class<? extends ITaskFactory>> getTaskFactories() {
-		return Arrays.asList(EpsilonEolTask.Factory.class, EpsilonEclTask.Factory.class, EpsilonEvlTask.Factory.class,
-				EpsilonEtlTask.Factory.class, EpsilonEglTask.Factory.class, EpsilonEgxTask.Factory.class,
-				EpsilonEplTask.Factory.class, EpsilonEmlTask.Factory.class, EpsilonEunitTask.Factory.class,
-				EpsilonFlockTask.Factory.class);
+	public List<Class<? extends ITaskInstance>> getTaskFactories() {
+		return Arrays.asList(EpsilonEolTask.class, EpsilonEclTask.class, EpsilonEvlTask.class,
+				EpsilonEtlTask.class, EpsilonEglTask.class, EpsilonEgxTask.class,
+				EpsilonEplTask.class, EpsilonEmlTask.class, EpsilonEunitTask.class,
+				EpsilonFlockTask.class);
 	}
 
 	@Override

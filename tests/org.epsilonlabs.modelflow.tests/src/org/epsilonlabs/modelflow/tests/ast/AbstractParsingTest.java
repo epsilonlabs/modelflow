@@ -3,7 +3,7 @@
  */
 package org.epsilonlabs.modelflow.tests.ast;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.junit.After;
 import org.junit.Before;
 
@@ -14,7 +14,7 @@ import org.junit.Before;
 public abstract class AbstractParsingTest {
 
 	protected interface Assertable {
-		Boolean evaluate(Workflow w);
+		Boolean evaluate(IWorkflow w);
 	}
 
 	protected String code;

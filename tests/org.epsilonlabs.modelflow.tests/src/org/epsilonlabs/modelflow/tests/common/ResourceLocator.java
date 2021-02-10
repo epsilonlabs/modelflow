@@ -18,6 +18,10 @@ public class ResourceLocator {
 	public static String locateInTestDir(String location){
 		return System.getProperty("user.dir") + "/target/modelflow/test/"+ location;
 	}
+	
+	public static String getTestDir(){
+		return System.getProperty("user.dir") + "/target/modelflow/test/";
+	}
 
 	public static String locateAndCopyToTestDir(String location) {
 		String l = location;

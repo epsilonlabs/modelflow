@@ -20,15 +20,16 @@ import org.eclipse.epsilon.egl.IEglModule;
 import org.eclipse.epsilon.egl.engine.traceability.fine.EglFineGrainedTraceContextAdaptor;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.EglHasher;
 import org.epsilonlabs.modelflow.mmc.epsilon.resource.hash.ProtectedFiles;
 
-public class EpsilonEglTask extends AbstractEglTask implements ITask {
+@Definition(name = "epsilon:egl")
+public class EpsilonEglTask extends AbstractEglTask {
 
 	protected Optional<String> target = Optional.empty();
 	
@@ -50,21 +51,6 @@ public class EpsilonEglTask extends AbstractEglTask implements ITask {
 		return target.get();
 	}
 
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEglTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "egl";
-		}
-
-	}
-	
 	@Override
 	protected void beforeParse() throws MFExecutionException {
 		super.beforeParse();
@@ -84,11 +70,10 @@ public class EpsilonEglTask extends AbstractEglTask implements ITask {
 		}
 		eglTrace = new EglFineGrainedTraceContextAdaptor().adapt(getModule().getContext());
 	}
-		
+	
 	@Override
-	public void afterExecute() throws MFExecutionException {
-		super.afterExecute();
-		
+	public void execute(IModelFlowContext ctx) throws MFExecutionException {
+		super.execute(ctx);
 		if (target.isPresent()) {			
 			if (!outputRoot.isPresent()) {
 				// use basedir

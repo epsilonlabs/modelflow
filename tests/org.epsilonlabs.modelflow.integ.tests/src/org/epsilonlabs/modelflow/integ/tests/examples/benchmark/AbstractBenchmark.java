@@ -8,10 +8,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.control.MeasurableObject;
 import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
@@ -27,7 +33,6 @@ import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
-import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 
 import com.google.common.io.Files;
 import com.google.inject.Guice;
@@ -42,16 +47,24 @@ public abstract class AbstractBenchmark {
 	protected static final TimeUnit TU = TimeUnit.NANOSECONDS;
 	protected static final MemoryUnit MU = MemoryUnit.BYTES;
 	
-	protected static File resultsFile;
+	protected static File detailsFile;
+	protected static File overheadFile;
 	protected static TaskFactoryRegistry taskFactoryRegistry;
 	protected static ResourceFactoryRegistry resourceFactoryRegistry;
 
 	public void setupClass() {
-		if (resultsFile ==null) {			
-			resultsFile = BenchmarkUtils.getResultsFile();
-			String[] headers = new String[] { "scenario", "tracing", "iteration", "task", "group", "stage", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
+		if (overheadFile ==null) {			
+			final Date time = new Date();
+			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
+			detailsFile = BenchmarkUtils.getResultsFile("details", time);
+			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "group", "stage", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
+			List<String> headersList = new ArrayList<>();
+			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
+			headersList.addAll(IMeasurable.Stage.names());
+			String[] overheadHeaders = headersList.toArray(new String[0]);
 			try {
-				BenchmarkUtils.prepareResultFile(resultsFile, headers);
+				BenchmarkUtils.prepareResultFile(overheadFile, overheadHeaders);
+				BenchmarkUtils.prepareResultFile(detailsFile, detailsHeaders);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -93,6 +106,7 @@ public abstract class AbstractBenchmark {
 			cleanup(outputPath);
 			fail("Exception during first execution");
 		}
+		/*
 		
 		// Run modifications
 		System.out.println("Performing modifications");
@@ -131,7 +145,7 @@ public abstract class AbstractBenchmark {
 		if (!validator.ok(module)) {
 			cleanup(outputPath);
 			fail(validator.expected());
-		}
+		}*/
 		
 		storeResults(scenario, tracing, iteration, module, maxIter);
  
@@ -167,38 +181,63 @@ public abstract class AbstractBenchmark {
 		return module;
 	}
 
+	/**
+	 * Save tracked memory profile of last iteration
+	 * 
+	 * @param scenario
+	 * @param tracing
+	 * @param iteration
+	 * @param module
+	 * @param maxIter
+	 */
 	protected void storeResults(IScenario scenario, Boolean tracing, Integer iteration, ModelFlowModule module, int maxIter) {
-		// Save tracked memory profile of last iteration
-		if (maxIter == iteration) {			
-			IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
-			StageProfilerMap profiledStages = profiler.getProfiledStages();
-			profiledStages.entrySet().forEach(s -> {
-				ProfiledStage stage = s.getValue();
-				MeasurableObject key = s.getKey();
-				final MeasureableSnapshot start = stage.getStart();
-				final MeasureableSnapshot end = stage.getEnd();
-				Object[] results = new Object[] { 
-						scenario, 
-						tracing, 
-						iteration, 
-						key.getNode(),
-						key.getStage().getGroup(), 
-						key.getStage().name(), 
-						(start != null) ? start.getTime(TU) : "",
-						(end != null) ? end.getTime(TU) : "",
-						(start != null) ? start.getFreeMemory(MU) : "",
-						(end != null) ? end.getFreeMemory(MU) : ""
-				};
-				try {
-					BenchmarkUtils.writeResults(resultsFile, results);
-				} catch (IOException e) {
-					fail(e);
-				}
-			});
-			String[] extension = resultsFile.getName().split("\\.");
+		IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
+		
+		StageProfilerMap profiledStages = profiler.getProfiledStages();
+	
+		List<Object> values = new ArrayList<>();
+		values.addAll(Arrays.asList(scenario, tracing, iteration));
+		for (Stage stage : Stage.values()) {
+			 final Long duration = profiledStages.getByStage(stage).values().stream().map(v-> v.delta().getTime(TU)).reduce(0l, Long::sum);
+			 values.add(duration);
+		}
+		
+		try {
+			BenchmarkUtils.writeResults(overheadFile, values.toArray());
+		} catch (IOException e) {
+			fail(e);
+		}
+		
+		profiledStages.entrySet().forEach(s -> {
+			ProfiledStage stage = s.getValue();
+			MeasurableObject key = s.getKey();
+			final MeasureableSnapshot start = stage.getStart();
+			final MeasureableSnapshot end = stage.getEnd();
+			Object[] results = new Object[] { 
+					scenario, 
+					tracing, 
+					iteration, 
+					key.getNode(),
+					key.getStage().getParent(), 
+					key.getStage().name(), 
+					(start != null) ? start.getTime(TU) : "",
+					(end != null) ? end.getTime(TU) : "",
+					(start != null) ? start.getFreeMemory(MU) : "",
+					(end != null) ? end.getFreeMemory(MU) : ""
+			};
+			try {
+				BenchmarkUtils.writeResults(detailsFile, results);
+			} catch (IOException e) {
+				fail(e);
+			}
+		});
+
+		
+		if (maxIter == iteration) {		
+			String[] extension = detailsFile.getName().split("\\.");
 			String newName = extension[0] + "_tracked_"+scenario.getName()+"_"+tracing+"." + extension[1]; 
 			try {
-				File destinationFile = resultsFile.toPath().resolveSibling(newName).toFile();
+				File destinationFile = detailsFile.toPath().resolveSibling(newName).toFile();
 				destinationFile.createNewFile();
 				Files.copy(profiler.getMemoryTracker().getLogFile(), destinationFile);
 			} catch (IOException e) {

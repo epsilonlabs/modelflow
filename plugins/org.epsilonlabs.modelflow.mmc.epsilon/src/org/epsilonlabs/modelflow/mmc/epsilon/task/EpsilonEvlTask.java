@@ -15,15 +15,15 @@ import org.eclipse.epsilon.evl.EvlModule;
 import org.eclipse.epsilon.evl.IEvlModule;
 import org.eclipse.epsilon.evl.execute.CommandLineFixer;
 import org.eclipse.epsilon.evl.trace.ConstraintTrace;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EvlTaskTrace;
 
-public class EpsilonEvlTask extends AbstractEpsilonTask implements ITask {
+@Definition(name = "epsilon:evl")
+public class EpsilonEvlTask extends AbstractEpsilonTask {
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -38,22 +38,6 @@ public class EpsilonEvlTask extends AbstractEpsilonTask implements ITask {
 	protected Boolean shortCircuit = false;
 	protected Boolean optimizedTrace = false;
 	protected Boolean failOnError = false;
-	
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEvlTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "evl";
-		}
-
-	}
 
 	@Param(key="fix")
 	public void setFix(Boolean fix) {

@@ -11,13 +11,13 @@ import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.flock.FlockModule;
 import org.eclipse.epsilon.flock.IFlockModule;
 import org.eclipse.epsilon.flock.execute.exceptions.FlockUnsupportedModelException;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFInvalidModelException;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 
-public class EpsilonFlockTask extends AbstractEpsilonTask implements ITask {
+@Definition(name = "epsilon:flock")
+public class EpsilonFlockTask extends AbstractEpsilonTask {
 
 	protected IModel migrated;
 	protected IModel original;
@@ -84,21 +84,6 @@ public class EpsilonFlockTask extends AbstractEpsilonTask implements ITask {
 		} catch (FlockUnsupportedModelException e) {
 			throw new MFInvalidModelException(e);
 		}
-	}
-	
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonFlockTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "flock";
-		}
-
 	}
 
 }

@@ -8,8 +8,7 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task.trace;
 
 import org.eclipse.epsilon.evl.trace.ConstraintTraceItem;
-import org.epsilonlabs.modelflow.dom.AbstractResource;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.AbstractEpsilonTask;
@@ -20,11 +19,11 @@ public class EvlTaskTrace implements ITrace {
 	protected final AbstractEpsilonTask task;
 	protected final Trace trace;
 
-	public EvlTaskTrace(ConstraintTraceItem constraint, ITask task) {
+	public EvlTaskTrace(ConstraintTraceItem constraint, ITaskInstance task) {
 		this(constraint, task, null);
 	}
 	
-	private EvlTaskTrace(ConstraintTraceItem constraint, ITask task, Trace trace) {
+	private EvlTaskTrace(ConstraintTraceItem constraint, ITaskInstance task, Trace trace) {
 		this.constraint = constraint;
 		this.task = (AbstractEpsilonTask) task;
 		this.trace = trace;
@@ -43,10 +42,10 @@ public class EvlTaskTrace implements ITrace {
 			throw new RuntimeException("Trace has not been initialised with ITask");
 		
 		String sourceId = EpsilonTraceUtil.getElementId(task, constraint.getInstance());
-		AbstractResource sourceContainer = EpsilonTraceUtil.getContainerModel(task, constraint.getInstance());
+		String sourceContainer = EpsilonTraceUtil.getContainerModel(task, constraint.getInstance());
 		
 		Trace builtTrace = new ManagementTraceBuilder()
-				.managementLink("Invariant", constraint.getConstraint().getName())
+				.link("Invariant", constraint.getConstraint().getName())
 				.addSourceModelElement(sourceId, sourceContainer, null)
 				.addTargetModelElement(sourceId, sourceContainer, null)
 				.addProperty("result", constraint.getResult())

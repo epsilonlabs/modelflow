@@ -21,8 +21,8 @@ import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.common.util.BasicMonitor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
-import org.epsilonlabs.modelflow.dom.api.AbstractTask;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
@@ -31,25 +31,10 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.param.hash.FileHasher;
 import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.emf.factory.AbstractEMFTaskFactory;
 import org.epsilonlabs.modelflow.mmc.emf.task.custom.CustomGenerator;
 
-public class GenerateModelCodeTask extends AbstractTask implements ITask {
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEMFTaskFactory {
-
-		public Factory() {
-			super(GenerateModelCodeTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "genCode";
-		}
-
-	}
+@Definition(name = "emf:genCode")
+public class GenerateModelCodeTask implements ITaskInstance {
 
 	protected Boolean generateModel 	= true;
 	protected Boolean generateEdit 		= false;
@@ -57,7 +42,7 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 	protected Boolean generateTests 	= false;
 	protected Set<String> outputs = new HashSet<String>();
 	
-	protected IModelWrapper modelRes;
+	protected String modelResName;
 	protected GenModel genModel;
 	protected CustomGenerator generator;
 
@@ -116,8 +101,7 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 		genModel.setCanGenerate(true);
 
 		generator = new CustomGenerator(genModel, new BasicMonitor());
-		generator.setTask(this);
-		generator.setResource(modelRes.getResource());
+		generator.setResourceName(modelResName);
 		
 		if (generateModel) {
 			generator.generate(MODEL_PROJECT_TYPE);
@@ -157,7 +141,7 @@ public class GenerateModelCodeTask extends AbstractTask implements ITask {
 				Object first = resource.getContents().get(0);
 				if (first instanceof GenModel) {					
 					genModel = (GenModel) resource.getContents().get(0);				
-					modelRes = m;
+					modelResName = m.getResourceNode().getName();
 					return true;
 				}
 			}			

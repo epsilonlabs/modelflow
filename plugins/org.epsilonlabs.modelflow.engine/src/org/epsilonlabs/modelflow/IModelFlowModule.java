@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow;
 
 import org.eclipse.epsilon.erl.IErlModule;
-import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
@@ -24,15 +24,7 @@ public interface IModelFlowModule extends IErlModule {
 	 *
 	 * @return the workflow
 	 */
-	Workflow getWorkflow();
-
-	/**
-	 * Sets the workflow.
-	 *
-	 * @param workflow the new workflow
-	 */
-	void setWorkflow(Workflow workflow);
-
+	IWorkflow getWorkflow();
 	
 	/**
 	 * Gets the context.
@@ -50,7 +42,7 @@ public interface IModelFlowModule extends IErlModule {
 	 * @return the compilation context
 	 */
 	@Override
-	ModelFlowCompilationContext getCompilationContext();
+	IModelFlowCompilationContext getCompilationContext();
 
 	/**
 	 * Clear cache.
@@ -98,6 +90,5 @@ public interface IModelFlowModule extends IErlModule {
 	 * @return the configuration
 	 */
 	IModelFlowConfiguration getConfiguration();
-
 
 }

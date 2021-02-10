@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
@@ -47,7 +47,7 @@ public class ExecutionHelper {
 		ResourceSet rs = new ResourceSetImpl();		
 		Registry packageRegistry = rs.getPackageRegistry();
 		packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-		packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+		packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 		packageRegistry.put(ExecutionTracePackage.eNS_URI, ExecutionTracePackage.eINSTANCE);
 		packageRegistry.put(ManagementTracePackage.eNS_URI, ManagementTracePackage.eINSTANCE);
 		
@@ -57,7 +57,7 @@ public class ExecutionHelper {
 		extensionToFactoryMap.put(ModelFlowModule.MANAGEMENT_TRACE_EXTENSION, new XMIResourceFactoryImpl());
 		
 		ExecutionTrace executionTrace = module.getContext().getExecutionTrace();
-		Workflow declaredWorkflow = module.getWorkflow();
+		IWorkflow declaredWorkflow = module.getWorkflow();
 		ManagementTrace managementTrace = module.getContext().getManagementTrace();
 		
 		String wfLocation= Paths.get(USER_DIR, TARGET, "wf", outputName + "." + ModelFlowModule.EXTENSION).toAbsolutePath().toString();
@@ -93,8 +93,8 @@ public class ExecutionHelper {
 	}
 
 	public void saveGraphs(String outputName){
-		String dg = module.getContext().getDependencyGraph().toString();
-		String eg = module.getContext().getExecutionGraph().toString();
+		String dg = module.getContext().getScheduler().getDependencyGraph().toString();
+		String eg = module.getContext().getScheduler().getExecutionGraph().toString();
 		String dgLoc= Paths.get(USER_DIR, TARGET, "wf", outputName + "-dg.dot").toAbsolutePath().toString();
 		String egLoc= Paths.get(USER_DIR, TARGET, "wf", outputName + "-eg.dot").toAbsolutePath().toString();
 		try {

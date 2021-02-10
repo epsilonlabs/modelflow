@@ -15,18 +15,18 @@ import org.eclipse.epsilon.epl.EplModule;
 import org.eclipse.epsilon.epl.IEplModule;
 import org.eclipse.epsilon.epl.execute.PatternMatch;
 import org.eclipse.epsilon.epl.execute.context.IEplContext;
-import org.epsilonlabs.modelflow.dom.api.ITask;
+import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.management.trace.Trace;
-import org.epsilonlabs.modelflow.mmc.epsilon.factory.AbstractEpsilonTaskFactory;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.EplTaskTrace;
 
 /** 
  * Produces a PatternMatchModel
  *
  */
-public class EpsilonEplTask extends AbstractEpsilonTask implements ITask {
+@Definition(name = "epsilon:epl")
+public class EpsilonEplTask extends AbstractEpsilonTask {
 
 	protected Integer maxLoops = -1;
 	protected Boolean repeatWhileMatches = false;
@@ -38,20 +38,6 @@ public class EpsilonEplTask extends AbstractEpsilonTask implements ITask {
 			this.module = new EplModule();
 		}
 		return (IEplModule) this.module;
-	}
-
-	/** FACTORY */
-
-	public static class Factory extends AbstractEpsilonTaskFactory {
-
-		public Factory() {
-			super(EpsilonEplTask.class);
-		}
-
-		@Override
-		public String getName() {
-			return "epl";
-		}
 	}
 
 	@Param(key = "maxLoops")

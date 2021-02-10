@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Scanner;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 
 /**
@@ -26,7 +26,7 @@ public class WorkflowHasher{
 	protected final String code;
 	protected final File file;
 	protected final URI uri;
-	protected final Workflow workflow;
+	protected final IWorkflow workflow;
 	
 	public WorkflowHasher(String code, File file, URI uri) {
 		this.code = code;
@@ -35,7 +35,7 @@ public class WorkflowHasher{
 		this.workflow = null;
 	}
 	
-	public WorkflowHasher(Workflow w, File file) {
+	public WorkflowHasher(IWorkflow w, File file) {
 		this.workflow = w;
 		this.file = file;
 		this.code = null;

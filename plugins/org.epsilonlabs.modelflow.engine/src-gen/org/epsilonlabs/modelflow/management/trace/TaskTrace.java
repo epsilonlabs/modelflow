@@ -13,8 +13,6 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.epsilonlabs.modelflow.dom.Task;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Task Trace</b></em>'.
@@ -34,26 +32,26 @@ import org.epsilonlabs.modelflow.dom.Task;
  */
 public interface TaskTrace extends EObject {
 	/**
-	 * Returns the value of the '<em><b>Task</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Task</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Task</em>' containment reference.
-	 * @see #setTask(Task)
+	 * @return the value of the '<em>Task</em>' attribute.
+	 * @see #setTask(String)
 	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getTaskTrace_Task()
-	 * @model containment="true"
+	 * @model
 	 * @generated
 	 */
-	Task getTask();
+	String getTask();
 
 	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.TaskTrace#getTask <em>Task</em>}' containment reference.
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.TaskTrace#getTask <em>Task</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Task</em>' containment reference.
+	 * @param value the new value of the '<em>Task</em>' attribute.
 	 * @see #getTask()
 	 * @generated
 	 */
-	void setTask(Task value);
+	void setTask(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Traces</b></em>' containment reference list.

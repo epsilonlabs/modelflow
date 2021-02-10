@@ -7,9 +7,9 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.management.resource;
 
-import org.epsilonlabs.modelflow.dom.api.IResource;
+import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
-import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
+import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +18,19 @@ public class ResourceLoader {
 	private static final Logger LOG = LoggerFactory.getLogger(ResourceLoader.class);
 
 	private final ResourceKind as;
-	private final IResource<?> res;
+	private final IModelResourceInstance<?> res;
+
+	private IModelResourceNode node;
 	
-	public ResourceLoader(ResourceKind as, IResource<?> res){
+	public ResourceLoader(ResourceKind as, IModelResourceInstance<?> res, IModelResourceNode node){
 		this.as = as;
 		this.res = res;
+		this.node = node;
 	}
 	
-	public IModelWrapper load(ITaskNode taskNode) throws MFResourceInstantiationException {
+	public IModelWrapper load() throws MFResourceInstantiationException {
 		
-		IResource<?> resource = null;
+		IModelResourceInstance<?> resource = null;
 		switch (as) {
 		case INPUT:
 			resource = res.asInput();
@@ -54,8 +57,7 @@ public class ResourceLoader {
 				throw new MFResourceInstantiationException(e);
 			}
 		}
-				
-		return new ModelWrapper(as, res.getNode().getInternal(), resource.get());
+		return new ModelWrapper(as, node, resource.get());
 	}
 
 }

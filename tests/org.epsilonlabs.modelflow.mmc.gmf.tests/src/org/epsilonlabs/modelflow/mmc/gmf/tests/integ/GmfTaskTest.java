@@ -2,7 +2,8 @@ package org.epsilonlabs.modelflow.mmc.gmf.tests.integ;
 
 import static org.junit.Assert.fail;
 
-import org.epsilonlabs.modelflow.dom.Workflow;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.tests.common.workflow.GmfTask;
@@ -25,7 +26,7 @@ public class GmfTaskTest extends WorkflowBuilderTest {
 		resFactoryRegistry = injector.getInstance(ResourceFactoryRegistry.class);
 	}
 		
-	protected Workflow w;
+	protected IWorkflow w;
 	
 	@Test 
 	public void testGenDiagram() {
@@ -50,7 +51,14 @@ public class GmfTaskTest extends WorkflowBuilderTest {
 
 	@Override
 	protected void setupSource() {
-		module.setWorkflow(w);
+		final String program = new WorkflowProgramBuilder(w).build();
+		try {
+			//module.setWorkflow(w);
+			module.parse(program);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 	
 }

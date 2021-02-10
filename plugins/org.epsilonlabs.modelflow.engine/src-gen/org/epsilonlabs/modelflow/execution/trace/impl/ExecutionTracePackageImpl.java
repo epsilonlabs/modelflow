@@ -13,16 +13,11 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
-
 import org.eclipse.emf.ecore.impl.EPackageImpl;
-
-import org.epsilonlabs.modelflow.dom.DomPackage;
-
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
-
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceFactory;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTracePackage;
+import org.epsilonlabs.modelflow.execution.trace.Named;
 import org.epsilonlabs.modelflow.execution.trace.PropertySnapshot;
 import org.epsilonlabs.modelflow.execution.trace.ResourceSnapshot;
 import org.epsilonlabs.modelflow.execution.trace.Snapshot;
@@ -50,6 +45,13 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	 * @generated
 	 */
 	private EClass statefulEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass namedEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -133,17 +135,11 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 
 		isInited = true;
 
-		// Obtain or create and register interdependencies
-		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
-		DomPackageImpl theDomPackage = (DomPackageImpl)(registeredPackage instanceof DomPackageImpl ? registeredPackage : DomPackage.eINSTANCE);
-
 		// Create package meta-data objects
 		theExecutionTracePackage.createPackageContents();
-		theDomPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theExecutionTracePackage.initializePackageContents();
-		theDomPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed
 		theExecutionTracePackage.freeze();
@@ -219,6 +215,26 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	 * @generated
 	 */
 	@Override
+	public EClass getNamed() {
+		return namedEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getNamed_Name() {
+		return (EAttribute)namedEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSnapshot() {
 		return snapshotEClass;
 	}
@@ -259,28 +275,8 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	 * @generated
 	 */
 	@Override
-	public EReference getResourceSnapshot_Resource() {
-		return (EReference)resourceSnapshotEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getPropertySnapshot() {
 		return propertySnapshotEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getPropertySnapshot_Key() {
-		return (EAttribute)propertySnapshotEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -301,16 +297,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	@Override
 	public EReference getWorkflowExecution_Tasks() {
 		return (EReference)workflowExecutionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getWorkflowExecution_Workflow() {
-		return (EReference)workflowExecutionEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -369,16 +355,6 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 	 * @generated
 	 */
 	@Override
-	public EReference getTaskExecution_Task() {
-		return (EReference)taskExecutionEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public ExecutionTraceFactory getExecutionTraceFactory() {
 		return (ExecutionTraceFactory)getEFactoryInstance();
 	}
@@ -410,26 +386,25 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		statefulEClass = createEClass(STATEFUL);
 		createEAttribute(statefulEClass, STATEFUL__END_STATE);
 
+		namedEClass = createEClass(NAMED);
+		createEAttribute(namedEClass, NAMED__NAME);
+
 		snapshotEClass = createEClass(SNAPSHOT);
 		createEAttribute(snapshotEClass, SNAPSHOT__STAMP);
 		createEAttribute(snapshotEClass, SNAPSHOT__TIMESTAMP);
 
 		resourceSnapshotEClass = createEClass(RESOURCE_SNAPSHOT);
-		createEReference(resourceSnapshotEClass, RESOURCE_SNAPSHOT__RESOURCE);
 
 		propertySnapshotEClass = createEClass(PROPERTY_SNAPSHOT);
-		createEAttribute(propertySnapshotEClass, PROPERTY_SNAPSHOT__KEY);
 
 		workflowExecutionEClass = createEClass(WORKFLOW_EXECUTION);
 		createEReference(workflowExecutionEClass, WORKFLOW_EXECUTION__TASKS);
-		createEReference(workflowExecutionEClass, WORKFLOW_EXECUTION__WORKFLOW);
 
 		taskExecutionEClass = createEClass(TASK_EXECUTION);
 		createEReference(taskExecutionEClass, TASK_EXECUTION__INPUT_MODELS);
 		createEReference(taskExecutionEClass, TASK_EXECUTION__OUTPUT_MODELS);
 		createEReference(taskExecutionEClass, TASK_EXECUTION__INPUT_PROPERTIES);
 		createEReference(taskExecutionEClass, TASK_EXECUTION__OUTPUT_PROPERTIES);
-		createEReference(taskExecutionEClass, TASK_EXECUTION__TASK);
 	}
 
 	/**
@@ -455,18 +430,19 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		setNsPrefix(eNS_PREFIX);
 		setNsURI(eNS_URI);
 
-		// Obtain other dependent packages
-		DomPackage theDomPackage = (DomPackage)EPackage.Registry.INSTANCE.getEPackage(DomPackage.eNS_URI);
-
 		// Create type parameters
 
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
 		resourceSnapshotEClass.getESuperTypes().add(this.getSnapshot());
+		resourceSnapshotEClass.getESuperTypes().add(this.getNamed());
 		propertySnapshotEClass.getESuperTypes().add(this.getSnapshot());
+		propertySnapshotEClass.getESuperTypes().add(this.getNamed());
 		workflowExecutionEClass.getESuperTypes().add(this.getStateful());
+		workflowExecutionEClass.getESuperTypes().add(this.getSnapshot());
 		taskExecutionEClass.getESuperTypes().add(this.getStateful());
+		taskExecutionEClass.getESuperTypes().add(this.getNamed());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(executionTraceEClass, ExecutionTrace.class, "ExecutionTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -477,26 +453,25 @@ public class ExecutionTracePackageImpl extends EPackageImpl implements Execution
 		initEClass(statefulEClass, Stateful.class, "Stateful", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getStateful_EndState(), ecorePackage.getEString(), "endState", null, 0, 1, Stateful.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		initEClass(namedEClass, Named.class, "Named", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getNamed_Name(), ecorePackage.getEString(), "name", null, 0, 1, Named.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(snapshotEClass, Snapshot.class, "Snapshot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSnapshot_Stamp(), ecorePackage.getEJavaObject(), "stamp", null, 0, 1, Snapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSnapshot_Timestamp(), ecorePackage.getELongObject(), "timestamp", null, 0, 1, Snapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(resourceSnapshotEClass, ResourceSnapshot.class, "ResourceSnapshot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getResourceSnapshot_Resource(), theDomPackage.getResource(), null, "resource", null, 0, 1, ResourceSnapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(propertySnapshotEClass, PropertySnapshot.class, "PropertySnapshot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getPropertySnapshot_Key(), ecorePackage.getEString(), "key", null, 0, 1, PropertySnapshot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(workflowExecutionEClass, WorkflowExecution.class, "WorkflowExecution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getWorkflowExecution_Tasks(), this.getTaskExecution(), null, "tasks", null, 0, -1, WorkflowExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getWorkflowExecution_Workflow(), theDomPackage.getWorkflow(), null, "workflow", null, 0, 1, WorkflowExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(taskExecutionEClass, TaskExecution.class, "TaskExecution", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getTaskExecution_InputModels(), this.getResourceSnapshot(), null, "inputModels", null, 0, -1, TaskExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTaskExecution_OutputModels(), this.getResourceSnapshot(), null, "outputModels", null, 0, -1, TaskExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTaskExecution_InputProperties(), this.getPropertySnapshot(), null, "inputProperties", null, 0, -1, TaskExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getTaskExecution_OutputProperties(), this.getPropertySnapshot(), null, "outputProperties", null, 0, -1, TaskExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTaskExecution_Task(), theDomPackage.getTask(), null, "task", null, 0, 1, TaskExecution.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

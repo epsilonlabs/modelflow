@@ -31,7 +31,7 @@ public class ExecutionGraph extends AbstractExecutionGraph {
 
 	public ExecutionGraph() {
 		this.graph = new SimpleDirectedGraph<>(ExecutionEdge.class);
-		setState(GraphState.CREATED);
+		setState(GraphState.INSTANTIATED);
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class ExecutionGraph extends AbstractExecutionGraph {
 	 */
 	@Override
 	public IExecutionGraph buildImpl(IModelFlowContext ctx) throws MFExecutionGraphExeption {
-		IDependencyGraph dg = ctx.getDependencyGraph();
+		IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
 				
 		// Add Task Nodes
 		addTaskNodes(dg);

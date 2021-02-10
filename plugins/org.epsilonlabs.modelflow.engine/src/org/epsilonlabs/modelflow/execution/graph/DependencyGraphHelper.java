@@ -18,7 +18,6 @@ import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge.Kind;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
-import org.epsilonlabs.modelflow.execution.graph.node.IResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 
@@ -27,7 +26,7 @@ import org.epsilonlabs.modelflow.management.resource.ResourceKind;
  *
  * @author Betty Sanchez
  */
-public class DependencyGraphHelper {
+public class DependencyGraphHelper implements IDependencyHelper{
 
 	/** The graph. */
 	protected final IDependencyGraph graph; 
@@ -102,7 +101,7 @@ public class DependencyGraphHelper {
 	 * @param taskNode the task node
 	 * @return the input resource edges
 	 */
-	public Collection<DependencyEdge> getInputResourceEdges(ITaskNode taskNode) {
+	protected Collection<DependencyEdge> getInputResourceEdges(ITaskNode taskNode) {
 		return graph.getGraph().incomingEdgesOf(taskNode).stream().filter(ie ->
 				ie.getKind().equals(Kind.TASK_RESOURCE)
 				&& graph.getGraph().outgoingEdgesOf(taskNode).stream().noneMatch(oe-> oe.getTarget().equals( ie.getSource())))
@@ -115,7 +114,7 @@ public class DependencyGraphHelper {
 	 * @param taskNode the task node
 	 * @return the output resource edges
 	 */
-	public Collection<DependencyEdge> getOutputResourceEdges(ITaskNode taskNode) {
+	protected Collection<DependencyEdge> getOutputResourceEdges(ITaskNode taskNode) {
 		return graph.getGraph().outgoingEdgesOf(taskNode).stream().filter(oe ->
 				// targets a resource
 				oe.getKind().equals(Kind.TASK_RESOURCE)
@@ -141,16 +140,6 @@ public class DependencyGraphHelper {
 				.collect(Collectors.toSet());
 	}
 
-	/**
-	 * Gets the tas dependencies.
-	 *
-	 * @param node the node
-	 * @return the tas dependencies
-	 */
-	protected Collection<DependencyEdge> getTasDependencies(ITaskNode node) {
-		return null; // TODO
-	}
-	
 	/**
 	 * Used by.
 	 *
@@ -206,15 +195,4 @@ public class DependencyGraphHelper {
 		.findAny().isPresent();
 	}
 	
-	/**
-	 * Gets the resource edge.
-	 *
-	 * @param res the res
-	 * @return the resource edge
-	 */
-	public Collection<DependencyEdge> getResourceEdge(IResourceNode res) {
-		return this.graph.getTaskResourceDependencyEdges().parallelStream()
-				.filter(e -> e.getSource().equals(res) || e.getTarget().equals(res))
-				.collect(Collectors.toSet());
-	}
 }

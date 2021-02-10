@@ -21,8 +21,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.ui.IEditorPart;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.dom.Workflow;
-import org.epsilonlabs.modelflow.dom.impl.DomPackageImpl;
+import org.epsilonlabs.modelflow.dom.IWorkflow;
+import org.epsilonlabs.modelflow.dom.impl.DomPackage;
 import org.epsilonlabs.modelflow.dt.editor.ModelFlowEditor;
 
 /**
@@ -71,12 +71,12 @@ public class ModelFlowMainPictoSource extends AbstractModelFlowPictoSource {
 			try {
 				module.parse(sb.toString());
 				module.compile();
-				Workflow w = module.getWorkflow();
+				IWorkflow w = module.getWorkflow();
 				if (w != null) {
 					ResourceSet resourceSet = new ResourceSetImpl();
 					Registry packageRegistry = resourceSet.getPackageRegistry();
 					packageRegistry.put(EcorePackage.eNS_URI, EcorePackage.eINSTANCE);
-					packageRegistry.put(DomPackageImpl.eNS_URI, DomPackageImpl.eINSTANCE);
+					packageRegistry.put(DomPackage.eNS_URI, DomPackage.eINSTANCE);
 
 					String uriLocation = String.format("picto://%s", file.getFullPath());
 					Resource r = resourceSet.createResource(URI.createURI(uriLocation));
