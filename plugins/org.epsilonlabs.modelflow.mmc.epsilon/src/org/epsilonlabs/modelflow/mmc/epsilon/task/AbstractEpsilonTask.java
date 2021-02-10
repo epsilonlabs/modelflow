@@ -78,11 +78,6 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 		this.src = Optional.ofNullable(src);
 	}
 	
-	@Param(key="src")
-	public void setSrc(String src) {
-		this.src = Optional.ofNullable(new File(src));
-	}
-	
 	@Input(key="src")
 	public File getSrc() {
 		return src.orElse(null);
@@ -205,7 +200,6 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 			getModule().getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
 		}
 		try {
-			getModule().getContext().getModelRepository().getModels().stream().forEach(m->System.out.println(m.getName()));
 			result = getModule().execute();
 		} catch (EolRuntimeException e) {
 			throw new MFExecutionException(e.getReason(), e);
