@@ -58,12 +58,6 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 			Iterator<Object> iterator = list.iterator();
 			if (forEach != null) {
 				forEach.compile(ctx);
-				try {
-					forEach.execute(ctx.getModule().getContext());
-					//iterator = forEach.getIterator();
-				} catch (EolRuntimeException e) {
-					ctx.addErrorMarker(forEach, e.getMessage());
-				}
 			}
 			FrameStack frameStack = ctx.getFrameStack();
 			createTask(ctx, getName());

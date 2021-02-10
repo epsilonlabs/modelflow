@@ -56,7 +56,7 @@ public abstract class RuleUtil  {
 		for (Entry<NameExpression, ModuleElement> p : declaration.getParameters().entrySet()) {
 			IProperty property = DomFactory.eINSTANCE.createProperty();
 			property.setKey(p.getKey().getName());
-			ModuleElement value = p.getValue();
+			Object value = p.getValue();
 			final Object result;
 			if (value instanceof IExecutableModuleElement) {
 				IExecutableModuleElement moduleElement = (IExecutableModuleElement) value;

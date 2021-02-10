@@ -1,6 +1,6 @@
 package org.epsilonlabs.modelflow.parse;
 
-// $ANTLR 3.1b1 ModelFlowParserRules.g 2020-08-13 14:10:29
+// $ANTLR 3.1b1 ModelFlowParserRules.g 2021-02-10 11:25:27
 
 import org.antlr.runtime.*;
 import java.util.Stack;
@@ -159,6 +159,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
     public static final int StatementBlock=33;
     public static final int T__177=177;
     public static final int T__176=176;
+    public static final int T__179=179;
     public static final int T__178=178;
     public static final int ABORT=48;
     public static final int T__173=173;
@@ -282,7 +283,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             // ModelFlowParserRules.g:58:2: ( paramDeclarationExpression | resourceDeclaration | taskDeclaration | annotationBlock | operationDeclaration )
             int alt1=5;
             switch ( input.LA(1) ) {
-            case 178:
+            case 179:
                 {
                 alt1=1;
                 }
@@ -292,7 +293,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
                 alt1=2;
                 }
                 break;
-            case 171:
+            case 172:
                 {
                 alt1=3;
                 }
@@ -617,7 +618,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            ta=(Token)match(input,171,FOLLOW_171_in_taskDeclaration173); if (state.failed) return retval;
+            ta=(Token)match(input,172,FOLLOW_172_in_taskDeclaration173); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             ta_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(ta);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(ta_tree, root_0);
@@ -660,7 +661,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             int alt5=2;
             int LA5_0 = input.LA(1);
 
-            if ( (LA5_0==173) ) {
+            if ( (LA5_0==174) ) {
                 alt5=1;
             }
             switch (alt5) {
@@ -683,7 +684,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             int alt6=2;
             int LA6_0 = input.LA(1);
 
-            if ( (LA6_0==174) ) {
+            if ( (LA6_0==175) ) {
                 alt6=1;
             }
             switch (alt6) {
@@ -706,7 +707,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             int alt7=2;
             int LA7_0 = input.LA(1);
 
-            if ( (LA7_0==177) ) {
+            if ( (LA7_0==178) ) {
                 alt7=1;
             }
             switch (alt7) {
@@ -729,7 +730,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             int alt8=2;
             int LA8_0 = input.LA(1);
 
-            if ( (LA8_0==175) ) {
+            if ( (LA8_0==176) ) {
                 alt8=1;
             }
             switch (alt8) {
@@ -777,7 +778,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
                     int alt9=2;
                     int LA9_0 = input.LA(1);
 
-                    if ( (LA9_0==169) ) {
+                    if ( (LA9_0==170) ) {
                         alt9=1;
                     }
                     switch (alt9) {
@@ -909,7 +910,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            ct=(Token)match(input,172,FOLLOW_172_in_ruleType242); if (state.failed) return retval;
+            ct=(Token)match(input,173,FOLLOW_173_in_ruleType242); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             ct_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(ct);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(ct_tree, root_0);
@@ -1132,7 +1133,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            i=(Token)match(input,173,FOLLOW_173_in_inout334); if (state.failed) return retval;
+            i=(Token)match(input,174,FOLLOW_174_in_inout334); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             i_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(i);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(i_tree, root_0);
@@ -1199,7 +1200,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            o=(Token)match(input,174,FOLLOW_174_in_out362); if (state.failed) return retval;
+            o=(Token)match(input,175,FOLLOW_175_in_out362); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             o_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(o);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(o_tree, root_0);
@@ -1247,7 +1248,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
     };
 
     // $ANTLR start forEach
-    // ModelFlowParserRules.g:131:1: forEach : fe= 'forEach' formalParameter 'in' expressionOrStatementBlock ;
+    // ModelFlowParserRules.g:131:1: forEach : fe= 'forEach' formalParameter ( 'as' expressionOrStatementBlock )? 'in' expressionOrStatementBlock ;
     public final ModelFlow_ModelFlowParserRules.forEach_return forEach() throws RecognitionException {
         ModelFlow_ModelFlowParserRules.forEach_return retval = new ModelFlow_ModelFlowParserRules.forEach_return();
         retval.start = input.LT(1);
@@ -1256,21 +1257,25 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
 
         Token fe=null;
         Token string_literal26=null;
+        Token string_literal28=null;
         ModelFlow_EolParserRules.formalParameter_return formalParameter25 = null;
 
         ModelFlow_EolParserRules.expressionOrStatementBlock_return expressionOrStatementBlock27 = null;
 
+        ModelFlow_EolParserRules.expressionOrStatementBlock_return expressionOrStatementBlock29 = null;
+
 
         org.eclipse.epsilon.common.parse.AST fe_tree=null;
         org.eclipse.epsilon.common.parse.AST string_literal26_tree=null;
+        org.eclipse.epsilon.common.parse.AST string_literal28_tree=null;
 
         try {
-            // ModelFlowParserRules.g:135:2: (fe= 'forEach' formalParameter 'in' expressionOrStatementBlock )
-            // ModelFlowParserRules.g:136:2: fe= 'forEach' formalParameter 'in' expressionOrStatementBlock
+            // ModelFlowParserRules.g:135:2: (fe= 'forEach' formalParameter ( 'as' expressionOrStatementBlock )? 'in' expressionOrStatementBlock )
+            // ModelFlowParserRules.g:136:2: fe= 'forEach' formalParameter ( 'as' expressionOrStatementBlock )? 'in' expressionOrStatementBlock
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            fe=(Token)match(input,175,FOLLOW_175_in_forEach390); if (state.failed) return retval;
+            fe=(Token)match(input,176,FOLLOW_176_in_forEach390); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             fe_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(fe);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(fe_tree, root_0);
@@ -1281,13 +1286,37 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             state._fsp--;
             if (state.failed) return retval;
             if ( state.backtracking==0 ) adaptor.addChild(root_0, formalParameter25.getTree());
-            string_literal26=(Token)match(input,126,FOLLOW_126_in_forEach395); if (state.failed) return retval;
-            pushFollow(FOLLOW_expressionOrStatementBlock_in_forEach398);
-            expressionOrStatementBlock27=gModelFlow.expressionOrStatementBlock();
+            // ModelFlowParserRules.g:136:32: ( 'as' expressionOrStatementBlock )?
+            int alt13=2;
+            int LA13_0 = input.LA(1);
+
+            if ( (LA13_0==177) ) {
+                alt13=1;
+            }
+            switch (alt13) {
+                case 1 :
+                    // ModelFlowParserRules.g:136:33: 'as' expressionOrStatementBlock
+                    {
+                    string_literal26=(Token)match(input,177,FOLLOW_177_in_forEach396); if (state.failed) return retval;
+                    pushFollow(FOLLOW_expressionOrStatementBlock_in_forEach399);
+                    expressionOrStatementBlock27=gModelFlow.expressionOrStatementBlock();
+
+                    state._fsp--;
+                    if (state.failed) return retval;
+                    if ( state.backtracking==0 ) adaptor.addChild(root_0, expressionOrStatementBlock27.getTree());
+
+                    }
+                    break;
+
+            }
+
+            string_literal28=(Token)match(input,126,FOLLOW_126_in_forEach403); if (state.failed) return retval;
+            pushFollow(FOLLOW_expressionOrStatementBlock_in_forEach406);
+            expressionOrStatementBlock29=gModelFlow.expressionOrStatementBlock();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) adaptor.addChild(root_0, expressionOrStatementBlock27.getTree());
+            if ( state.backtracking==0 ) adaptor.addChild(root_0, expressionOrStatementBlock29.getTree());
             if ( state.backtracking==0 ) {
               fe.setType(FOREACH);
             }
@@ -1332,55 +1361,55 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
 
         org.eclipse.epsilon.common.parse.AST root_0 = null;
 
-        Token string_literal29=null;
-        ModelFlow_ModelFlowParserRules.taskResource_return taskResource28 = null;
-
+        Token string_literal31=null;
         ModelFlow_ModelFlowParserRules.taskResource_return taskResource30 = null;
 
+        ModelFlow_ModelFlowParserRules.taskResource_return taskResource32 = null;
 
-        org.eclipse.epsilon.common.parse.AST string_literal29_tree=null;
-        RewriteRuleTokenStream stream_143=new RewriteRuleTokenStream(adaptor,"token 143");
+
+        org.eclipse.epsilon.common.parse.AST string_literal31_tree=null;
+        RewriteRuleTokenStream stream_144=new RewriteRuleTokenStream(adaptor,"token 144");
         RewriteRuleSubtreeStream stream_taskResource=new RewriteRuleSubtreeStream(adaptor,"rule taskResource");
         try {
             // ModelFlowParserRules.g:144:2: ( taskResource ( 'and' taskResource )* -> ^( RESLIST ( taskResource )* ) )
             // ModelFlowParserRules.g:145:2: taskResource ( 'and' taskResource )*
             {
-            pushFollow(FOLLOW_taskResource_in_taskResourceList421);
-            taskResource28=taskResource();
+            pushFollow(FOLLOW_taskResource_in_taskResourceList429);
+            taskResource30=taskResource();
 
             state._fsp--;
             if (state.failed) return retval;
-            if ( state.backtracking==0 ) stream_taskResource.add(taskResource28.getTree());
+            if ( state.backtracking==0 ) stream_taskResource.add(taskResource30.getTree());
             // ModelFlowParserRules.g:145:15: ( 'and' taskResource )*
-            loop13:
+            loop14:
             do {
-                int alt13=2;
-                int LA13_0 = input.LA(1);
+                int alt14=2;
+                int LA14_0 = input.LA(1);
 
-                if ( (LA13_0==143) ) {
-                    alt13=1;
+                if ( (LA14_0==144) ) {
+                    alt14=1;
                 }
 
 
-                switch (alt13) {
+                switch (alt14) {
             	case 1 :
             	    // ModelFlowParserRules.g:145:16: 'and' taskResource
             	    {
-            	    string_literal29=(Token)match(input,143,FOLLOW_143_in_taskResourceList424); if (state.failed) return retval; 
-            	    if ( state.backtracking==0 ) stream_143.add(string_literal29);
+            	    string_literal31=(Token)match(input,144,FOLLOW_144_in_taskResourceList432); if (state.failed) return retval; 
+            	    if ( state.backtracking==0 ) stream_144.add(string_literal31);
 
-            	    pushFollow(FOLLOW_taskResource_in_taskResourceList426);
-            	    taskResource30=taskResource();
+            	    pushFollow(FOLLOW_taskResource_in_taskResourceList434);
+            	    taskResource32=taskResource();
 
             	    state._fsp--;
             	    if (state.failed) return retval;
-            	    if ( state.backtracking==0 ) stream_taskResource.add(taskResource30.getTree());
+            	    if ( state.backtracking==0 ) stream_taskResource.add(taskResource32.getTree());
 
             	    }
             	    break;
 
             	default :
-            	    break loop13;
+            	    break loop14;
                 }
             } while (true);
 
@@ -1460,18 +1489,18 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
         Token res=null;
         Token ind=null;
         Token a=null;
-        Token char_literal31=null;
-        Token NAME32=null;
         Token char_literal33=null;
         Token NAME34=null;
+        Token char_literal35=null;
+        Token NAME36=null;
 
         org.eclipse.epsilon.common.parse.AST res_tree=null;
         org.eclipse.epsilon.common.parse.AST ind_tree=null;
         org.eclipse.epsilon.common.parse.AST a_tree=null;
-        org.eclipse.epsilon.common.parse.AST char_literal31_tree=null;
-        org.eclipse.epsilon.common.parse.AST NAME32_tree=null;
         org.eclipse.epsilon.common.parse.AST char_literal33_tree=null;
         org.eclipse.epsilon.common.parse.AST NAME34_tree=null;
+        org.eclipse.epsilon.common.parse.AST char_literal35_tree=null;
+        org.eclipse.epsilon.common.parse.AST NAME36_tree=null;
 
         try {
             // ModelFlowParserRules.g:153:2: (res= NAME ( '.' ind= NAME )? (a= 'as' NAME ( ',' NAME )* )? )
@@ -1479,24 +1508,24 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            res=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource460); if (state.failed) return retval;
+            res=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource468); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             res_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(res);
             adaptor.addChild(root_0, res_tree);
             }
             // ModelFlowParserRules.g:154:11: ( '.' ind= NAME )?
-            int alt14=2;
-            int LA14_0 = input.LA(1);
+            int alt15=2;
+            int LA15_0 = input.LA(1);
 
-            if ( (LA14_0==POINT) ) {
-                alt14=1;
+            if ( (LA15_0==POINT) ) {
+                alt15=1;
             }
-            switch (alt14) {
+            switch (alt15) {
                 case 1 :
                     // ModelFlowParserRules.g:154:12: '.' ind= NAME
                     {
-                    char_literal31=(Token)match(input,POINT,FOLLOW_POINT_in_taskResource463); if (state.failed) return retval;
-                    ind=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource468); if (state.failed) return retval;
+                    char_literal33=(Token)match(input,POINT,FOLLOW_POINT_in_taskResource471); if (state.failed) return retval;
+                    ind=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource476); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     ind_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(ind);
                     adaptor.addChild(root_0, ind_tree);
@@ -1508,53 +1537,53 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             }
 
             // ModelFlowParserRules.g:154:28: (a= 'as' NAME ( ',' NAME )* )?
-            int alt16=2;
-            int LA16_0 = input.LA(1);
+            int alt17=2;
+            int LA17_0 = input.LA(1);
 
-            if ( (LA16_0==176) ) {
-                alt16=1;
+            if ( (LA17_0==177) ) {
+                alt17=1;
             }
-            switch (alt16) {
+            switch (alt17) {
                 case 1 :
                     // ModelFlowParserRules.g:154:29: a= 'as' NAME ( ',' NAME )*
                     {
-                    a=(Token)match(input,176,FOLLOW_176_in_taskResource475); if (state.failed) return retval;
+                    a=(Token)match(input,177,FOLLOW_177_in_taskResource483); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
                     a_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(a);
                     root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(a_tree, root_0);
                     }
-                    NAME32=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource478); if (state.failed) return retval;
+                    NAME34=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource486); if (state.failed) return retval;
                     if ( state.backtracking==0 ) {
-                    NAME32_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME32);
-                    adaptor.addChild(root_0, NAME32_tree);
+                    NAME34_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME34);
+                    adaptor.addChild(root_0, NAME34_tree);
                     }
                     // ModelFlowParserRules.g:154:42: ( ',' NAME )*
-                    loop15:
+                    loop16:
                     do {
-                        int alt15=2;
-                        int LA15_0 = input.LA(1);
+                        int alt16=2;
+                        int LA16_0 = input.LA(1);
 
-                        if ( (LA15_0==103) ) {
-                            alt15=1;
+                        if ( (LA16_0==103) ) {
+                            alt16=1;
                         }
 
 
-                        switch (alt15) {
+                        switch (alt16) {
                     	case 1 :
                     	    // ModelFlowParserRules.g:154:43: ',' NAME
                     	    {
-                    	    char_literal33=(Token)match(input,103,FOLLOW_103_in_taskResource481); if (state.failed) return retval;
-                    	    NAME34=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource484); if (state.failed) return retval;
+                    	    char_literal35=(Token)match(input,103,FOLLOW_103_in_taskResource489); if (state.failed) return retval;
+                    	    NAME36=(Token)match(input,NAME,FOLLOW_NAME_in_taskResource492); if (state.failed) return retval;
                     	    if ( state.backtracking==0 ) {
-                    	    NAME34_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME34);
-                    	    adaptor.addChild(root_0, NAME34_tree);
+                    	    NAME36_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME36);
+                    	    adaptor.addChild(root_0, NAME36_tree);
                     	    }
 
                     	    }
                     	    break;
 
                     	default :
-                    	    break loop15;
+                    	    break loop16;
                         }
                     } while (true);
 
@@ -1614,14 +1643,14 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
         org.eclipse.epsilon.common.parse.AST root_0 = null;
 
         Token t=null;
-        Token NAME35=null;
-        Token char_literal36=null;
         Token NAME37=null;
+        Token char_literal38=null;
+        Token NAME39=null;
 
         org.eclipse.epsilon.common.parse.AST t_tree=null;
-        org.eclipse.epsilon.common.parse.AST NAME35_tree=null;
-        org.eclipse.epsilon.common.parse.AST char_literal36_tree=null;
         org.eclipse.epsilon.common.parse.AST NAME37_tree=null;
+        org.eclipse.epsilon.common.parse.AST char_literal38_tree=null;
+        org.eclipse.epsilon.common.parse.AST NAME39_tree=null;
 
         try {
             // ModelFlowParserRules.g:167:2: (t= 'dependsOn' NAME ( ',' NAME )* )
@@ -1629,43 +1658,43 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            t=(Token)match(input,177,FOLLOW_177_in_dependsOn513); if (state.failed) return retval;
+            t=(Token)match(input,178,FOLLOW_178_in_dependsOn521); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             t_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(t);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(t_tree, root_0);
             }
-            NAME35=(Token)match(input,NAME,FOLLOW_NAME_in_dependsOn516); if (state.failed) return retval;
+            NAME37=(Token)match(input,NAME,FOLLOW_NAME_in_dependsOn524); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
-            NAME35_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME35);
-            adaptor.addChild(root_0, NAME35_tree);
+            NAME37_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME37);
+            adaptor.addChild(root_0, NAME37_tree);
             }
             // ModelFlowParserRules.g:168:22: ( ',' NAME )*
-            loop17:
+            loop18:
             do {
-                int alt17=2;
-                int LA17_0 = input.LA(1);
+                int alt18=2;
+                int LA18_0 = input.LA(1);
 
-                if ( (LA17_0==103) ) {
-                    alt17=1;
+                if ( (LA18_0==103) ) {
+                    alt18=1;
                 }
 
 
-                switch (alt17) {
+                switch (alt18) {
             	case 1 :
             	    // ModelFlowParserRules.g:168:23: ',' NAME
             	    {
-            	    char_literal36=(Token)match(input,103,FOLLOW_103_in_dependsOn519); if (state.failed) return retval;
-            	    NAME37=(Token)match(input,NAME,FOLLOW_NAME_in_dependsOn522); if (state.failed) return retval;
+            	    char_literal38=(Token)match(input,103,FOLLOW_103_in_dependsOn527); if (state.failed) return retval;
+            	    NAME39=(Token)match(input,NAME,FOLLOW_NAME_in_dependsOn530); if (state.failed) return retval;
             	    if ( state.backtracking==0 ) {
-            	    NAME37_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME37);
-            	    adaptor.addChild(root_0, NAME37_tree);
+            	    NAME39_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME39);
+            	    adaptor.addChild(root_0, NAME39_tree);
             	    }
 
             	    }
             	    break;
 
             	default :
-            	    break loop17;
+            	    break loop18;
                 }
             } while (true);
 
@@ -1714,16 +1743,16 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
         org.eclipse.epsilon.common.parse.AST root_0 = null;
 
         Token p=null;
-        Token NAME38=null;
-        Token char_literal39=null;
-        Token char_literal40=null;
+        Token NAME40=null;
+        Token char_literal41=null;
+        Token char_literal42=null;
         ModelFlow_EolParserRules.typeName_return t = null;
 
 
         org.eclipse.epsilon.common.parse.AST p_tree=null;
-        org.eclipse.epsilon.common.parse.AST NAME38_tree=null;
-        org.eclipse.epsilon.common.parse.AST char_literal39_tree=null;
-        org.eclipse.epsilon.common.parse.AST char_literal40_tree=null;
+        org.eclipse.epsilon.common.parse.AST NAME40_tree=null;
+        org.eclipse.epsilon.common.parse.AST char_literal41_tree=null;
+        org.eclipse.epsilon.common.parse.AST char_literal42_tree=null;
 
         try {
             // ModelFlowParserRules.g:179:2: (p= 'param' NAME ( ':' t= typeName )? ';' )
@@ -1731,29 +1760,29 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
             {
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.nil();
 
-            p=(Token)match(input,178,FOLLOW_178_in_paramDeclarationExpression549); if (state.failed) return retval;
+            p=(Token)match(input,179,FOLLOW_179_in_paramDeclarationExpression557); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
             p_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(p);
             root_0 = (org.eclipse.epsilon.common.parse.AST)adaptor.becomeRoot(p_tree, root_0);
             }
-            NAME38=(Token)match(input,NAME,FOLLOW_NAME_in_paramDeclarationExpression552); if (state.failed) return retval;
+            NAME40=(Token)match(input,NAME,FOLLOW_NAME_in_paramDeclarationExpression560); if (state.failed) return retval;
             if ( state.backtracking==0 ) {
-            NAME38_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME38);
-            adaptor.addChild(root_0, NAME38_tree);
+            NAME40_tree = (org.eclipse.epsilon.common.parse.AST)adaptor.create(NAME40);
+            adaptor.addChild(root_0, NAME40_tree);
             }
             // ModelFlowParserRules.g:180:18: ( ':' t= typeName )?
-            int alt18=2;
-            int LA18_0 = input.LA(1);
+            int alt19=2;
+            int LA19_0 = input.LA(1);
 
-            if ( (LA18_0==112) ) {
-                alt18=1;
+            if ( (LA19_0==112) ) {
+                alt19=1;
             }
-            switch (alt18) {
+            switch (alt19) {
                 case 1 :
                     // ModelFlowParserRules.g:180:19: ':' t= typeName
                     {
-                    char_literal39=(Token)match(input,112,FOLLOW_112_in_paramDeclarationExpression555); if (state.failed) return retval;
-                    pushFollow(FOLLOW_typeName_in_paramDeclarationExpression560);
+                    char_literal41=(Token)match(input,112,FOLLOW_112_in_paramDeclarationExpression563); if (state.failed) return retval;
+                    pushFollow(FOLLOW_typeName_in_paramDeclarationExpression568);
                     t=gModelFlow.typeName();
 
                     state._fsp--;
@@ -1765,7 +1794,7 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
 
             }
 
-            char_literal40=(Token)match(input,101,FOLLOW_101_in_paramDeclarationExpression564); if (state.failed) return retval;
+            char_literal42=(Token)match(input,101,FOLLOW_101_in_paramDeclarationExpression572); if (state.failed) return retval;
 
             }
 
@@ -1807,26 +1836,26 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
     public static final BitSet FOLLOW_annotationBlock_in_workflowContents95 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_operationDeclaration_in_workflowContents99 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_100_in_resourceDeclaration121 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_resourceDeclaration124 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000100000000000L});
+    public static final BitSet FOLLOW_NAME_in_resourceDeclaration124 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000200000000000L});
     public static final BitSet FOLLOW_ruleType_in_resourceDeclaration126 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L});
     public static final BitSet FOLLOW_105_in_resourceDeclaration132 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L});
     public static final BitSet FOLLOW_propertyDeclaration_in_resourceDeclaration135 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L});
     public static final BitSet FOLLOW_106_in_resourceDeclaration140 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_101_in_resourceDeclaration146 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_171_in_taskDeclaration173 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_taskDeclaration176 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000100000000000L});
-    public static final BitSet FOLLOW_ruleType_in_taskDeclaration178 = new BitSet(new long[]{0x0000000000000000L,0x4000022000000000L,0x0002E00000000000L});
-    public static final BitSet FOLLOW_in_in_taskDeclaration180 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0002E00000000000L});
-    public static final BitSet FOLLOW_inout_in_taskDeclaration183 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0002C00000000000L});
-    public static final BitSet FOLLOW_out_in_taskDeclaration186 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0002800000000000L});
-    public static final BitSet FOLLOW_dependsOn_in_taskDeclaration189 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0000800000000000L});
+    public static final BitSet FOLLOW_172_in_taskDeclaration173 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_taskDeclaration176 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000200000000000L});
+    public static final BitSet FOLLOW_ruleType_in_taskDeclaration178 = new BitSet(new long[]{0x0000000000000000L,0x4000022000000000L,0x0005C00000000000L});
+    public static final BitSet FOLLOW_in_in_taskDeclaration180 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0005C00000000000L});
+    public static final BitSet FOLLOW_inout_in_taskDeclaration183 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0005800000000000L});
+    public static final BitSet FOLLOW_out_in_taskDeclaration186 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0005000000000000L});
+    public static final BitSet FOLLOW_dependsOn_in_taskDeclaration189 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L,0x0001000000000000L});
     public static final BitSet FOLLOW_forEach_in_taskDeclaration192 = new BitSet(new long[]{0x0000000000000000L,0x0000022000000000L});
-    public static final BitSet FOLLOW_105_in_taskDeclaration199 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L,0x0000020000000000L});
+    public static final BitSet FOLLOW_105_in_taskDeclaration199 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L,0x0000040000000000L});
     public static final BitSet FOLLOW_guard_in_taskDeclaration202 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L});
     public static final BitSet FOLLOW_propertyDeclaration_in_taskDeclaration205 = new BitSet(new long[]{0x0000000000800000L,0x0000040000000000L});
     public static final BitSet FOLLOW_106_in_taskDeclaration210 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_101_in_taskDeclaration216 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_172_in_ruleType242 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_173_in_ruleType242 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_NAME_in_ruleType247 = new BitSet(new long[]{0x0000000000000002L,0x0001000000000000L});
     public static final BitSet FOLLOW_112_in_ruleType250 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_NAME_in_ruleType255 = new BitSet(new long[]{0x0000000000000002L});
@@ -1834,32 +1863,34 @@ public class ModelFlow_ModelFlowParserRules extends org.eclipse.epsilon.common.p
     public static final BitSet FOLLOW_expressionOrStatementBlock_in_propertyDeclaration282 = new BitSet(new long[]{0x0000000000000002L});
     public static final BitSet FOLLOW_126_in_in306 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_taskResourceList_in_in309 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_173_in_inout334 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_174_in_inout334 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_taskResourceList_in_inout337 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_174_in_out362 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_175_in_out362 = new BitSet(new long[]{0x0000000000800000L});
     public static final BitSet FOLLOW_taskResourceList_in_out365 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_175_in_forEach390 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_formalParameter_in_forEach393 = new BitSet(new long[]{0x0000000000000000L,0x4000000000000000L});
-    public static final BitSet FOLLOW_126_in_forEach395 = new BitSet(new long[]{0x0000000000000000L,0x0001020000000000L});
-    public static final BitSet FOLLOW_expressionOrStatementBlock_in_forEach398 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_taskResource_in_taskResourceList421 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000008000L});
-    public static final BitSet FOLLOW_143_in_taskResourceList424 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_taskResource_in_taskResourceList426 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000008000L});
-    public static final BitSet FOLLOW_NAME_in_taskResource460 = new BitSet(new long[]{0x0000000000000202L,0x0000000000000000L,0x0001000000000000L});
-    public static final BitSet FOLLOW_POINT_in_taskResource463 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_taskResource468 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0001000000000000L});
-    public static final BitSet FOLLOW_176_in_taskResource475 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_taskResource478 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
-    public static final BitSet FOLLOW_103_in_taskResource481 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_taskResource484 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
-    public static final BitSet FOLLOW_177_in_dependsOn513 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_dependsOn516 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
-    public static final BitSet FOLLOW_103_in_dependsOn519 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_dependsOn522 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
-    public static final BitSet FOLLOW_178_in_paramDeclarationExpression549 = new BitSet(new long[]{0x0000000000800000L});
-    public static final BitSet FOLLOW_NAME_in_paramDeclarationExpression552 = new BitSet(new long[]{0x0000000000000000L,0x0001002000000000L});
-    public static final BitSet FOLLOW_112_in_paramDeclarationExpression555 = new BitSet(new long[]{0x00000000008E0000L});
-    public static final BitSet FOLLOW_typeName_in_paramDeclarationExpression560 = new BitSet(new long[]{0x0000000000000000L,0x0000002000000000L});
-    public static final BitSet FOLLOW_101_in_paramDeclarationExpression564 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_176_in_forEach390 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_formalParameter_in_forEach393 = new BitSet(new long[]{0x0000000000000000L,0x4000000000000000L,0x0002000000000000L});
+    public static final BitSet FOLLOW_177_in_forEach396 = new BitSet(new long[]{0x0000000000000000L,0x0001020000000000L});
+    public static final BitSet FOLLOW_expressionOrStatementBlock_in_forEach399 = new BitSet(new long[]{0x0000000000000000L,0x4000000000000000L});
+    public static final BitSet FOLLOW_126_in_forEach403 = new BitSet(new long[]{0x0000000000000000L,0x0001020000000000L});
+    public static final BitSet FOLLOW_expressionOrStatementBlock_in_forEach406 = new BitSet(new long[]{0x0000000000000002L});
+    public static final BitSet FOLLOW_taskResource_in_taskResourceList429 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_144_in_taskResourceList432 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_taskResource_in_taskResourceList434 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000010000L});
+    public static final BitSet FOLLOW_NAME_in_taskResource468 = new BitSet(new long[]{0x0000000000000202L,0x0000000000000000L,0x0002000000000000L});
+    public static final BitSet FOLLOW_POINT_in_taskResource471 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_taskResource476 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0002000000000000L});
+    public static final BitSet FOLLOW_177_in_taskResource483 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_taskResource486 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
+    public static final BitSet FOLLOW_103_in_taskResource489 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_taskResource492 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
+    public static final BitSet FOLLOW_178_in_dependsOn521 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_dependsOn524 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
+    public static final BitSet FOLLOW_103_in_dependsOn527 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_dependsOn530 = new BitSet(new long[]{0x0000000000000002L,0x0000008000000000L});
+    public static final BitSet FOLLOW_179_in_paramDeclarationExpression557 = new BitSet(new long[]{0x0000000000800000L});
+    public static final BitSet FOLLOW_NAME_in_paramDeclarationExpression560 = new BitSet(new long[]{0x0000000000000000L,0x0001002000000000L});
+    public static final BitSet FOLLOW_112_in_paramDeclarationExpression563 = new BitSet(new long[]{0x00000000008E0000L});
+    public static final BitSet FOLLOW_typeName_in_paramDeclarationExpression568 = new BitSet(new long[]{0x0000000000000000L,0x0000002000000000L});
+    public static final BitSet FOLLOW_101_in_paramDeclarationExpression572 = new BitSet(new long[]{0x0000000000000002L});
 
 }

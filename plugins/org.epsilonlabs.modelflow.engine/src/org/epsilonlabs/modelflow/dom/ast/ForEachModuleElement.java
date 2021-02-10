@@ -14,15 +14,16 @@ import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.common.util.CollectionUtil;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
-import org.eclipse.epsilon.eol.dom.Expression;
-import org.eclipse.epsilon.eol.dom.ForStatement;
+import org.eclipse.epsilon.eol.dom.ICompilableModuleElement;
+import org.eclipse.epsilon.eol.dom.IEolVisitor;
+import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.dom.Parameter;
+import org.eclipse.epsilon.eol.dom.Statement;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.Return;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
-import org.eclipse.epsilon.eol.types.EolCollectionType;
 import org.eclipse.epsilon.eol.types.EolModelElementType;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
 
@@ -30,35 +31,43 @@ import org.eclipse.epsilon.eol.types.EolPrimitiveType;
  * @author Betty Sanchez
  *
  */
-public class ForEachModuleElement extends ForStatement {
+public class ForEachModuleElement extends Statement {
 
 	protected Iterator<Object> it;
+	protected IExecutableModuleElement iterationBlock;
+	protected IExecutableModuleElement labelBlock;
+	protected Parameter iteratorParameter;
+
 
 	@Override
 	public void build(AST cst, IModule module) {
-		iteratorParameter = (Parameter) module.createAst(cst.getFirstChild(), this);
-		iteratedExpression = (Expression) module.createAst(cst.getSecondChild(), this);
+		iteratorParameter = (Parameter)  module.createAst(cst.getFirstChild(), this);
+		AST iteration = (cst.getThirdChild()!=null)? cst.getThirdChild(): cst.getSecondChild();
+		AST label = (cst.getThirdChild()!=null)? cst.getSecondChild() : null;
+		iterationBlock = (IExecutableModuleElement) module.createAst(iteration, this);
+		if (label != null) {			
+			labelBlock = (IExecutableModuleElement) module.createAst(label, this);
+		}
 	}
 
 	@Override
 	public void compile(IEolCompilationContext context) {
 		iteratorParameter.compile(context);
-		iteratedExpression.compile(context);
-		context.getFrameStack().enterLocal(FrameType.UNPROTECTED, bodyStatementBlock,
-				new Variable("loopCount", EolPrimitiveType.Integer), new Variable("hasMore", EolPrimitiveType.Boolean));
-
-		if (iteratedExpression.hasResolvedType()
-				&& !(iteratedExpression.getResolvedType() instanceof EolCollectionType)) {
-			context.addErrorMarker(iteratedExpression,
-					"Collection expected instead of " + iteratedExpression.getResolvedType());
+		if (iterationBlock instanceof ICompilableModuleElement) {
+			((ICompilableModuleElement)iterationBlock).compile(context);
 		}
+		context.getFrameStack().enterLocal(FrameType.UNPROTECTED, iterationBlock,
+				new Variable("loopCount", EolPrimitiveType.Integer), new Variable("hasMore", EolPrimitiveType.Boolean));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Return execute(IEolContext context) throws EolRuntimeException {
-		Object iteratedObject = this.iteratedExpression.execute(context);
-
+		Object iteratedObject = this.iterationBlock.execute(context);
+		if (iteratedObject instanceof Return) {
+			iteratedObject = ((Return) iteratedObject).getValue();
+		}
+		
 		Collection<Object> iteratedCol = null;
 
 		if (iteratedObject instanceof Collection<?>) {
@@ -79,12 +88,30 @@ public class ForEachModuleElement extends ForStatement {
 		if (it == null) {			
 			it = iteratedCol.iterator();
 		}
-
+		
 		return null;
 	}
 
 	public Iterator<Object> getIterator() {
 		return it;
+	}
+
+	@Override
+	public void accept(IEolVisitor visitor) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public IExecutableModuleElement getIterationBlock() {
+		return iterationBlock;
+	}
+	
+	public Parameter getIteratorParameter() {
+		return iteratorParameter;
+	}	
+	
+	public IExecutableModuleElement getLabelBlock() {
+		return labelBlock;
 	}
 
 }

@@ -16,12 +16,12 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.dom.Parameter;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.execute.Return;
 import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
@@ -248,29 +248,23 @@ public abstract class AbstractTaskNode implements ITaskNode {
 			}
 		}
 	}
-
-	/**
-	 * @param ctx
-	 * @param iteratorParameter
-	 * @param loop
-	 * @param next
-	 * @return
-	 * @throws EolRuntimeException
-	 */
+	
 	protected String processIterationVariables(IModelFlowContext ctx, Parameter iteratorParameter, int loop,
 			final Object next) throws EolRuntimeException {
 		NodeVar selfVar = new NodeVar(iteratorParameter.getName(), next, iteratorParameter.getType(ctx));
 		NodeVar loopCountVar = new NodeVar("loopCount", loop, EolPrimitiveType.Integer);
 		
 		String subTaskName = String.valueOf(loop);
-		final Optional<Entry<NameExpression, ModuleElement>> optionalTaskName = taskDeclaration.getParameters().entrySet().stream().filter(p->p.getKey().getName().equals(TASK_NAME)).findAny();
-		if (optionalTaskName.isPresent()) {
-			Object val = optionalTaskName.get().getValue();
-			if (val instanceof IExecutableModuleElement) {
-				final Object result = ((IExecutableModuleElement) val).execute(ctx);
-				if (result instanceof String) {
-					subTaskName = (String) result;
-				} 
+		IExecutableModuleElement labelExpr = taskDeclaration.getForEach().getLabelBlock();
+		if (labelExpr != null) {
+			ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, labelExpr, selfVar.toVar(), loopCountVar.toVar());
+			Object result = labelExpr.execute(ctx);
+			ctx.getFrameStack().leaveLocal(labelExpr);
+			if (result instanceof Return) {
+				result = ((Return) result).getValue();
+			}
+			if (result instanceof String) {
+				subTaskName = (String) result;
 			}
 		}
 		final String taskName = taskDeclaration.getName() + "@" + subTaskName;
