@@ -205,6 +205,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 			getModule().getContext().getNativeTypeDelegates().add(new ExtensionPointToolNativeTypeDelegate());
 		}
 		try {
+			getModule().getContext().getModelRepository().getModels().stream().forEach(m->System.out.println(m.getName()));
 			result = getModule().execute();
 		} catch (EolRuntimeException e) {
 			throw new MFExecutionException(e.getReason(), e);

@@ -16,7 +16,6 @@ import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
-import org.epsilonlabs.modelflow.execution.scheduler.TopologicalConcurrentScheduler;
 import org.epsilonlabs.modelflow.execution.scheduler.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -42,7 +41,7 @@ public class ParallelTest extends WorkflowBuilderTest {
 	@Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { new TopologicalConcurrentScheduler(), 4000, 5000 }, 
+                //{ new TopologicalConcurrentScheduler(), 4000, 5000 }, 
                 { new TopologicalSequentialScheduler(), 7000, 8000 }
         });
     }

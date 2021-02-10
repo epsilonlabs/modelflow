@@ -2,12 +2,14 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.epsilon.common.util.Multimap;
 import org.eclipse.epsilon.eol.dom.ModelDeclaration;
+import org.eclipse.epsilon.eol.models.IModel;
 import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
@@ -84,6 +86,18 @@ public class TaskModuleElementNode extends AbstractTaskNode {
 
 		// Safely dispose no longer used models
 		safelyDispose(ctx);
+	}
+
+	@Override
+	protected List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected void resolveTask(IModelFlowContext ctx) throws MFRuntimeException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

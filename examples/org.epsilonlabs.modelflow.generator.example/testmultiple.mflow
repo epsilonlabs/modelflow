@@ -19,4 +19,14 @@ task C is epsilon:eol
   	return map;
   }
   
+}model modelA is epsilon:emf {
+	src: "exam.model"
+	metamodelFile: "markingmate.ecore"	
+}
+// TODO  Do not iterate if skipped
+task D is epsilon:eol
+	in modelA 
+	forEach q in : modelA!Question.all()
+{
+  code: ("\""+q.description.println() + "\".println('Question: ');").println("Statement") 
 }

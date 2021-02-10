@@ -7,9 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.repository;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
@@ -23,13 +20,11 @@ public class TaskRepository {
 
 	protected TaskFactoryRegistry taskFactoryRegistry;
 	protected ResourceRepository resourceRepository;
-	protected Map<String, ITaskInstance> tasks;
 
 
 	public TaskRepository(TaskFactoryRegistry registry, ResourceFactoryRegistry resRegistry) {
 		this.taskFactoryRegistry = registry;
 		this.resourceRepository = new ResourceRepository(resRegistry);
-		this.tasks = new ConcurrentHashMap<>();
 	}
 	
 	public ResourceRepository getResourceRepository() {
@@ -54,7 +49,6 @@ public class TaskRepository {
 		try {
 			taskClazz = taskFactoryRegistry.getFactory(node.getDefinition());
 			final ITaskInstance instance = ctx.getScheduler().getTaskInstanceFactory().create(taskClazz, node, ctx);
-			this.tasks.put(node.getName(), instance);
 			return instance;
 		} catch (MFInvalidFactoryException e) {
 			throw new MFInstantiationException(e);
@@ -62,7 +56,6 @@ public class TaskRepository {
 	}
 	
 	public void clear() {
-		this.tasks.clear();
 		this.resourceRepository.clear();
 	}
 

@@ -457,15 +457,11 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		}
 		
 		// Task Repository
-		if (ctx.getTaskRepository() == null) {
-			TaskRepository taskRepository = new TaskRepository(getTaskFactoryRegistry(), getResFactoryRegistry());
-			ctx.setTaskRepository(taskRepository);
-		}
+		TaskRepository taskRepository = new TaskRepository(getTaskFactoryRegistry(), getResFactoryRegistry());
+		ctx.setTaskRepository(taskRepository);
 
 		// Executor 
-		if (ctx.getScheduler() == null) {
-			ctx.setScheduler(EMF ? new TopologicalSequentialScheduler() : new TaskStackScheduler());
-		}
+		ctx.setScheduler(EMF ? new TopologicalSequentialScheduler() : new TaskStackScheduler());
 		
 		// Model Manager
 		if (ctx.getResourceManager() == null) {

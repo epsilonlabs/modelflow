@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -172,7 +173,7 @@ public class ConservativeExecutionHelper {
 		boolean sameNumberOfElements = previousProperties.size() == currentProperties.size();
 		boolean allElementsEqual = previousProperties.stream().allMatch(e -> {
 			String key = e.getName();
-			return currentProperties.containsKey(key) && e.getStamp().equals(currentProperties.get(key));
+			return currentProperties.containsKey(key) && Objects.equals(currentProperties.get(key), e.getStamp());
 		});
 		return sameNumberOfElements && allElementsEqual;
 	}
@@ -183,7 +184,7 @@ public class ConservativeExecutionHelper {
 		if (sameNumberOfElements) {
 			return previousProperties.parallelStream().filter(e -> {
 				String key = e.getName();
-				return currentProperties.containsKey(key) && !e.getStamp().equals(currentProperties.get(key));
+				return currentProperties.containsKey(key) && ! Objects.equals(currentProperties.get(key), e.getStamp());
 			}).map(PropertySnapshot::getName).collect(Collectors.toList());
 		} else {
 			throw new IllegalArgumentException();

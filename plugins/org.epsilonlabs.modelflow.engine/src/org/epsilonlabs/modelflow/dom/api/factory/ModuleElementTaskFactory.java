@@ -16,6 +16,7 @@ import org.eclipse.epsilon.common.module.ModuleElement;
 import org.eclipse.epsilon.eol.dom.IExecutableModuleElement;
 import org.eclipse.epsilon.eol.dom.NameExpression;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
+import org.eclipse.epsilon.eol.execute.Return;
 import org.eclipse.epsilon.eol.models.IRelativePathResolver;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -70,6 +71,9 @@ public class ModuleElementTaskFactory implements IInstanceFactory<ITaskInstance,
 			if (value instanceof IExecutableModuleElement) {
 				try {
 					value = ((IExecutableModuleElement) value).execute(ctx);
+					if (value instanceof Return) {
+						value = ((Return) value).getValue();
+					}
 				} catch (EolRuntimeException e) {
 					throw new MFRuntimeException(e);
 				}

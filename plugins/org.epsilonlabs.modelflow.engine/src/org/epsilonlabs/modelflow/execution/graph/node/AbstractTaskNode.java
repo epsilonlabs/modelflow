@@ -6,6 +6,7 @@ package org.epsilonlabs.modelflow.execution.graph.node;
 import static org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement.TASK_NAME;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.eclipse.epsilon.eol.execute.context.FrameType;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.eclipse.epsilon.eol.types.EolPrimitiveType;
+import org.eclipse.epsilon.eol.types.EolType;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.dom.ast.ForEachModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.IModelCallExpression;
@@ -43,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import io.reactivex.Completable;
 import io.reactivex.subjects.CompletableSubject;
@@ -72,6 +75,7 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	protected AbstractTaskNode(ITaskModuleElement declaration, String name) {
 		this.taskDeclaration = declaration; 
 		this.name = name;
+		setState(TaskState.CREATED);
 	}
 	
 	@Override
@@ -168,78 +172,123 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	protected void postFor(IModelFlowContext ctx) {
 		
 	}
-	protected List<IModel> getForEachModels(){
-		final List<IModelCallExpression> inputs = taskDeclaration.getInputs();
-		final List<IModelCallExpression> inouts = taskDeclaration.getInouts();
-		return Collections.emptyList();
+	protected abstract List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException;	
+	protected abstract void resolveTask(IModelFlowContext ctx) throws MFRuntimeException;
+
+	class NodeVar {
+		String key;
+		Object val;
+		EolType type;
+		public NodeVar(String key, Object val, EolType type) {
+			this.key = key;
+			this.val = val;
+			this.type = type;
+		}
+		Variable toVar() {
+			return new Variable(key, val, type, true);
+		}
+		
 	}
-	
+	protected Map<String, Collection<NodeVar>> vars = Maps.newHashMap();
+
 	public void attemptForEachExecution(IModelFlowContext ctx) throws MFRuntimeException {
 		final ForEachModuleElement forEachModuleElement = taskDeclaration.getForEach();
 		try {
-			ctx.getModelRepository().addModels(getForEachModels());
+			final List<IModel> forEachModels = getForEachModels(ctx);
+			ctx.getModelRepository().addModels(forEachModels);
 			forEachModuleElement.execute(ctx);
 		} catch (Exception e) {
 			final String msg = "Exception when evaluating forEach statement of task %s";
 			final String formatted = String.format(msg, taskDeclaration.getName());
 			throw new MFRuntimeException(formatted, forEachModuleElement);
-		} finally {
-			ctx.getModelRepository().dispose();			
-		}
-		final Iterator<Object> iterator = forEachModuleElement.getIterator();
-		final Parameter iteratorParameter = forEachModuleElement.getIteratorParameter();
-		for (int loop = 1; iterator.hasNext(); loop++) {
-			try {
+		} 
+		Iterator<Object> iterator = forEachModuleElement.getIterator();
+		Parameter iteratorParameter = forEachModuleElement.getIteratorParameter();
+		try {
+			for (int loop = 1; iterator.hasNext(); loop++) {
+				// Setup Iteration
 				final Object next = iterator.next();
-				Variable selfVar = new Variable(iteratorParameter.getName(), next, iteratorParameter.getType(ctx));
-				Variable loopCountVar = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
-				String subTaskName = String.valueOf(loop);
-				final Optional<Entry<NameExpression, ModuleElement>> optionalTaskName = taskDeclaration.getParameters().entrySet().stream().filter(p->p.getKey().getName().equals(TASK_NAME)).findAny();
-				if (optionalTaskName.isPresent()) {
-					Object val = optionalTaskName.get().getValue();
-					if (val instanceof IExecutableModuleElement) {
-						try {
-							final Object result = ((IExecutableModuleElement) val).execute(ctx);
-							if (result instanceof String) {
-								subTaskName = (String) result;
-							} 
-						} catch (Exception e) {
-							// Do not change the name, ignore this error for now 
-						}
-					}
-				}
-				final String taskName = taskDeclaration.getName() + "@" + subTaskName;
-				Variable taskNameVar = new Variable(TASK_NAME, taskName, EolPrimitiveType.String, true);
-				ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, forEachModuleElement, selfVar, loopCountVar,
-						taskNameVar);
+				
+				final String taskName = processIterationVariables(ctx, iteratorParameter, loop, next);
+				
+				final Variable[] variables = vars.get(taskName).stream().map(NodeVar::toVar).collect(Collectors.toList()).toArray(new Variable[0]);
+				ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, forEachModuleElement, variables);
 				try {
-					
 					final ITaskNode node = createSubNode(taskDeclaration, taskName);
 					node.setParentNode(this);
 					subNodes.put(taskName, node);
 					if (node instanceof AbstractTaskNode) {
-						ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
-						final TaskExecution exec = updater.createTaskExecution(taskName);
-						ctx.getOutputStream().printf("%n>>Executing: %s%n", taskName);
-						// While we are in the local context
-						((AbstractTaskNode)node).attemptIndividualExecution(ctx);
-						ctx.getOutputStream().printf("%n--Status: %s%n", exec.getEndState());
-
+						((AbstractTaskNode)node).resolveTask(ctx);
+						final ITaskInstance instance = ctx.getTaskRepository().create(node, ctx);
+						((AbstractTaskNode) node).setInstance(instance);
 					}
 				} finally {
 					ctx.getFrameStack().leaveLocal(forEachModuleElement);
 				}
-			} catch (EolRuntimeException e) {
-				throw new MFRuntimeException(e);
+			}
+		} catch (EolRuntimeException e) {
+			throw new MFRuntimeException(e);
+		} finally {			
+			ctx.getModelRepository().dispose();
+		}
+		for (Entry<String, ITaskNode> entry : this.getSubNodes().entrySet()) {
+			ExecutionTraceUpdater updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
+			final String taskName = entry.getKey();
+			final AbstractTaskNode node = (AbstractTaskNode)entry.getValue();
+			
+			final TaskExecution exec = updater.createTaskExecution(taskName);
+			ctx.getOutputStream().printf("%n>>Executing: %s%n", taskName);
+			final Variable[] variables = vars.get(taskName).stream().map(NodeVar::toVar).collect(Collectors.toList()).toArray(new Variable[0]);
+			ctx.getFrameStack().enterLocal(FrameType.UNPROTECTED, taskDeclaration, variables);
+			try {
+				node.attemptIndividualExecution(ctx);
+			} finally {				
+				ctx.getFrameStack().leaveLocal(taskDeclaration);
+				ctx.getOutputStream().printf("%n--Status: %s%n", exec.getEndState());
 			}
 		}
 	}
-	
+
+	/**
+	 * @param ctx
+	 * @param iteratorParameter
+	 * @param loop
+	 * @param next
+	 * @return
+	 * @throws EolRuntimeException
+	 */
+	protected String processIterationVariables(IModelFlowContext ctx, Parameter iteratorParameter, int loop,
+			final Object next) throws EolRuntimeException {
+		NodeVar selfVar = new NodeVar(iteratorParameter.getName(), next, iteratorParameter.getType(ctx));
+		NodeVar loopCountVar = new NodeVar("loopCount", loop, EolPrimitiveType.Integer);
+		
+		String subTaskName = String.valueOf(loop);
+		final Optional<Entry<NameExpression, ModuleElement>> optionalTaskName = taskDeclaration.getParameters().entrySet().stream().filter(p->p.getKey().getName().equals(TASK_NAME)).findAny();
+		if (optionalTaskName.isPresent()) {
+			Object val = optionalTaskName.get().getValue();
+			if (val instanceof IExecutableModuleElement) {
+				final Object result = ((IExecutableModuleElement) val).execute(ctx);
+				if (result instanceof String) {
+					subTaskName = (String) result;
+				} 
+			}
+		}
+		final String taskName = taskDeclaration.getName() + "@" + subTaskName;
+		NodeVar taskNameVar = new NodeVar(TASK_NAME, taskName, EolPrimitiveType.String);
+		
+		Set<NodeVar> set = Sets.newHashSet();
+		set.add(taskNameVar);
+		set.add(selfVar);
+		set.add(loopCountVar);
+		vars.put(taskName, set);
+		return taskName;
+	}
 
 	public void attemptIndividualExecution(IModelFlowContext ctx) throws MFRuntimeException {
 		if (isEnabled() && isGuardOk(ctx)) {
-			
-			taskInstance = ctx.getTaskRepository().create(this, ctx);
+			if (taskInstance == null) {				
+				taskInstance = ctx.getTaskRepository().create(this, ctx);
+			}
 			taskInstance.validateParameters();
 			
 			conservativeExecutionHelper = new ConservativeExecutionHelper(this, ctx);

@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epsilon.eol.dom.ExecutableBlock;
 import org.eclipse.epsilon.eol.execute.context.Variable;
+import org.eclipse.epsilon.eol.models.IModel;
 import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
@@ -29,6 +30,10 @@ import org.epsilonlabs.modelflow.dom.ast.emf.RuleUtil;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
+import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
+import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
+import org.epsilonlabs.modelflow.management.resource.ResourceKind;
+import org.epsilonlabs.modelflow.management.resource.ResourceLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,12 +46,10 @@ public class TaskNode extends AbstractTaskNode {
 	public TaskNode(ITask task) {
 		super((ITaskModuleElement)task.getModuleElement(), task.getName());
 		this.taskDefintion = task;
-		setState(TaskState.CREATED);
 	}
 	
 	public TaskNode(ITaskModuleElement task, String name) {
 		super(task, name);
-		setState(TaskState.CREATED);
 	}
 	
 	public ITask getTaskDefintion() {
@@ -62,25 +65,46 @@ public class TaskNode extends AbstractTaskNode {
 		return new TaskNode(declaration, name);
 	}
 	
-	public void attemptIndividualExecution(IModelFlowContext ctx) throws MFRuntimeException {
+	protected List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException{
+		List<IModel> models = new ArrayList<IModel>();
+		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
+		// For all the resources connected to this task node
+		for (IAbstractResourceNode entry : dg.getResourceNodes(this)) {
+			IAbstractResourceNode resNode = entry;
+			ResourceKind kind = dg.getResourceKindForTask(resNode, this);
+			// If of type ModelResource 
+			if (resNode instanceof IModelResourceNode && (kind.isInout() || kind.isInput())) {
+				IModelResourceNode rNode = (IModelResourceNode) resNode;
+				IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(rNode, ctx);
+				ctx.getScheduler().getDependencyGraph().getAliasFor(rNode, this).forEach(r::setAlias);
+				if (r.get() instanceof IModel) {					
+					IModelWrapper mRes = new ResourceLoader(kind,r, rNode).load();
+					// Add model to list of models for task to accept
+					models.add((IModel) r.get());
+				}
+			}
+		}
+		return models;
+	}
+	
+	protected void resolveTask(IModelFlowContext ctx) throws MFRuntimeException {		
 		if (parentNode != null && parentNode instanceof TaskNode) {
 			final ITask parentTask = ((TaskNode)parentNode).getTaskDefintion();
 			EcoreUtil.Copier copier = new EcoreUtil.Copier(); 
 			final ITask copy = (ITask) copier.copy(parentTask); //Improve copy
-			((IWorkflow)parentTask.eContainer()).getTasks().add(copy);
 			copier.copyReferences();
+			copy.setName(getName());
+			taskDefintion = copy;
+			((IWorkflow)parentTask.eContainer()).getTasks().add(taskDefintion);
 			
-			this.taskDefintion = copy;
-			this.taskDefintion.setName(getName());
 			try {
 				RuleUtil.setupConfigurableParameters(ctx, copy, taskDeclaration);
 			} catch (Exception e) {
 				throw new MFRuntimeException(e);
 			}
-			
 		}
-		super.attemptIndividualExecution(ctx);
 	}
+	
 	protected void postFor(IModelFlowContext ctx) {
 		if (parentNode != null && parentNode instanceof TaskNode) {
 			final ITask task = ((TaskNode)parentNode).getTaskDefintion();
@@ -223,11 +247,12 @@ public class TaskNode extends AbstractTaskNode {
 	}
 
 	protected void safelyDispose(IModelFlowContext ctx) {
-		new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph()).getResourceNodes(this).stream()
+		if (parentNode == null) {
+			new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph()).getResourceNodes(this).stream()
 			.filter(r->r instanceof IModelResourceNode)
 			.forEach(r -> {
 				IModelResourceNode resource = (IModelResourceNode)r;
-				boolean finalUse = ctx.getScheduler().isLastUseOf(r.getName(), this.getName());
+				boolean finalUse = ctx.getScheduler().isLastUseOf(r.getName(), getName());
 				if (finalUse) {
 					/** Dispose resource */
 					LOG.debug("Disposing {}", resource.getName());
@@ -247,6 +272,7 @@ public class TaskNode extends AbstractTaskNode {
 					}
 				} 
 			});
+		}
 	}
 	
 	protected boolean isTrace(){

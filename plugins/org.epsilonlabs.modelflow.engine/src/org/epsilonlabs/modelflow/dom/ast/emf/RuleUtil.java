@@ -60,10 +60,7 @@ public abstract class RuleUtil  {
 			final Object result;
 			if (value instanceof IExecutableModuleElement) {
 				IExecutableModuleElement moduleElement = (IExecutableModuleElement) value;
-				FrameStack frameStack = ctx.getFrameStack();
-				frameStack.enterLocal(FrameType.UNPROTECTED, (ModuleElement) moduleElement);
 				result = moduleElement.execute(ctx);
-				frameStack.leaveLocal((ModuleElement) moduleElement);
 				property.setValue(result);
 				element.getProperties().add(property);
 			}
