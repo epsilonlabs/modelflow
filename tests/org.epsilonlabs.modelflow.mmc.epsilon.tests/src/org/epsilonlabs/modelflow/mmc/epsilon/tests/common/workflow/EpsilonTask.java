@@ -43,7 +43,7 @@ public class EpsilonTask {
 		return new WorkflowBuilder()
 				
 				.addTask("test", "epsilon:eol")
-				.addProperty("code", "new Native(\"org.epsilonlabs.modelflow.mmc.epsilon.tests.integ.NativeTypeExample\").success().println();")
+				.addProperty("code", "new Native('org.epsilonlabs.modelflow.mmc.epsilon.tests.integ.NativeTypeExample').success().println();")
 				
 				.build();
 	}
