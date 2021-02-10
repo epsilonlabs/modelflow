@@ -57,7 +57,7 @@ public abstract class AbstractBenchmark {
 			final Date time = new Date();
 			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
 			detailsFile = BenchmarkUtils.getResultsFile("details", time);
-			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "group", "stage", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
+			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "stage", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
 			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
 			headersList.addAll(IMeasurable.Stage.names());

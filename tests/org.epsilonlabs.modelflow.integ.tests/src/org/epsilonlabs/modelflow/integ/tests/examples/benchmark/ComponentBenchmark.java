@@ -18,7 +18,7 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 public class ComponentBenchmark extends AbstractBenchmark{
 
-	protected static final int MAX_ITER = 1;
+	protected static final int MAX_ITER = 2;
 
 	@ParameterizedTest(name = "Scenario {0} tracing {1} #{2}.")
 	@ScenarioSource(value = ComponentScenarios.class, times = MAX_ITER)
