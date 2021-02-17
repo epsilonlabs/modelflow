@@ -155,27 +155,30 @@ public class TaskNode extends AbstractTaskNode {
 		boolean execute = true;
 		
 		if (conservativeExecutionHelper.hasBeenPreviouslyExecuted()) { // There is a previous execution trace
-			DependencyGraphHelper dependencyGraphHelper = new DependencyGraphHelper(ctx.getScheduler().getDependencyGraph());
 			
-			if ( !(taskDeclaration.isAlwaysExecute()) 
+			if ( !(taskDeclaration.isAlwaysExecute() || taskInstance.isAlwaysExecute()) 
 					/*&& ! (dependencyGraphHelper.hasDerivedOutputDependencies(parentNode)) */)
 			{
 				boolean inputsChanged = conservativeExecutionHelper.haveInputPropertiesChanged() 
 						|| conservativeExecutionHelper.haveInputModelsChanged();
-				int shouldExecuteOutput = shouldExecuteBasedOnOutputs(ctx);
-				switch (shouldExecuteOutput) {
-				case 0:
-					execute = inputsChanged;
-					break;
-				case -1:
-					if (inputsChanged) {
-						// WARN!
-					}
-					execute = false;
-					break;
-				default:
-					break;
-				}					
+				if (ctx.isProtectResources()) {					
+					int shouldExecuteOutput = shouldExecuteBasedOnOutputs(ctx);
+					switch (shouldExecuteOutput) {
+					case 0:
+						execute = inputsChanged;
+						break;
+					case -1:
+						if (inputsChanged) {
+							// WARN!
+						}
+						execute = false;
+						break;
+					default:
+						break;
+					}					
+				} else {
+					return inputsChanged;
+				}
 			}
 		}
 		return execute;

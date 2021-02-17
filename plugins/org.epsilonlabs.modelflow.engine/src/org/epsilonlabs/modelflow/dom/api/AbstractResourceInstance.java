@@ -17,7 +17,7 @@ import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 public abstract class AbstractResourceInstance<M> implements IModelResourceInstance<M> {
 
 	protected String name;
-	private boolean isLoaded = false;
+	protected boolean isLoaded = false;
 	protected Set<String> aliases = new HashSet<>();
 	protected ResourceKind kind = null;
 	

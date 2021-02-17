@@ -16,16 +16,18 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 public class MeasurableObject implements IMeasurable {
 
 	protected final IMeasurable.Stage stage;
-	protected final String node;
+	protected final String name;
 	protected final Class<? extends IGraphNode> type;
+	protected IGraphNode node;
 
 	public MeasurableObject(IGraphNode node, IMeasurable.Stage stage) {
 		this.stage = stage;
-		if (node != null) {			
-			this.node = node.getName();
+		if (node != null) {
+			this.node = node;
+			this.name = node.getName();
 			this.type = node.getClass();
 		} else {
-			this.node = null;
+			this.name = null;
 			this.type = null;
 		}
 	}
@@ -36,15 +38,18 @@ public class MeasurableObject implements IMeasurable {
 	}	
 
 	@Override
-	public String getNode() {
-		return this.node;
+	public String getName() {
+		return this.name;
 	}
 
 	@Override
 	public Stage getStage() {
 		return this.stage;
 	}
-
+	@Override
+	public IGraphNode getNode() {
+		return node;
+	}
 	@Override
 	public Class<? extends IGraphNode> getType() {
 		return this.type;
@@ -54,7 +59,7 @@ public class MeasurableObject implements IMeasurable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((node == null) ? 0 : node.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((stage == null) ? 0 : stage.hashCode());
 		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
@@ -69,11 +74,11 @@ public class MeasurableObject implements IMeasurable {
 			return false;
 		}
 		MeasurableObject other = (MeasurableObject) obj;
-		if (node == null) {
-			if (other.node != null) {
+		if (name == null) {
+			if (other.name != null) {
 				return false;
 			}
-		} else if (!node.equals(other.node)) {
+		} else if (!name.equals(other.name)) {
 			return false;
 		}
 		if (stage != other.stage) {
@@ -91,7 +96,7 @@ public class MeasurableObject implements IMeasurable {
 
 	@Override
 	public String toString() {
-		return "MeasurableObject [stage=" + stage + ", node=" + node + ", type=" + type + "]";
+		return "MeasurableObject [stage=" + stage + ", node=" + name + ", type=" + type + "]";
 	}
 	
 }

@@ -155,7 +155,7 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 		});
 		Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);
 		if (!ValidationHelper.isOK(isGenModelValid)) {
-			throw new MFInvalidModelException(isGenModelValid.getException());
+			throw new MFInvalidModelException(isGenModelValid.getMessage(),  isGenModelValid.getException());
 		}
 	}
 

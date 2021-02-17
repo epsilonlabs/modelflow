@@ -2,20 +2,22 @@ package org.epsilonlabs.modelflow.tests.common.validator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.IModelFlowModule;
 
-public class CompositeValidator implements IValidate {
+public class CompositeTaskValidator implements IValidate {
 
-	protected IValidate[] validators;
+	protected ITaskValidator[] validators;
 
-	public CompositeValidator(IValidate... validators) {
+	public CompositeTaskValidator(ITaskValidator... validators) {
 		this.validators = validators;
 	}
 	@Override
 	public String expected() {
 		return Arrays.asList(validators).stream()
+				.filter(v->!v.getExpectedTask().equals(v.getActualTask()))
 				.map(IValidate::expected)
 				.collect(Collectors.joining(System.lineSeparator()));
 	}
@@ -23,7 +25,7 @@ public class CompositeValidator implements IValidate {
 	@Override
 	public Boolean ok(IModelFlowModule module) throws Exception {
 		ArrayList<String> errors = new ArrayList<>();
-		final boolean ok = Arrays.asList(validators).stream().allMatch(v -> {
+		final Set<Boolean> result = Arrays.asList(validators).stream().map(v -> {
 			try {
 				return v.ok(module);
 			} catch (Exception e) {
@@ -31,11 +33,11 @@ public class CompositeValidator implements IValidate {
 				errors.add(e.getMessage());
 				return false;
 			}
-		});
+		}).collect(Collectors.toSet());
 		if (!errors.isEmpty()) {
 			throw new Exception(errors.toString());
 		} 
-		return ok;
+		return result.stream().allMatch(Boolean::booleanValue);
 	}
 
 	

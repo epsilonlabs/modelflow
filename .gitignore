@@ -7,3 +7,4 @@
 *.launch
 **/testOutput/**
 **/target-plain/**
+*.log

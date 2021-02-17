@@ -13,9 +13,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.epsilon.emc.emf.CachedResourceSet;
-import org.eclipse.epsilon.emc.emf.CachedResourceSet.Cache.CacheItem;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.EolEvaluator;
 import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
@@ -127,23 +125,10 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 			final IModelWrapper wrapper = getResources().get(GMFGenPackage.eNS_URI);
 			
 			final EmfModel emfModel = (EmfModel)wrapper.getModel();
-			final CachedResourceSet resourceSet = (CachedResourceSet) emfModel.getResource().getResourceSet();
-			//Remove resource
-			final EList<Resource> resourcesList = resourceSet.getResources();
-			resourcesList.remove(emfModel.getResource());
-			// Remove from cache
-			final Collection<CacheItem> items = resourceSet.getCache().getItems();
-			items.stream().filter(i->i.getUri().equals(resource.getURI())).findAny().ifPresent(items::remove);
-			
-			//((EmfModel)wrapper.getModel()).setResource(resource);
-			
-			final ToolResource createResource = (ToolResource) resourceSet.createResource(resource.getURI(), "org.eclipse.gmf.gen");
-			createResource.getContents().add(resource.getContents().get(0));
-			HashMap<String, Object> saveOptions = new HashMap<String, Object>();
-			saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
-			createResource.getDefaultSaveOptions().putAll(saveOptions);
-			emfModel.setResource(createResource);
-			// We need to inhibit the workflow from saving
+			final ResourceSet rs = emfModel.getResource().getResourceSet();
+			rs.getResources().clear();
+			rs.getResources().add(resource);
+			emfModel.setResource(resource);
 			transformation.getTrace();
 		} catch (Exception e) {
 			throw new MFExecutionException(e);

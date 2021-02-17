@@ -98,7 +98,7 @@ for (node in getNodes()) {
     		// Resize constraint which forbids resizing
     		// NORTH (1), SOUTH (4), EAST (8) and WEST (16): all handles are not resizable
     		var resizeconstraint_not_resizable = new GmfGen!ResizeConstraints;
-    		resizeconstraint_not_resizable.nonResizeHandles := 31;
+    		resizeconstraint_not_resizable.nonResizeHandles = 31;
     		figure_viewmap.attributes.add(resizeconstraint_not_resizable);
 		}
 	}

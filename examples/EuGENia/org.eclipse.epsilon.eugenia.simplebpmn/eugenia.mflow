@@ -15,17 +15,24 @@ model GenModel is epsilon:emf {
 	src : base + ".genmodel"
 	metamodelUri : "http://www.eclipse.org/emf/2002/GenModel"
 }
-
 model GmfGen is epsilon:emf {
 	src : base + ".gmfgen"
+	reload : true
 	metamodelUri : "http://www.eclipse.org/gmf/2009/GenModel"
+	loadOpts {
+		var m = new Map;
+		m.put("DEFER_IDREF_RESOLUTION",true);
+		return m;
+	}
 	saveOpts {
 		var map = new Map;
 		map.put("ENCODING", "UTF-8");
+		map.put("SAVE_ONLY_IF_CHANGED","MEMORY_BUFFER");
+		map.put("SCHEMA_LOCATION",true);
+		map.put("LINE_WIDTH",1);
 		return map;
 	}
 }
-
 model GmfMap is epsilon:emf {
 	src :  base + ".gmfmap"
 	metamodelUri : "http://www.eclipse.org/gmf/2008/mappings"
@@ -71,6 +78,7 @@ task Emfatic2Ecore is emf:emfatic2ecore
 }
 
 // ValidateEcoreForGenModel
+@always
 task ValidateEcoreForGenModel is epsilon:evl
 	in ECore  as Ecore
 {
@@ -134,6 +142,7 @@ task PolishGenModel is epsilon:eol
  	}
 }
 // ValidateEcoreForGMFToolGraphMap 
+@always
 task ValidateEcoreForGMFToolGraphMap is epsilon:evl
 	in ECore as Ecore
 {

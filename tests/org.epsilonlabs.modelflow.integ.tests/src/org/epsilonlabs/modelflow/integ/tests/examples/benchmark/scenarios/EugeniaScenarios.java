@@ -7,13 +7,15 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.FileModifier;
-import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.ITaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 
@@ -23,13 +25,30 @@ import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
  */
 public enum EugeniaScenarios implements IScenario {
 
+	// No polishing scripts
 	NO_MODIFICATION,
-	MODIFY_FILE_EMF_GMF,
+	
+	// Change EMF margin
+	MODIFY_EMF_GMF_ANNOTATION,
+	//Change
+	MODIFY_EMF_GENMODEL_ANNOTATION,	
+	
+	// As in: Kolovos, et al (2017). Eugenia: towards disciplined and automated development of GMF-based graphical model editors.
+	// Change EMF to use bold
+	//CHANGE_FONT_TO_BOLD,
+	// Change EMF to use background color
+	//CHANGE_BACKGROUND_COLOR,
+	// Change EMF class name
+	//RENAME_METAMODEL_CLASS,
+	// Add polishing scripts
+	//ADD_POLISHING_SCRIPT,
+	
+	MODIFY_TASK_POLISH_GMFGEN,
+	
+	
 	/*
-	MODIFY_MODEL_ECORE_GMF,
 	MODIFY_MODEL_GENMODEL,
 	MODIFY_MODEL_GMFGEN,
-	MODIFY_TASK_POLISH,
 	MODIFY_GENERATED_CODE,
 	MODIFY_GENERATED_CODE_OUTSIDE_PROTECTED_NO_ACTION,
 	*/
@@ -42,7 +61,11 @@ public enum EugeniaScenarios implements IScenario {
 
 	@Override
 	public boolean isProtect() {
-		return false;	
+		switch (this) {
+		
+		default:
+			return false;
+		}	
 	}
 	
 	@Override
@@ -50,29 +73,77 @@ public enum EugeniaScenarios implements IScenario {
 		String modelDir 	= basedir + "/resources/model/%s";
 		String polishDir 	= basedir + "/resources/task/polish/%s";
 		switch(this) {
-		case MODIFY_FILE_EMF_GMF:
-			String file = String.format(modelDir, "simplebpmn.emf");
-			FileModifier modifier = new FileModifier(file);
-			modifier.replaceFirst("(.*)(margin=\")(2)(\")(.*)", "$1$23$4$5");// Margin from 2 to 3				
+		case MODIFY_EMF_GMF_ANNOTATION:
+			// EMF changes margin of XOR, then Ecore is updated, GenModel does not change, GmfGraph changes for XORFigure which is now 3
+			// FixGenModel executes again because Ecore changed
+			return ()-> {
+				String file = String.format(modelDir, "simplebpmn.emf");
+				FileModifier modifier = new FileModifier(file);				
+				modifier.replaceFirst("(.*)(margin=\")(2)(\")(.*)", "$1$23$4$5") ;// Margin from 2 to 3 
+			};
+		case MODIFY_EMF_GENMODEL_ANNOTATION:
+			// EMF changes margin of XOR, then Ecore is updated, GenModel does not change, GmfGraph changes for XORFigure which is now 3
+			// FixGenModel executes again because Ecore changed
+			return ()-> {
+				String file = String.format(modelDir, "simplebpmn.emf");
+				FileModifier modifier = new FileModifier(file);	
+				//modifier.replaceFirst("(@gmf.node\\(tool.name=\\\"XOR Gateway\\\",)", "@emf.gen(documentation=\"An XOR Gateway\")$1") ;// adding documentation
+				//modifier.replaceFirst("(.*)(attr String name;)", "$1@emf.gen(propertyMultiline=\"true\") $2") ;// Adding multiline property
+				modifier.replaceFirst("(@namespace.*)", "@emf.gen(basePackage=\"org.eclipse.epsilon.eugenia.simplebpmn\")$1") ;// Adding multiline property
+			};
+		case MODIFY_TASK_POLISH_GMFGEN:
+			return () -> {
+				String file = String.format(polishDir, "FixGMFGen.eol");
+				try {
+					new File(file).createNewFile();
+					FileModifier modifier = new FileModifier(file);
+					String code = "var genPlugin = GmfGen!GenPlugin.all.first();\n" +
+							"genPlugin.requiredPlugins.add(\"org.eclipse.epsilon.eugenia.simplebpmn.diagram.custom\");";
+					modifier.newLineAtEnd(code);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			};
+		case NO_MODIFICATION:
 		default:
 			return () -> {};
 		}
+		
 	}
 
+	// Emfatic2Ecore, Ecore2GenModel, Ecore2GMFToolGraphMap, FixGenModel, PolishGMFToolGraphMap, PolishGenModel, GmfMap2GmfGen, GenerateDomainModelCode, FixGmfGen, PolishGmfGen, GenerateDiagramCode
 	@Override
 	public IValidate getValidator() {
-		//Emfatic2Ecore, genPackages, copyright, ValidateEcoreForGenModel, ValidateEcoreForGMFToolGraphMap, Ecore2GenModel, Ecore2GMFToolGraphMap, 
-		//FixGenModel, PolishGMFToolGraphMap, PolishGenModel, GmfMap2GmfGen, GenerateDomainModelCode, FixGmfGen, PolishGmfGen, GenerateDiagramCode
 		switch (this) {
 		case NO_MODIFICATION:
-			return expect(false, true, true, false, false, false, false, 
-					false, false, false, false, false, false, false, false);
-		case MODIFY_FILE_EMF_GMF:
-			return expect(true, true, true, true, true, true, true, 
-					false, true, false, true, false, true, true, true);
+			return expect(false, false, false, false, false, false, false, false, false, false, false);
+		case MODIFY_EMF_GMF_ANNOTATION:
+			return expect(true, true, true, true, true, false, true, false, true, false, true);
+		case MODIFY_TASK_POLISH_GMFGEN: 
+			return expect(false, false, false, false, false, false, false, false, false, true, true);
+		case MODIFY_EMF_GENMODEL_ANNOTATION:
+			return expect(true, true, true, true, true, false, true, true, true, false, true);
 		default:
-			return AllTaskStateValidator.SKIPPED;
+			throw new IllegalStateException("We shouldnt have to arrive to this line");
 		}
+	}
+	
+	/** Same as below but without the tasks that always execute */
+	protected static IValidate expect(
+			boolean Emfatic2Ecore, 
+			boolean Ecore2GenModel,
+			boolean Ecore2GMFToolGraphMap, 
+			boolean FixGenModel, 
+			boolean PolishGMFToolGraphMap,
+			boolean PolishGenModel, 
+			boolean GmfMap2GmfGen, 
+			boolean GenerateDomainModelCode,
+			boolean FixGmfGen, 
+			boolean PolishGmfGen,
+			boolean GenerateDiagramCode
+	) {
+		return expect(Emfatic2Ecore, true, true, true, true, Ecore2GenModel, Ecore2GMFToolGraphMap, FixGenModel, PolishGMFToolGraphMap, PolishGenModel, 
+			GmfMap2GmfGen, GenerateDomainModelCode, FixGmfGen, PolishGmfGen,GenerateDiagramCode);
 	}
 	
 	protected static IValidate expect(
@@ -111,7 +182,7 @@ public enum EugeniaScenarios implements IScenario {
 		list.add(new TaskStateValidator((PolishGmfGen ? TaskState.EXECUTED : TaskState.SKIPPED), "PolishGmfGen"));
 		list.add(new TaskStateValidator((GenerateDiagramCode ? TaskState.EXECUTED : TaskState.SKIPPED), "GenerateDiagramCode"));
 		
-		return new CompositeValidator(list.toArray(new IValidate[0]));
+		return new CompositeTaskValidator(list.toArray(new ITaskValidator[0]));
 	}
 	
 }

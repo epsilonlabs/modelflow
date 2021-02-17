@@ -279,24 +279,28 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	}
 
 	public void attemptIndividualExecution(IModelFlowContext ctx) throws MFRuntimeException {
-		if (isEnabled() && isGuardOk(ctx)) {
+		if (isEnabled()) {
 			if (taskInstance == null) {				
 				taskInstance = ctx.getTaskRepository().create(this, ctx);
 			}
-			taskInstance.validateParameters();
-			
-			conservativeExecutionHelper = new ConservativeExecutionHelper(this, ctx);
-			
-			// Assume it will execute
-			boolean execute = shouldExecuteBasedOnTrace(ctx);
-			if (execute) {
-				doExecute(ctx);
-			} else {
-				noNeedToExecute(ctx);
+			if (isGuardOk(ctx)) {
+				taskInstance.validateParameters();
+				
+				conservativeExecutionHelper = new ConservativeExecutionHelper(this, ctx);
+				
+				// Assume it will execute
+				boolean execute = shouldExecuteBasedOnTrace(ctx);
+				if (execute) {
+					doExecute(ctx);
+					return;
+				} else {
+					noNeedToExecute(ctx);
+					return;
+					
+				} 
 			}
-		} else { // Guard failed or task is disabled
-			skip();			
 		}
+		skip();
 	}
 
 	

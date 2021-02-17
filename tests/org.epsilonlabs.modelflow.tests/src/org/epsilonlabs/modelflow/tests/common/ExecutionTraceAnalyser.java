@@ -58,4 +58,13 @@ public class ExecutionTraceAnalyser {
 			throw new MFUnknownTaskException("unknown task " + taskName);
 		}
 	}
+	
+	public String taskState(String taskName) throws MFUnknownTaskException {
+		Optional<TaskExecution> task = getAllTaskExecutions().stream().filter(t->t.getName().equalsIgnoreCase(taskName)).findFirst();
+		if (task.isPresent()) {
+			return task.get().getEndState();
+		} else {			
+			throw new MFUnknownTaskException("unknown task " + taskName);
+		}
+	}
 }

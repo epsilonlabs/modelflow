@@ -32,7 +32,7 @@ import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 import org.junit.BeforeClass;
@@ -320,7 +320,7 @@ public class ComponentOneChangeIncrementalTest extends IncrementalTest {
 		TaskStateValidator x = new TaskStateValidator((validateTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "validate");
 		TaskStateValidator y = new TaskStateValidator((transformTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "m2m");
 		TaskStateValidator z = new TaskStateValidator((generateTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "m2t");
-		return new CompositeValidator(y, x, z);
+		return new CompositeTaskValidator(y, x, z);
 	}
 
 }

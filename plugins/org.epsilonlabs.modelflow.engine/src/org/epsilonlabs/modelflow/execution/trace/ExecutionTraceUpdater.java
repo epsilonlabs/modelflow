@@ -152,6 +152,10 @@ public class ExecutionTraceUpdater {
 		}
 		return Optional.empty();
 	}
+	
+	public synchronized Optional<ResourceSnapshot> getLatest(String resource){
+		return getTrace().getLatest().stream().filter(r->r.getName().equals(resource)).findFirst();
+	}
 
 	public synchronized void addTaskOutputProperties(String task, Map<String, Object> map){
 		TaskExecution taskExecution = getCurrentTaskExecution(task);

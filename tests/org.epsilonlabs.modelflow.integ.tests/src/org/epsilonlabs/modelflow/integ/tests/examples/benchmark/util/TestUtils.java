@@ -95,6 +95,7 @@ public class TestUtils {
 			try {
 				FileUtils.deleteDirectory(output.toFile());
 			} catch (IOException e1) {
+				e1.printStackTrace();
 				fail("Unable to clear files");
 			}
 		}

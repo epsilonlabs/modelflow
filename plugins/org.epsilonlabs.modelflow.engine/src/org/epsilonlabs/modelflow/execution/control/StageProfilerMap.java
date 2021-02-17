@@ -29,7 +29,7 @@ public class StageProfilerMap extends ConcurrentHashMap<MeasurableObject, Profil
 	}
 
 	public StageProfilerMap getByNode(String name) {
-		return entrySet().stream().filter(e -> e.getKey().getNode().equals(name))
+		return entrySet().stream().filter(e -> e.getKey().getName().equals(name))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (u, v) -> {
 					throw new IllegalStateException(String.format("Duplicate key %s", u));
 				}, StageProfilerMap::new));

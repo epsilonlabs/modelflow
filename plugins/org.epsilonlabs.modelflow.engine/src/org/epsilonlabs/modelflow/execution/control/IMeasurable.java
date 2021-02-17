@@ -62,13 +62,18 @@ public interface IMeasurable {
 		}
 	}
 	
-	String getNode();
+	String getName();
 	
 	Stage getStage();
 		
 	Class<? extends IGraphNode> getType();
 	
 	IMeasurable getParent();
+
+	/**
+	 * @return
+	 */
+	IGraphNode getNode();
 	
 	
 }

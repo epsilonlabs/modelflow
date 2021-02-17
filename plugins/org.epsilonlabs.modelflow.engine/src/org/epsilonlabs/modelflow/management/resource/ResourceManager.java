@@ -46,9 +46,7 @@ public class ResourceManager implements IResourceManager {
 	protected IModelFlowContext ctx;
 	protected ResourceRepository resourceRepository;
 
-	public ResourceManager() {
-
-	}
+	public ResourceManager() {}
 
 	private ResourceManager(ITaskNode taskNode, IModelFlowContext ctx) {
 		this.ctx = ctx;

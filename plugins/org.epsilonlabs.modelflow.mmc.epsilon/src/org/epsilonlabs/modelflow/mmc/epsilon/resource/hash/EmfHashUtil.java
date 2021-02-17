@@ -72,8 +72,8 @@ public class EmfHashUtil {
 
 		Map<String, Resource> dependencies = getResourceDependencies(resource, file);
 
-		HashSet<String> res = new HashSet<String>();
-		HashSet<String> files = new HashSet<String>();
+		HashSet<String> res = new HashSet<>();
+		HashSet<String> files = new HashSet<>();
 		dependencies.values().forEach(r -> {
 			String hash = computeHashForResource(r);
 			res.add(hash);
@@ -97,7 +97,7 @@ public class EmfHashUtil {
 			if (trace == null) {
 				emfModel = newModel(modelFile, metamodel, expanded);
 			} else {
-				HashMap<String, String> newTrace = hash(trace, new File(modelFile), expanded);
+				Map<String, String> newTrace = hash(trace, new File(modelFile), expanded);
 				System.out.println("same: "+newTrace.equals(trace));
 			}
 			
@@ -124,26 +124,24 @@ public class EmfHashUtil {
 
 	/** --------- HELPERS -------- */
 
-	public static HashMap<String, String> hash(Object trace, File root, boolean expanded) {
-		HashMap<String, String> res = new HashMap<String, String>();
+	public static Map<String, String> hash(Object trace, File root, boolean expanded) {
+		HashMap<String, String> res = new HashMap<>();
 		res.put(URI.createFileURI(root.getAbsolutePath()).toFileString(), computeHashForFile(root));
-		if (expanded) {
-			if (trace instanceof HashMap) {
-				HashMap<?, ?> maptrace = (HashMap<?, ?>) trace;
-				maptrace.keySet().forEach(r -> {
-					if (r instanceof String) {
-						File f = new File((String) r);
-						String hash = computeHashForFile(f);
-						res.put((String) r,hash);
-					}
-				});
-			}
+		if (expanded && trace instanceof HashMap) {
+			HashMap<?, ?> maptrace = (HashMap<?, ?>) trace;
+			maptrace.keySet().forEach(r -> {
+				if (r instanceof String) {
+					File f = new File((String) r);
+					String hash = computeHashForFile(f);
+					res.put((String) r,hash);
+				}
+			});
 		}
 		return res;
 	}
 
-	public static HashMap<String, String> hash(Resource resource, File root, boolean expanded) {
-		HashMap<String, String> res = new HashMap<String, String>();
+	public static Map<String, String> hash(Resource resource, File root, boolean expanded) {
+		HashMap<String, String> res = new HashMap<>();
 		res.put(URI.createFileURI(root.getAbsolutePath()).toFileString(), computeHashForFile(root));
 		if (expanded) {
 			Map<String, Resource> dependencies = getResourceDependencies(resource, root);
@@ -156,7 +154,7 @@ public class EmfHashUtil {
 	}
 
 	public static Map<String, Resource> getResourceDependencies(Resource resource, File root) {
-		Map<String, Resource> dependencies = new HashMap<String, Resource>();
+		Map<String, Resource> dependencies = new HashMap<>();
 		ResourceSet rs = resource.getResourceSet();
 		TreeIterator<EObject> allContents = resource.getAllContents();
 		while (allContents.hasNext()) {
@@ -164,8 +162,11 @@ public class EmfHashUtil {
 			if (c.eIsProxy()) {
 				URI eProxyURI = ((InternalEObject) c).eProxyURI();
 				String path = eProxyURI.toFileString();
-				String location = Paths.get(root.getParent(), path).toFile().getAbsolutePath();
-				URI uri = URI.createFileURI(location);
+				final File file = new File(path);
+				if (!(file.isAbsolute() && file.exists())) {
+					path= Paths.get(root.getParent(), path).toFile().getAbsolutePath();
+				}
+				URI uri = URI.createFileURI(path);					
 				Resource resource2 = rs.getResource(uri, true);
 				try {
 					resource2.load(null);

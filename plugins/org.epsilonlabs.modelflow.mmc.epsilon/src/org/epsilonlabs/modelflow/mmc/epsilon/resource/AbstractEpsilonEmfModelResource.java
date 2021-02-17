@@ -48,8 +48,8 @@ public abstract class AbstractEpsilonEmfModelResource extends AbstractEpsilonCac
 		super.loadImpl();
 		/* FIXME: This seems to be a bug in the CachedResourceSet of Epsilon EmfModel which is ignoring the flag
 		isReadOnLoad and is loading the model anyway.*/
-		if (!this.read.get()) {
-			getModel().getResource().getContents().clear();
+		if (!this.read) {
+			//getModel().getResource().getContents().clear();
 		}
 	}
 	

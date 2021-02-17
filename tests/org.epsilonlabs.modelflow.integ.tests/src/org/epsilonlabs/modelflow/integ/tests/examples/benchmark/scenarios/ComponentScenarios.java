@@ -6,7 +6,7 @@ package org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios;
 import org.epsilonlabs.modelflow.execution.graph.node.TaskState;
 import org.epsilonlabs.modelflow.integ.tests.common.FileModifier;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 
@@ -38,7 +38,7 @@ public enum ComponentScenarios implements IScenario {
 		TaskStateValidator x = new TaskStateValidator((validateTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "validate");
 		TaskStateValidator y = new TaskStateValidator((transformTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "m2m");
 		TaskStateValidator z = new TaskStateValidator((generateTaskExecuted ? TaskState.EXECUTED : TaskState.SKIPPED), "m2t");
-		return new CompositeValidator(y, x, z);
+		return new CompositeTaskValidator(y, x, z);
 	}
 
 	@Override

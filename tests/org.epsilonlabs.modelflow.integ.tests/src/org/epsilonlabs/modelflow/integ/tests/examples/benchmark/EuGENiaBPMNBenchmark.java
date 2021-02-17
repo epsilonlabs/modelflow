@@ -25,7 +25,6 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios.EugeniaScenarios;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.ScenarioSource;
-import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.ScenarioSource.Mode;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.TestUtils;
 import org.epsilonlabs.modelflow.tests.common.ResourceLocator;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -38,13 +37,13 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 
-	protected static final int MAX_ITER = 10;
+	protected static final int MAX_ITER = 1;
 	protected Path diagramProjectOutputPath;
 	protected String metamodelName = "simplebpmn";
 	protected String base = "org.eclipse.epsilon.eugenia";
 
 	@ParameterizedTest(name = "Scenario {0} tracing {1} #{2}.")
-	@ScenarioSource(value = EugeniaScenarios.class, names = "NO_MODIFICATION", mode = Mode.INCLUDE, times = MAX_ITER)
+	@ScenarioSource(value = EugeniaScenarios.class, times = MAX_ITER /*, mode = Mode.MATCH_ALL, names = "MODIFY_FILE_EMF_GENMODEL"*/)
 	public void eugeniaExampleTwoExecutionTests(EugeniaScenarios scenario, Boolean tracing, Integer iteration)
 			throws Exception {
 		// Setup Variables
@@ -89,6 +88,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 				final IProject p = projects[i];
 				p.delete(IResource.ALWAYS_DELETE_PROJECT_CONTENT, null);
 			} catch (Exception e) {
+				e.printStackTrace();
 				fail("Unable to close projects");
 			}
 		}

@@ -95,7 +95,6 @@ public class ConservativeExecutionHelper {
 		return resourcesChanged(false);
 	}
 
-	// TODO check also model properties ?
 	protected boolean resourcesChanged(boolean input) {
 		Collection<IAbstractResourceNode> nodes;
 		
@@ -117,7 +116,7 @@ public class ConservativeExecutionHelper {
 				if (input) {
 					pastResource = updater.getPastInputResource(node.getName(), resource.getName());
 				} else {
-					pastResource = updater.getPastOutputResource(node.getName(), resource.getName());
+					pastResource = updater.getLatest(resource.getName()); //updater.getPastOutputResource(node.getName(), resource.getName());
 				}
 				if (pastResource.isPresent()) {
 					Object pastStamp = pastResource.get().getStamp();

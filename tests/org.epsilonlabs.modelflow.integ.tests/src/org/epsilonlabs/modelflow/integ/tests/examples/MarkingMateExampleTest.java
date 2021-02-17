@@ -17,7 +17,7 @@ import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.ExampleProjectTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 import org.junit.BeforeClass;
@@ -72,7 +72,7 @@ public class MarkingMateExampleTest extends ExampleProjectTest {
 			boolean merge,
 			boolean csv) 
 	{
-		return new CompositeValidator(
+		return new CompositeTaskValidator(
 				new TaskStateValidator((validateSetup ? TaskState.EXECUTED : TaskState.SKIPPED), "validateSetup"), 
 				new TaskStateValidator((splitBob ? TaskState.EXECUTED : TaskState.SKIPPED), "splitBob"),
 				new TaskStateValidator((splitAlice ? TaskState.EXECUTED : TaskState.SKIPPED), "splitAlice"),

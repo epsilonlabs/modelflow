@@ -24,6 +24,8 @@ import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MemoryUnit;
 import org.epsilonlabs.modelflow.execution.control.ProfiledStage;
 import org.epsilonlabs.modelflow.execution.control.StageProfilerMap;
+import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
+import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.scenarios.IScenario;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.BenchmarkUtils;
 import org.epsilonlabs.modelflow.integ.tests.examples.benchmark.util.TestUtils;
@@ -33,6 +35,7 @@ import org.epsilonlabs.modelflow.mmc.epsilon.plugin.EpsilonPlugin;
 import org.epsilonlabs.modelflow.mmc.gmf.plugin.GMFPlugin;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
+import org.epsilonlabs.modelflow.tests.common.validator.IValidate;
 
 import com.google.common.io.Files;
 import com.google.inject.Guice;
@@ -57,7 +60,7 @@ public abstract class AbstractBenchmark {
 			final Date time = new Date();
 			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
 			detailsFile = BenchmarkUtils.getResultsFile("details", time);
-			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "stage", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
+			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
 			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
 			headersList.addAll(IMeasurable.Stage.names());
@@ -88,6 +91,7 @@ public abstract class AbstractBenchmark {
 		boolean protect = scenario.isProtect();
 		ModelFlowModule module = createModule(tracing, protect, outputPath);
 		
+		System.out.printf(">>>>[ EXECUTING ] SCENARIO: %s, TRACING: %b, ITERATION: %d%n", scenario.getName(), tracing, iteration);
 		// Parse
 		System.out.println("Parsing" );
 		try {
@@ -106,7 +110,6 @@ public abstract class AbstractBenchmark {
 			cleanup(outputPath);
 			fail("Exception during first execution");
 		}
-		/*
 		
 		// Run modifications
 		System.out.println("Performing modifications");
@@ -119,6 +122,7 @@ public abstract class AbstractBenchmark {
 			fail("Unable to perform modifications");
 		}
 		
+		module.clearCache();
 		module = createModule(tracing, protect, outputPath);
 		
 		System.out.println("Parsing second execution" );
@@ -145,7 +149,7 @@ public abstract class AbstractBenchmark {
 		if (!validator.ok(module)) {
 			cleanup(outputPath);
 			fail(validator.expected());
-		}*/
+		}
 		
 		storeResults(scenario, tracing, iteration, module, maxIter);
  
@@ -213,13 +217,19 @@ public abstract class AbstractBenchmark {
 			MeasurableObject key = s.getKey();
 			final MeasureableSnapshot start = stage.getStart();
 			final MeasureableSnapshot end = stage.getEnd();
+			String state = "";
+			IGraphNode n = key.getNode();
+			if (n instanceof ITaskNode) {
+				state = ((ITaskNode) n).getState().name();
+			}
 			Object[] results = new Object[] { 
 					scenario, 
 					tracing, 
 					iteration, 
-					key.getNode(),
+					key.getName(),
 					key.getStage().getParent(), 
 					key.getStage().name(), 
+					state,
 					(start != null) ? start.getTime(TU) : "",
 					(end != null) ? end.getTime(TU) : "",
 					(start != null) ? start.getFreeMemory(MU) : "",

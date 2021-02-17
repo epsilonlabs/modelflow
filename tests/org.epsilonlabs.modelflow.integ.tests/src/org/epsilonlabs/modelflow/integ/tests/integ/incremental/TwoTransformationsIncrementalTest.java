@@ -29,7 +29,7 @@ import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -102,7 +102,7 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 		TaskStateValidator x = new TaskStateValidator(TaskState.EXECUTED, "X");
 		TaskStateValidator y = new TaskStateValidator(TaskState.SKIPPED, "Y");
 		TaskStateValidator z = new TaskStateValidator(TaskState.SKIPPED, "Z");
-		second = new CompositeValidator(y, x, z);
+		second = new CompositeTaskValidator(y, x, z);
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 		TaskStateValidator x = new TaskStateValidator(TaskState.SKIPPED, "X");
 		TaskStateValidator y = new TaskStateValidator(TaskState.EXECUTED, "Y");
 		TaskStateValidator z = new TaskStateValidator(TaskState.SKIPPED, "Z");
-		second = new CompositeValidator(y, x, z);
+		second = new CompositeTaskValidator(y, x, z);
 	}
 	
 	@Test
@@ -130,7 +130,7 @@ public class TwoTransformationsIncrementalTest extends IncrementalTest {
 		TaskStateValidator x = new TaskStateValidator(TaskState.SKIPPED, "X");
 		TaskStateValidator y = new TaskStateValidator(TaskState.SKIPPED, "Y");
 		TaskStateValidator z = new TaskStateValidator(TaskState.EXECUTED, "Z");
-		second = new CompositeValidator(y, x, z);
+		second = new CompositeTaskValidator(y, x, z);
 	}
 
 

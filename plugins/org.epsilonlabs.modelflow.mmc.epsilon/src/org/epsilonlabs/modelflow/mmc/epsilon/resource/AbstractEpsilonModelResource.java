@@ -7,8 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.mmc.epsilon.resource;
 
-import java.util.Optional;
-
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 import org.eclipse.epsilon.eol.models.IModel;
 import org.epsilonlabs.modelflow.dom.api.AbstractResourceInstance;
@@ -19,8 +17,10 @@ public abstract class AbstractEpsilonModelResource extends AbstractResourceInsta
 
 	protected IModel model = null; 
 
-	protected Optional<Boolean> read = Optional.empty();
-	protected Optional<Boolean> store = Optional.empty();
+	protected Boolean read = false;
+	protected Boolean store = false;
+	protected Boolean reload = false;
+
 	
 	public AbstractEpsilonModelResource() {
 		getModel();
@@ -30,19 +30,24 @@ public abstract class AbstractEpsilonModelResource extends AbstractResourceInsta
 	
 	@Param(key="read")
 	public void setRead(Boolean read) {
-		this.read = Optional.of(read);
+		this.read = read;
 	}
 	
 	@Param(key="store")
 	public void setStore(Boolean store) {
-		this.store = Optional.of(store);
+		this.store =store;
+	}
+	
+	@Param(key="reload")
+	public void setReload(Boolean reload) {
+		this.reload =reload;
 	}
 
 	@Override
 	public void configure(){
 		getModel().setName(getName());
-		this.read.ifPresent(val -> getModel().setReadOnLoad(val));
-		this.store.ifPresent(val -> getModel().setStoredOnDisposal(val));
+		getModel().setReadOnLoad(read);
+		getModel().setStoredOnDisposal(store);
 	}
 	
 	@Override
@@ -74,50 +79,58 @@ public abstract class AbstractEpsilonModelResource extends AbstractResourceInsta
 		getModel().getAliases().clear();
 	}
 
+	
+	
 	@Override
 	public void modelAsInOut() {
-		if (!this.read.isPresent()) {
-			this.read = Optional.of(true);
+		if (!this.read) {
+			this.read = true;
 			getModel().setReadOnLoad(true);
 		}
-		if (!this.store.isPresent()) {
-			this.store = Optional.of(true);
+		if (!this.store) {			
+			this.store = true;
 			getModel().setStoredOnDisposal(true);
+		}
+		if (reload) {
+			this.isLoaded = false;
 		}
 	}
 	
 	@Override
 	public void modelAsInput() {
-		if (!this.read.isPresent()) {
-			this.read = Optional.of(true);
+		if (!this.read) {
+			this.read = true;
 			getModel().setReadOnLoad(true);
 		}
-		if (!this.store.isPresent()) {
-			this.store = Optional.of(false);
+		if (this.store) {
+			this.store = false;
 			getModel().setStoredOnDisposal(false);
+		}
+		if (reload) {
+			this.isLoaded = false;
 		}
 	}
 	
 	@Override
 	public void modelAsOutput() {
-		if (!this.read.isPresent()) {
-			this.read = Optional.of(false);
+		if (this.read) {
+			this.read = false;
 			getModel().setReadOnLoad(false);
 		}
-		if (!this.store.isPresent()) {
-			this.store = Optional.of(true);
+		if (!this.store) {
+			this.store = true;
 			getModel().setStoredOnDisposal(true);
 		}
 	}
 	
 	@Override
 	public void modelAsTransient() {
-		if (!this.read.isPresent()) {
-			this.read = Optional.of(false);
+		if (this.read) {
+			this.read = false;
 			getModel().setReadOnLoad(false);
 		}
-		if (!this.store.isPresent()) {
-			this.store = Optional.of(false);
+		if (this.store) {
+			this.store = false;
 			getModel().setStoredOnDisposal(false);
 		}
 	}

@@ -28,7 +28,7 @@ import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
 import org.epsilonlabs.modelflow.tests.common.IncrementalTest;
 import org.epsilonlabs.modelflow.tests.common.validator.AllTaskStateValidator;
-import org.epsilonlabs.modelflow.tests.common.validator.CompositeValidator;
+import org.epsilonlabs.modelflow.tests.common.validator.CompositeTaskValidator;
 import org.epsilonlabs.modelflow.tests.common.validator.TaskStateValidator;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -103,7 +103,7 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 		TaskStateValidator compare = new TaskStateValidator(TaskState.EXECUTED, "compare");
 		TaskStateValidator merge = new TaskStateValidator(TaskState.SKIPPED, "merge");
 		TaskStateValidator transform = new TaskStateValidator(TaskState.SKIPPED, "transform");
-		second = new CompositeValidator(merge, compare, transform);
+		second = new CompositeTaskValidator(merge, compare, transform);
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 		TaskStateValidator compare = new TaskStateValidator(TaskState.EXECUTED, "compare");
 		TaskStateValidator merge = new TaskStateValidator(TaskState.EXECUTED, "merge");
 		TaskStateValidator transform = new TaskStateValidator(TaskState.SKIPPED, "transform");
-		second = new CompositeValidator(merge, compare, transform);
+		second = new CompositeTaskValidator(merge, compare, transform);
 	}
 
 	//FIXME
@@ -133,7 +133,7 @@ public class CompareMergeTransformIncrementalTest extends IncrementalTest {
 		TaskStateValidator compare = new TaskStateValidator(TaskState.SKIPPED, "compare");
 		TaskStateValidator merge = new TaskStateValidator(TaskState.SKIPPED, "merge");
 		TaskStateValidator transform = new TaskStateValidator(TaskState.EXECUTED, "transform");
-		second = new CompositeValidator(merge, compare, transform);
+		second = new CompositeTaskValidator(merge, compare, transform);
 	}
 	
 	/*TODO
