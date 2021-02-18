@@ -44,7 +44,7 @@ public class AnnotationTaskParameterManager implements ITaskParameterManager {
 	@Override
 	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
 		Map<String, Object> hashes = getOutputParameterHandler(node.getTaskInstance()).getHashes();
-		LOG.debug("OutputHashes: {}", hashes);
+		//LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {			
 			new ExecutionTraceUpdater(trace).addTaskOutputProperties(node.getName(), hashes);

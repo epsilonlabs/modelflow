@@ -100,7 +100,7 @@ public class ExecutionGraph extends AbstractExecutionGraph {
 	}
 	
 	protected ExecutionEdge addEdge(ITaskNode sourceVertex, ITaskNode targetVertex) {
-		LOG.debug("Adding edge : {} -> {}", sourceVertex.getName(), targetVertex.getName());
+		//LOG.debug("Adding edge : {} -> {}", sourceVertex.getName(), targetVertex.getName());
 		// Only allow one edge per source/target node combination
 		if (getGraph().getAllEdges(sourceVertex, targetVertex).isEmpty() && getGraph().getAllEdges(targetVertex, sourceVertex).isEmpty()) {
 			return this.graph.addEdge(sourceVertex, targetVertex);

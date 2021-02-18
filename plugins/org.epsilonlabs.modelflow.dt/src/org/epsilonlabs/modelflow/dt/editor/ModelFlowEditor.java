@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.epsilon.common.dt.editor.outline.ModuleContentOutlinePage;
 import org.eclipse.epsilon.common.dt.editor.outline.ModuleContentProvider;
 import org.eclipse.epsilon.common.dt.editor.outline.ModuleElementLabelProvider;
 import org.eclipse.epsilon.eol.dt.editor.EolEditor;
@@ -20,10 +21,12 @@ import org.eclipse.jface.text.source.SourceViewerConfiguration;
 import org.eclipse.ui.texteditor.ITextEditor;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.ModelFlowModule;
+import org.epsilonlabs.modelflow.dt.editor.outline.MFModuleContentOutlinePage;
 import org.epsilonlabs.modelflow.dt.editor.outline.ModelFlowModuleContentProvider;
 import org.epsilonlabs.modelflow.dt.editor.outline.ModelFlowModuleElementLabelProvider;
 
 public class ModelFlowEditor extends EolEditor implements ITextEditor {
+		
 	
 	public ModelFlowEditor() {
 		this.addTemplateContributor(new ModelFlowEditorStaticTemplateContributor());
@@ -54,10 +57,8 @@ public class ModelFlowEditor extends EolEditor implements ITextEditor {
 		//keywords.add("abstract");
 		//keywords.add("extends");
 		
-		//keywords.add("type");
 		keywords.add("is");
 		keywords.add("as");
-		//keywords.add("on");
 		keywords.add("dependsOn");
 		keywords.add("forEach");
 		
@@ -102,5 +103,20 @@ public class ModelFlowEditor extends EolEditor implements ITextEditor {
 	public IModelFlowModule createModule() {
 		return new ModelFlowModule();
 	}
+	
+	@Override
+	public ModuleContentOutlinePage createOutlinePage() {
+		ModuleContentOutlinePage outline = 
+				new MFModuleContentOutlinePage(
+						this.getDocumentProvider(), 
+						this, 
+						createModuleElementLabelProvider(),
+						createModuleContentProvider());
+					
+			addModuleParsedListener(outline);
+			
+		return outline;
+	}
+	
 	
 }

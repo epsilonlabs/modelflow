@@ -60,7 +60,7 @@ public abstract class AbstractBenchmark {
 			final Date time = new Date();
 			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
 			detailsFile = BenchmarkUtils.getResultsFile("details", time);
-			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
+			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "parentStage", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
 			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
 			headersList.addAll(IMeasurable.Stage.names());
@@ -244,8 +244,10 @@ public abstract class AbstractBenchmark {
 
 		
 		if (maxIter == iteration) {		
-			String[] extension = detailsFile.getName().split("\\.");
-			String newName = extension[0] + "_tracked_"+scenario.getName()+"_"+tracing+"." + extension[1]; 
+			String[] split = detailsFile.getName().split("\\.");
+			final String originalName = split[0];
+			final String extension = split[1];
+			String newName = String.format("%s_tracked_%s_%s.%s", originalName, scenario.getName(), tracing, extension); 
 			try {
 				File destinationFile = detailsFile.toPath().resolveSibling(newName).toFile();
 				destinationFile.createNewFile();

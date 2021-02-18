@@ -67,10 +67,6 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		testExecution(scenario, tracing, iteration, eugeniaOutputProjectPath, buildScript, MAX_ITER);
 	}
 
-	/**
-	 * @param outputPath
-	 * @throws CoreException
-	 */
 	protected void importProject(final Path outputPath) throws CoreException {
 		final org.eclipse.core.runtime.Path mainEclipseProject = new org.eclipse.core.runtime.Path(outputPath.resolve(".project").toString());
 		IProjectDescription description = ResourcesPlugin.getWorkspace().loadProjectDescription(mainEclipseProject);

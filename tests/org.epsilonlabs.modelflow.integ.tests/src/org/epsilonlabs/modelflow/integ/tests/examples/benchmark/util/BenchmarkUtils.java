@@ -42,7 +42,7 @@ public class BenchmarkUtils {
 		String pattern = "yyyy-MM-dd-hh:mm:ss";
 		String dateOfExperiment = new SimpleDateFormat(pattern).format(date);
 		return Paths.get(System.getProperty("user.dir")).resolve("results")
-				.resolve(String.format("%s-%s.csv", prefix, dateOfExperiment)).toFile();
+				.resolve(String.format("%s-%s.csv", dateOfExperiment, prefix)).toFile();
 	}
 
 	/** 
