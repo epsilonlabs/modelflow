@@ -10,7 +10,6 @@ package org.epsilonlabs.modelflow;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.util.Scanner;
 
@@ -42,7 +41,7 @@ public class WorkflowHasher{
 		this.uri = null;
 	}
 
-	protected String computeIdentifier() throws MalformedURLException, IOException {
+	protected String computeIdentifier() throws IOException {
 		if (code != null) {
 			return Hasher.computeHash(code.getBytes());
 		} else if (file != null) {
@@ -55,7 +54,6 @@ public class WorkflowHasher{
 					sb.append(sc.nextLine());
 				}
 				return Hasher.computeHash(sb.toString().getBytes());
-			} catch (Exception e) {
 			}
 		}
 		return null;

@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.epsilon.eol.IEolModule;
+import org.eclipse.epsilon.eol.dom.Import;
 import org.eclipse.epsilon.eol.dt.ExtensionPointToolNativeTypeDelegate;
 import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
@@ -44,7 +45,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	// Pre-Execution
 	protected Optional<String> code = Optional.empty();
 	protected Optional<File> src = Optional.empty();
-	protected Boolean profile = false;
+	protected boolean profile = false;
 	protected Map<String, Object> params = new HashMap<>();
 
 	// Post-Execution
@@ -85,7 +86,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	
 	@Input(key="imports")
 	public List<File> getImports() {
-		return getModule().getImports().stream().map(i->i.getFile()).collect(Collectors.toList());
+		return getModule().getImports().stream().map(Import::getFile).collect(Collectors.toList());
 	}
 	
 	@Param(key="profile")
@@ -93,7 +94,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 		this.profile = profile;
 	}
 	
-	public Boolean getProfile() {
+	public boolean getProfile() {
 		return profile;
 	}
 	

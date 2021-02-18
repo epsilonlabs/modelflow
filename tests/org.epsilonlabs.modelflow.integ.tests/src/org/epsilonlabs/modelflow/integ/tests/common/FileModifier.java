@@ -55,6 +55,28 @@ public class FileModifier {
 		assertNotEquals("hashes are the same", hashOriginal, hashModified);
 	}
 	
+	public void append(File appendFile){
+		assertTrue("File not found", file.exists());
+		assertTrue("Appending file not found", appendFile.exists());
+		String hashOriginal = Hasher.computeHashForFile(file);
+		String absolutePath = file.getAbsolutePath();
+		try (FileWriter fw = new FileWriter(absolutePath, true)) {
+			BufferedWriter out = new BufferedWriter(fw);
+			try (BufferedReader reader = new BufferedReader(new FileReader(appendFile))){
+				String line;
+				while ((line = reader.readLine()) != null) {					
+					out.newLine();
+					out.write(line);
+				}
+			}
+			out.close();
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
+		String hashModified = Hasher.computeHashForFile(new File(absolutePath));
+		assertNotEquals("hashes are the same", hashOriginal, hashModified);
+	}
+	
 	public void replaceFirst(String regex, String replacement) {
 		String absolutePath = file.getAbsolutePath();
 		assertTrue("File not found", file.exists());

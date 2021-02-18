@@ -1,0 +1,11 @@
+// Add bold font to component label 
+var activityLabel = GmfGraph!Label.all.selectOne(l|l.name="ActivityLabelFigure");
+activityLabel.font = new GmfGraph!BasicFont; 
+activityLabel.font.style = GmfGraph!FontStyle#BOLD;
+
+//Set background color and border of the component compartment
+var activityFigure = GmfGraph!RoundedRectangle.all.selectOne(r|r.name="ActivityFigure"); 
+var lineBorder = new GmfGraph!LineBorder; 
+lineBorder.width = 1;
+activityFigure.backgroundColor = createColor(245,245,245); 
+activityFigure.border = lineBorder;

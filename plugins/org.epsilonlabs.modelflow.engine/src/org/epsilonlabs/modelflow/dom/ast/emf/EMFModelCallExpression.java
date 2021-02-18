@@ -68,6 +68,7 @@ public class EMFModelCallExpression extends ModelCallExpression implements IEMFD
 		return Arrays.asList(ref);
 	}
 
+	@Override
 	public void addAlias(NameExpression name) {
 		aliases.add(name);
 	}

@@ -137,7 +137,7 @@ public class ConservativeExecutionHelper {
 						if (optHash.isPresent()) {
 							Object hash = optHash.get();
 							if (!pastStamp.equals(hash)) {
-								LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
+								//LOG.debug("Hash of {} changed from {} to {}", resource.getName(), pastStamp, hash);
 								return true;
 							}
 						}

@@ -23,7 +23,7 @@ import io.reactivex.Observable;
  */
 public class ScenarioBenchmarkArgumentProvider implements ArgumentsProvider, AnnotationConsumer<ScenarioSource> {
 	
-	public static final Observable<?> trueFalse = Observable.fromArray(true, false);
+	public static final Observable<?> trueFalse = Observable.fromArray(false, true);
 
 	protected ScenarioSource scenarioSource;
 
@@ -41,9 +41,9 @@ public class ScenarioBenchmarkArgumentProvider implements ArgumentsProvider, Ann
 			Set<String> uniqueNames = stream(enums).collect(toSet());
 			enumConstants.removeIf(constant -> !mode.select(constant, uniqueNames));
 		}
-		return Observable.fromIterable(enumConstants).flatMap(scenario -> 
-		 	trueFalse.flatMap(tracing -> 
-		 		Observable.range(1, scenarioSource.times()).map(iteration -> 
+		return Observable.range(1, scenarioSource.times()).flatMap(iteration -> 
+			Observable.fromIterable(enumConstants).flatMap(scenario -> 
+		 		trueFalse.map(tracing -> 
 		 			new Object[] {scenario, tracing, iteration}
 		 		)
 		 	)

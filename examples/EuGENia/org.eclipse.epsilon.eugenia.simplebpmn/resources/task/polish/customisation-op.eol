@@ -1,0 +1,7 @@
+operation createColor(red : Integer, green : Integer, blue : Integer) : GmfGraph!RGBColor {
+	var color = new GmfGraph!RGBColor; 
+	color.red = red; 
+	color.blue = blue; 
+	color.green = green; 
+	return color;
+}

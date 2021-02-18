@@ -10,20 +10,14 @@ package org.epsilonlabs.modelflow.dom.ast.emf;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
-import org.eclipse.epsilon.eol.dom.Parameter;
-import org.eclipse.epsilon.eol.exceptions.EolRuntimeException;
-import org.eclipse.epsilon.eol.execute.context.FrameStack;
-import org.eclipse.epsilon.eol.execute.context.IEolContext;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.eclipse.epsilon.eol.types.EolAnyType;
-import org.eclipse.epsilon.eol.types.EolPrimitiveType;
 import org.epsilonlabs.modelflow.compile.context.IModelFlowCompilationContext;
 import org.epsilonlabs.modelflow.dom.IResourceReference;
 import org.epsilonlabs.modelflow.dom.ITask;
@@ -46,7 +40,6 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 
 	protected HashMap<String, Map<String, Object>> map = new HashMap<>();
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void compile(IEolCompilationContext context) {
 		super.compile(context);
@@ -55,42 +48,11 @@ public class EMFTaskRule extends TaskDeclaration implements IEMFDomElement<ITask
 
 			List<Object> list = new ArrayList<>(1);
 			list.add(getName());
-			Iterator<Object> iterator = list.iterator();
 			if (forEach != null) {
 				forEach.compile(ctx);
 			}
-			FrameStack frameStack = ctx.getFrameStack();
 			createTask(ctx, getName());
-			/*
-			if (iterator != null) {
-				for (int loop = 1; iterator.hasNext(); loop++) {
-					final Map<String, Object> itMap = new HashMap<>();
-					Object next = iterator.next();				
-					String name = getName();
-					try {
-						if (forEach != null){		
-							final Variable[] vars = getVariables(ctx.getModule().getContext(), loop, next);
-							frameStack.enterLocal(FrameType.UNPROTECTED, this, vars);
-							name += String.format("@%d", loop);
-							final Map<String, Object> varMap = Arrays.stream(vars).collect(Collectors.toMap(v -> v.getName(), v -> v.getValue()));
-							map.put(name, varMap);
-						}
-						if (forEach != null){	
-							frameStack.leaveLocal(this);
-						}
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
-			}*/
 		}
-	}
-
-	private Variable[] getVariables(IEolContext ctx, int loop, Object next) throws EolRuntimeException {
-		final Parameter iterator = forEach.getIteratorParameter();
-		Variable itemVar = new Variable(iterator.getName(), next, iterator.getType(ctx));
-		Variable countVar = new Variable("loopCount", loop, EolPrimitiveType.Integer, true);
-		return new Variable[] {itemVar, countVar};
 	}
 	
 	/**

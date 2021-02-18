@@ -43,7 +43,7 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	protected Map<String, IAbstractResourceNode> resources = new ConcurrentHashMap<>();
 	
 		
-	public AbstractDependencyGraph() {
+	protected AbstractDependencyGraph() {
 		updateStatus(GraphState.INSTANTIATED);
 	}
 	
@@ -70,7 +70,7 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	public Collection<IAbstractResourceNode> getResourceNodes() {
 		return getGraph().vertexSet().parallelStream()
 				.filter(r -> r instanceof IAbstractResourceNode)
-				.map(n -> (IAbstractResourceNode) n)
+				.map(IAbstractResourceNode.class::cast)
 				.collect(Collectors.toList());
 	}
 
@@ -78,7 +78,7 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	public Collection<ITaskNode> getTaskNodes() {
 		return getGraph().vertexSet().parallelStream()
 				.filter(r -> r instanceof ITaskNode)
-				.map(n -> (ITaskNode) n)
+				.map(ITaskNode.class::cast)
 				.collect(Collectors.toList());
 	}
 

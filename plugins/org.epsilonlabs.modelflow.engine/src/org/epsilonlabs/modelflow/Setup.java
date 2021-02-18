@@ -15,12 +15,16 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
 import org.epsilonlabs.modelflow.registry.TaskFactoryRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
 public class Setup {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Setup.class);
 
 	public static final String TASK_EP_ID = "org.epsilonlabs.modelflow.engine.taskExtension";
 	public static final String TASK_EP_ATTRIBUTE = "TaskFactoryModule";
@@ -85,7 +89,7 @@ public class Setup {
 					exts.add((Module) i.createExecutableExtension(attribute));
 				} catch (CoreException e) {
 					e.printStackTrace();
-					System.err.println("Unable to find Extension");
+					LOG.error("Unable to find Extension");
 				}
 			}
 		}

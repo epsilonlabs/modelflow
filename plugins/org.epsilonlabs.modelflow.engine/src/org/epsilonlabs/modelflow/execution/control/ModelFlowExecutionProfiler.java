@@ -28,6 +28,7 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	protected MemoryTracker memoryTracker = new MemoryTracker();
 	protected long timeout = 100;
 	protected TimeUnit unit = TimeUnit.NANOSECONDS;
+	protected ScheduledExecutorService exec;
 	
 	@Override
 	public StageProfilerMap getProfiledStages() {
@@ -60,7 +61,7 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	
 	@Override
 	public void dispose() {
-		profiledStages.clear();
+		exec.shutdownNow();
 	}
 	
 	@Override
@@ -92,13 +93,14 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 		return unit;
 	}
 
+	
 	@Override
 	public void track() {
 		try {
 			if (memoryTracker.getLogFile()==null) {				
 				memoryTracker.setup();
 			}
-			ScheduledExecutorService exec = Executors.newSingleThreadScheduledExecutor();
+			exec = Executors.newSingleThreadScheduledExecutor();
 			exec.scheduleAtFixedRate(memoryTracker, 0, timeout, unit);
 		} catch (IOException e) {
 			e.printStackTrace();

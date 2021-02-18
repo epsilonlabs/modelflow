@@ -77,15 +77,6 @@ public abstract class AbstractBenchmark {
 		}
 	}
 
-	/**
-	 * @param scenario
-	 * @param tracing
-	 * @param iteration
-	 * @param projectName
-	 * @param buildFileName
-	 * @param maxIter 
-	 * @throws Exception
-	 */
 	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, Path outputPath,
 			File buildFile, int maxIter) throws Exception {
 		boolean protect = scenario.isProtect();
@@ -111,37 +102,40 @@ public abstract class AbstractBenchmark {
 			fail("Exception during first execution");
 		}
 		
-		// Run modifications
-		System.out.println("Performing modifications");
-		try {
-			final Runnable modifications = scenario.getModifications(outputPath);
-			modifications.run();
-		} catch (Exception e) {
-			e.printStackTrace();
-			cleanup(outputPath);
-			fail("Unable to perform modifications");
-		}
-		
-		module.clearCache();
-		module = createModule(tracing, protect, outputPath);
-		
-		System.out.println("Parsing second execution" );
-		try {
-			module.parse(buildFile);
-		} catch (Exception e) {
-			e.printStackTrace();
-			cleanup(outputPath);
-			fail(e);
-		}
-		
-		// Execute
-		System.out.println("Second execution");
-		try {
-			module.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-			cleanup(outputPath);
-			fail("Exception during second execution");
+		if (scenario.isFirstTimeExecution()) {
+			System.out.println("Skipping modifications and second execution");
+		} else {			
+			// Run modifications
+			System.out.println("Performing modifications");
+			try {
+				final Runnable modifications = scenario.getModifications(outputPath);
+				modifications.run();
+			} catch (Exception e) {
+				e.printStackTrace();
+				cleanup(outputPath);
+				fail("Unable to perform modifications");
+			}
+			
+			module = createModule(tracing, protect, outputPath);
+			
+			System.out.println("Parsing second execution" );
+			try {
+				module.parse(buildFile);
+			} catch (Exception e) {
+				e.printStackTrace();
+				cleanup(outputPath);
+				fail(e);
+			}
+			
+			// Execute
+			System.out.println("Second execution");
+			try {
+				module.execute();
+			} catch (Exception e) {
+				e.printStackTrace();
+				cleanup(outputPath);
+				fail("Exception during second execution");
+			}
 		}
 		
 		// Assert the execution performed as expected
@@ -153,18 +147,17 @@ public abstract class AbstractBenchmark {
 		
 		storeResults(scenario, tracing, iteration, module, maxIter);
  
+		TimeUnit.SECONDS.sleep(1);
 		cleanup(outputPath);
+		module.clearCache();
+		System.gc();
+		
 	}
 
 	protected void cleanup(Path outputPath) {
 		TestUtils.clearExecutionFiles(outputPath);
 	}
 	
-	/**
-	 * @param tracing
-	 * @param outputPath
-	 * @return
-	 */
 	protected ModelFlowModule createModule(Boolean tracing, Boolean protect, final Path outputPath) {
 		File endToEndTraceFile = outputPath.resolve("endToEndTrace.mftrace").toFile();
 		File executionTraceFile = outputPath.resolve("executionTrace.mfexec").toFile();
@@ -185,20 +178,18 @@ public abstract class AbstractBenchmark {
 		return module;
 	}
 
-	/**
-	 * Save tracked memory profile of last iteration
-	 * 
-	 * @param scenario
-	 * @param tracing
-	 * @param iteration
-	 * @param module
-	 * @param maxIter
-	 */
 	protected void storeResults(IScenario scenario, Boolean tracing, Integer iteration, ModelFlowModule module, int maxIter) {
 		IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
 		
 		StageProfilerMap profiledStages = profiler.getProfiledStages();
 	
+		saveOverhead(scenario, tracing, iteration, profiledStages);
+		saveDetails(scenario, tracing, iteration, profiledStages);
+		//saveTrackedDetails(scenario, tracing, iteration, maxIter, profiler);
+	}
+
+	protected void saveOverhead(IScenario scenario, Boolean tracing, Integer iteration,
+			StageProfilerMap profiledStages) {
 		List<Object> values = new ArrayList<>();
 		values.addAll(Arrays.asList(scenario, tracing, iteration));
 		for (Stage stage : Stage.values()) {
@@ -211,7 +202,10 @@ public abstract class AbstractBenchmark {
 		} catch (IOException e) {
 			fail(e);
 		}
-		
+	}
+
+	protected void saveDetails(IScenario scenario, Boolean tracing, Integer iteration,
+			StageProfilerMap profiledStages) {
 		profiledStages.entrySet().forEach(s -> {
 			ProfiledStage stage = s.getValue();
 			MeasurableObject key = s.getKey();
@@ -241,8 +235,10 @@ public abstract class AbstractBenchmark {
 				fail(e);
 			}
 		});
+	}
 
-		
+	protected void saveTrackedDetails(IScenario scenario, Boolean tracing, Integer iteration, int maxIter,
+			IModelFlowExecutionProfiler profiler) {
 		if (maxIter == iteration) {		
 			String[] split = detailsFile.getName().split("\\.");
 			final String originalName = split[0];
@@ -256,7 +252,6 @@ public abstract class AbstractBenchmark {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 
 }

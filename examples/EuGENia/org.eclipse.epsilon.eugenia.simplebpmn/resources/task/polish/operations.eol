@@ -1,0 +1,19 @@
+operation GmfGraph!Layoutable setCustomLayout(class : String) {
+	var layout = new GmfGraph!CustomLayout;
+	layout.qualifiedClassName = class;
+	self.layout = layout;
+}
+
+operation GmfGraph!Label makeVertical() {
+	var labelFigure = self;
+	var labelFigureName = labelFigure.name;
+	var labelFigureText = labelFigure.text;
+	var figure = labelFigure.eContainer();
+	var labelFigureChildAccess = GmfGraph!ChildAccess.all.selectOne(ca|ca.figure = labelFigure);
+	delete labelFigure;
+	labelFigure = new GmfGraph!VerticalLabel;
+	labelFigure.name = labelFigureName;
+	labelFigure.text = labelFigureText;
+	figure.children.add(0, labelFigure);
+	labelFigureChildAccess.figure = labelFigure;
+}

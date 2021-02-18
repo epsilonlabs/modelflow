@@ -20,7 +20,7 @@ import org.apache.commons.csv.CSVPrinter;
  *
  * @author Betty Sanchez
  */
-public class MemoryTracker extends Thread {
+public class MemoryTracker implements Runnable{
 
 	/** The log file. */
 	private File logFile;

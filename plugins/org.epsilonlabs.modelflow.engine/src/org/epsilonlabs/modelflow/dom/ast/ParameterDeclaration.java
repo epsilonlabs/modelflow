@@ -75,9 +75,6 @@ public class ParameterDeclaration extends Expression {
 		FrameStack frameStack = context.getFrameStack();
 		Variable variable = null;
 
-		EolType variableType = typeExpression == null ? EolAnyType.Instance :
-			(EolType) context.getExecutorFactory().execute(typeExpression, context);
-		
 		if (!frameStack.contains(getName())){
 			variable = Variable.createReadOnlyVariable(getName(), EolUndefined.INSTANCE);
 			frameStack.put(variable);

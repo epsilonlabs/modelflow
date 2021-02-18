@@ -29,7 +29,7 @@ import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
  * @author bea
  *
  */
-public abstract class RuleUtil  {
+public class RuleUtil  {
 	
 	public static void setupConfigurableParameters(IModelFlowCompilationContext ctx, IConfigurable element, Class<?> factory, AbstractDeclaration declaration) {
 		for (Entry<NameExpression, ModuleElement> p : declaration.getParameters().entrySet()) {

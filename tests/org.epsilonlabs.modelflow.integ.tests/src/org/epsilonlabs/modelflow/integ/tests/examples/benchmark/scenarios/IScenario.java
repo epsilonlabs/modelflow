@@ -37,6 +37,8 @@ public interface IScenario {
 	 * @return
 	 */
 	String getName();
+	
+	boolean isFirstTimeExecution();
 
 
 }

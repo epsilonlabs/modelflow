@@ -43,7 +43,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	protected String base = "org.eclipse.epsilon.eugenia";
 
 	@ParameterizedTest(name = "Scenario {0} tracing {1} #{2}.")
-	@ScenarioSource(value = EugeniaScenarios.class, times = MAX_ITER /*, mode = Mode.MATCH_ALL, names = "MODIFY_FILE_EMF_GENMODEL"*/)
+	@ScenarioSource(value = EugeniaScenarios.class, times = MAX_ITER)
 	public void eugeniaExampleTwoExecutionTests(EugeniaScenarios scenario, Boolean tracing, Integer iteration)
 			throws Exception {
 		// Setup Variables

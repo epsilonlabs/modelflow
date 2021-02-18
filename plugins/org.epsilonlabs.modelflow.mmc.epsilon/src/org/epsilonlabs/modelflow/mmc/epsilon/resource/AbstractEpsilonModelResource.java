@@ -17,9 +17,9 @@ public abstract class AbstractEpsilonModelResource extends AbstractResourceInsta
 
 	protected IModel model = null; 
 
-	protected Boolean read = false;
-	protected Boolean store = false;
-	protected Boolean reload = false;
+	protected boolean read = false;
+	protected boolean store = false;
+	protected boolean reload = false;
 
 	
 	public AbstractEpsilonModelResource() {

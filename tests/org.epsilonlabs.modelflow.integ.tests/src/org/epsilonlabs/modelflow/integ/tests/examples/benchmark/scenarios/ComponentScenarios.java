@@ -27,7 +27,8 @@ public enum ComponentScenarios implements IScenario {
 	MODIFY_TEMPLATE_FILE,
 	MODIFY_TRANSFORMATION_SCRIPT,
 	MODIFY_VALIDATIONS_CRIPT,
-	NO_MODIFICATION;
+	NO_MODIFICATION,
+	FIRST_TIME_EXECUTION;
 	
 	@Override
 	public String getName() {
@@ -50,6 +51,11 @@ public enum ComponentScenarios implements IScenario {
 		default:
 			return true;
 		}
+	}
+	
+	@Override
+	public boolean isFirstTimeExecution() {
+		return this.equals(FIRST_TIME_EXECUTION);
 	}
 
 	@Override
@@ -80,7 +86,7 @@ public enum ComponentScenarios implements IScenario {
 		case MODIFY_GENERATED_CODE_OUTSIDE_PROTECTED_NO_ACTION:
 			return expect(false, false, false);
 		default:
-			return null;
+			return AllTaskStateValidator.EXECUTED;
 		}
 	}
 	
@@ -92,6 +98,7 @@ public enum ComponentScenarios implements IScenario {
 		String srcgenDir 	= basedir + "/src-gen/reactive/%s";
 		
 		switch (this) {
+		case FIRST_TIME_EXECUTION:
 		case NO_MODIFICATION:
 			return () -> {};
 		case MODIFY_CONFIG_MODEL:

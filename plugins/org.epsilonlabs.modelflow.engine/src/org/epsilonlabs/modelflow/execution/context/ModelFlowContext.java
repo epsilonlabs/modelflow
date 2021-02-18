@@ -7,8 +7,10 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.context;
 
+import java.util.Optional;
+
 import org.eclipse.epsilon.common.module.IModule;
-import org.eclipse.epsilon.erl.execute.context.concurrent.ErlContextParallel;
+import org.eclipse.epsilon.erl.execute.context.ErlContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
@@ -25,7 +27,7 @@ import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.repository.TaskRepository;
 
-public class ModelFlowContext extends ErlContextParallel implements IModelFlowContext {
+public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 
 	protected IDependencyGraph dependencyGraph;
 	protected IExecutionGraph executionGraph;

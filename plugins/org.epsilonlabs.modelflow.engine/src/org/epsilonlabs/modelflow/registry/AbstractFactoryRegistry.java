@@ -18,7 +18,7 @@ public abstract class AbstractFactoryRegistry<F>{
 	
 	protected Map<String, Class<F>> factories = new ConcurrentHashMap<>();
 	
-	public AbstractFactoryRegistry(Set<Class<F>> resourceMonitor) {
+	protected AbstractFactoryRegistry(Set<Class<F>> resourceMonitor) {
 		resourceMonitor.parallelStream().forEach(r-> {
 			Definition definition = r.getAnnotation(Definition.class);
 			if (definition != null) {				

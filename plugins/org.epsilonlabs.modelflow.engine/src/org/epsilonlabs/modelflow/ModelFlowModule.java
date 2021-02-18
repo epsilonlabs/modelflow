@@ -107,7 +107,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	protected ModulePersistenceHelper traceHelper;
 	protected IModelFlowConfiguration config;
 
-	protected boolean EMF = true;
+	protected boolean isEmf = true;
 	/*
 	 *******************************************
 	 * CONSTRUCTOR
@@ -206,7 +206,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public IModelFlowContext getContext() {
 		if (context == null) {
-			this.context = EMF ? new ModelFlowEMFContext() : new ModelFlowContext();
+			this.context = isEmf ? new ModelFlowEMFContext() : new ModelFlowContext();
 		}
 		return (IModelFlowContext) context;
 	}
@@ -221,7 +221,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public HashMap<String, Class<?>> getImportConfiguration() {
 		HashMap<String, Class<?>> importConfiguration = super.getImportConfiguration();
-		importConfiguration.put("mflow", ModelFlowModule.class);
+		importConfiguration.put(EXTENSION, ModelFlowModule.class);
 		return importConfiguration;
 	}
 
@@ -287,10 +287,10 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		switch (cst.getType()) {
 		
 		case ModelFlowParser.RESOURCEDECLARATION:
-			return EMF ? new EMFResourceRule() : new ModelDeclaration();
+			return isEmf ? new EMFResourceRule() : new ModelDeclaration();
 			
 		case ModelFlowParser.TASKDECLARATION:
-			return EMF ? new EMFTaskRule() : new TaskDeclaration();
+			return isEmf ? new EMFTaskRule() : new TaskDeclaration();
 
 		case ModelFlowParser.RULETYPE:
 			return new NameExpression(cst.getText());	
@@ -311,9 +311,9 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			if (parentAst instanceof ITaskModuleElement) {
 				int parentToken = cst.getParent().getType();
 				if (parentToken == ModelFlowParser.DEPENDSON) {
-					return EMF ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
+					return isEmf ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
 				} else if (parentToken == ModelFlowParser.TASKRESOURCE) {
-					return EMF ? new EMFModelCallExpression() : new ModelCallExpression();
+					return isEmf ? new EMFModelCallExpression() : new ModelCallExpression();
 				} else {
 					return super.adapt(cst, parentAst);
 				}
@@ -322,13 +322,13 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		
 		case ModelFlowParser.DEPENDSON:
 			if (parentAst instanceof ITaskModuleElement) {
-				return EMF ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
+				return isEmf ? new EMFTaskDependencyExpression((ITaskModuleElement) parentAst) : new TaskDependencyExpression();
 			}
 			break;
 		
 		case ModelFlowParser.TASKRESOURCE:
 			if (parentAst instanceof ITaskModuleElement) {
-				return EMF ? new EMFModelCallExpression() : new ModelCallExpression();
+				return isEmf ? new EMFModelCallExpression() : new ModelCallExpression();
 			}
 			break;
 		
@@ -347,7 +347,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public IModelFlowCompilationContext getCompilationContext() {
 		if (compilationCtx == null) {
-			compilationCtx = EMF ? new EMFModelFlowCompilationContext(this) : new ModelFlowCompilationContext(this);
+			compilationCtx = isEmf ? new EMFModelFlowCompilationContext(this) : new ModelFlowCompilationContext(this);
 		}
 		compilationCtx.setRuntimeContext(getContext());
 		return compilationCtx;
@@ -381,9 +381,10 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 			dep.compile(context);
 			if (dep instanceof IEMFDomElement) {
 				Collection<?> deps = ((IEMFDomElement<?>) dep).getDomElements();
-				deps.stream().filter(ITaskDependency.class::isInstance).map(ITaskDependency.class::cast).forEach(t->{
-					workflow.getTaskDependencies().add(t);
-				});
+				deps.stream()
+					.filter(ITaskDependency.class::isInstance)
+					.map(ITaskDependency.class::cast)
+					.forEach(t-> workflow.getTaskDependencies().add(t));
 			}
 		});
 		return super.compile();
@@ -461,11 +462,11 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		ctx.setTaskRepository(taskRepository);
 
 		// Executor 
-		ctx.setScheduler(EMF ? new TopologicalSequentialScheduler() : new TaskStackScheduler());
+		ctx.setScheduler(isEmf ? new TopologicalSequentialScheduler() : new TaskStackScheduler());
 		
 		// Model Manager
 		if (ctx.getResourceManager() == null) {
-			ctx.setResourceManager(EMF ? new ResourceManager() : new TaskResourceManager());
+			ctx.setResourceManager(isEmf ? new ResourceManager() : new TaskResourceManager());
 		}
 		
 		// Path Resolver
@@ -556,7 +557,12 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	public void postExecution() throws EolRuntimeException {
 		super.postExecution();
 
-		getContext().getTaskRepository().getResourceRepository().flush();
+		final IModelFlowContext ctx = getContext();
+		if (ctx.isProfilingEnabled()) {
+			ctx.getProfiler().dispose();
+		}
+		
+		ctx.getTaskRepository().getResourceRepository().flush();
 	}
 	
 	@Override
@@ -574,8 +580,12 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		ctx.setManagementTrace(mTrace);
 
 		// Model Manager
-		ctx.getTaskRepository().getResourceRepository().flush();
+		ctx.getTaskRepository().getResourceRepository().clear();
 		ctx.getTaskRepository().clear();
+		
+		
+		
+		
 	}
 
 }
