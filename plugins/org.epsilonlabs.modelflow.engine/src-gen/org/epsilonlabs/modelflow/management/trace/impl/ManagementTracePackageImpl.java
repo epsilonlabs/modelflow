@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.FileElement;
+import org.epsilonlabs.modelflow.management.trace.FileRegionElement;
 import org.epsilonlabs.modelflow.management.trace.Link;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceFactory;
@@ -24,7 +25,6 @@ import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
 import org.epsilonlabs.modelflow.management.trace.ModelElement;
 import org.epsilonlabs.modelflow.management.trace.ModelElementProperty;
 import org.epsilonlabs.modelflow.management.trace.Property;
-import org.epsilonlabs.modelflow.management.trace.Region;
 import org.epsilonlabs.modelflow.management.trace.TaskTrace;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
@@ -89,7 +89,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass regionEClass = null;
+	private EClass fileRegionElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -352,8 +352,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EReference getFileElement_Region() {
-		return (EReference)fileElementEClass.getEStructuralFeatures().get(0);
+	public EClass getFileRegionElement() {
+		return fileRegionElementEClass;
 	}
 
 	/**
@@ -362,8 +362,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EClass getRegion() {
-		return regionEClass;
+	public EAttribute getFileRegionElement_Offset() {
+		return (EAttribute)fileRegionElementEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -372,18 +372,8 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public EAttribute getRegion_Offset() {
-		return (EAttribute)regionEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EAttribute getRegion_Length() {
-		return (EAttribute)regionEClass.getEStructuralFeatures().get(1);
+	public EAttribute getFileRegionElement_Length() {
+		return (EAttribute)fileRegionElementEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -509,11 +499,10 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		createEAttribute(modelElementPropertyEClass, MODEL_ELEMENT_PROPERTY__VALUE);
 
 		fileElementEClass = createEClass(FILE_ELEMENT);
-		createEReference(fileElementEClass, FILE_ELEMENT__REGION);
 
-		regionEClass = createEClass(REGION);
-		createEAttribute(regionEClass, REGION__OFFSET);
-		createEAttribute(regionEClass, REGION__LENGTH);
+		fileRegionElementEClass = createEClass(FILE_REGION_ELEMENT);
+		createEAttribute(fileRegionElementEClass, FILE_REGION_ELEMENT__OFFSET);
+		createEAttribute(fileRegionElementEClass, FILE_REGION_ELEMENT__LENGTH);
 
 		linkEClass = createEClass(LINK);
 		createEAttribute(linkEClass, LINK__TYPE);
@@ -556,6 +545,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		modelElementEClass.getESuperTypes().add(this.getElement());
 		modelElementPropertyEClass.getESuperTypes().add(this.getModelElement());
 		fileElementEClass.getESuperTypes().add(this.getElement());
+		fileRegionElementEClass.getESuperTypes().add(this.getFileElement());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(managementTraceEClass, ManagementTrace.class, "ManagementTrace", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -582,11 +572,10 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 		initEAttribute(getModelElementProperty_Value(), ecorePackage.getEJavaObject(), "value", null, 0, 1, ModelElementProperty.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fileElementEClass, FileElement.class, "FileElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFileElement_Region(), this.getRegion(), null, "region", null, 0, 1, FileElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(regionEClass, Region.class, "Region", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getRegion_Offset(), ecorePackage.getEInt(), "offset", null, 0, 1, Region.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getRegion_Length(), ecorePackage.getEInt(), "length", null, 0, 1, Region.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(fileRegionElementEClass, FileRegionElement.class, "FileRegionElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFileRegionElement_Offset(), ecorePackage.getEInt(), "offset", null, 0, 1, FileRegionElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFileRegionElement_Length(), ecorePackage.getEInt(), "length", null, 0, 1, FileRegionElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getLink_Type(), ecorePackage.getEString(), "type", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -660,7 +649,7 @@ public class ManagementTracePackageImpl extends EPackageImpl implements Manageme
 			   "label", "return \'@\'+self.region.offset + \':\' + self.region.length;"
 		   });
 		addAnnotation
-		  (regionEClass,
+		  (fileRegionElementEClass,
 		   source,
 		   new String[] {
 			   "classIcon", "object",

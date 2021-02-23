@@ -9,40 +9,39 @@
  */
 package org.epsilonlabs.modelflow.management.trace;
 
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Region</b></em>'.
+ * A representation of the model object '<em><b>File Region Element</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.Region#getOffset <em>Offset</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.Region#getLength <em>Length</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getOffset <em>Offset</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getLength <em>Length</em>}</li>
  * </ul>
  *
- * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getRegion()
+ * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getFileRegionElement()
  * @model annotation="exeed classIcon='object' label='return self.offset + \':\' + self.length;'"
  * @generated
  */
-public interface Region extends EObject {
+public interface FileRegionElement extends FileElement {
 	/**
 	 * Returns the value of the '<em><b>Offset</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Offset</em>' attribute.
 	 * @see #setOffset(int)
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getRegion_Offset()
+	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getFileRegionElement_Offset()
 	 * @model
 	 * @generated
 	 */
 	int getOffset();
 
 	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.Region#getOffset <em>Offset</em>}' attribute.
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getOffset <em>Offset</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Offset</em>' attribute.
@@ -57,14 +56,14 @@ public interface Region extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Length</em>' attribute.
 	 * @see #setLength(int)
-	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getRegion_Length()
+	 * @see org.epsilonlabs.modelflow.management.trace.ManagementTracePackage#getFileRegionElement_Length()
 	 * @model
 	 * @generated
 	 */
 	int getLength();
 
 	/**
-	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.Region#getLength <em>Length</em>}' attribute.
+	 * Sets the value of the '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getLength <em>Length</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Length</em>' attribute.
@@ -73,4 +72,4 @@ public interface Region extends EObject {
 	 */
 	void setLength(int value);
 
-} // Region
+} // FileRegionElement

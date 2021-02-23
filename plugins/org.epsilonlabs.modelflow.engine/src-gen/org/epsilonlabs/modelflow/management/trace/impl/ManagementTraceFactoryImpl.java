@@ -69,7 +69,7 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 			case ManagementTracePackage.MODEL_ELEMENT: return createModelElement();
 			case ManagementTracePackage.MODEL_ELEMENT_PROPERTY: return createModelElementProperty();
 			case ManagementTracePackage.FILE_ELEMENT: return createFileElement();
-			case ManagementTracePackage.REGION: return createRegion();
+			case ManagementTracePackage.FILE_REGION_ELEMENT: return createFileRegionElement();
 			case ManagementTracePackage.LINK: return createLink();
 			case ManagementTracePackage.PROPERTY: return createProperty();
 			default:
@@ -149,9 +149,9 @@ public class ManagementTraceFactoryImpl extends EFactoryImpl implements Manageme
 	 * @generated
 	 */
 	@Override
-	public Region createRegion() {
-		RegionImpl region = new RegionImpl();
-		return region;
+	public FileRegionElement createFileRegionElement() {
+		FileRegionElementImpl fileRegionElement = new FileRegionElementImpl();
+		return fileRegionElement;
 	}
 
 	/**

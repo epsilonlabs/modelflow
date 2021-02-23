@@ -83,22 +83,23 @@ public class ManagementTraceBuilder {
 	}
 	
 	private FileElement fileElement(@Nullable String file, @Nullable Integer offset, @Nullable Integer length) {
-		FileElement element = ManagementTraceFactoryImpl.eINSTANCE.createFileElement();
+		FileElement element = null;
+		if (offset!= null && length!=null) {
+			element= ManagementTraceFactoryImpl.eINSTANCE.createFileRegionElement();
+		} else {
+			element = ManagementTraceFactoryImpl.eINSTANCE.createFileElement();
+		}
 		if (file != null && !file.isEmpty()) {	
 			IResource res = DomFactory.eINSTANCE.createResource();
 			res.setDeclared(false);
 			res.setName(file);
 			element.setResource(res.getName());
 		}
-		Region region = ManagementTraceFactoryImpl.eINSTANCE.createRegion();
 		if (offset != null) 
-			region.setOffset(offset);
+			((FileRegionElement) element).setOffset(offset);
 		if (length != null) 
-			region.setLength(length);
+			((FileRegionElement) element).setLength(length);
 		
-		if (region != null) {			
-			element.setRegion(region);
-		}
 		return element;
 	}
 	

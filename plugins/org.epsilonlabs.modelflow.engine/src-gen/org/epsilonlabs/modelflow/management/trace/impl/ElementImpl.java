@@ -10,9 +10,12 @@
 package org.epsilonlabs.modelflow.management.trace.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
 import org.epsilonlabs.modelflow.management.trace.Element;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
 
@@ -40,6 +43,7 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected static final String RESOURCE_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getResource() <em>Resource</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -49,6 +53,7 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected String resource = RESOURCE_EDEFAULT;
+
 	/**
 	 * The default value of the '{@link #getRole() <em>Role</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -58,6 +63,7 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected static final String ROLE_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getRole() <em>Role</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -67,6 +73,7 @@ public abstract class ElementImpl extends MinimalEObjectImpl.Container implement
 	 * @ordered
 	 */
 	protected String role = ROLE_EDEFAULT;
+
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

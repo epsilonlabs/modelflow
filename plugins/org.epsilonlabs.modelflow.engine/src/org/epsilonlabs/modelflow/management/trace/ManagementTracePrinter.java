@@ -57,8 +57,10 @@ public class ManagementTracePrinter {
 			}
 		} else if (element instanceof FileElement){
 			builder.append(String.format("  (file : %s, ", getContainer(element)));
-			Region region = ((FileElement)element).getRegion();
-			builder.append(String.format("region : %s:%s", region.getOffset(), region.getLength()));
+			if (element instanceof FileRegionElement) {	
+				FileRegionElement region = (FileRegionElement) element;
+				builder.append(String.format("region : %s:%s", region.getOffset(), region.getLength()));
+			}
 		}
 		builder.append(")\n");
 		

@@ -83,13 +83,13 @@ public interface ManagementTraceFactory extends EFactory {
 	FileElement createFileElement();
 
 	/**
-	 * Returns a new object of class '<em>Region</em>'.
+	 * Returns a new object of class '<em>File Region Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Region</em>'.
+	 * @return a new object of class '<em>File Region Element</em>'.
 	 * @generated
 	 */
-	Region createRegion();
+	FileRegionElement createFileRegionElement();
 
 	/**
 	 * Returns a new object of class '<em>Link</em>'.

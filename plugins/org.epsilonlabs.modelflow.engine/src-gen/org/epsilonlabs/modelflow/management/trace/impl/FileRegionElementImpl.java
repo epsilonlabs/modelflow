@@ -14,26 +14,25 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.epsilonlabs.modelflow.management.trace.FileRegionElement;
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
-import org.epsilonlabs.modelflow.management.trace.Region;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Region</b></em>'.
+ * An implementation of the model object '<em><b>File Region Element</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.RegionImpl#getOffset <em>Offset</em>}</li>
- *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.RegionImpl#getLength <em>Length</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl#getOffset <em>Offset</em>}</li>
+ *   <li>{@link org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl#getLength <em>Length</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
+public class FileRegionElementImpl extends FileElementImpl implements FileRegionElement {
 	/**
 	 * The default value of the '{@link #getOffset() <em>Offset</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -79,7 +78,7 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected RegionImpl() {
+	protected FileRegionElementImpl() {
 		super();
 	}
 
@@ -90,7 +89,7 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return ManagementTracePackage.Literals.REGION;
+		return ManagementTracePackage.Literals.FILE_REGION_ELEMENT;
 	}
 
 	/**
@@ -113,7 +112,7 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 		int oldOffset = offset;
 		offset = newOffset;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.REGION__OFFSET, oldOffset, offset));
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.FILE_REGION_ELEMENT__OFFSET, oldOffset, offset));
 	}
 
 	/**
@@ -136,7 +135,7 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 		int oldLength = length;
 		length = newLength;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.REGION__LENGTH, oldLength, length));
+			eNotify(new ENotificationImpl(this, Notification.SET, ManagementTracePackage.FILE_REGION_ELEMENT__LENGTH, oldLength, length));
 	}
 
 	/**
@@ -147,9 +146,9 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case ManagementTracePackage.REGION__OFFSET:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__OFFSET:
 				return getOffset();
-			case ManagementTracePackage.REGION__LENGTH:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__LENGTH:
 				return getLength();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -163,10 +162,10 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case ManagementTracePackage.REGION__OFFSET:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__OFFSET:
 				setOffset((Integer)newValue);
 				return;
-			case ManagementTracePackage.REGION__LENGTH:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__LENGTH:
 				setLength((Integer)newValue);
 				return;
 		}
@@ -181,10 +180,10 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case ManagementTracePackage.REGION__OFFSET:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__OFFSET:
 				setOffset(OFFSET_EDEFAULT);
 				return;
-			case ManagementTracePackage.REGION__LENGTH:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__LENGTH:
 				setLength(LENGTH_EDEFAULT);
 				return;
 		}
@@ -199,9 +198,9 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case ManagementTracePackage.REGION__OFFSET:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__OFFSET:
 				return offset != OFFSET_EDEFAULT;
-			case ManagementTracePackage.REGION__LENGTH:
+			case ManagementTracePackage.FILE_REGION_ELEMENT__LENGTH:
 				return length != LENGTH_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -225,4 +224,4 @@ public class RegionImpl extends MinimalEObjectImpl.Container implements Region {
 		return result.toString();
 	}
 
-} //RegionImpl
+} //FileRegionElementImpl

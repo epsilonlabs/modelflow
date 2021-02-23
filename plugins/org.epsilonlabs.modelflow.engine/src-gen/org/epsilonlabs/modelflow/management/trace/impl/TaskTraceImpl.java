@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.epsilonlabs.modelflow.management.trace.ManagementTracePackage;
 import org.epsilonlabs.modelflow.management.trace.TaskTrace;
 import org.epsilonlabs.modelflow.management.trace.Trace;

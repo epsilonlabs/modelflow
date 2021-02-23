@@ -404,22 +404,13 @@ public interface ManagementTracePackage extends EPackage {
 	int FILE_ELEMENT__ROLE = ELEMENT__ROLE;
 
 	/**
-	 * The feature id for the '<em><b>Region</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FILE_ELEMENT__REGION = ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>File Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FILE_ELEMENT_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 1;
+	int FILE_ELEMENT_FEATURE_COUNT = ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of operations of the '<em>File Element</em>' class.
@@ -431,14 +422,32 @@ public interface ManagementTracePackage extends EPackage {
 	int FILE_ELEMENT_OPERATION_COUNT = ELEMENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.RegionImpl <em>Region</em>}' class.
+	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl <em>File Region Element</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.RegionImpl
-	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getRegion()
+	 * @see org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl
+	 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getFileRegionElement()
 	 * @generated
 	 */
-	int REGION = 7;
+	int FILE_REGION_ELEMENT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Resource</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE_REGION_ELEMENT__RESOURCE = FILE_ELEMENT__RESOURCE;
+
+	/**
+	 * The feature id for the '<em><b>Role</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FILE_REGION_ELEMENT__ROLE = FILE_ELEMENT__ROLE;
 
 	/**
 	 * The feature id for the '<em><b>Offset</b></em>' attribute.
@@ -447,7 +456,7 @@ public interface ManagementTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REGION__OFFSET = 0;
+	int FILE_REGION_ELEMENT__OFFSET = FILE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Length</b></em>' attribute.
@@ -456,25 +465,25 @@ public interface ManagementTracePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REGION__LENGTH = 1;
+	int FILE_REGION_ELEMENT__LENGTH = FILE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The number of structural features of the '<em>Region</em>' class.
+	 * The number of structural features of the '<em>File Region Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REGION_FEATURE_COUNT = 2;
+	int FILE_REGION_ELEMENT_FEATURE_COUNT = FILE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
-	 * The number of operations of the '<em>Region</em>' class.
+	 * The number of operations of the '<em>File Region Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REGION_OPERATION_COUNT = 0;
+	int FILE_REGION_ELEMENT_OPERATION_COUNT = FILE_ELEMENT_OPERATION_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.epsilonlabs.modelflow.management.trace.impl.LinkImpl <em>Link</em>}' class.
@@ -770,47 +779,36 @@ public interface ManagementTracePackage extends EPackage {
 	EClass getFileElement();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link org.epsilonlabs.modelflow.management.trace.FileElement#getRegion <em>Region</em>}'.
+	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement <em>File Region Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Region</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.FileElement#getRegion()
-	 * @see #getFileElement()
+	 * @return the meta object for class '<em>File Region Element</em>'.
+	 * @see org.epsilonlabs.modelflow.management.trace.FileRegionElement
 	 * @generated
 	 */
-	EReference getFileElement_Region();
+	EClass getFileRegionElement();
 
 	/**
-	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.Region <em>Region</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Region</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Region
-	 * @generated
-	 */
-	EClass getRegion();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Region#getOffset <em>Offset</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getOffset <em>Offset</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Offset</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Region#getOffset()
-	 * @see #getRegion()
+	 * @see org.epsilonlabs.modelflow.management.trace.FileRegionElement#getOffset()
+	 * @see #getFileRegionElement()
 	 * @generated
 	 */
-	EAttribute getRegion_Offset();
+	EAttribute getFileRegionElement_Offset();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.Region#getLength <em>Length</em>}'.
+	 * Returns the meta object for the attribute '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement#getLength <em>Length</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Length</em>'.
-	 * @see org.epsilonlabs.modelflow.management.trace.Region#getLength()
-	 * @see #getRegion()
+	 * @see org.epsilonlabs.modelflow.management.trace.FileRegionElement#getLength()
+	 * @see #getFileRegionElement()
 	 * @generated
 	 */
-	EAttribute getRegion_Length();
+	EAttribute getFileRegionElement_Length();
 
 	/**
 	 * Returns the meta object for class '{@link org.epsilonlabs.modelflow.management.trace.Link <em>Link</em>}'.
@@ -1069,22 +1067,14 @@ public interface ManagementTracePackage extends EPackage {
 		EClass FILE_ELEMENT = eINSTANCE.getFileElement();
 
 		/**
-		 * The meta object literal for the '<em><b>Region</b></em>' containment reference feature.
+		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl <em>File Region Element</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
+		 * @see org.epsilonlabs.modelflow.management.trace.impl.FileRegionElementImpl
+		 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getFileRegionElement()
 		 * @generated
 		 */
-		EReference FILE_ELEMENT__REGION = eINSTANCE.getFileElement_Region();
-
-		/**
-		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.RegionImpl <em>Region</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.RegionImpl
-		 * @see org.epsilonlabs.modelflow.management.trace.impl.ManagementTracePackageImpl#getRegion()
-		 * @generated
-		 */
-		EClass REGION = eINSTANCE.getRegion();
+		EClass FILE_REGION_ELEMENT = eINSTANCE.getFileRegionElement();
 
 		/**
 		 * The meta object literal for the '<em><b>Offset</b></em>' attribute feature.
@@ -1092,7 +1082,7 @@ public interface ManagementTracePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute REGION__OFFSET = eINSTANCE.getRegion_Offset();
+		EAttribute FILE_REGION_ELEMENT__OFFSET = eINSTANCE.getFileRegionElement_Offset();
 
 		/**
 		 * The meta object literal for the '<em><b>Length</b></em>' attribute feature.
@@ -1100,7 +1090,7 @@ public interface ManagementTracePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute REGION__LENGTH = eINSTANCE.getRegion_Length();
+		EAttribute FILE_REGION_ELEMENT__LENGTH = eINSTANCE.getFileRegionElement_Length();
 
 		/**
 		 * The meta object literal for the '{@link org.epsilonlabs.modelflow.management.trace.impl.LinkImpl <em>Link</em>}' class.

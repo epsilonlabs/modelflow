@@ -17,12 +17,6 @@
             genModel="model/managementTrace.genmodel"/>
    </extension>
 
-   <extension point="org.eclipse.emf.ecore.extension_parser">
-      <!-- @generated managementTrace -->
-      <parser
-            type="trace"
-            class="org.epsilonlabs.modelflow.management.trace.util.ManagementTraceResourceFactoryImpl"/>
-   </extension>
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated executionTrace -->
       <package

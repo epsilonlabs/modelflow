@@ -40,11 +40,10 @@ class ModelElementProperty extends ModelElement {
 
 @exeed(classIcon="text", label="return '@'+self.region.offset + ':' + self.region.length;")
 class FileElement extends Element {
-  val Region region;
 }
 
 @exeed(classIcon="object", label="return self.offset + ':' + self.length;")
-class Region {
+class FileRegionElement extends FileElement {
   attr int offset;
   attr int length;
 }

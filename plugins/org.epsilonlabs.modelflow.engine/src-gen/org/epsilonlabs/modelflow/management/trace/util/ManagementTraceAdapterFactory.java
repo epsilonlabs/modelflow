@@ -103,8 +103,8 @@ public class ManagementTraceAdapterFactory extends AdapterFactoryImpl {
 				return createFileElementAdapter();
 			}
 			@Override
-			public Adapter caseRegion(Region object) {
-				return createRegionAdapter();
+			public Adapter caseFileRegionElement(FileRegionElement object) {
+				return createFileRegionElementAdapter();
 			}
 			@Override
 			public Adapter caseLink(Link object) {
@@ -233,16 +233,16 @@ public class ManagementTraceAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.management.trace.Region <em>Region</em>}'.
+	 * Creates a new adapter for an object of class '{@link org.epsilonlabs.modelflow.management.trace.FileRegionElement <em>File Region Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see org.epsilonlabs.modelflow.management.trace.Region
+	 * @see org.epsilonlabs.modelflow.management.trace.FileRegionElement
 	 * @generated
 	 */
-	public Adapter createRegionAdapter() {
+	public Adapter createFileRegionElementAdapter() {
 		return null;
 	}
 
