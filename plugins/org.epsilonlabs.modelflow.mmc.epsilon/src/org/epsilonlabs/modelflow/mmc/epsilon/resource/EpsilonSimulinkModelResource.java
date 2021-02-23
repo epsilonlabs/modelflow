@@ -43,6 +43,7 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 	//private Boolean lookUnderMasks;
 
 	private File workingDir;
+	private File project;
 	private File file;
 	private String libraryPath;
 	private String engineJarPath;
@@ -74,7 +75,9 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 		getModel().setCloseOnDispose(false);
 
 		getModel().setFindOptimisationEnabled(findOptimisations);
-
+		if (project != null && project.exists()) {
+			getModel().setProject(project);
+		}
 		getModel().setEnableTryCatch(enableTryCatch);
 		getModel().setFollowLinks(followLinks);
 		getModel().setIncludeCommented(comments);		
@@ -88,6 +91,15 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 	@Param(key = "workingDir")
 	public void setWorkingDir(File workingDir) {
 		this.workingDir = workingDir;
+	}
+
+	public File getProject() {
+		return project;
+	}
+
+	@Param(key = "project")
+	public void setProject(File project) {
+		this.project = project;
 	}
 
 	public Boolean getShowInMatlabEditor() {
