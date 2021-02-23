@@ -8,8 +8,8 @@
 package org.epsilonlabs.modelflow.execution.control;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
  */
 public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 
-	protected Map<MeasurableObject, ProfiledStage> profiledStages = new ConcurrentHashMap<>();
+	protected Map<MeasurableObject, ProfiledStage> profiledStages =  new HashMap<>();
 	protected MemoryTracker memoryTracker = new MemoryTracker();
 	protected long timeout = 100;
 	protected TimeUnit unit = TimeUnit.NANOSECONDS;

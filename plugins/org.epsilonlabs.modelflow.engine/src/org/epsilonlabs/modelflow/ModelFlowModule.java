@@ -409,7 +409,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	public TaskFactoryRegistry getTaskFactoryRegistry() {
 		if (taskFactoryRegistry == null) {
-					taskFactoryRegistry = Setup.getInstance().getTaskFactoryRegistry();
+			taskFactoryRegistry = Setup.getInstance().getTaskFactoryRegistry();
 		}
 		return taskFactoryRegistry;
 	}
@@ -582,10 +582,6 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		// Model Manager
 		ctx.getTaskRepository().getResourceRepository().clear();
 		ctx.getTaskRepository().clear();
-		
-		
-		
-		
 	}
 
 }

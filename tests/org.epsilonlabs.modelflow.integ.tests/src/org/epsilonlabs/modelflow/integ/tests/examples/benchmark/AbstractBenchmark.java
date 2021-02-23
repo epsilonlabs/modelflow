@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -52,6 +53,7 @@ public abstract class AbstractBenchmark {
 	
 	protected static File detailsFile;
 	protected static File overheadFile;
+	protected static File invocationsFile;
 	protected static TaskFactoryRegistry taskFactoryRegistry;
 	protected static ResourceFactoryRegistry resourceFactoryRegistry;
 
@@ -59,6 +61,7 @@ public abstract class AbstractBenchmark {
 		if (overheadFile ==null) {			
 			final Date time = new Date();
 			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
+			invocationsFile = BenchmarkUtils.getResultsFile("invocations", time);
 			detailsFile = BenchmarkUtils.getResultsFile("details", time);
 			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "parentStage", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
@@ -67,6 +70,7 @@ public abstract class AbstractBenchmark {
 			String[] overheadHeaders = headersList.toArray(new String[0]);
 			try {
 				BenchmarkUtils.prepareResultFile(overheadFile, overheadHeaders);
+				BenchmarkUtils.prepareResultFile(invocationsFile, overheadHeaders);
 				BenchmarkUtils.prepareResultFile(detailsFile, detailsHeaders);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -191,18 +195,25 @@ public abstract class AbstractBenchmark {
 	protected void saveOverhead(IScenario scenario, Boolean tracing, Integer iteration,
 			StageProfilerMap profiledStages) {
 		List<Object> values = new ArrayList<>();
+		List<Object> invocations = new ArrayList<>();
+		invocations.addAll(Arrays.asList(scenario, tracing, iteration));
 		values.addAll(Arrays.asList(scenario, tracing, iteration));
 		for (Stage stage : Stage.values()) {
-			 final Long duration = profiledStages.getByStage(stage).values().stream().map(v-> v.delta().getTime(TU)).reduce(0l, Long::sum);
+			 final Collection<ProfiledStage> profiles = profiledStages.getByStage(stage).values();
+			// Sums all ocurrences during the execution
+			 final Long duration = profiles.stream().map(v-> v.delta().getTime(TU)).reduce(0l, Long::sum);
 			 values.add(duration);
+			 invocations.add(profiles.size());
 		}
 		
 		try {
 			BenchmarkUtils.writeResults(overheadFile, values.toArray());
+			BenchmarkUtils.writeResults(invocationsFile, invocations.toArray());
 		} catch (IOException e) {
 			fail(e);
 		}
 	}
+
 
 	protected void saveDetails(IScenario scenario, Boolean tracing, Integer iteration,
 			StageProfilerMap profiledStages) {

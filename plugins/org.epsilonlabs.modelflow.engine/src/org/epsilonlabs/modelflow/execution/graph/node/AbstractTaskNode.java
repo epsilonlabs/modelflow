@@ -8,6 +8,7 @@ import static org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement.TASK_NAME;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,6 @@ import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 import io.reactivex.Completable;
@@ -61,13 +61,21 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	protected TaskState state;
 
 	protected ITaskNode parentNode = null;
-	protected Map<String, ITaskNode> subNodes = Maps.newHashMap();
+	protected Map<String, ITaskNode> subNodes = new HashMap<>();
 	protected ConservativeExecutionHelper conservativeExecutionHelper;
 
 	protected final CompletableSubject completable = CompletableSubject.create();
 	protected final PublishSubject<TaskState> statusUpdater = PublishSubject.create();
 	
+	protected Map<String, Collection<NodeVar>> vars = new HashMap<>();
+
 	protected abstract ITaskNode createSubNode(ITaskModuleElement declaration, String name);
+	protected abstract boolean shouldExecuteBasedOnTrace(IModelFlowContext ctx);
+	protected abstract void noNeedToExecute(IModelFlowContext ctx);
+	protected abstract void safelyDispose(IModelFlowContext ctx);
+	protected abstract List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException;	
+	protected abstract void resolveTask(IModelFlowContext ctx) throws MFRuntimeException;
+
 	
 	public AbstractTaskNode(ITaskModuleElement declaration) {
 		this(declaration, declaration.getName());
@@ -151,12 +159,9 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		return this.getName();
 	}
 	
-	protected abstract boolean shouldExecuteBasedOnTrace(IModelFlowContext ctx);
-	protected abstract void noNeedToExecute(IModelFlowContext ctx);
-	protected abstract void safelyDispose(IModelFlowContext ctx);
-	
 	// NEW
 
+	@Override
 	public void execute(IModelFlowContext ctx) throws MFRuntimeException {
 		if (taskDeclaration != null && taskDeclaration.isGenerator() && getParentNode() == null) {
 			try {
@@ -170,11 +175,9 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		}		
 	}
 	protected void postFor(IModelFlowContext ctx) {
-		
+		// Do something?
 	}
-	protected abstract List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException;	
-	protected abstract void resolveTask(IModelFlowContext ctx) throws MFRuntimeException;
-
+	
 	class NodeVar {
 		String key;
 		Object val;
@@ -189,7 +192,6 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		}
 		
 	}
-	protected Map<String, Collection<NodeVar>> vars = Maps.newHashMap();
 
 	public void attemptForEachExecution(IModelFlowContext ctx) throws MFRuntimeException {
 		final ForEachModuleElement forEachModuleElement = taskDeclaration.getForEach();

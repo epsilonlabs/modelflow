@@ -37,6 +37,11 @@ public enum EugeniaScenarios implements IScenario {
 	POLISH_ECORE2GMF,
 	;
 	
+	/**
+	 * 
+	 */
+	private static final String EMF = "simplebpmn.emf";
+
 	@Override
 	public String getName() {
 		return name();
@@ -61,21 +66,21 @@ public enum EugeniaScenarios implements IScenario {
 		case EMF_GMF_ANNOTATION:
 			// Arrow style dash to dot
 			return ()-> {
-				String file = String.format(modelDir, "simplebpmn.emf");
+				String file = String.format(modelDir, EMF);
 				FileModifier modifier = new FileModifier(file);				
 				modifier.replaceFirst("(.*)(border\\.style=\")(dash)(\")(.*)", "$1$2dot$4$5") ;
 			};
 		case EMF_RENAME_CLASS:
 			// Rename Activity class to Task 
 			return ()-> {
-				String file = String.format(modelDir, "simplebpmn.emf");
+				String file = String.format(modelDir, EMF);
 				FileModifier modifier = new FileModifier(file);				
 				modifier.replaceFirst("(class )(Activity)( extends .*)", "$1Task$3");
 			};
 		case EMF_GENMODEL_ANNOTATION:
 			// Adds basepackage to genmodel
 			return () -> {
-				String file = String.format(modelDir, "simplebpmn.emf");
+				String file = String.format(modelDir, EMF);
 				FileModifier modifier = new FileModifier(file);	
 				modifier.replaceFirst("(@namespace.*)", "@emf.gen(basePackage=\"org.eclipse.epsilon.eugenia.simplebpmn\")$1");
 			};
