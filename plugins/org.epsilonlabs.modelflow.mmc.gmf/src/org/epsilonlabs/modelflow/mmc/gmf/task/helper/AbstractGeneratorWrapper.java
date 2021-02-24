@@ -64,29 +64,40 @@ import org.eclipse.text.edits.TextEdit;
 import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfDiagramTrace;
 
 @SuppressWarnings({ "restriction", "deprecation" })
-public abstract class AbstractGeneratorWrapper implements Runnable {
+public abstract class AbstractGeneratorWrapper implements IGenerator {
+
+	protected static final boolean IS_TO_RESTORE_EXISTING_IMPORTS = true;
+
+	protected final List<IStatus> myExceptions;
 
 	protected CodeFormatter myCodeFormatter;
 	protected OrganizeImportsPostprocessor myImportsPostprocessor;
-	protected final List<IStatus> myExceptions;
 	protected IStatus myRunStatus = Status.CANCEL_STATUS;
 	protected TextMerger myMerger;
-	protected final static boolean isToRestoreExistingImports = true;
 	protected IProgressMonitor myProgress = new NullProgressMonitor();
-
 	protected IPackageFragmentRoot myDestRoot;
 	protected IProject myDestProject;
 
 	protected abstract void customRun() throws InterruptedException, UnexpectedBehaviourException;
-
 	protected abstract void setupProgressMonitor();
-
-
 	
-	public AbstractGeneratorWrapper() {
+	protected AbstractGeneratorWrapper() {
 		myExceptions = new LinkedList<>();
 	}
+	
+	@Override
+	public void clean() {
+		myExceptions.clear();
+		myCodeFormatter = null;
+		myImportsPostprocessor = null;
+		myRunStatus = Status.CANCEL_STATUS;
+		myMerger = null;
+		myProgress = null;
+		myDestRoot = null;
+		myDestProject = null;
+	}
 
+	@Override
 	public void run(IProgressMonitor progress) throws InterruptedException {
 		setProgressMonitor(progress);
 		clearExceptionsList();
@@ -108,6 +119,7 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 	 * 
 	 * @return state of the generator run, or CANCEL if generator was not yet run.
 	 */
+	@Override
 	public IStatus getRunStatus() {
 		return myRunStatus;
 	}
@@ -118,6 +130,7 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 	 * 
 	 * @param progress
 	 */
+	@Override
 	public void setProgressMonitor(IProgressMonitor progress) {
 		myProgress = progress;
 	}
@@ -337,10 +350,12 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 		this.files.add(absFile);
 		return absFile;
 	}
+	@Override
 	public Set<File> getFiles() {
 		return files;
 	}
 	
+	@Override
 	public List<GmfDiagramTrace> getTraces() {
 		return traces;
 	}
@@ -616,7 +631,7 @@ public abstract class AbstractGeneratorWrapper implements Runnable {
 
 	protected OrganizeImportsPostprocessor getImportsPostrocessor() {
 		if (myImportsPostprocessor == null) {
-			myImportsPostprocessor = new OrganizeImportsPostprocessor(isToRestoreExistingImports);
+			myImportsPostprocessor = new OrganizeImportsPostprocessor(IS_TO_RESTORE_EXISTING_IMPORTS);
 		}
 		return myImportsPostprocessor;
 	}

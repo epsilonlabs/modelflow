@@ -58,5 +58,11 @@ public class TaskRepository {
 	public void clear() {
 		this.resourceRepository.clear();
 	}
+	
+	public void dispose() {
+		this.resourceRepository.dispose();
+		this.resourceRepository = null;
+		taskFactoryRegistry = null;
+	}
 
 }

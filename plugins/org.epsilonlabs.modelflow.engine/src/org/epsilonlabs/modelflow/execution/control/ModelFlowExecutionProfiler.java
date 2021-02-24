@@ -7,10 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.control;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -25,7 +23,7 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 
 	protected Map<MeasurableObject, ProfiledStage> profiledStages =  new HashMap<>();
-	protected MemoryTracker memoryTracker = new MemoryTracker();
+	protected IMemoryTracker memoryTracker;
 	protected long timeout = 100;
 	protected TimeUnit unit = TimeUnit.NANOSECONDS;
 	protected ScheduledExecutorService exec;
@@ -61,7 +59,9 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	
 	@Override
 	public void dispose() {
-		exec.shutdownNow();
+		if (exec != null) {			
+			exec.shutdownNow();
+		}
 	}
 	
 	@Override
@@ -96,19 +96,31 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	
 	@Override
 	public void track() {
+		
+		if (memoryTracker == null){
+			memoryTracker = new DefaultMemoryTracker();
+		}/*
 		try {
 			if (memoryTracker.getLogFile()==null) {				
 				memoryTracker.setup();
 			}
-			exec = Executors.newSingleThreadScheduledExecutor();
+			exec = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+				
+				@Override
+				public Thread newThread(Runnable r) {
+					final Thread t = new Thread(r);
+					t.setName("ModelFlowProfiler");
+					return t;
+				}
+			});
 			exec.scheduleAtFixedRate(memoryTracker, 0, timeout, unit);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}	
 	
 	@Override
-	public MemoryTracker getMemoryTracker() {
+	public IMemoryTracker getMemoryTracker() {
 		return memoryTracker;
 	}
 

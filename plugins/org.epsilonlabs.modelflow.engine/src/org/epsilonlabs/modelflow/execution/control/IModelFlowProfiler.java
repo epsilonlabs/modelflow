@@ -87,6 +87,6 @@ public interface IModelFlowProfiler {
 	 *
 	 * @return the memory tracker
 	 */
-	MemoryTracker getMemoryTracker();
+	IMemoryTracker getMemoryTracker();
 
 }

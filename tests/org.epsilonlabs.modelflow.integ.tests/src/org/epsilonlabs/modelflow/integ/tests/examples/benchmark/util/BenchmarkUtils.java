@@ -26,10 +26,11 @@ public class BenchmarkUtils {
 	 * @throws IOException
 	 */
 	public static void writeResults(File file, Object... record) throws IOException {
-		FileWriter fileWriter = new FileWriter(file, true);
 		CSVFormat csvFormat = CSVFormat.EXCEL;
-		try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
-			csvPrinter.printRecord(record);
+		try(FileWriter fileWriter = new FileWriter(file, true)){			
+			try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
+				csvPrinter.printRecord(record);
+			}
 		}
 	}
 
@@ -51,10 +52,11 @@ public class BenchmarkUtils {
 	 * @return
 	 */
 	public static final void prepareResultFile(File file, String... headers) throws IOException {
-		FileWriter fileWriter = new FileWriter(file);
 		CSVFormat csvFormat = CSVFormat.EXCEL.withHeader(headers);
-		try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
-			// Do nothing
+		try(FileWriter fileWriter = new FileWriter(file)){			
+			try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
+				// Do nothing
+			}
 		}
 	}
 

@@ -20,7 +20,9 @@ import org.apache.commons.csv.CSVPrinter;
  *
  * @author Betty Sanchez
  */
-public class MemoryTracker implements Runnable{
+public class MemoryTracker implements IMemoryTracker{
+
+	private static CSVFormat CSV = CSVFormat.EXCEL;
 
 	/** The log file. */
 	private File logFile;
@@ -30,6 +32,7 @@ public class MemoryTracker implements Runnable{
 	 *
 	 * @return the log file
 	 */
+	@Override
 	public File getLogFile() {
 		return logFile;
 	}
@@ -39,6 +42,7 @@ public class MemoryTracker implements Runnable{
 	 *
 	 * @param logFile the new log file
 	 */
+	@Override
 	public void setLogFile(File logFile) {
 		this.logFile = logFile;
 	}
@@ -48,6 +52,7 @@ public class MemoryTracker implements Runnable{
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
+	@Override
 	public void setup() throws IOException{
 		logFile = Files.createTempFile("track", ".csv").toFile();
 		write("time", "memory");
@@ -70,8 +75,7 @@ public class MemoryTracker implements Runnable{
 	 */
 	private void write(Object... records) {
 		try (FileWriter fileWriter = new FileWriter(logFile, true)) {
-			CSVFormat csvFormat = CSVFormat.EXCEL;
-			try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, csvFormat)) {
+			try (CSVPrinter csvPrinter = new CSVPrinter(fileWriter, CSV)) {
 				csvPrinter.printRecord(records);
 			}
 		} catch (Exception e) {

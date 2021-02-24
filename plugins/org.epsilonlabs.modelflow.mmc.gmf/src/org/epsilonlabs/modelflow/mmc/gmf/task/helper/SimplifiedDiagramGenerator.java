@@ -1,9 +1,5 @@
 package org.epsilonlabs.modelflow.mmc.gmf.task.helper;
 
-import java.io.File;
-import java.util.List;
-import java.util.Set;
-
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -14,29 +10,18 @@ import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.codegen.util.CodegenEmitters;
 import org.eclipse.gmf.codegen.util.EmitterSource;
 import org.epsilonlabs.modelflow.mmc.gmf.task.GenerateDiagramCodeTask;
-import org.epsilonlabs.modelflow.mmc.gmf.task.trace.GmfDiagramTrace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class SimplifiedDiagramGenerator extends Job {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SimplifiedDiagramGenerator.class);
-
-	protected GenerateDiagramCodeTask task;
 	
 	protected GenEditorGenerator myGenModel;
-	
 	protected EmitterSource<GenEditorGenerator, CodegenEmitters> emmiterSource;
 	protected IProgressMonitor monitor;
+	protected IGenerator generator;
 
-	protected GenerateDiagramCodeTask getTask() {
-		return this.task;
-	}
-	
-	public void setTask(GenerateDiagramCodeTask task) {
-		this.task = task;
-	}
-	
 	public void setMonitor(IProgressMonitor monitor) {
 		this.monitor = monitor;
 	}
@@ -70,7 +55,6 @@ public class SimplifiedDiagramGenerator extends Job {
 		return emmiterSource.getEmitters(genmodel, genmodel.isDynamicTemplates());
 	}
 
-	AbstractGeneratorWrapper generator;
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 		if (getMonitor() == null) setMonitor(monitor); 
@@ -88,17 +72,12 @@ public class SimplifiedDiagramGenerator extends Job {
 		}
 	}
 	
-	public Set<File> getFiles(){
-		return generator.getFiles();
-	}
-	
-	public List<GmfDiagramTrace> getTraces(){
-		return generator.getTraces();
+	public IGenerator getGenerator() {
+		return generator;
 	}
 
-	public SimplifiedDiagramGenerator(GenerateDiagramCodeTask task) {
+	public SimplifiedDiagramGenerator(GenerateDiagramCodeTask t) {
 		super("gmf:genDiagram");
-		this.task = task;
 		this.setUser(false);
 		this.addJobChangeListener(new JobChangeAdapter() {
 
@@ -111,10 +90,17 @@ public class SimplifiedDiagramGenerator extends Job {
 				} else if (runStatus.matches(IStatus.ERROR)) {
 					LOG.error(runStatus.getMessage(), runStatus.getException());
 				}
-				task.setDone();
 			}
-	
 		});
+	}
+
+	public void clean() {
+		this.generator.clean();
+		this.generator = null;
+		this.emmiterSource = null;
+		this.monitor = null;
+		this.myGenModel =null;
+		
 	}
 
 }

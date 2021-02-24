@@ -64,7 +64,7 @@ public class DefaultModelFlowProfiler implements IModelFlowProfiler {
 	}
 
 	@Override
-	public MemoryTracker getMemoryTracker() {
+	public IMemoryTracker getMemoryTracker() {
 		return null;
 	}
 

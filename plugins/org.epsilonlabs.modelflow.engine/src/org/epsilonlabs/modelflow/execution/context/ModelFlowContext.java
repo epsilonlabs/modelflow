@@ -189,5 +189,21 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 		}
 		return this.profiler;
 	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+
+		getTaskRepository().dispose();
+		this.taskRepository = null;
+
+		getProfiler().dispose();
+		this.profiler = null;
+		
+		this.executionTrace = null;
+		this.managementTrace = null;
+		this.executionGraph = null;
+	}
+	
 
 }

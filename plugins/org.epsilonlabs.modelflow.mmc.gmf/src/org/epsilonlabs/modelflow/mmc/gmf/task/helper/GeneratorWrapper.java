@@ -85,15 +85,15 @@ import org.eclipse.ocl.ecore.OCLExpression;
 import org.eclipse.ocl.options.ParsingOptions;
 
 @SuppressWarnings({ "restriction", "deprecation" })
-public class GeneratorWrapper extends AbstractGeneratorWrapper implements Runnable {
+public class GeneratorWrapper extends AbstractGeneratorWrapper  {
 
-	protected final GenEditorGenerator myEditorGen;
+	protected GenEditorGenerator myEditorGen;
 
-	protected final GenDiagram myDiagram;
+	protected GenDiagram myDiagram;
 
-	protected final CodegenEmitters myEmitters;
+	protected CodegenEmitters myEmitters;
 
-	protected final BinaryEmitters myBinaryEmmiters;
+	protected BinaryEmitters myBinaryEmmiters;
 
 	public GeneratorWrapper(GenEditorGenerator genModel, CodegenEmitters emitters) {
 		this(genModel, emitters, new BinaryEmitters());
@@ -107,6 +107,15 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper implements Runnab
 		myBinaryEmmiters = binaryEmitters;
 	}
 
+	@Override
+	public void clean(){
+		super.clean();
+		myEditorGen = null;
+		myDiagram = null;
+		myEmitters = null;
+		myBinaryEmmiters = null;
+	}
+	
 	@Override
 	protected TextMerger createMergeService() {
 		TextMerger service = myEmitters.createMergeService();

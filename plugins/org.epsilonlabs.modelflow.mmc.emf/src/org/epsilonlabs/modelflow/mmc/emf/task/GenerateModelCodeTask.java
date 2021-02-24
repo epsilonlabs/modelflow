@@ -40,7 +40,7 @@ public class GenerateModelCodeTask implements ITaskInstance {
 	protected Boolean generateEdit 		= false;
 	protected Boolean generateEditor 	= false;
 	protected Boolean generateTests 	= false;
-	protected Set<String> outputs = new HashSet<String>();
+	protected Set<String> outputs = new HashSet<>();
 	
 	protected String modelResName;
 	protected GenModel genModel;

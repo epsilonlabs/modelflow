@@ -12,7 +12,6 @@ import java.util.List;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceBuilder;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 
@@ -25,18 +24,11 @@ public class GmfDiagramTrace {
 	protected Object[] sources;
 	protected String label;
 	protected List<File> outputs = new ArrayList<>();
-	protected ITaskInstance itask;
 	protected String resource;
 	protected final Path base = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toFile().toPath();
-
-	public Object[] getSources() {
-		return sources;
-	}
+	
 	public void setSources(Object[] sources) {
 		this.sources = sources;
-	}
-	public String getLabel() {
-		return label;
 	}
 	public void setLabel(String label) {
 		this.label = label;
@@ -48,11 +40,6 @@ public class GmfDiagramTrace {
 		this.outputs.add(output);
 	}
 
-	public GmfDiagramTrace setTask(ITaskInstance task){
-		this.itask = task;
-		return this;
-	}
-	
 	public GmfDiagramTrace setResourceName(String resource){
 		this.resource = resource;
 		return this;
@@ -79,9 +66,15 @@ public class GmfDiagramTrace {
 			// Targets
 			
 			outputs.forEach(f->builder.addTargetElement(base.resolve(f.toString().substring(1)).toFile().getAbsolutePath(), -1, -1));
+			
 			// Link
 			builder.link(label);
-			return builder.build();
+			
+			final Trace trace = builder.build();
+			outputs = null;
+			sources = null;
+			resource = null;
+			return trace;
 		}
 		return null;
 	}

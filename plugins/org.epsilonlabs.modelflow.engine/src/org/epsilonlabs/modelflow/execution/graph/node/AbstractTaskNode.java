@@ -43,6 +43,7 @@ import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
 import org.epsilonlabs.modelflow.management.resource.IResourceManager;
 import org.epsilonlabs.modelflow.management.trace.ManagementTrace;
 import org.epsilonlabs.modelflow.management.trace.ManagementTraceUpdater;
+import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -438,16 +439,19 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		if (endToEndTracing && traceable) {
 			if (!getState().isSkpped()) {
 				// Check if task produced traces
-				this.taskInstance.getTrace().ifPresent(traces -> {
+				final Optional<Collection<Trace>> trace = this.taskInstance.getTrace();
+				trace.ifPresent(traces -> {
 					try {
 						ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
 						ManagementTrace fullTrace = ctx.getManagementTrace();
 						ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(fullTrace, getName());
 						traceUpdater.update(traces);
+						traces.clear();
 					} finally {
 						ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
 					}
 				});
+				
 			} else {
 				// Should remain the same
 			}

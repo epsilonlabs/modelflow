@@ -32,7 +32,6 @@ public class ResourceRepository {
 	protected ResourceFactoryRegistry factoryRegistry;
 	protected Map<String, Object> derivedResources;
 	protected Map<String, IModelResourceInstance<?>> resources;
-	protected Map<String, String> hashes;
 	
 	public ResourceRepository(ResourceFactoryRegistry registry) {
 		factoryRegistry = registry;
@@ -121,6 +120,14 @@ public class ResourceRepository {
 	public void flush() {
 		clearDerived();
 		clearNonInputModels();		
-	}	
+	}
+	
+	public void dispose() {
+		clear();
+		this.derivedResources = null;
+		this.resources = null;
+		this.factoryRegistry = null;
+		
+	}
 	
 }
