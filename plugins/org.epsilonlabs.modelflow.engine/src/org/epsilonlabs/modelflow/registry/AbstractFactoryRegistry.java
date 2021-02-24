@@ -7,16 +7,16 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.registry;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 
 public abstract class AbstractFactoryRegistry<F>{
 	
-	protected Map<String, Class<F>> factories = new ConcurrentHashMap<>();
+	protected Map<String, Class<F>> factories = new HashMap<>();
 	
 	protected AbstractFactoryRegistry(Set<Class<F>> resourceMonitor) {
 		resourceMonitor.parallelStream().forEach(r-> {

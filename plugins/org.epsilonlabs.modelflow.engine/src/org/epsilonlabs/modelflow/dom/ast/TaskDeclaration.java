@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
@@ -197,7 +198,35 @@ public class TaskDeclaration extends AbstractDeclaration implements ITaskModuleE
 		return "TaskDeclaration [type=" + type + ", parameters=" + parameters + ", guard=" + guard + ", forEach="
 				+ forEach + ", inputs=" + inputs + ", outputs=" + outputs + ", inouts=" + inouts + ", dependsOn="
 				+ dependsOn + ", enabled=" + enabled + ", alwaysExecute=" + alwaysExecute + ", trace=" + trace + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(alwaysExecute, dependsOn, enabled, forEach, guard, inouts, inputs,
+				outputs, requires, trace, trans);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof TaskDeclaration)) {
+			return false;
+		}
+		TaskDeclaration other = (TaskDeclaration) obj;
+		return alwaysExecute == other.alwaysExecute && Objects.equals(dependsOn, other.dependsOn)
+				&& enabled == other.enabled && Objects.equals(forEach, other.forEach)
+				&& Objects.equals(guard, other.guard) && Objects.equals(inouts, other.inouts)
+				&& Objects.equals(inputs, other.inputs) && Objects.equals(outputs, other.outputs)
+				&& Objects.equals(requires, other.requires) && trace == other.trace
+				&& Objects.equals(trans, other.trans);
 	}	
-	
 
 }

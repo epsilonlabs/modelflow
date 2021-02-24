@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public class WorkflowProgramBuilder {
 
+	private static final String AND = " and ";
+
 	protected IWorkflow workflow;
 	
 	public WorkflowProgramBuilder(IWorkflow workflow){
@@ -38,11 +40,11 @@ public class WorkflowProgramBuilder {
 			str.append(main);
 			str.append(NL);
 			// Models
-			final String input = t.getConsumes().stream().map(this::models).collect(Collectors.joining(" and "));
+			final String input = t.getConsumes().stream().map(this::models).collect(Collectors.joining(AND));
 			if (!input.isEmpty()) str.append("in "+input+ NL);
-			final String inout = t.getModifies().stream().map(this::models).collect(Collectors.joining(" and "));
+			final String inout = t.getModifies().stream().map(this::models).collect(Collectors.joining(AND));
 			if (!inout.isEmpty()) str.append("inout "+inout+ NL);
-			final String output = t.getProduces().stream().map(this::models).collect(Collectors.joining(" and "));
+			final String output = t.getProduces().stream().map(this::models).collect(Collectors.joining(AND));
 			if (!output.isEmpty()) str.append("out "+output + NL);
 			str.append("{" + NL);
 			// TODO Guard

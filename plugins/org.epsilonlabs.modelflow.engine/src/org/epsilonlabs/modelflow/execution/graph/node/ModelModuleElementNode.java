@@ -25,9 +25,7 @@ public class ModelModuleElementNode implements IModelResourceNode {
 		modelRef = callExpression;
 		ctx.getModule().getCompilationContext().getResourceDeclarations().stream()
 			.filter(m->m.getNameExpression().getName().equals(getName()))
-			.findAny().ifPresent(m -> {
-				model = m;
-			});
+			.findAny().ifPresent(m -> model = m);
 	}
 	
 	@Override

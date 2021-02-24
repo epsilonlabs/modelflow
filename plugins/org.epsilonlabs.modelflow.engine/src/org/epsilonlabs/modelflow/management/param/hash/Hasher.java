@@ -30,6 +30,8 @@ public class Hasher {
 	private static final Logger LOG = LoggerFactory.getLogger(Hasher.class);
 
 	private static final String MD5_ALGORITHM = "MD5";
+	
+	private Hasher() {}
 
 	public static Object hash(Object object) {
 		byte[] bytes = new byte[0];

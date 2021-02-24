@@ -86,14 +86,14 @@ public class ModuleElementModelFactory implements IInstanceFactory<IModelResourc
 			
 			// ATTEMPT TO CONFIGURE INSTANCE
 			final Object val = value;
-			Collection<Method> potentialMatchingMethods = paramMethods.stream().filter(m -> {
+			Collection<Method> potentialMatchingMethods = paramMethods.stream().filter(m ->
 				/* same key */
-				return m.getAnnotationsByType(Param.class)[0].key().equals(key)
+				m.getAnnotationsByType(Param.class)[0].key().equals(key)
 						/* one argument */
 						&& m.getParameterTypes().length == 1
 						/* assignable from value */
-						&& (isAssignableFrom(m, val));
-			}).collect(Collectors.toSet());
+						&& (isAssignableFrom(m, val))
+			).collect(Collectors.toSet());
 			
 			if (potentialMatchingMethods.isEmpty()) {
 				/* Unknown Property */
@@ -128,7 +128,7 @@ public class ModuleElementModelFactory implements IInstanceFactory<IModelResourc
 		throw new MFInstantiationException(String.format(msg, key, instance.getName()));
 	}
 	
-	protected Object getAssignableValue(Object value, Class<?> paramType, IModelFlowContext ctx) throws MFInstantiationException {
+	protected Object getAssignableValue(Object value, Class<?> paramType, IModelFlowContext ctx) {
 		// Utility for files
 		if (File.class.isAssignableFrom(paramType) && value instanceof String){
 			IRelativePathResolver relativePathResolver = ctx.getModule().getCompilationContext().getRelativePathResolver();

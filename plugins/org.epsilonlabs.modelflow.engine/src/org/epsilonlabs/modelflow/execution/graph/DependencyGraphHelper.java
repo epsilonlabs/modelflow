@@ -191,8 +191,7 @@ public class DependencyGraphHelper implements IDependencyHelper{
 	 */
 	public boolean hasDerivedOutputDependencies(ITaskNode tNode) {
 		return getOutputResourceNodes(tNode).parallelStream()
-		.filter(node -> node instanceof DerivedResourceNode)
-		.findAny().isPresent();
+		.anyMatch(node -> node instanceof DerivedResourceNode);
 	}
 	
 }

@@ -56,9 +56,9 @@ public class EMFTaskFactory extends AbstractFactory<ITaskInstance, ITaskNode> {
 		}
 		Injector injector = Guice.createInjector();
 		injector.getAllBindings();
-		instance = (ITaskInstance) injector.getInstance(clazz);
+		instance = injector.getInstance(clazz);
 		injector.injectMembers(instance);
-		instance = (ITaskInstance) clazz.cast(instance); // Is this necessary?
+		instance = clazz.cast(instance); // Is this necessary?
 		configure(); // How to add info of the factory in the task
 		return instance;
 	}

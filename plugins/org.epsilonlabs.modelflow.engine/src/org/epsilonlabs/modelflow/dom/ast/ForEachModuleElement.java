@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Objects;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
@@ -112,6 +113,31 @@ public class ForEachModuleElement extends Statement {
 	
 	public IExecutableModuleElement getLabelBlock() {
 		return labelBlock;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(it, iterationBlock, iteratorParameter, labelBlock);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ForEachModuleElement)) {
+			return false;
+		}
+		ForEachModuleElement other = (ForEachModuleElement) obj;
+		return Objects.equals(it, other.it) && Objects.equals(iterationBlock, other.iterationBlock)
+				&& Objects.equals(iteratorParameter, other.iteratorParameter)
+				&& Objects.equals(labelBlock, other.labelBlock);
 	}
 
 }

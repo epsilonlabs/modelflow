@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -146,12 +147,6 @@ public abstract class AbstractTaskNode implements ITaskNode {
 	@Override
 	public ITaskModuleElement getModuleElement() {
 		return taskDeclaration;
-	}
-	
-	/** Unique Task identifiers by name */
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof ITaskNode && getName().equals(((ITaskNode)obj).getName());
 	}
 	
 	@Override
@@ -458,5 +453,26 @@ public abstract class AbstractTaskNode implements ITaskNode {
 			}
 		}
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(completable, conservativeExecutionHelper, name, parentNode, state, statusUpdater, subNodes,
+				taskDeclaration, taskInstance, vars);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof AbstractTaskNode)) {
+			return false;
+		}
+		AbstractTaskNode other = (AbstractTaskNode) obj;
+		return Objects.equals(completable, other.completable)
+				&& Objects.equals(conservativeExecutionHelper, other.conservativeExecutionHelper)
+				&& Objects.equals(name, other.name) && Objects.equals(parentNode, other.parentNode)
+				&& state == other.state && Objects.equals(statusUpdater, other.statusUpdater)
+				&& Objects.equals(subNodes, other.subNodes) && Objects.equals(taskDeclaration, other.taskDeclaration)
+				&& Objects.equals(taskInstance, other.taskInstance) && Objects.equals(vars, other.vars);
+	}
 }

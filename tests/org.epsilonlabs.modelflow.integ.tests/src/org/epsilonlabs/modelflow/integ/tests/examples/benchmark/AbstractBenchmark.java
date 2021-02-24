@@ -154,8 +154,7 @@ public abstract class AbstractBenchmark {
 		TimeUnit.SECONDS.sleep(1);
 		cleanup(outputPath);
 		module.clearCache();
-		System.gc();
-		
+		module.getContext().dispose();
 	}
 
 	protected void cleanup(Path outputPath) {

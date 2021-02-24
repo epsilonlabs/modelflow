@@ -7,9 +7,9 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.exception.MFExecutionGraphExeption;
@@ -29,7 +29,7 @@ import org.jgrapht.Graphs;
 public abstract class AbstractExecutionGraph implements IExecutionGraph {
 
 	protected Graph<ITaskNode, ExecutionEdge> graph;
-	protected Map<String, ITaskNode> tasks = new ConcurrentHashMap<>();
+	protected Map<String, ITaskNode> tasks = new HashMap<>();
 	protected GraphState state;
 
 	@Override

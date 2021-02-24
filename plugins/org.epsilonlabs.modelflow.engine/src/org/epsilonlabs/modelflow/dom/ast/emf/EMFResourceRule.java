@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.dom.ast.emf;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Objects;
 
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
 import org.epsilonlabs.modelflow.compile.context.ModelFlowCompilationContext;
@@ -62,6 +63,29 @@ public class EMFResourceRule extends ModelDeclaration implements IEMFDomElement<
 			modelResource = resource;
 		}
 		
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(modelResource);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof EMFResourceRule)) {
+			return false;
+		}
+		EMFResourceRule other = (EMFResourceRule) obj;
+		return Objects.equals(modelResource, other.modelResource);
 	}
 
 }

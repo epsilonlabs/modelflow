@@ -7,6 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.graph.node;
 
+import java.util.Objects;
+
 import org.epsilonlabs.modelflow.dom.IAbstractResource;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 
@@ -34,15 +36,28 @@ public abstract class AbstractResourceNode<T extends IAbstractResource> implemen
 	public String getDefinition() {
 		return this.definition;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		return obj instanceof AbstractResourceNode && ((AbstractResourceNode<?>) obj).getName().equals(getName());
-	}
 	
 	@Override
 	public void subscribe(IModelFlowPublisher pub) {
 		statusUpdater.subscribe(state -> pub.resourceState(getName(), state));
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(definition, name, resource, statusUpdater);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof AbstractResourceNode)) {
+			return false;
+		}
+		AbstractResourceNode other = (AbstractResourceNode) obj;
+		return Objects.equals(definition, other.definition) && Objects.equals(name, other.name)
+				&& Objects.equals(resource, other.resource) && Objects.equals(statusUpdater, other.statusUpdater);
 	}
 
 }

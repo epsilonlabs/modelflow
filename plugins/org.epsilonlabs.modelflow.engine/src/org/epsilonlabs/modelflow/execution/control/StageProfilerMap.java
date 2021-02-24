@@ -7,11 +7,11 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.control;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-public class StageProfilerMap extends ConcurrentHashMap<MeasurableObject, ProfiledStage> implements Map<MeasurableObject, ProfiledStage> {
+public class StageProfilerMap extends HashMap<MeasurableObject, ProfiledStage> implements Map<MeasurableObject, ProfiledStage> {
 
 	private static final long serialVersionUID = 561135571648588358L;
 

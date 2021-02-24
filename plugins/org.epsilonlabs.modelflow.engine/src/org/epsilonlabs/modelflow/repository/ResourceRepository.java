@@ -7,11 +7,11 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.repository;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
@@ -36,8 +36,8 @@ public class ResourceRepository {
 	
 	public ResourceRepository(ResourceFactoryRegistry registry) {
 		factoryRegistry = registry;
-		resources = new ConcurrentHashMap<>(); // ConcurrentHashMap
-		derivedResources = new ConcurrentHashMap<>();
+		resources = new HashMap<>(); // ConcurrentHashMap
+		derivedResources = new HashMap<>();
 	}
 
 	public void addDerived(IDerivedResourceNode node, Object resource) {

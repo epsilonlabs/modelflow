@@ -6,6 +6,7 @@ package org.epsilonlabs.modelflow.dom.ast;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.module.ModuleElement;
@@ -61,4 +62,28 @@ public abstract class AbstractDeclaration extends NamedRule implements IDeclarat
 	public Map<NameExpression, ModuleElement> getParameters() {
 		return parameters;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(parameters, type);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof AbstractDeclaration)) {
+			return false;
+		}
+		AbstractDeclaration other = (AbstractDeclaration) obj;
+		return Objects.equals(parameters, other.parameters) && Objects.equals(type, other.type);
+	}
+	
 }

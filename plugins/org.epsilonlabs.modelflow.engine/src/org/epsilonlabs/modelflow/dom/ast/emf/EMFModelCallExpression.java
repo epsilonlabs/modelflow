@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.dom.ast.emf;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
@@ -72,5 +73,28 @@ public class EMFModelCallExpression extends ModelCallExpression implements IEMFD
 	public void addAlias(NameExpression name) {
 		aliases.add(name);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(ref);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof EMFModelCallExpression)) {
+			return false;
+		}
+		EMFModelCallExpression other = (EMFModelCallExpression) obj;
+		return Objects.equals(ref, other.ref);
+	}	
 
 }

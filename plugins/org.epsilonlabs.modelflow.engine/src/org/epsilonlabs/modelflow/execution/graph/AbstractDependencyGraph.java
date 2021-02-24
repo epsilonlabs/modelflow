@@ -9,9 +9,9 @@
 package org.epsilonlabs.modelflow.execution.graph;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
@@ -39,8 +39,8 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	protected GraphState status = null;
 	
 	protected Graph<IGraphNode, DependencyEdge> graph;
-	protected Map<String, ITaskNode> tasks = new ConcurrentHashMap<>();
-	protected Map<String, IAbstractResourceNode> resources = new ConcurrentHashMap<>();
+	protected Map<String, ITaskNode> tasks = new HashMap<>();
+	protected Map<String, IAbstractResourceNode> resources = new HashMap<>();
 	
 		
 	protected AbstractDependencyGraph() {

@@ -7,6 +7,8 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.dom.ast;
 
+import java.util.Objects;
+
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
@@ -109,6 +111,30 @@ public class ParameterDeclaration extends Expression {
 	@Override
 	public void accept(IEolVisitor visitor) {
 		// TODO
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(nameExpression, typeExpression);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ParameterDeclaration)) {
+			return false;
+		}
+		ParameterDeclaration other = (ParameterDeclaration) obj;
+		return Objects.equals(nameExpression, other.nameExpression)
+				&& Objects.equals(typeExpression, other.typeExpression);
 	}
 
 }

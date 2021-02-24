@@ -29,9 +29,9 @@ public class ManagementTraceUpdater {
 	
 	public void update(Collection<Trace> traces){
 		TaskTrace taskTrace = null;
-		Optional<TaskTrace> previousRecord = trace.getTasks().stream().filter(t->{
-			return t.getTask().equals(taskName);
-		}).findFirst();
+		Optional<TaskTrace> previousRecord = trace.getTasks().stream()
+				.filter(t-> t.getTask().equals(taskName))
+				.findFirst();
 		if (!previousRecord.isPresent()) {
 			taskTrace = ManagementTraceFactoryImpl.eINSTANCE.createTaskTrace();
 			taskTrace.setTask(taskName);

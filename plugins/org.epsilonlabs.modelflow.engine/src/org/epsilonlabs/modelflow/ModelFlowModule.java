@@ -10,7 +10,6 @@ package org.epsilonlabs.modelflow;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -19,6 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -135,7 +135,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		return hasher;
 	}
 
-	protected void computeIdentifier(java.net.URI uri, String code, File file) throws IOException, MalformedURLException {
+	protected void computeIdentifier(java.net.URI uri, String code, File file) throws IOException {
 		if (code != null) {
 			hasher = Hasher.computeHash(code.getBytes());
 		} else if (file != null) {
@@ -582,6 +582,35 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		// Model Manager
 		ctx.getTaskRepository().getResourceRepository().clear();
 		ctx.getTaskRepository().clear();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(compilationCtx, config, hasher, isEmf, parameterDeclarations,
+				resFactoryRegistry, taskFactoryRegistry, traceHelper, workflow);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ModelFlowModule)) {
+			return false;
+		}
+		ModelFlowModule other = (ModelFlowModule) obj;
+		return Objects.equals(compilationCtx, other.compilationCtx) && Objects.equals(config, other.config)
+				&& Objects.equals(hasher, other.hasher) && isEmf == other.isEmf
+				&& Objects.equals(parameterDeclarations, other.parameterDeclarations)
+				&& Objects.equals(resFactoryRegistry, other.resFactoryRegistry)
+				&& Objects.equals(taskFactoryRegistry, other.taskFactoryRegistry)
+				&& Objects.equals(traceHelper, other.traceHelper) && Objects.equals(workflow, other.workflow);
 	}
 
 }

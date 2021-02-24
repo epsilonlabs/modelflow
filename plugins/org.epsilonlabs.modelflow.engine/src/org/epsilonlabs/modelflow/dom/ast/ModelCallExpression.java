@@ -9,6 +9,7 @@ package org.epsilonlabs.modelflow.dom.ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.common.parse.AST;
@@ -67,5 +68,28 @@ public class ModelCallExpression extends FeatureCallExpression implements IModel
 	@Override
 	public NameExpression getModel() {
 		return super.getNameExpression();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(aliases);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ModelCallExpression)) {
+			return false;
+		}
+		ModelCallExpression other = (ModelCallExpression) obj;
+		return Objects.equals(aliases, other.aliases);
 	}
 }

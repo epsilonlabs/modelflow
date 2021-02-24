@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -31,7 +32,6 @@ import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
-import org.epsilonlabs.modelflow.management.resource.IModelWrapper;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
 import org.epsilonlabs.modelflow.management.resource.ResourceLoader;
 import org.slf4j.Logger;
@@ -66,7 +66,7 @@ public class TaskNode extends AbstractTaskNode {
 	}
 	
 	protected List<IModel> getForEachModels(IModelFlowContext ctx) throws MFRuntimeException{
-		List<IModel> models = new ArrayList<IModel>();
+		List<IModel> models = new ArrayList<>();
 		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
 		// For all the resources connected to this task node
 		for (IAbstractResourceNode entry : dg.getResourceNodes(this)) {
@@ -78,7 +78,7 @@ public class TaskNode extends AbstractTaskNode {
 				IModelResourceInstance<?> r = ctx.getTaskRepository().getResourceRepository().getOrCreate(rNode, ctx);
 				ctx.getScheduler().getDependencyGraph().getAliasFor(rNode, this).forEach(r::setAlias);
 				if (r.get() instanceof IModel) {					
-					IModelWrapper mRes = new ResourceLoader(kind,r, rNode).load();
+					new ResourceLoader(kind,r, rNode).load();
 					// Add model to list of models for task to accept
 					models.add((IModel) r.get());
 				}
@@ -88,7 +88,7 @@ public class TaskNode extends AbstractTaskNode {
 	}
 	
 	protected void resolveTask(IModelFlowContext ctx) throws MFRuntimeException {		
-		if (parentNode != null && parentNode instanceof TaskNode) {
+		if (parentNode instanceof TaskNode) {
 			final ITask parentTask = ((TaskNode)parentNode).getTaskDefintion();
 			EcoreUtil.Copier copier = new EcoreUtil.Copier(); 
 			final ITask copy = (ITask) copier.copy(parentTask); //Improve copy
@@ -105,8 +105,9 @@ public class TaskNode extends AbstractTaskNode {
 		}
 	}
 	
+	@Override
 	protected void postFor(IModelFlowContext ctx) {
-		if (parentNode != null && parentNode instanceof TaskNode) {
+		if (parentNode instanceof TaskNode) {
 			final ITask task = ((TaskNode)parentNode).getTaskDefintion();
 			final EList<ITask> taskList = ((IWorkflow) task.eContainer()).getTasks();
 			final Iterator<ITask> taskIterator = taskList.iterator();
@@ -278,6 +279,7 @@ public class TaskNode extends AbstractTaskNode {
 		}
 	}
 	
+	@Override
 	protected boolean isTrace(){
 		if (this.taskDeclaration != null) {
 			return super.isTrace();
@@ -304,5 +306,27 @@ public class TaskNode extends AbstractTaskNode {
 			return Collections.emptySet();
 		}
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(taskDefintion);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof TaskNode)) {
+			return false;
+		}
+		TaskNode other = (TaskNode) obj;
+		return Objects.equals(taskDefintion, other.taskDefintion);
+	}
+	
+	
 	
 }

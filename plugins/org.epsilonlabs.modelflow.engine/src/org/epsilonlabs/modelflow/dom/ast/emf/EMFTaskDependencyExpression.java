@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.dom.ast.emf;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.epsilon.eol.compile.context.IEolCompilationContext;
@@ -77,4 +78,28 @@ public class EMFTaskDependencyExpression extends TaskDependencyExpression implem
 		return Arrays.asList(taskDependency);
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + Objects.hash(declaringTaskRule, taskDependency);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof EMFTaskDependencyExpression)) {
+			return false;
+		}
+		EMFTaskDependencyExpression other = (EMFTaskDependencyExpression) obj;
+		return Objects.equals(declaringTaskRule, other.declaringTaskRule)
+				&& Objects.equals(taskDependency, other.taskDependency);
+	}
+
 }
