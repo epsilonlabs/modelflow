@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
 import org.epsilonlabs.modelflow.execution.control.IMeasurable;
@@ -84,6 +85,7 @@ public abstract class AbstractBenchmark {
 	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, Path outputPath,
 			File buildFile, int maxIter) throws Exception {
 		boolean protect = scenario.isProtect();
+		CachedResourceSet.getCache().clear();
 		ModelFlowModule module = createModule(tracing, protect, outputPath);
 		
 		System.out.printf(">>>>[ EXECUTING ] SCENARIO: %s, TRACING: %b, ITERATION: %d%n", scenario.getName(), tracing, iteration);

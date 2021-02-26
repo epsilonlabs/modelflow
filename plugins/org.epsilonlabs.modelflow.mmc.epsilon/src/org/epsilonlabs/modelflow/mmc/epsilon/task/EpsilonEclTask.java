@@ -57,6 +57,7 @@ public class EpsilonEclTask extends AbstractEpsilonTask{
 			traces = trace.stream()
 					.map(match -> new EclTaskTrace(match, this).init().getTrace())
 					.collect(Collectors.toList());
+			trace.clear();
 		}
 		return Optional.of(traces);
 	}

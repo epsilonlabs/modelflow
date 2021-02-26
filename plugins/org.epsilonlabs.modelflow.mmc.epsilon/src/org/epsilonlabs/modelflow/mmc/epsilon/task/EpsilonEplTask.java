@@ -74,6 +74,7 @@ public class EpsilonEplTask extends AbstractEpsilonTask {
 			traces = trace.stream()
 					.map(patternMatch -> new EplTaskTrace(patternMatch, this).init().getTrace())
 					.collect(Collectors.toList());
+			trace.clear();
 		}
 		return Optional.of(traces);
 	}

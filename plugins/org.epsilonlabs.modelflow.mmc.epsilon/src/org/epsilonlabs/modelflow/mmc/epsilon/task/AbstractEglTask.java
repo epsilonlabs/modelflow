@@ -62,6 +62,8 @@ public abstract class AbstractEglTask extends AbstractEpsilonTask {
 			traces = trace.stream()
 					.map(link -> new EglTaskTrace(link, this).init().getTrace())
 					.collect(Collectors.toList());
+			trace.clear();
+			eglTrace = null;
 		}
 		return Optional.ofNullable(traces);
 	}

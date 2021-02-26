@@ -404,9 +404,6 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		);
 		
 		
-		// Cleanup if necessary 
-		this.taskInstance.afterExecute();
-		
 		// -- POST PROCESSING -- 
 		
 		// Record outputs in execution trace
@@ -427,6 +424,9 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		} finally {
 			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 		}
+		
+		// Cleanup if necessary 
+		this.taskInstance.afterExecute();		
 	}
 	
 	protected boolean isTrace(){

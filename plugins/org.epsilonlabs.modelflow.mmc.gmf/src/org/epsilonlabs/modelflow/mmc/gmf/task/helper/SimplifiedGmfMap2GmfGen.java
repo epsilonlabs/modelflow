@@ -21,7 +21,6 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ContentHandler;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.ExternalCrossReferencer;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -60,7 +59,7 @@ public class SimplifiedGmfMap2GmfGen {
 	private static final Logger LOG = LoggerFactory.getLogger(SimplifiedGmfMap2GmfGen.class);
 
 	protected TransformOptions myOptions;
-	protected final ResourceSet myResourceSet;
+	protected ResourceSet myResourceSet;
 	protected IProgressMonitor monitor;
 	protected Diagnostic myGMFGenValidationResult;
 
@@ -75,7 +74,6 @@ public class SimplifiedGmfMap2GmfGen {
 	}
 	
 	public SimplifiedGmfMap2GmfGen() {
-		myResourceSet = new ResourceSetImpl();
 		this.myOptions = new TransformOptions();
 	}
 
@@ -126,15 +124,19 @@ public class SimplifiedGmfMap2GmfGen {
 		this.myMapping = model;
 	}
 	
-	public final ResourceSet getResourceSet() {
+	public ResourceSet getResourceSet() {
 		return myResourceSet;
+	}
+	
+	public void setResourceSet(ResourceSet rs) {
+		this.myResourceSet = rs;
 	}
 
 	protected void setGMFGenValidationResult(Diagnostic validationResult) {
 		this.myGMFGenValidationResult = validationResult;
 	}
 	
-	public Resource executeTransformation() throws Exception{
+	public void executeTransformation() throws Exception{
 		Diagnostic validation = Diagnostic.CANCEL_INSTANCE;
 		try {
 			if (getGmfGenURI() == null) {
@@ -168,7 +170,7 @@ public class SimplifiedGmfMap2GmfGen {
 
 			monitor.subTask(Messages.TransformToGenModelOperation_task_save);
 
-			Resource save = save(genEditor);
+			//Resource save = save(genEditor);
 			monitor.subTask(Messages.TransformToGenModelOperation_task_validate);
 			try {
 				validation = ValidationHelper.validate(genEditor, true, monitor);
@@ -178,7 +180,7 @@ public class SimplifiedGmfMap2GmfGen {
 			if (Diagnostic.CANCEL != validation.getSeverity()) {
 				idDispenser.release();
 			}
-			return save;
+			//return save;
 		} catch (Exception ex) {
 			String message = ex.getMessage();
 			if (message == null) {
@@ -349,7 +351,6 @@ public class SimplifiedGmfMap2GmfGen {
 				// (e.g. the one in #save() method, with another content type)
 				// Another option would be use of correct content type here, but what 
 				// if loaded/reconciled model has old content type? 
-				getResourceSet().getResources().remove(resource);
 			}
 		}
 	}

@@ -17,13 +17,7 @@ model GenModel is epsilon:emf {
 }
 model GmfGen is epsilon:emf {
 	src : base + ".gmfgen"
-	reload : true
 	metamodelUri : "http://www.eclipse.org/gmf/2009/GenModel"
-	loadOpts {
-		var m = new Map;
-		m.put("DEFER_IDREF_RESOLUTION",true);
-		return m;
-	}
 	saveOpts {
 		var map = new Map;
 		map.put("ENCODING", "UTF-8");

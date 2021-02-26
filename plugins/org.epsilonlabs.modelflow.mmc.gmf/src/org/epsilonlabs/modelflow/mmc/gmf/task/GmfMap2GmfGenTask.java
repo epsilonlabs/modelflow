@@ -14,12 +14,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.EolEvaluator;
 import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
-import org.eclipse.gmf.internal.common.ToolingResourceFactory.ToolResource;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -43,7 +43,8 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 
 	private static final Logger LOG = LoggerFactory.getLogger(GmfMap2GmfGenTask.class);
 
-	protected SimplifiedGmfMap2GmfGen transformation;
+	protected SimplifiedGmfMap2GmfGen transformation = new SimplifiedGmfMap2GmfGen();
+
 
 	protected URI genmodelLoc;
 	protected URI mappingLoc;
@@ -53,12 +54,13 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	protected Mapping mapping;
 	protected GenEditorGenerator gmfgen;
 	protected EmfModel ecore;
+	protected ResourceSet rs;
+	protected Map<String, IModelWrapper> resources = new HashMap<>();
 	
 	protected boolean generateRCP = false;
 	protected boolean useMapMode = true;
 	protected boolean useRuntimeFigures = true;
-	protected Map<String, IModelWrapper> resources = new HashMap<>();
-	
+
 	private Resource output;
 
 	@Param(key="rcp")
@@ -90,8 +92,7 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	
 	@Override
 	public void validateParameters() throws MFExecutionException {
-		transformation = new SimplifiedGmfMap2GmfGen();
-		transformation.setMonitor(new GmfMap2GmfGenMonitor());		
+			
 	}
 	
 	protected EolEvaluator evaluator;
@@ -115,33 +116,43 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
-		if (genmodelLoc == null || mappingLoc == null || gmfgenLoc == null) {
-			throw new MFExecutionException("Invalid models");
-		}
 		try {			
-			// Caused by: java.lang.IllegalStateException: Target gmfgen URI should be specified
-			final ToolResource resource = (ToolResource) transformation.executeTransformation();
-			//resource.getDefaultSaveOptions()
-			final IModelWrapper wrapper = getResources().get(GMFGenPackage.eNS_URI);
+			Resource resource = CachedResourceSet.getCache().checkoutResource(gmfgenLoc);
+			rs.getResources().remove(resource);
 			
-			final EmfModel emfModel = (EmfModel)wrapper.getModel();
-			final ResourceSet rs = emfModel.getResource().getResourceSet();
-			rs.getResources().clear();
-			rs.getResources().add(resource);
-			emfModel.setResource(resource);
-			transformation.getTrace();
+			transformation.setMonitor(new GmfMap2GmfGenMonitor());		
+			transformation.setResourceSet(rs);
+			transformation.executeTransformation();
+			
+			resource = rs.createResource(gmfgenLoc);
+			resource.getContents().add(transformation.getGmfGen());
+			rs.getResources().add(resource);			
 		} catch (Exception e) {
 			throw new MFExecutionException(e);
+		} finally {
+			genmodel = null;
+			mapping = null;
+			genmodelLoc = null;
+			mappingLoc= null;
+			gmfgenLoc= null;
+			gmfgen= null;
+			ecore= null;
+			rs= null;
 		}
 	}
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		return Optional.of(new GmfMap2GmfGenTrace(this, transformation).init().getTraces());
+		final GmfMap2GmfGenTrace trace = new GmfMap2GmfGenTrace(this, transformation);
+		trace.init();
+		return Optional.of(trace.getTraces());
 	}	
 
 	@Override
-	public void processModelsAfterExecution() { }
+	public void processModelsAfterExecution() {
+		resources.clear();
+		transformation = null;
+	}
 
 	/** 
 	 * Can only execute for a specific model configuration:
@@ -173,6 +184,7 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 				if (uri.isFile()){
 					if (uri.toString().endsWith("gmfgen") && isOutput) {
 						gmfgenLoc = model.getModelFileUri();
+						rs = model.getResource().getResourceSet();
 						output = resource;
 						resources.put(GMFGenPackage.eNS_URI, m);
 					}
@@ -189,6 +201,9 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 		options.setGenerateRCP(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "rcp", "false")));
 		options.setUseMapMode(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useMapMode", "true")));
 		options.setUseRuntimeFigures(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useRuntimeFigures", "true")));
+		if (genmodelLoc == null || mappingLoc == null || gmfgenLoc == null) {
+			throw new MFInvalidModelException("Invalid models");
+		}	
 	}
 
 	public Map<String, IModelWrapper> getResources() {
@@ -196,6 +211,7 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	}
 	
 	@Override
-	public void afterExecute() {}
+	public void afterExecute() {
+	}
 	
 }

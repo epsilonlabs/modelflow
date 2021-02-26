@@ -92,6 +92,7 @@ public class EpsilonEvlTask extends AbstractEpsilonTask {
 			traces = trace.stream()
 					.map(constraint -> new EvlTaskTrace(constraint, this).init().getTrace())
 					.collect(Collectors.toList());
+			trace.clear();
 		}
 		return Optional.of(traces);
 	}

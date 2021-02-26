@@ -37,7 +37,7 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 
-	protected static final int MAX_ITER = 1;
+	protected static final int MAX_ITER = 10;
 	protected Path diagramProjectOutputPath;
 	protected String metamodelName = "simplebpmn";
 	protected String base = "org.eclipse.epsilon.eugenia";
