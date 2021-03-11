@@ -15,12 +15,12 @@ import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
  */
 public class MeasurableObject implements IMeasurable {
 
-	protected final IMeasurable.Stage stage;
+	protected final ExecutionStage stage;
 	protected final String name;
 	protected final Class<? extends IGraphNode> type;
 	protected IGraphNode node;
 
-	public MeasurableObject(IGraphNode node, IMeasurable.Stage stage) {
+	public MeasurableObject(IGraphNode node, ExecutionStage stage) {
 		this.stage = stage;
 		if (node != null) {
 			this.node = node;
@@ -43,7 +43,7 @@ public class MeasurableObject implements IMeasurable {
 	}
 
 	@Override
-	public Stage getStage() {
+	public ExecutionStage getStage() {
 		return this.stage;
 	}
 	@Override

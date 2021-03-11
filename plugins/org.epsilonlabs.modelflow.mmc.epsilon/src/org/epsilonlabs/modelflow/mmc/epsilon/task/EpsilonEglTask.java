@@ -20,6 +20,7 @@ import org.eclipse.epsilon.egl.IEglModule;
 import org.eclipse.epsilon.egl.engine.traceability.fine.EglFineGrainedTraceContextAdaptor;
 import org.eclipse.epsilon.egl.exceptions.EglRuntimeException;
 import org.eclipse.epsilon.egl.merge.partition.CompositePartitioner;
+import org.eclipse.epsilon.egl.traceability.OutputFile;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
@@ -97,7 +98,7 @@ public class EpsilonEglTask extends AbstractEglTask {
 		if (outputFiles.isEmpty() && outputRoot.isPresent() && target.isPresent()) {
 			files = Arrays.asList(outputRoot.get() +File.separator+ target.get());
 		} else {			
-			files = outputFiles.stream().map(f->f.getName()).collect(Collectors.toList());
+			files = outputFiles.stream().map(OutputFile::getName).collect(Collectors.toList());
 		}
 		CompositePartitioner partitioner = getModule().getContext().getPartitioner();
 		return new ProtectedFiles(files, partitioner);

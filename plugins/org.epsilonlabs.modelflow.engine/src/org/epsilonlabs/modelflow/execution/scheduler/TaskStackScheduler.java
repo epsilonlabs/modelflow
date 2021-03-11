@@ -24,7 +24,7 @@ import org.epsilonlabs.modelflow.dom.ast.TaskDependencyExpression;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.IExecutionGraph;
 import org.epsilonlabs.modelflow.execution.graph.ModuleElementDependencyGraph;
@@ -53,7 +53,7 @@ public class TaskStackScheduler extends AbstractScheduler {
 	public WorkflowExecution execute(IModelFlowContext ctx) throws MFExecutionException {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().start(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 			try {
 				executeAll(ctx);
 			} catch (MFRuntimeException e) {
@@ -61,7 +61,7 @@ public class TaskStackScheduler extends AbstractScheduler {
 			}
 			return updater.getCurrentWorkflowExecution();
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().stop(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class TaskStackScheduler extends AbstractScheduler {
 	public WorkflowExecution execute(String target, IModelFlowContext ctx) throws MFExecutionException {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().start(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 			try {
 				executeTarget(target, ctx);
 			} catch (MFRuntimeException e) {
@@ -77,7 +77,7 @@ public class TaskStackScheduler extends AbstractScheduler {
 			}
 			return updater.getCurrentWorkflowExecution();
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().stop(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 		}
 	}
 	

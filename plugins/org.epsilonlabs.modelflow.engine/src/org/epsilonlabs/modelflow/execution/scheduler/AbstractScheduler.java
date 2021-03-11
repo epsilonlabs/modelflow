@@ -20,7 +20,7 @@ import org.epsilonlabs.modelflow.dom.api.factory.ModuleElementTaskFactory;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
 import org.epsilonlabs.modelflow.execution.IExecutionListener;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -59,10 +59,10 @@ public abstract class AbstractScheduler implements IScheduler {
 		updater = new ExecutionTraceUpdater(ctx.getExecutionTrace()); 
 		WorkflowExecution executeImpl = null; 
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().start(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 			executeImpl = executeImpl(ctx);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.EXECUTION_PROCESS, null, ctx);
+			ctx.getProfiler().stop(ExecutionStage.EXECUTION_PROCESS, null, ctx);
 		}
 		return executeImpl;
 	}
@@ -100,7 +100,7 @@ public abstract class AbstractScheduler implements IScheduler {
 		ctx.getOutputStream().printf("%n>>Executing: %s%n", task.getName());
 
 		/* Profiler start */
-		ctx.getProfiler().start(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
+		ctx.getProfiler().start(ExecutionStage.TASK_EXECUTION_PROCESS, task, ctx);
 	
 		/* Execute Task */
 		try {
@@ -109,7 +109,7 @@ public abstract class AbstractScheduler implements IScheduler {
 			processException(ctx, task, currentTaskExecution, updater.getCurrentWorkflowExecution(), e);
 		} finally {
 			/* Profiler end */
-			ctx.getProfiler().stop(IMeasurable.Stage.TASK_EXECUTION_PROCESS, task, ctx);
+			ctx.getProfiler().stop(ExecutionStage.TASK_EXECUTION_PROCESS, task, ctx);
 		}
 	
 		/* Successful Execution Status */

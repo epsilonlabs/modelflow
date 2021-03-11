@@ -29,12 +29,12 @@ public class DefaultModelFlowProfiler implements IModelFlowProfiler {
 	}
 
 	@Override
-	public void start(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context) {
+	public void start(ExecutionStage stage, IGraphNode ast, IModelFlowContext context) {
 		// Do nothing		
 	}
 
 	@Override
-	public void stop(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context) {
+	public void stop(ExecutionStage stage, IGraphNode ast, IModelFlowContext context) {
 		// Do nothing		
 	}
 

@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 import org.epsilonlabs.modelflow.exception.MFExecutionGraphExeption;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.edge.ExecutionEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
 import org.epsilonlabs.modelflow.execution.graph.util.GraphizPrinter;
@@ -35,9 +35,9 @@ public abstract class AbstractExecutionGraph implements IExecutionGraph {
 	@Override
 	public IExecutionGraph build(IModelFlowContext ctx) throws MFExecutionGraphExeption {
 		IModelFlowProfiler profiler = ctx.getProfiler();
-		profiler.start(IMeasurable.Stage.EXECUTION_GRAPH, null, ctx);
+		profiler.start(ExecutionStage.EXECUTION_GRAPH, null, ctx);
 		IExecutionGraph eg = buildImpl(ctx);
-		profiler.stop(IMeasurable.Stage.EXECUTION_GRAPH, null, ctx);
+		profiler.stop(ExecutionStage.EXECUTION_GRAPH, null, ctx);
 		return eg;
 	}
 

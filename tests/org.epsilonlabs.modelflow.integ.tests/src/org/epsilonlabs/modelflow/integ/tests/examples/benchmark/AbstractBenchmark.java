@@ -18,13 +18,12 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.control.MeasurableObject;
 import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MemoryUnit;
 import org.epsilonlabs.modelflow.execution.control.ProfiledStage;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.control.StageProfilerMap;
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -67,7 +66,7 @@ public abstract class AbstractBenchmark {
 			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "parentStage", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
 			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
-			headersList.addAll(IMeasurable.Stage.names());
+			headersList.addAll(ExecutionStage.names());
 			String[] overheadHeaders = headersList.toArray(new String[0]);
 			try {
 				BenchmarkUtils.prepareResultFile(overheadFile, overheadHeaders);
@@ -199,7 +198,7 @@ public abstract class AbstractBenchmark {
 		List<Object> invocations = new ArrayList<>();
 		invocations.addAll(Arrays.asList(scenario, tracing, iteration));
 		values.addAll(Arrays.asList(scenario, tracing, iteration));
-		for (Stage stage : Stage.values()) {
+		for (ExecutionStage stage : ExecutionStage.values()) {
 			 final Collection<ProfiledStage> profiles = profiledStages.getByStage(stage).values();
 			// Sums all ocurrences during the execution
 			 final Long duration = profiles.stream().map(v-> v.delta().getTime(TU)).reduce(0l, Long::sum);

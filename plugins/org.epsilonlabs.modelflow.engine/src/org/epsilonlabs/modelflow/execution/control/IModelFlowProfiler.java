@@ -38,7 +38,7 @@ public interface IModelFlowProfiler {
 	 * @param ast the ast
 	 * @param context the context
 	 */
-	void start(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context);
+	void start(ExecutionStage stage, IGraphNode ast, IModelFlowContext context);
 	
 	/**
 	 * Stop.
@@ -47,7 +47,7 @@ public interface IModelFlowProfiler {
 	 * @param ast the ast
 	 * @param context the context
 	 */
-	void stop(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context);
+	void stop(ExecutionStage stage, IGraphNode ast, IModelFlowContext context);
 	
 	/**
 	 * Sets the timeout.

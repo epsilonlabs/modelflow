@@ -15,7 +15,7 @@ public interface IModelFlowExecutionProfiler extends IModelFlowProfiler {
 
 	StageProfilerMap getProfiledStages();
 
-	default StageProfilerMap getByStage(IMeasurable.Stage stage) {
+	default StageProfilerMap getByStage(ExecutionStage stage) {
 		return StageProfilerMap.from(getProfiledStages()).getByStage(stage);
 	}
 

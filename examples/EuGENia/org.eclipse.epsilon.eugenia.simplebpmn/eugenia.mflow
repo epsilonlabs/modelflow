@@ -2,11 +2,9 @@ pre {
 	var base = "resources/model/" + metamodelName;
 	var pluginName = pluginPrefix + "." + metamodelName;
 }
-
 param metamodelName;
 param copyrightStatement;
 param pluginPrefix;
-
 model ECore is epsilon:emf {
 	src : base + ".ecore"
 	metamodelUri : "http://www.eclipse.org/emf/2002/Ecore"
@@ -31,25 +29,20 @@ model GmfMap is epsilon:emf {
 	src :  base + ".gmfmap"
 	metamodelUri : "http://www.eclipse.org/gmf/2008/mappings"
 }
-
 model GmfTool is epsilon:emf {
 	src : base + ".gmftool"
 	metamodelUri : "http://www.eclipse.org/gmf/2005/ToolDefinition"
 }
-
 model GmfGraph is epsilon:emf {
 	src : base + ".gmfgraph"
 	metamodelUri : "http://www.eclipse.org/gmf/2006/GraphicalDefinition"
 }
-
-// GenPackages
 @always
 task genPackages is epsilon:eol
 	in ECore
 {
  	src : "resources/task/genPackages.eol"
 }
-// copyright 
 task copyright is core:fileReader
 	in ECore as Ecore
 {
@@ -62,24 +55,17 @@ task copyright is core:fileReader
  	 	}
  	 }
 }
-
-// Emfatic2Ecore
-
 task Emfatic2Ecore is emf:emfatic2ecore
 	out ECore
 {
  	src : base + ".emf"	 
 }
-
-// ValidateEcoreForGenModel
 @always
 task ValidateEcoreForGenModel is epsilon:evl
 	in ECore  as Ecore
 {
  	src : "resources/task/Ecore2GenModel.evl"
 }
-
-// Ecore2GenModel
 task Ecore2GenModel is epsilon:etl
 	in ECore as Ecore
 	out GenModel 
@@ -99,8 +85,6 @@ task Ecore2GenModel is epsilon:etl
 		return map;
  	}
 }
-
-// FixGenModel 
 task FixGenModel is epsilon:eol
 	in ECore as Ecore
 	inout GenModel
@@ -116,8 +100,6 @@ task FixGenModel is epsilon:eol
 		return map;
  	}
 }
-
-// PolishGenModel 
 task PolishGenModel is epsilon:eol
 	in ECore 
 	inout GenModel 
@@ -135,15 +117,12 @@ task PolishGenModel is epsilon:eol
 		return map;
  	}
 }
-// ValidateEcoreForGMFToolGraphMap 
 @always
 task ValidateEcoreForGMFToolGraphMap is epsilon:evl
 	in ECore as Ecore
 {
  	src : "resources/task/ECore2GMF.evl"
 }
-
-//Ecore2GMFToolGraphMap
 task Ecore2GMFToolGraphMap is epsilon:eol
 	in ECore as Ecore
 	out GmfMap and GmfGraph and GmfTool
@@ -151,27 +130,18 @@ task Ecore2GMFToolGraphMap is epsilon:eol
 {
  	src : "resources/task/ECore2GMF.eol"
 }
-
-//PolishGMFToolGraphMap
-
 task PolishGMFToolGraphMap is epsilon:eol
 	in ECore 
 	inout GmfMap and GmfGraph and GmfTool
-	//dependsOn Ecore2GMFToolGraphMap
 {
  	guard : self.src.exists()
  	src : "resources/task/polish/ECore2GMF.eol"
 }
-
-
-// GmfMap2GmfGen 
 task GmfMap2GmfGen is gmf:gmfMap2gmfGen
 	in ECore as Ecore 
 		and GmfMap 
 		and GenModel 
 	out GmfGen;
-	
-// FixGmfGen 
 task FixGmfGen is epsilon:eol
 	in ECore as Ecore
 		and GenModel
@@ -192,8 +162,6 @@ task FixGmfGen is epsilon:eol
 		return map;
 	}
 }
-
-// PolishGmfGen
 task PolishGmfGen is epsilon:eol
 	in ECore as Ecore
 		and GenModel 
@@ -206,16 +174,12 @@ task PolishGmfGen is epsilon:eol
  	guard : self.src.exists()
  	src : "resources/task/polish/FixGMFGen.eol"
 }
-
-// GenerateDomainModelCode 
 task GenerateDomainModelCode is emf:genCode
 	in GenModel {
 	generateEdit : true
 	generateEditor : true
+	generateTest: true
 }
-
-
-// GenerateDiagramCode
 task GenerateDiagramCode is gmf:genDiagram
 	in GmfGen;
 

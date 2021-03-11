@@ -15,8 +15,8 @@ import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
@@ -121,9 +121,9 @@ public class ResourceManager implements IResourceManager {
 
 		// Load resource as indicated by the resource kind (in/out..)
 		IModelFlowProfiler profiler = ctx.getProfiler();
-		profiler.start(IMeasurable.Stage.LOAD, rNode, ctx);
+		profiler.start(ExecutionStage.LOAD, rNode, ctx);
 		IModelWrapper mRes = new ResourceLoader(kind, r, rNode).load();
-		profiler.stop(IMeasurable.Stage.LOAD, rNode, ctx);
+		profiler.stop(ExecutionStage.LOAD, rNode, ctx);
 
 		// Add model to list of models for task to accept
 		list.add(mRes);
@@ -219,9 +219,9 @@ public class ResourceManager implements IResourceManager {
 				// Dispose resource
 				IModelFlowProfiler profiler = ctx.getProfiler();
 				LOG.debug("Disposing {}", resourceNode.getName());
-				profiler.start(IMeasurable.Stage.DISPOSE, resourceNode, ctx);
+				profiler.start(ExecutionStage.DISPOSE, resourceNode, ctx);
 				resource.dispose();
-				profiler.stop(IMeasurable.Stage.DISPOSE, resourceNode, ctx);
+				profiler.stop(ExecutionStage.DISPOSE, resourceNode, ctx);
 			}
 			resource.afterTask();
 		} else {

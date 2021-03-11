@@ -21,7 +21,7 @@ public class StageProfilerMap extends HashMap<MeasurableObject, ProfiledStage> i
 		return map;
 	}
 
-	public StageProfilerMap getByStage(IMeasurable.Stage stage) {
+	public StageProfilerMap getByStage(ExecutionStage stage) {
 		return entrySet().stream().filter(e -> e.getKey().getStage().equals(stage))
 				.collect(Collectors.toMap(Entry::getKey, Entry::getValue, (u, v) -> {
 					throw new IllegalStateException(String.format("Duplicate key %s", u));

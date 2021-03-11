@@ -63,7 +63,7 @@ import org.epsilonlabs.modelflow.dom.impl.DomFactory;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowContext;
 import org.epsilonlabs.modelflow.execution.context.ModelFlowEMFContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.scheduler.TaskStackScheduler;
 import org.epsilonlabs.modelflow.execution.scheduler.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTrace;
@@ -524,7 +524,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 	@Override
 	protected ManagementTrace processRules() throws EolRuntimeException {
 		IModelFlowContext ctx = getContext();
-		ctx.getProfiler().start(Stage.EXECUTION, null, ctx);
+		ctx.getProfiler().start(ExecutionStage.EXECUTION, null, ctx);
 		
 		if (ctx.isProfilingEnabled()) {
 			ctx.getProfiler().track();
@@ -547,7 +547,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 				LOG.debug("Updating Management Trace");
 				traceHelper.updateEndToEndTrace();
 			}
-			ctx.getProfiler().stop(Stage.EXECUTION, null, ctx);
+			ctx.getProfiler().stop(ExecutionStage.EXECUTION, null, ctx);
 		}
 		
 		return ctx.getManagementTrace();

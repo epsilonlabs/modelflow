@@ -34,7 +34,7 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	}
 
 	@Override
-	public void start(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context) {
+	public void start(ExecutionStage stage, IGraphNode ast, IModelFlowContext context) {
 		// Must be the first line invoked
 		ProfiledStage profiledStageDiagnostic = new ProfiledStage();
 
@@ -43,7 +43,7 @@ public class ModelFlowExecutionProfiler implements IModelFlowExecutionProfiler {
 	}
 	
 	@Override
-	public void stop(IMeasurable.Stage stage, IGraphNode ast, IModelFlowContext context) {
+	public void stop(ExecutionStage stage, IGraphNode ast, IModelFlowContext context) {
 		// Must be the first line invoked
 		MeasureableSnapshot meassureSnapshot = new MeasureableSnapshot();
 		

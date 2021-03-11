@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 import org.epsilonlabs.modelflow.dom.IWorkflow;
 import org.epsilonlabs.modelflow.dom.WorkflowBuilder;
 import org.epsilonlabs.modelflow.dom.WorkflowProgramBuilder;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable.Stage;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.scheduler.IScheduler;
 import org.epsilonlabs.modelflow.execution.scheduler.TopologicalSequentialScheduler;
 import org.epsilonlabs.modelflow.mmc.core.plugin.CorePlugin;
@@ -118,7 +118,7 @@ public class ParallelTest extends WorkflowBuilderTest {
 		execute();
 		IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
 		
-		long time = profiler.getByStage(Stage.EXECUTION_PROCESS).values().stream().findFirst().get().delta().getTime(TimeUnit.MILLISECONDS);
+		long time = profiler.getByStage(ExecutionStage.EXECUTION_PROCESS).values().stream().findFirst().get().delta().getTime(TimeUnit.MILLISECONDS);
 		assertTrue("Went over max ("+max+"): "+ time,time<max);
 		assertTrue("Was less than min ("+min+"): "+ time,time>min);
 	}

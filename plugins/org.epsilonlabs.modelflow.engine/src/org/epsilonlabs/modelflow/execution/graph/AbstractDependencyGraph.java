@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 import org.epsilonlabs.modelflow.exception.MFDependencyGraphException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.edge.DependencyEdge;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
@@ -58,9 +58,9 @@ public abstract class AbstractDependencyGraph implements IDependencyGraph {
 	@Override
 	public IDependencyGraph build(IModelFlowContext ctx) throws MFDependencyGraphException {
 		IModelFlowProfiler profiler = ctx.getProfiler();
-		profiler.start(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
+		profiler.start(ExecutionStage.DEPENDENCY_GRAPH, null, ctx);
 		IDependencyGraph dg = buildImpl(ctx);
-		profiler.stop(IMeasurable.Stage.DEPENDENCY_GRAPH, null, ctx);
+		profiler.stop(ExecutionStage.DEPENDENCY_GRAPH, null, ctx);
 		return dg;
 	}
 	

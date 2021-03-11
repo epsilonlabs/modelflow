@@ -36,7 +36,7 @@ import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.IModelFlowPublisher;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IMeasurable;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.trace.ExecutionTraceUpdater;
 import org.epsilonlabs.modelflow.execution.trace.TaskExecution;
 import org.epsilonlabs.modelflow.management.param.ITaskParameterManager;
@@ -281,9 +281,8 @@ public abstract class AbstractTaskNode implements ITaskNode {
 			if (taskInstance == null) {				
 				taskInstance = ctx.getTaskRepository().create(this, ctx);
 			}
-			if (isGuardOk(ctx)) {
-				taskInstance.validateParameters();
-				
+			taskInstance.validateParameters();
+			if (isGuardOk(ctx)) {				
 				conservativeExecutionHelper = new ConservativeExecutionHelper(this, ctx);
 				
 				// Assume it will execute
@@ -371,17 +370,17 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		
 		// Register inputs in execution trace
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+			ctx.getProfiler().start(ExecutionStage.PROCESS_INPUTS, this, ctx);
 			pManager.processInputs(this, ctx);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_INPUTS, this, ctx);
+			ctx.getProfiler().stop(ExecutionStage.PROCESS_INPUTS, this, ctx);
 		}
 		// Assign Models Before Execution
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
+			ctx.getProfiler().start(ExecutionStage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
 			manager.processResourcesBeforeExecution(this, ctx);
 		} finally {			
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
+			ctx.getProfiler().stop(ExecutionStage.PROCESS_MODELS_BEFORE_EXECUTION, this, ctx);
 		}
 		setState(TaskState.RESOLVED);		
 		
@@ -392,11 +391,11 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		// Execute 
 		try {
 			setState(TaskState.EXECUTING);
-			ctx.getProfiler().start(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
+			ctx.getProfiler().start(ExecutionStage.ATOMIC_EXECUTION, this, ctx);
 			this.taskInstance.execute(ctx);
 			setState(TaskState.EXECUTED);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.ATOMIC_EXECUTION, this, ctx);
+			ctx.getProfiler().stop(ExecutionStage.ATOMIC_EXECUTION, this, ctx);
 		}
 
 		ctx.getFrameStack().put(
@@ -408,10 +407,10 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		
 		// Record outputs in execution trace
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+			ctx.getProfiler().start(ExecutionStage.PROCESS_OUTPUTS, this, ctx);
 			pManager.processOutputs(this, ctx);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_OUTPUTS, this, ctx);
+			ctx.getProfiler().stop(ExecutionStage.PROCESS_OUTPUTS, this, ctx);
 		}
 
 		// Traces
@@ -419,10 +418,10 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		
 		// Process Models After Execution
 		try {
-			ctx.getProfiler().start(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
+			ctx.getProfiler().start(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 			manager.processResourcesAfterExecution(this, ctx);
 		} finally {
-			ctx.getProfiler().stop(IMeasurable.Stage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
+			ctx.getProfiler().stop(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
 		}
 		
 		// Cleanup if necessary 
@@ -442,13 +441,13 @@ public abstract class AbstractTaskNode implements ITaskNode {
 				final Optional<Collection<Trace>> trace = this.taskInstance.getTrace();
 				trace.ifPresent(traces -> {
 					try {
-						ctx.getProfiler().start(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+						ctx.getProfiler().start(ExecutionStage.END_TO_END_TRACES, this, ctx);
 						ManagementTrace fullTrace = ctx.getManagementTrace();
 						ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(fullTrace, getName());
 						traceUpdater.update(traces);
 						traces.clear();
 					} finally {
-						ctx.getProfiler().stop(IMeasurable.Stage.END_TO_END_TRACES, this, ctx);
+						ctx.getProfiler().stop(ExecutionStage.END_TO_END_TRACES, this, ctx);
 					}
 				});
 				
