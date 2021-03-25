@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -47,7 +48,7 @@ public abstract class AbstractModelFlowPictoSource extends EglPictoSource {
 
 	@Override
 	protected Resource getResource(IEditorPart editorPart) {
-		IFile file = waitForFile(editorPart);
+		IPath file = waitForPath(editorPart);
 		if (file == null) return null;
 		
 		//TODO
@@ -61,7 +62,7 @@ public abstract class AbstractModelFlowPictoSource extends EglPictoSource {
 		Map<String, Object> extensionToFactoryMap = resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
 		registerExtensions(extensionToFactoryMap);
 
-		Resource resource = resourceSet.createResource(URI.createFileURI(file.getLocation().toOSString()));		
+		Resource resource = resourceSet.createResource(URI.createFileURI(file.toOSString()));		
 		try {
 			resource.load(null);
 			return resource;

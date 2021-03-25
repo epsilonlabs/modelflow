@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EcorePackage;
@@ -31,7 +32,7 @@ import org.epsilonlabs.modelflow.dt.editor.ModelFlowEditor;
  */
 public class ModelFlowMainPictoSource extends AbstractModelFlowPictoSource {
 
-	protected Map<IFile, Resource> graphs = new HashMap<>();
+	protected Map<String, Resource> graphs = new HashMap<>();
 
 	@Override
 	protected String getTransformation() {
@@ -49,16 +50,16 @@ public class ModelFlowMainPictoSource extends AbstractModelFlowPictoSource {
 
 	@Override
 	protected Resource getResource(IEditorPart editorPart) {
-		IFile file = waitForFile(editorPart);
+		IPath file = waitForPath(editorPart);
 		if (file == null) {
 			return null;
 		} else {
-			return graphs.get(file);
+			return graphs.get(file.toOSString());
 		}
 	}
 
 	@Override
-	protected IFile waitForFile(IEditorPart editorPart) {
+	protected IPath waitForPath(IEditorPart editorPart) {
 		IFile file = getFile(editorPart);
 
 		ModelFlowModule module = new ModelFlowModule();
@@ -81,11 +82,11 @@ public class ModelFlowMainPictoSource extends AbstractModelFlowPictoSource {
 					String uriLocation = String.format("picto://%s", file.getFullPath());
 					Resource r = resourceSet.createResource(URI.createURI(uriLocation));
 					r.getContents().add(w);
-					graphs.put(file, r);
+					graphs.put(file.getFullPath().toOSString(), r);
 				}
 			} catch (Exception e) { }
 		} catch (CoreException e) { }	
-		return file;
+		return file.getFullPath();
 	}
 
 	@Override

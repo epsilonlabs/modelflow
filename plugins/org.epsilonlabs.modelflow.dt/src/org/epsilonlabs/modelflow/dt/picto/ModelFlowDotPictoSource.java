@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.epsilon.common.module.ModuleMarker;
 import org.eclipse.epsilon.picto.ViewTree;
 import org.eclipse.epsilon.picto.source.GraphvizSource;
@@ -81,10 +81,10 @@ public class ModelFlowDotPictoSource extends GraphvizSource {
 
 	@Override
 	public ViewTree getViewTree(IEditorPart editor) throws Exception {
-		IFile iFile = waitForFile(editor);
+		IPath iFile = waitForPath(editor);
 		if (iFile == null )
 			return createEmptyViewTree();
-		File modelFile = new File(iFile.getLocation().toOSString());
+		File modelFile = new File(iFile.toOSString());
 		IDependencyGraph dg = graphs.get(modelFile);
 		if (dg == null) {
 			return createEmptyViewTree();
