@@ -133,9 +133,6 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 	}
 
 	@Override
-	public void processModelsAfterExecution() { }
-
-	@Override
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 		Arrays.asList(models).stream().forEach(m -> {
 			if (m.getModel() instanceof EmfModel) {

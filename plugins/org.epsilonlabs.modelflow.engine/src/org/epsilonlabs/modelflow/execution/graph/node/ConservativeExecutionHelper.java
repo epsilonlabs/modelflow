@@ -65,13 +65,13 @@ public class ConservativeExecutionHelper {
 
 	public boolean haveInputPropertiesChanged() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).computeHashes();
 		return !equivalent(inputProperties, previousPropertiesHashes);
 	}
 
 	public List<String> getChangedInputProperties() {
 		EList<PropertySnapshot> previousPropertiesHashes = previousTaskExecution.getInputProperties();
-		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).getHashes();
+		Map<String, Object> inputProperties = ctx.getParamManager().getInputParameterHandler(task).computeHashes();
 		return getChangedProperties(inputProperties, previousPropertiesHashes);
 	}
 

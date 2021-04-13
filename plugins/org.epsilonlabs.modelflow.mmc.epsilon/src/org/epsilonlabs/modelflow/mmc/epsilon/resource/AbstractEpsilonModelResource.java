@@ -78,8 +78,6 @@ public abstract class AbstractEpsilonModelResource extends AbstractResourceInsta
 	public void clearModelAliases() {
 		getModel().getAliases().clear();
 	}
-
-	
 	
 	@Override
 	public void modelAsInOut() {

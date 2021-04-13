@@ -62,7 +62,6 @@ public interface ITaskInstance {
 	 * In case the tasks used infromation from the models but not the actual model, 
 	 * this is the method where they must be synchronised. 
 	 */
-	void processModelsAfterExecution();
 	
 	/**
 	 *  

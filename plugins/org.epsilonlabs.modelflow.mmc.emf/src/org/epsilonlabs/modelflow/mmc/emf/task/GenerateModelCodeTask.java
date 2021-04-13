@@ -149,7 +149,4 @@ public class GenerateModelCodeTask implements ITaskInstance {
 		}).findFirst();
 	}
 
-	@Override
-	public void processModelsAfterExecution() {}
-
 }

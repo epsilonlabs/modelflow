@@ -153,9 +153,6 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 		});
 	}
 	
-	@Override
-	public void processModelsAfterExecution(){ }
-	
 	/**
 	 * ------------------------------
 	 * Execution Methods

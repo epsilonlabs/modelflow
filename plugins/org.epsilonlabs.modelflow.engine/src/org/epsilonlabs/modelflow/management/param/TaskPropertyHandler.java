@@ -71,7 +71,7 @@ public abstract class TaskPropertyHandler implements ITaskPropertyHandler {
 	}
 	
 	@Override
-	public Map<String, Object> getHashes(){
+	public Map<String, Object> computeHashes(){
 		if (this.hashes == null) {
 			hashes = new HashMap<>();
 			get().entrySet().forEach(e-> hashes.put(e.getKey(),Hasher.hash(e.getValue())) );

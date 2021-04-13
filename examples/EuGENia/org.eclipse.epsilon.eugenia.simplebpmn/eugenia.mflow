@@ -178,7 +178,7 @@ task GenerateDomainModelCode is emf:genCode
 	in GenModel {
 	generateEdit : true
 	generateEditor : true
-	generateTest: true
+	generateTests: true
 }
 task GenerateDiagramCode is gmf:genDiagram
 	in GmfGen;

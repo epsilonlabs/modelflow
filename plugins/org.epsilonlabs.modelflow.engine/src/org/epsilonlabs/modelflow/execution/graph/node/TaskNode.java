@@ -30,6 +30,8 @@ import org.epsilonlabs.modelflow.dom.ast.ITaskModuleElement;
 import org.epsilonlabs.modelflow.dom.ast.emf.RuleUtil;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.DependencyGraphHelper;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.management.resource.ResourceKind;
@@ -268,7 +270,11 @@ public class TaskNode extends AbstractTaskNode {
 								 * TODO Ensure this is the correct behaviour of safely dispose,
 								 * Maybe also remove from repository
 								 */
+								LOG.debug("Disposing {}", res.getName());
+								IModelFlowProfiler profiler = ctx.getProfiler();
+								profiler.start(ExecutionStage.DISPOSE, r, ctx);
 								res.dispose();
+								profiler.stop(ExecutionStage.DISPOSE, r, ctx);
 							}
 						});
 					} catch (MFRuntimeException e) {

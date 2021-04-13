@@ -68,8 +68,9 @@ public class SimplifiedDiagramGenerator extends Job {
 			}
 			return s;
 		} catch (InterruptedException ex) {
+			Thread.currentThread().interrupt();
 			return Status.CANCEL_STATUS;
-		}
+		} 
 	}
 	
 	public IGenerator getGenerator() {
@@ -83,7 +84,6 @@ public class SimplifiedDiagramGenerator extends Job {
 
 			@Override
 			public void done(IJobChangeEvent event) {
-//				unloadGenModel();
 				IStatus runStatus = event.getResult();
 				
 				if (runStatus.isOK()) {

@@ -85,9 +85,6 @@ public class FileReaderTask implements ITaskInstance {
 	}
 
 	@Override
-	public void processModelsAfterExecution() { }
-
-	@Override
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 	}
 

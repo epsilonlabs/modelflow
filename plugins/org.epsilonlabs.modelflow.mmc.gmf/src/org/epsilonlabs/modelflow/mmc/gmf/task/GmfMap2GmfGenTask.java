@@ -148,12 +148,6 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 		return Optional.of(trace.getTraces());
 	}	
 
-	@Override
-	public void processModelsAfterExecution() {
-		resources.clear();
-		transformation = null;
-	}
-
 	/** 
 	 * Can only execute for a specific model configuration:
 	 */
@@ -212,6 +206,8 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	
 	@Override
 	public void afterExecute() {
+		resources.clear();
+		transformation = null;
 	}
 	
 }

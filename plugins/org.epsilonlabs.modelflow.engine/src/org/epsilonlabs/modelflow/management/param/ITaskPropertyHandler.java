@@ -53,7 +53,7 @@ public interface ITaskPropertyHandler {
 	 *
 	 * @return the hashes
 	 */
-	Map<String, Object> getHashes();
+	Map<String, Object> computeHashes();
 
 	/**
 	 * @param taskExecution

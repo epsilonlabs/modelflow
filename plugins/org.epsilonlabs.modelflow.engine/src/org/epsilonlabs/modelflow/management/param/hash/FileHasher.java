@@ -22,7 +22,7 @@ public class FileHasher implements IHasher<Collection<File>, Map<String, Object>
 	}
 
 	@Override
-	public Map<String, Object> fromTaskPopulatedParameter(Collection<File> taskParameterReturnType) {
+	public Map<String, Object> fromEvaluatedParameter(Collection<File> taskParameterReturnType) {
 		HashMap<String, Object> hashMap = new HashMap<>();
 		taskParameterReturnType.forEach(f-> hashMap.put(f.getAbsolutePath(), Hasher.computeHashForFile(f)));
 		return hashMap;

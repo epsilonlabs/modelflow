@@ -15,8 +15,8 @@ import org.epsilonlabs.modelflow.dom.api.IModelResourceInstance;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
-import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
+import org.epsilonlabs.modelflow.execution.control.IModelFlowProfiler;
 import org.epsilonlabs.modelflow.execution.graph.IDependencyGraph;
 import org.epsilonlabs.modelflow.execution.graph.node.DerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IAbstractResourceNode;
@@ -205,28 +205,36 @@ public class ResourceManager implements IResourceManager {
 					updater.addResourceToLatest(snapshot);
 				}
 			}
-			boolean finalUse = false;
-			if (taskNode.getParentNode() == null) { // If container node is done				
-				// Check if this task uses the resource for its last time
-				finalUse = ctx.getScheduler().isLastUseOf(resourceNode.getName(), taskInstanceName);
-			} else {
-				final long pendingTasks = taskNode.getParentNode().getSubNodes().values().stream()
-						.filter(t->Objects.equal(t.getName(), taskInstanceName))
-						.filter(t->t.getState().isNotDone()).count();
-				finalUse = (pendingTasks == 0);
-			}
-			if (finalUse) {
-				// Dispose resource
-				IModelFlowProfiler profiler = ctx.getProfiler();
-				LOG.debug("Disposing {}", resourceNode.getName());
-				profiler.start(ExecutionStage.DISPOSE, resourceNode, ctx);
-				resource.dispose();
-				profiler.stop(ExecutionStage.DISPOSE, resourceNode, ctx);
-			}
 			resource.afterTask();
+			shouldDispose(resourceNode, resource);
 		} else {
 			throw new IllegalStateException(
 					"resource " + resourceNode.getName() + " should have been created previously");
+		}
+	}
+
+	/**
+	 * @param resourceNode
+	 * @param resource
+	 */
+	public void shouldDispose(IModelResourceNode resourceNode, IModelResourceInstance<?> resource) {
+		boolean finalUse = false;
+		if (taskNode.getParentNode() == null) { // If container node is done				
+			// Check if this task uses the resource for its last time
+			finalUse = ctx.getScheduler().isLastUseOf(resourceNode.getName(), taskInstanceName);
+		} else {
+			final long pendingTasks = taskNode.getParentNode().getSubNodes().values().stream()
+					.filter(t->Objects.equal(t.getName(), taskInstanceName))
+					.filter(t->t.getState().isNotDone()).count();
+			finalUse = (pendingTasks == 0);
+		}
+		if (finalUse && resource.isLoaded()) {
+			// Dispose resource
+			IModelFlowProfiler profiler = ctx.getProfiler();
+			LOG.debug("Disposing {}", resourceNode.getName());
+			profiler.start(ExecutionStage.DISPOSE, resourceNode, ctx);
+			resource.dispose();
+			profiler.stop(ExecutionStage.DISPOSE, resourceNode, ctx);
 		}
 	}
 
@@ -237,13 +245,7 @@ public class ResourceManager implements IResourceManager {
 			// Identify property name
 			String propertyName = derivedNode.getName().split("_")[1];
 			// If result
-			Object result = null;
-			if ("trace".equals(propertyName)) {
-				result = taskInstance.getTrace();
-				// If other
-			} else {
-				result = ctx.getParamManager().getOutputParameterHandler(taskInstance).get(propertyName);
-			}
+			Object result = ctx.getParamManager().getOutputParameterHandler(taskInstance).get(propertyName);
 			// If present, save value in repository
 			if (result != null) {
 				ctx.getTaskRepository().getResourceRepository().addDerived(derivedNode, result);

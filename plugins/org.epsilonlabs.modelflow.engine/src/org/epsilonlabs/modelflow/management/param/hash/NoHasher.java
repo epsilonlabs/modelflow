@@ -15,7 +15,7 @@ public class NoHasher implements IHasher<Object,String> {
 	}
 
 	@Override
-	public String fromTaskPopulatedParameter(Object outputType) {
+	public String fromEvaluatedParameter(Object outputType) {
 		return "";
 	}
 

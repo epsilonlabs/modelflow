@@ -18,7 +18,7 @@ import org.epsilonlabs.modelflow.management.param.hash.IHasher;
 public class EglHasher implements IHasher<ProtectedFiles,Map<String, Object>> {
 	
 	@Override
-	public Map<String, Object> fromTaskPopulatedParameter(ProtectedFiles protectedFiles){
+	public Map<String, Object> fromEvaluatedParameter(ProtectedFiles protectedFiles){
 		return protectedFiles.compute();
 
 	}

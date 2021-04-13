@@ -132,11 +132,6 @@ public class XsdValidationTask implements ITaskInstance {
 		// Do nothing
 	}
 
-	@Override
-	public void processModelsAfterExecution() {
-		// Do nothing
-	}
-
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {

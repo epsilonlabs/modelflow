@@ -15,7 +15,7 @@ public class DefaultInputHasher implements IHasher<Object, Object>{
 	}
 
 	@Override
-	public Object fromTaskPopulatedParameter(Object taskParameterReturnType) {
+	public Object fromEvaluatedParameter(Object taskParameterReturnType) {
 		return Hasher.hash(taskParameterReturnType);
 	}
 

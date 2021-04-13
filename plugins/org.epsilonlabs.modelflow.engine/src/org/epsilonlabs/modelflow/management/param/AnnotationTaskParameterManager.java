@@ -33,7 +33,7 @@ public class AnnotationTaskParameterManager implements ITaskParameterManager {
 	
 	@Override
 	public void processInputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = getInputParameterHandler(node.getTaskInstance()).getHashes();
+		Map<String, Object> hashes = getInputParameterHandler(node.getTaskInstance()).computeHashes();
 		LOG.debug("InputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {		
@@ -43,7 +43,7 @@ public class AnnotationTaskParameterManager implements ITaskParameterManager {
 	
 	@Override
 	public void processOutputs(ITaskNode node, IModelFlowContext ctx){
-		Map<String, Object> hashes = getOutputParameterHandler(node.getTaskInstance()).getHashes();
+		Map<String, Object> hashes = getOutputParameterHandler(node.getTaskInstance()).computeHashes();
 		//LOG.debug("OutputHashes: {}", hashes);
 		ExecutionTrace trace = ctx.getExecutionTrace();
 		synchronized (trace) {			

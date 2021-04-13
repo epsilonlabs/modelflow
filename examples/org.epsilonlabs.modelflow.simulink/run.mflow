@@ -1,8 +1,10 @@
 model sim is epsilon:simulink{
-	src: "model.slx"
+	src: "/Applications/MATLAB_R2019b.app/toolbox/simulink/simdemos/simfeatures/modelreference/sldemo_mdlref_depgraph.slx"
+	engine: "/Applications/MATLAB_R2021a.app/extern/engines/java/jar/engine.jar"
+	library: "/Applications/MATLAB_R2021a.app/bin/maci64"
 }
 task eol is epsilon:eol
-	out sim
+	in sim
 {
 	src: "create.eol"
 }

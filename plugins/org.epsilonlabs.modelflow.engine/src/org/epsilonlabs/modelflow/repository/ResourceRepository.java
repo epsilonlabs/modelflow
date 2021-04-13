@@ -89,7 +89,7 @@ public class ResourceRepository {
 
 	public void clear() {
 		LOG.info("Clearing Resource Repository");
-		this.resources.values().stream().forEach(IModelResourceInstance::dispose);
+		this.resources.values().stream().filter(IModelResourceInstance::isLoaded).forEach(IModelResourceInstance::dispose);
 		this.resources.clear();
 		this.derivedResources.clear();
 	}

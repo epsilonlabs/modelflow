@@ -14,7 +14,11 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -24,11 +28,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.epsilon.emc.simulink.engine.MatlabEngine;
 import org.eclipse.epsilon.emc.simulink.engine.MatlabEnginePool;
-import org.eclipse.epsilon.emc.simulink.exception.MatlabException;
 import org.eclipse.epsilon.emc.simulink.model.SimulinkModel;
 import org.eclipse.epsilon.emc.simulink.model.element.SimulinkElement;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Param;
+import org.epsilonlabs.modelflow.management.param.hash.Hasher;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -45,9 +49,9 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 	private File workingDir;
 	private File project;
 	private File file;
+
 	private String libraryPath;
 	private String engineJarPath;
-
 
 	@Override
 	public SimulinkModel getModel() {
@@ -164,19 +168,52 @@ public class EpsilonSimulinkModelResource extends AbstractEpsilonCachedModelReso
 
 	@Override
 	public Optional<Object> loadedHash() {
+		MatlabEngine engine = getModel().getEngine(); //loaded engine
 		try {
-			MatlabEngine engine = getModel().getEngine(); //loaded engine
-			String simulinkModelName = (file.exists()) ? file.getAbsolutePath() : getModel().getSimulinkModelName();
-			Object hash = engine.evalWithResult("Simulink.MDLInfo('?').ModelVersion", simulinkModelName);
-			return Optional.of(hash);
-		} catch (MatlabException e) {
-			return Optional.empty();
+			//final List<String> dependencies = (List<String>)engine.evalWithResult("listRequiredFiles(currentProject,'?')", getFile().getAbsolutePath());
+			final String modelName = getModel().getSimulinkModelName();
+			@SuppressWarnings("unchecked")
+			// IF PROJECT WAS PROVIDED DO
+			Object dependencies = null;
+			if (project != null) {				
+				dependencies = engine.evalWithResult("dependencies.fileDependencyAnalysis('?')", modelName);
+			} else {
+				String cmd = ""
+						+ "output = {}"
+						+ "refs = find_mdlrefs('sldemo_mdlref_basic');\n"
+						+ "for roxIdx = 1:length(refs)\n"
+						+ "	   ref = refs{rowIdx, end};\n"  
+						+ "    output{rowIdx,1} = Simulink.MDLInfo(ref).FileName;\n"
+						+ "end";
+				engine.eval(cmd, modelName);
+				dependencies = engine.getVariable("output");
+			}
+			// ELSE DO
+			if (dependencies instanceof String) {
+				final HashMap<String, String> map = new HashMap<>();
+				final String fileDep = (String) dependencies;
+				map.put(fileDep, Hasher.computeHashForFile(new File(fileDep)));
+				return Optional.of(map);
+			} else if (dependencies instanceof List) {
+				
+				
+				final Map<String, String> map = ((List<String>)dependencies).stream().collect(Collectors.toMap(s->s, s->Hasher.computeHashForFile(new File(s))));
+				return Optional.of(map);
+			}
+			return null;
+		} catch (Exception e) {
+			return Optional.empty(); 
 		}
 	}
 
 	@Override
 	public Optional<Object> unloadedHash(Object trace) {
-		return Optional.of(extractRevisionFromSlx());
+		if (trace instanceof Map) {
+			@SuppressWarnings("unchecked")
+			final Map<String, String> map = ((Map<String, String>) trace).keySet().stream().collect(Collectors.toMap(s->s, s->Hasher.computeHashForFile(new File(s))));
+			return Optional.of(map);
+		}
+		return Optional.empty();
 	}
 
 	@Override

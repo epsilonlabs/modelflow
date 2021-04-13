@@ -113,10 +113,6 @@ public class Emfatic2EcoreTask implements ITaskInstance {
 	@Override
 	public void afterExecute() {}
 	
-	@Override
-	public void processModelsAfterExecution() {
-	
-	}
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {

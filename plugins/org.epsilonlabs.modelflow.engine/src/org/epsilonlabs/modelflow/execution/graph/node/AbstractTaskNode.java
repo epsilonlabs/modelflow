@@ -281,8 +281,8 @@ public abstract class AbstractTaskNode implements ITaskNode {
 			if (taskInstance == null) {				
 				taskInstance = ctx.getTaskRepository().create(this, ctx);
 			}
-			taskInstance.validateParameters();
 			if (isGuardOk(ctx)) {				
+				taskInstance.validateParameters();
 				conservativeExecutionHelper = new ConservativeExecutionHelper(this, ctx);
 				
 				// Assume it will execute

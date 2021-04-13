@@ -129,7 +129,6 @@ public class EpsilonTaskTests extends WorkflowBuilderTest {
 	protected void setupSource() {
 		final String program = new WorkflowProgramBuilder(w).build();
 		try {
-			//module.setWorkflow(w);
 			module.parse(program);
 		} catch (Exception e) {
 			e.printStackTrace();

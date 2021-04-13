@@ -28,6 +28,6 @@ public interface IHasher<O,T> {
 	 * @param taskParameterReturnType accepts the same object type as that returned by the method annotated with this class as hasher.
 	 * @return the recently calculated hash which will be stored in the execution trace.
 	 */
-	T fromTaskPopulatedParameter(O taskParameterReturnType);
+	T fromEvaluatedParameter(O taskParameterReturnType);
 
 }

@@ -1,5 +1,6 @@
 package org.epsilonlabs.modelflow.mmc.gmf.task.helper;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -100,7 +101,6 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper  {
 	}
 
 	public GeneratorWrapper(GenEditorGenerator genModel, CodegenEmitters emitters, BinaryEmitters binaryEmitters) {
-		assert genModel != null && emitters != null;
 		myEditorGen = genModel;
 		myDiagram = genModel.getDiagram();
 		myEmitters = emitters;
@@ -132,8 +132,15 @@ public class GeneratorWrapper extends AbstractGeneratorWrapper  {
 				Collections.<IProject>emptyList());
 
 		if (myEditorGen.getModelAccess() != null) {
-			/*myEmitters.setGlobals(
-					Collections.<String, Object>singletonMap("DynamicModelAccess", myEditorGen.getModelAccess()));*/
+			final Map<String, Object> singletonMap = Collections.<String, Object>singletonMap("DynamicModelAccess", myEditorGen.getModelAccess());
+			try {
+				final Method m = CodegenEmitters.class.getMethod("setGlobals", Map.class);
+				m.setAccessible(true);
+				m.invoke(myEmitters, singletonMap);
+			} catch (Exception e) {
+				throw new UnexpectedBehaviourException(e);
+			}
+			
 			generateModelAccessFacility();
 		}
 

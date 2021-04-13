@@ -57,7 +57,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 	}*/
 	
 	@Override
-	public Map<String, Object> getHashes() {
+	public Map<String, Object> computeHashes() {
 		this.properties = new HashMap<String, Object>();
 		this.hashes = new HashMap<String, Object>();
 		for (Method m : annotatedMethods) {
@@ -78,7 +78,7 @@ public class TaskOutputPropertyHandler extends TaskPropertyHandler {
 					}						
 					@SuppressWarnings("unchecked")
 					IHasher<Object, Object> hasher = (IHasher<Object, Object>) m.getAnnotation(Output.class).hasher().newInstance();
-					this.hashes.put(key, hasher.fromTaskPopulatedParameter(this.properties.get(key)));
+					this.hashes.put(key, hasher.fromEvaluatedParameter(this.properties.get(key)));
 				} catch (Exception e) {
 					throw new IllegalStateException("Unable to retrieve hasher for output property");
 				}

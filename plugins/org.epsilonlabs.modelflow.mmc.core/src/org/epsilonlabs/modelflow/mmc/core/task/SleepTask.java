@@ -80,12 +80,6 @@ public class SleepTask implements ITaskInstance {
 	}
 
 	@Override
-	public void processModelsAfterExecution() {
-		// Do nothing
-	}
-
-
-	@Override
 	public Optional<Collection<Trace>> getTrace() {
 		return Optional.empty();
 	}
