@@ -8,6 +8,6 @@ tooltip="[%=tt.task%] Traces"
 [%
 var colors = new Map;
 var defColors = Sequence{}; %]
-[%=tt.traceGraph()%]
+[%=tt.traceGraph2()%]
 [%=key(tt)%]
 }
