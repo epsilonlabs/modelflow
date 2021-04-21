@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -32,13 +33,11 @@ public class EpsilonEtlTask extends AbstractEpsilonTask {
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		if (traces == null) {			
-			Collection<Transformation> trace = getModule().getContext().getTransformationTrace().getTransformations();
-			traces = trace.stream()
-					.map(transformation -> new EtlTaskTrace(transformation, this).init().getTrace())
-					.collect(Collectors.toList());
-			trace.clear();
-		}
+		Collection<Transformation> trace = getModule().getContext().getTransformationTrace().getTransformations();
+		List<Trace> traces = trace.stream()
+				.map(transformation -> new EtlTaskTrace(transformation, this).init().getTrace())
+				.collect(Collectors.toList());
+		trace.clear();
 		return Optional.of(traces);
 	}
 }

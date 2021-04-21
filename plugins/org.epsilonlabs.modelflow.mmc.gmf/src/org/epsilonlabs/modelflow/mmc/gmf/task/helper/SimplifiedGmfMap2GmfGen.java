@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2006, 2009 Borland Software Corporation
+ * 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *    Alexander Fedorov (Borland) - initial API and implementation
+ */
 package org.epsilonlabs.modelflow.mmc.gmf.task.helper;
 
 import java.io.IOException;
@@ -53,6 +64,7 @@ import org.eclipse.m2m.qvt.oml.TransformationExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// Based on org.eclipse.gmf.internal.bridge.transform.TransformToGenModelOperation
 @SuppressWarnings({ "restriction", "deprecation" })
 public class SimplifiedGmfMap2GmfGen {
 
@@ -339,10 +351,10 @@ public class SimplifiedGmfMap2GmfGen {
 		} catch (IOException e) {
 			// can't load resource, means no old file, IGNORE the exception
 		} catch (RuntimeException e) {
+			System.err.println(e);
 			old = null;
-			throw new Exception(e);
 		} finally {
-			if (resource != null) {
+			/*if (resource != null) {
 				if (resource.isLoaded()) {
 					// not sure I need to unload given I'll remove the resource from resource set anyway, but it doesn't hurt? 
 					resource.unload();
@@ -351,7 +363,7 @@ public class SimplifiedGmfMap2GmfGen {
 				// (e.g. the one in #save() method, with another content type)
 				// Another option would be use of correct content type here, but what 
 				// if loaded/reconciled model has old content type? 
-			}
+			}*/
 		}
 	}
 

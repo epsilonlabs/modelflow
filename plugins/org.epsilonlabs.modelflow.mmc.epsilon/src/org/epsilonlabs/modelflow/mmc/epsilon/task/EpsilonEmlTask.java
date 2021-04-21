@@ -67,19 +67,17 @@ public class EpsilonEmlTask extends AbstractEpsilonTask {
 	
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		if (traces == null) {
-			List<Trace> mergeTraces = getModule().getContext().getMergeTrace().stream()
-					.map(merge -> new EmlTaskTrace(merge, this).init().getTrace())
-					.collect(Collectors.toList());
-			
-			List<Trace> transformationTraces = getModule().getContext().getTransformationTrace().getTransformations().stream()
-				.map(transformation -> new EtlTaskTrace(transformation, this).init().getTrace())
+		List<Trace> mergeTraces = getModule().getContext().getMergeTrace().stream()
+				.map(merge -> new EmlTaskTrace(merge, this).init().getTrace())
 				.collect(Collectors.toList());
-			
-			traces = new ArrayList<Trace>();
-			traces.addAll(mergeTraces);
-			traces.addAll(transformationTraces);
-		}
+		
+		List<Trace> transformationTraces = getModule().getContext().getTransformationTrace().getTransformations().stream()
+			.map(transformation -> new EtlTaskTrace(transformation, this).init().getTrace())
+			.collect(Collectors.toList());
+		
+		ArrayList<Trace> traces = new ArrayList<Trace>();
+		traces.addAll(mergeTraces);
+		traces.addAll(transformationTraces);
 		return Optional.of(traces);
 	}
 	

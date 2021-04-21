@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -69,13 +70,11 @@ public class EpsilonEplTask extends AbstractEpsilonTask {
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		if (traces == null) {			
-			Collection<PatternMatch> trace = ((IEplContext) getModule().getContext()).getPatternMatchTrace().getMatches();
-			traces = trace.stream()
-					.map(patternMatch -> new EplTaskTrace(patternMatch, this).init().getTrace())
-					.collect(Collectors.toList());
-			trace.clear();
-		}
+		Collection<PatternMatch> trace = ((IEplContext) getModule().getContext()).getPatternMatchTrace().getMatches();
+		List<Trace> traces = trace.stream()
+				.map(patternMatch -> new EplTaskTrace(patternMatch, this).init().getTrace())
+				.collect(Collectors.toList());
+		trace.clear();
 		return Optional.of(traces);
 	}
 

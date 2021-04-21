@@ -30,7 +30,7 @@ public class ComponentBenchmark extends AbstractBenchmark{
 		String projectName = "org.epsilonlabs.modelflow.component.example";
 		String buildFileName = "component.mflow";
 		final Path outputPath = TestUtils.copyExampleProjectToTempLocation(projectName);
-		final File buildScript = TestUtils.getBuildScript(outputPath, buildFileName);
+		final File buildScript = TestUtils.getFileInPath(outputPath, buildFileName);
 
 		testExecution(scenario, tracing, iteration, outputPath, buildScript, MAX_ITER);
 	}

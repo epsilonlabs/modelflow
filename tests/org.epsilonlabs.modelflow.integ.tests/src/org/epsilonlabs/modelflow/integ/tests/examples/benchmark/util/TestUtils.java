@@ -78,8 +78,8 @@ public class TestUtils {
 	/**
 	 * @return the buildScript as file
 	 */
-	public static File getBuildScript(Path outputPath, String scriptFile) {
-		return outputPath.resolve(scriptFile).toFile();
+	public static File getFileInPath(Path outputPath, String file) {
+		return outputPath.resolve(file).toFile();
 	}
 
 	private static FileFilter getExampleFileFilter() {

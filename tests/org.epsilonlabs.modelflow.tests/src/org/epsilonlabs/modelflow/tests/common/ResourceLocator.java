@@ -7,20 +7,25 @@ import org.apache.commons.io.FileUtils;
 
 public class ResourceLocator {
 
+	public static String getUserDir(){
+		String usrDir = System.getProperty("user.dir");
+		return usrDir;
+	}
+	
 	public static String locate(String location){
 		if (location.startsWith("/")){
 			return location;
 		} else {
-			return System.getProperty("user.dir") + "/resources/"+ location;
+			return getUserDir() + "/resources/"+ location;
 		}
 	}
 	
 	public static String locateInTestDir(String location){
-		return System.getProperty("user.dir") + "/target/modelflow/test/"+ location;
+		return getUserDir() + "/target/modelflow/test/"+ location;
 	}
 	
 	public static String getTestDir(){
-		return System.getProperty("user.dir") + "/target/modelflow/test/";
+		return getUserDir() + "/target/modelflow/test/";
 	}
 
 	public static String locateAndCopyToTestDir(String location) {

@@ -17,6 +17,7 @@ import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.dom.api.annotation.Definition;
 import org.epsilonlabs.modelflow.dom.api.annotation.Output;
 import org.epsilonlabs.modelflow.exception.MFExecutionException;
+import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
 import org.epsilonlabs.modelflow.management.trace.Trace;
 import org.epsilonlabs.modelflow.mmc.epsilon.task.trace.RuntimeTracer;
 
@@ -48,10 +49,12 @@ public class EpsilonEolTask extends AbstractEpsilonTask {
 	}
 
 	@Override
-	protected void beforeParse() throws MFExecutionException {
-		super.beforeParse();
-		FrameStack frameStack = getModule().getContext().getFrameStack();
-		tracer = new RuntimeTracer(this);
-		frameStack.putGlobal(Variable.createReadOnlyVariable("mfTrace", tracer));
+	protected void beforeExecute(IModelFlowContext ctx) throws MFExecutionException {
+		if (ctx.isEndToEndTracing()) {
+			FrameStack frameStack = getModule().getContext().getFrameStack();
+			tracer = new RuntimeTracer(this);
+			frameStack.putGlobal(Variable.createReadOnlyVariable("mfTrace", tracer));
+		}
+		
 	}
 }

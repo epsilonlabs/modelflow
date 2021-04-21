@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.ModelFlowModule;
@@ -37,7 +38,7 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 
-	protected static final int MAX_ITER = 10;
+	protected static final int MAX_ITER = 25;
 	protected Path diagramProjectOutputPath;
 	protected String metamodelName = "simplebpmn";
 	protected String base = "org.eclipse.epsilon.eugenia";
@@ -57,7 +58,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		final Path eugeniaSource = Paths.get(System.getProperty("user.dir"), "..","..", "examples", "EuGENia");
 		final Path eugeniaOutputProjectPath = TestUtils.copyExampleProjectToTempLocation(eugeniaSource.resolve(projectName), projectName);
 		importProject(eugeniaOutputProjectPath);
-		final File buildScript = TestUtils.getBuildScript(eugeniaOutputProjectPath, buildFileName);
+		final File buildScript = TestUtils.getFileInPath(eugeniaOutputProjectPath, buildFileName);
 		
 		// Copy dependent diagram project
 		final String diagramProjectName = String.format("%s.%s.diagram.custom", base, metamodelName);
@@ -93,7 +94,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	}
 
 	@Override
-	protected ModelFlowModule createModule(Boolean tracing, Boolean protect, Path outputPath) {
+	protected ModelFlowModule createModule(boolean tracing, Boolean protect, Path outputPath) {
 		final ModelFlowModule module = super.createModule(tracing, protect, outputPath);
 		
 		// Execution parameters

@@ -52,7 +52,6 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	protected Object result;
 
 	private IModelWrapper[] resources = null;
-	protected List<Trace> traces = null; 
 
 	// Constructor
 	protected AbstractEpsilonTask() {
@@ -190,8 +189,13 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 		
 	}
 	
+	protected void beforeExecute(IModelFlowContext ctx) throws MFExecutionException {
+		
+	}
+	
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
+		beforeExecute();
 		getModule().getContext().setOutputStream(ctx.getOutputStream());
 		getModule().getContext().setErrorStream(ctx.getErrorStream());
 		if (Platform.isRunning()) {			
@@ -205,6 +209,8 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	}
 
 	@Override
-	public void afterExecute() throws MFExecutionException{}
+	public void afterExecute() throws MFExecutionException{
+		this.module = null;
+	}
 
 }

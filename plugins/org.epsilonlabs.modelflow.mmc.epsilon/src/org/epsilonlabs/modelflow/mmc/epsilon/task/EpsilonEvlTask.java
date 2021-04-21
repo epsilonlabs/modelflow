@@ -8,6 +8,7 @@
 package org.epsilonlabs.modelflow.mmc.epsilon.task;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -87,13 +88,11 @@ public class EpsilonEvlTask extends AbstractEpsilonTask {
 	
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		if (traces == null) {			
-			ConstraintTrace trace = getModule().getContext().getConstraintTrace();
-			traces = trace.stream()
-					.map(constraint -> new EvlTaskTrace(constraint, this).init().getTrace())
-					.collect(Collectors.toList());
-			trace.clear();
-		}
+		ConstraintTrace trace = getModule().getContext().getConstraintTrace();
+		List<Trace> traces = trace.stream()
+				.map(constraint -> new EvlTaskTrace(constraint, this).init().getTrace())
+				.collect(Collectors.toList());
+		trace.clear();
 		return Optional.of(traces);
 	}
 	

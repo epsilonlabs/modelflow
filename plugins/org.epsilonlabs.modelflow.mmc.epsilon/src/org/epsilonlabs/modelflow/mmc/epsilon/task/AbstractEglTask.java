@@ -10,6 +10,7 @@ package org.epsilonlabs.modelflow.mmc.epsilon.task;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -53,18 +54,15 @@ public abstract class AbstractEglTask extends AbstractEpsilonTask {
 		} 
 		return null;	
 	}
-		
 	
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
-		if (traces == null) {			
-			Collection<TraceLink> trace = eglTrace.getTraceLinks();
-			traces = trace.stream()
-					.map(link -> new EglTaskTrace(link, this).init().getTrace())
-					.collect(Collectors.toList());
-			trace.clear();
-			eglTrace = null;
-		}
+		Collection<TraceLink> trace = eglTrace.getTraceLinks();
+		List<Trace> traces = trace.stream()
+				.map(link -> new EglTaskTrace(link, this).init().getTrace())
+				.collect(Collectors.toList());
+		trace.clear();
+		eglTrace = null;
 		return Optional.ofNullable(traces);
 	}
 	

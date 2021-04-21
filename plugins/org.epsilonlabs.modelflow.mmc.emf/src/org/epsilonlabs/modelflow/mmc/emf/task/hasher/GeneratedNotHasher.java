@@ -20,7 +20,7 @@ public class GeneratedNotHasher implements IHasher<CodegenOutputUtil, Map<String
 
 	@Override
 	public Map<String, Object> fromExecutionTrace(Map<String, Object> trace) {
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = new HashMap<>();
 
 		Map<String, String> object = (Map<String, String>) trace.get(CodegenOutputUtil.OPTIONS);
 		String jdk = (String) trace.get(CodegenOutputUtil.JDK);
@@ -33,7 +33,7 @@ public class GeneratedNotHasher implements IHasher<CodegenOutputUtil, Map<String
 		
 		
 		for (String file : files.keySet()) {
-			String pastResult = (String) files.get(file);
+			String pastResult = files.get(file);
 			if (file.endsWith(".java")) {
 				JMerger jMerger = helper.getMerger();
 				System.out.println(file);
@@ -86,8 +86,8 @@ public class GeneratedNotHasher implements IHasher<CodegenOutputUtil, Map<String
 	}
 
 	@Override
-	public Map<String, Object> fromTaskPopulatedParameter(CodegenOutputUtil taskParameterReturnType) {
-		HashMap<String, String> fileHashes = new HashMap<String, String>();
+	public Map<String, Object> fromEvaluatedParameter(CodegenOutputUtil taskParameterReturnType) {
+		HashMap<String, String> fileHashes = new HashMap<>();
 		taskParameterReturnType.getFiles().forEach(f -> {
 			try {
 				InputStream is = new ExtensibleURIConverterImpl()
@@ -104,7 +104,7 @@ public class GeneratedNotHasher implements IHasher<CodegenOutputUtil, Map<String
 				e.printStackTrace();
 			}
 		});
-		HashMap<String, Object> result = new HashMap<String, Object>();
+		HashMap<String, Object> result = new HashMap<>();
 		result.put(CodegenOutputUtil.FILES, fileHashes);
 		result.put(CodegenOutputUtil.JDK, taskParameterReturnType.getJDK());
 		result.put(CodegenOutputUtil.OPTIONS, taskParameterReturnType.getOptions());
@@ -112,5 +112,7 @@ public class GeneratedNotHasher implements IHasher<CodegenOutputUtil, Map<String
 		result.put(CodegenOutputUtil.TEMPLATE_DIR, taskParameterReturnType.getTemplateDir());
 		return result;
 	}
+
+	
 
 }
