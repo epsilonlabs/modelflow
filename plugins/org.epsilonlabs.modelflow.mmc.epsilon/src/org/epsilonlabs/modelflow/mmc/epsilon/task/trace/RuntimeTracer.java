@@ -41,7 +41,7 @@ public class RuntimeTracer {
 			Trace trace = new ManagementTraceBuilder()
 				 .addSourceModelElement(sourceId, getResource(sourceModel).orElse(null), "")
 				 .addTargetModelElement(targetId, getResource(targetModel).orElse(null), "")
-				 .link(link)
+				 .link("transform", link)
 				 .build();
 			traces.add(trace);
 		}
