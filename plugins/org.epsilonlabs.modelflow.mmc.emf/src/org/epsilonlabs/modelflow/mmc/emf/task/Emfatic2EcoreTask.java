@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.emfatic.core.generator.ecore.Builder;
 import org.eclipse.emf.emfatic.core.generator.ecore.Connector;
 import org.eclipse.emf.emfatic.core.lang.gen.parser.EmfaticParserDriver;
@@ -34,7 +35,6 @@ public class Emfatic2EcoreTask implements ITaskInstance {
 	protected File emfatic = null; 
 	protected Resource resource = null;
 	protected IModelWrapper output;
-	//protected boolean mustSave = true;
 	
 	@Param(key="src")
 	public void setEmfatic(File emfatic){
@@ -69,22 +69,17 @@ public class Emfatic2EcoreTask implements ITaskInstance {
 		EmfaticParserDriver parser = new EmfaticParserDriver(URI.createFileURI(emfatic.getAbsolutePath()));
 		ParseContext parseContext = parser.parse(reader);
 		Builder builder = new Builder();
+		Resource tmp = new ResourceSetImpl().createResource(resource.getURI());
 		try {
-			builder.build(parseContext, resource, monitor);
+			builder.build(parseContext, tmp, monitor);
 		} catch (IOException e) {
 			throw new MFExecutionException(e);
 		}
 
 		if (!parseContext.hasErrors()) {
 			Connector connector = new Connector(builder);
-			connector.connect(parseContext, resource, monitor);
-			/*try {
-				resource.save(null);
-			//	resource.getResourceSet().getResources().clear();
-			} catch (IOException e) {
-				throw new MFExecutionException(e);
-			}*/
-			
+			connector.connect(parseContext, tmp, monitor);
+			resource.getContents().add(tmp.getContents().get(0));
 		}
 		else {
 			String message = parseContext.getMessages()[0].getMessage();
@@ -93,8 +88,7 @@ public class Emfatic2EcoreTask implements ITaskInstance {
 			throw new MFExecutionException("Syntax error: " + message);
 		}
 	}
-
-	//FIXME Use EMF regular 
+	
 	@Override
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 		
@@ -111,8 +105,9 @@ public class Emfatic2EcoreTask implements ITaskInstance {
 	}	
 
 	@Override
-	public void afterExecute() {}
-	
+	public void afterExecute() {
+		resource = null;
+	}	
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {

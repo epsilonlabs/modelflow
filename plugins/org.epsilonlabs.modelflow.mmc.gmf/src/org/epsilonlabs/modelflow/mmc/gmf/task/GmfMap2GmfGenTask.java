@@ -6,20 +6,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
+import org.eclipse.emf.common.util.BasicDiagnostic;
+import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.epsilon.emc.emf.CachedResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.EolEvaluator;
 import org.eclipse.gmf.codegen.gmfgen.GMFGenPackage;
-import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
 import org.eclipse.gmf.internal.bridge.transform.TransformOptions;
+import org.eclipse.gmf.internal.bridge.transform.ValidationHelper;
 import org.eclipse.gmf.mappings.GMFMapPackage;
 import org.eclipse.gmf.mappings.Mapping;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -46,14 +50,13 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	protected SimplifiedGmfMap2GmfGen transformation = new SimplifiedGmfMap2GmfGen();
 
 
-	protected URI genmodelLoc;
-	protected URI mappingLoc;
-	protected URI gmfgenLoc;
+	protected URI genmodelUri;
+	protected URI gmfMappingUri;
+	protected URI gmfgenUri;
 	
-	protected GenModel genmodel;
-	protected Mapping mapping;
-	protected GenEditorGenerator gmfgen;
-	protected EmfModel ecore;
+	protected GenModel genmodelRoot;
+	protected Mapping gmfMappingRoot;
+	protected EmfModel ecoreEmfModel;
 	protected ResourceSet rs;
 	protected Map<String, IModelWrapper> resources = new HashMap<>();
 	
@@ -61,7 +64,7 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	protected boolean useMapMode = true;
 	protected boolean useRuntimeFigures = true;
 
-	private Resource output;
+	private Resource gmfgenResource;
 
 	@Param(key="rcp")
 	public void setGenerateRCP(Boolean rcp) {
@@ -98,10 +101,10 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	protected EolEvaluator evaluator;
 
 	protected String getAnnotationDetailValue(String annotation, String detail, String default_) {
-		if (ecore != null) {
+		if (ecoreEmfModel != null) {
 			try {
 				if (evaluator == null) {
-					evaluator = new EolEvaluator(ecore);
+					evaluator = new EolEvaluator(ecoreEmfModel);
 				}
 				Object o = evaluator.evaluate("EAnnotation.all.select(a|a.source='" + annotation + "').collect(a|a.details.select(d|d.key='" + detail + "')).flatten().collect(d|d.value).first()");
 				if (o == null) return default_;
@@ -114,32 +117,6 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 		return default_;
 	}
 
-	@Override
-	public void execute(IModelFlowContext ctx) throws MFExecutionException {
-		try {			
-			Resource resource = CachedResourceSet.getCache().checkoutResource(gmfgenLoc);
-			rs.getResources().remove(resource);
-			
-			transformation.setMonitor(new GmfMap2GmfGenMonitor());		
-			transformation.setResourceSet(rs);
-			transformation.executeTransformation();
-			
-			resource = rs.createResource(gmfgenLoc);
-			resource.getContents().add(transformation.getGmfGen());
-			rs.getResources().add(resource);			
-		} catch (Exception e) {
-			throw new MFExecutionException(e);
-		} finally {
-			genmodel = null;
-			mapping = null;
-			genmodelLoc = null;
-			mappingLoc= null;
-			gmfgenLoc= null;
-			gmfgen= null;
-			ecore= null;
-			rs= null;
-		}
-	}
 
 	@Override
 	public Optional<Collection<Trace>> getTrace() {
@@ -160,44 +137,83 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 				Resource resource = model.getResource();
 				EList<EObject> contents = resource.getContents();
 				if (!contents.isEmpty()) {
-					EObject eObject = contents.get(0);
-					LOG.debug("class: {}", eObject.getClass().getSimpleName());
-					if (eObject instanceof GenModel) {
-						genmodelLoc = model.getModelFileUri();
-						genmodel = (GenModel) eObject;
+					EObject rootEObject = contents.get(0);
+					LOG.debug("class: {}", rootEObject.getClass().getSimpleName());
+					if (rootEObject instanceof GenModel) {
+						// GenModel
+						genmodelUri = model.getModelFileUri();
+						genmodelRoot = (GenModel) rootEObject;
 						resources.put(GenModelPackage.eNS_URI, m);
-					} else if (eObject instanceof Mapping) {
-						mappingLoc = model.getModelFileUri();
-						mapping = (Mapping) eObject;
+						
+					} else if (rootEObject instanceof Mapping) {
+						//GmfGen
+						gmfMappingUri = model.getModelFileUri();
+						gmfMappingRoot = (Mapping) rootEObject;
 						resources.put(GMFMapPackage.eNS_URI, m);
-					} else if (eObject instanceof EPackage) { // Ecore
-						ecore = model;
+					} else if (rootEObject instanceof EPackage) { 
+						// Ecore
+						ecoreEmfModel = model;
 					}
 				}
 				URI uri = resource.getURI();
-				if (uri.isFile()){
-					if (uri.toString().endsWith("gmfgen") && isOutput) {
-						gmfgenLoc = model.getModelFileUri();
-						rs = model.getResource().getResourceSet();
-						output = resource;
-						resources.put(GMFGenPackage.eNS_URI, m);
-					}
+				if (uri.isFile() && uri.toString().endsWith("gmfgen") && isOutput) {
+					gmfgenUri = model.getModelFileUri();
+					resources.put(GMFGenPackage.eNS_URI, m);
+					rs = model.getResource().getResourceSet();
+					gmfgenResource = resource;
 				}
 			}
 		});
-		
-		transformation.setMapping(mapping);
-		transformation.setGenModel(genmodel);
-		transformation.setGmfGenURI(gmfgenLoc);
-		transformation.setGmfGenResource(output);
+		if (genmodelUri == null || gmfMappingUri == null || gmfgenUri == null) {
+			throw new MFInvalidModelException("Invalid models");
+		}	
+		transformation.setMapping(gmfMappingRoot);
+		transformation.setGenModel(genmodelRoot);
+		transformation.setGmfGenURI(gmfgenUri);
+		transformation.setGmfGenResource(gmfgenResource);
 		
 		TransformOptions options = transformation.getOptions();
 		options.setGenerateRCP(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "rcp", "false")));
 		options.setUseMapMode(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useMapMode", "true")));
 		options.setUseRuntimeFigures(Boolean.valueOf(getAnnotationDetailValue("gmf.diagram", "useRuntimeFigures", "true")));
-		if (genmodelLoc == null || mappingLoc == null || gmfgenLoc == null) {
-			throw new MFInvalidModelException("Invalid models");
-		}	
+		
+	}
+	
+
+	@Override
+	public void execute(IModelFlowContext ctx) throws MFExecutionException {
+		Diagnostic genmodelValidation;
+		try {
+			genmodelValidation = ValidationHelper.validate(genmodelRoot, true, new NullProgressMonitor());
+		} catch (RuntimeException re) {
+			genmodelValidation = BasicDiagnostic.toDiagnostic(re);
+		}
+		if (genmodelValidation.getCode() != Diagnostic.OK){
+			throw new MFExecutionException(genmodelValidation.getMessage());
+		}
+
+		Diagnostic mapValidation;
+		try {
+			mapValidation = ValidationHelper.validate(gmfMappingRoot, true, new NullProgressMonitor());
+		} catch (RuntimeException re) {
+			mapValidation = BasicDiagnostic.toDiagnostic(re);
+		}
+		if (mapValidation.getCode() != Diagnostic.OK){
+			throw new MFExecutionException(mapValidation.getMessage());
+		}
+		
+		try {			
+			rs = new ResourceSetImpl();
+			rs.getURIConverter().getURIMap().putAll(EcorePlugin.computePlatformURIMap());
+	
+			transformation.setMonitor(new GmfMap2GmfGenMonitor());		
+			transformation.setResourceSet(rs);
+			transformation.executeTransformation();
+			
+			gmfgenResource.getContents().add(transformation.getGmfGen());	
+		} catch (Exception e) {
+			throw new MFExecutionException(e);
+		}
 	}
 
 	public Map<String, IModelWrapper> getResources() {
@@ -208,6 +224,10 @@ public class GmfMap2GmfGenTask implements ITaskInstance {
 	public void afterExecute() {
 		resources.clear();
 		transformation = null;
+		genmodelRoot = null;
+		gmfMappingRoot = null;
+		ecoreEmfModel= null;
+		rs= null;
 	}
 	
 }

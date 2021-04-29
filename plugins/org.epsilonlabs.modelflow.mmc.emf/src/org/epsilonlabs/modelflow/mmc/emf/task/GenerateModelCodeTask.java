@@ -18,7 +18,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
-import org.eclipse.emf.common.util.BasicMonitor;
+import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.Monitor;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.epsilonlabs.modelflow.dom.api.ITaskInstance;
@@ -92,15 +93,63 @@ public class GenerateModelCodeTask implements ITaskInstance {
 
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
-		int oldSize;
-		do {
-			oldSize = genModel.getGenPackages().size();
-			genModel.reconcile();
-		} while (genModel.getGenPackages().size() != oldSize);
+		//int oldSize;
+		//do {
+		//	oldSize = genModel.getGenPackages().size();
+		//	genModel.reconcile();
+		//} while (genModel.getGenPackages().size() != oldSize);
 		
 		genModel.setCanGenerate(true);
 
-		generator = new CustomGenerator(genModel, new BasicMonitor());
+		generator = new CustomGenerator(genModel, new Monitor() {
+			
+			@Override
+			public void worked(int work) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void subTask(String name) {
+				System.out.println(name);				
+			}
+			
+			@Override
+			public void setTaskName(String name) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void setCanceled(boolean value) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void setBlocked(Diagnostic reason) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isCanceled() {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public void internalWorked(double work) {}
+			
+			@Override
+			public void done() {}
+			
+			@Override
+			public void clearBlocked() {}
+			
+			@Override
+			public void beginTask(String name, int totalWork) {}
+		});
 		generator.setResourceName(modelResName);
 		
 		if (generateModel) {

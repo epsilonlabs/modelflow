@@ -71,6 +71,7 @@
 		<unit id="com.atlassian.commonmark-task-list-items" version="0.15.1.v20200707-1444"/>
 		<unit id="com.atlassian.commonmark-yaml" version="0.15.1.v20200707-1444"/>
 		<unit id="org.jsoup" version="1.7.2.v201411291515"/>
+		<unit id="org.yaml.snakeyaml" version="1.14.0.v201604211500"/>
 	</location>
 	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 		<repository location="https://download.eclipse.org/modeling/gmp/gmf-tooling/updates/releases"/>

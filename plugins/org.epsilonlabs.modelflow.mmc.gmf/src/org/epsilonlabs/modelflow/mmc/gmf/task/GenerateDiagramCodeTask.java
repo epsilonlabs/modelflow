@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.gmf.codegen.gmfgen.GenDiagram;
 import org.eclipse.gmf.codegen.gmfgen.GenEditorGenerator;
@@ -46,7 +47,7 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 	protected GenEditorGenerator myGenModel;
 	protected URI modelFileUri;
 	protected File outputDir;
-	protected String resource;
+	protected String resourceName;
 	protected Set<File> files = new HashSet<>();
 	protected List<GmfDiagramTrace> traces = new ArrayList<>();
 	
@@ -123,7 +124,7 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 	public Optional<Collection<Trace>> getTrace() {
 		if (resolvedTraces == null) {			
 			resolvedTraces = traces.stream()
-					.map(t->t.setResourceName(resource).getTrace())
+					.map(t->t.setResourceName(resourceName).getTrace())
 					.filter(Objects::nonNull)
 					.collect(Collectors.toList());
 			traces.clear();
@@ -136,18 +137,20 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 	public void acceptModels(IModelWrapper[] models) throws MFInvalidModelException {
 		Arrays.asList(models).stream().forEach(m -> {
 			if (m.getModel() instanceof EmfModel) {
-				resource = m.getResourceNode().getName();
-				EmfModel model = (EmfModel) m.getModel(); 
+				EmfModel model = (EmfModel) m.getModel();
 				EObject eObject = model.getResource().getContents().get(0);
 				if (eObject instanceof GenDiagram) {
 					myGenModel = ((GenDiagram) eObject).getEditorGen();
 				} else if (eObject instanceof GenEditorGenerator) {
 					myGenModel = (GenEditorGenerator) eObject;
 				}
+				
 				if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
 					myGenModel.getDomainGenModel().reconcile();
+					resourceName = m.getResourceNode().getName();
+					modelFileUri = model.getModelFileUri();
 				}
-				modelFileUri = model.getModelFileUri();
+				EcoreUtil.resolveAll(model.getResource());
 			}
 		});
 		Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);

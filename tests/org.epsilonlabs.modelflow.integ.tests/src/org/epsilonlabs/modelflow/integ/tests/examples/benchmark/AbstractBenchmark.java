@@ -15,15 +15,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.epsilon.emc.emf.CachedResourceSet;
 import org.epsilonlabs.modelflow.IModelFlowConfiguration;
 import org.epsilonlabs.modelflow.ModelFlowModule;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.control.IModelFlowExecutionProfiler;
 import org.epsilonlabs.modelflow.execution.control.MeasurableObject;
 import org.epsilonlabs.modelflow.execution.control.MeasureableSnapshot;
 import org.epsilonlabs.modelflow.execution.control.MemoryUnit;
 import org.epsilonlabs.modelflow.execution.control.ProfiledStage;
-import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.control.StageProfilerMap;
 import org.epsilonlabs.modelflow.execution.graph.node.IGraphNode;
 import org.epsilonlabs.modelflow.execution.graph.node.ITaskNode;
@@ -84,7 +86,6 @@ public abstract class AbstractBenchmark {
 	protected void testExecution(IScenario scenario, Boolean tracing, Integer iteration, Path outputPath,
 			File buildFile, int maxIter) throws Exception {
 		boolean protect = scenario.isProtect();
-		CachedResourceSet.getCache().clear();
 		ModelFlowModule module = createModule(tracing, protect, outputPath);
 		
 		System.out.printf(">>>>[ EXECUTING ] SCENARIO: %s, TRACING: %b, ITERATION: %d%n", scenario.getName(), tracing, iteration);
@@ -115,6 +116,9 @@ public abstract class AbstractBenchmark {
 			try {
 				final Runnable modifications = scenario.getModifications(outputPath);
 				modifications.run();
+				ResourcesPlugin.getWorkspace().getRoot().refreshLocal(-1, new NullProgressMonitor());
+				TimeUnit.SECONDS.sleep(1);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				cleanup(outputPath);
@@ -156,6 +160,8 @@ public abstract class AbstractBenchmark {
 		cleanup(outputPath);
 		module.clearCache();
 		module.getContext().dispose();
+		CachedResourceSet.getCache().clear();
+		TimeUnit.SECONDS.sleep(2);
 	}
 
 	protected void cleanup(Path outputPath) {

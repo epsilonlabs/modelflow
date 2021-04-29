@@ -24,6 +24,7 @@ model GmfGen is epsilon:emf {
 		map.put("LINE_WIDTH",1);
 		return map;
 	}
+	expand : true
 }
 model GmfMap is epsilon:emf {
 	src :  base + ".gmfmap"
@@ -43,6 +44,7 @@ task genPackages is epsilon:eol
 {
  	src : "resources/task/genPackages.eol"
 }
+@always
 task copyright is core:fileReader
 	in ECore as Ecore
 {
@@ -62,7 +64,7 @@ task Emfatic2Ecore is emf:emfatic2ecore
 }
 @always
 task ValidateEcoreForGenModel is epsilon:evl
-	in ECore  as Ecore
+	in ECore as Ecore
 {
  	src : "resources/task/Ecore2GenModel.evl"
 }
@@ -175,55 +177,10 @@ task PolishGmfGen is epsilon:eol
  	src : "resources/task/polish/FixGMFGen.eol"
 }
 task GenerateDomainModelCode is emf:genCode
-	in GenModel {
+	in GenModel and ECore as Ecore{
 	generateEdit : true
 	generateEditor : true
 	generateTests: true
 }
 task GenerateDiagramCode is gmf:genDiagram
 	in GmfGen;
-
-
-operation tracesForTask(name : String ) : OrderedSet {
-	return trace.tasks.selectOne(t|t.`task`.name == name).traces;
-}
-
-operation targetsForSourceElement(elementId : String, resourceName : String) : Sequence {
-	return trace.tasks.traces.flatten().select(t|not t.sources.select(s|s.container.name == resourceName and s.elementId == elementId).isEmpty());
-}
-
-operation targetsForElement(srcs) : Sequence {
-	return trace.tasks.traces.flatten().select(t|not t.sources.select(s| not srcs.select(src|s.container.name == src.container.name and s.elementId == src.elementId).isEmpty()).isEmpty()).flatten();
-}
-
-operation Any name() : String{
-	var base =  "(" +self.container.name;
-	if (not (self.getClass().getSimpleName()=="FileElementImpl")){
-		return base + ":"+ self.elementId + ")";
-	} else {
-		return base;
-	}
-}
-
-/*
-post {
-
-	trace.tasks.`task`.name.println("Traced Tasks: ");
-	tracesForTask("ValidateEcoreForGenModel").size().println();
-	tracesForTask("ValidateEcoreForGMFToolGraphMap").size().println();
-	tracesForTask("Ecore2GenModel").size().println();
-	tracesForTask("GenerateDomainModelCode").size().println();
-	
-	targetsForSourceElement("//Feature","ECore").flatten()
-		.closure(t|targetsForElement(t.targets))
-		.collect(t|t.link.link +": " + t.sources.collect(s|s.name()) + "->" + t.targets.collect(t|t.name()))
-		.concat("\n")
-		.println("targets:\n");
-	
-	trace.tasks.selectOne(t|t.`task`.name == "Ecore2GenModel").traces.targets.flatten().elementId.asSet().println();
-	trace.tasks.selectOne(t|t.`task`.name == "Ecore2GenModel").traces.select(t|t.targets.elementId.contains("//fed/Feature")).link.println();
-	
-	trace.tasks.selectOne(t|t.`task`.name == "GenerateDomainModelCode").traces.sources.flatten().elementId.asSet().println();
-	trace.tasks.selectOne(t|t.`task`.name == "GenerateDomainModelCode").traces.select(t|t.sources.elementId.contains("//fed/Feature")).link.println();
-	
-}*/

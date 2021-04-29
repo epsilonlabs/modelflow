@@ -70,16 +70,17 @@ public class SimplifiedGmfMap2GmfGen {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SimplifiedGmfMap2GmfGen.class);
 
-	protected TransformOptions myOptions;
 	protected ResourceSet myResourceSet;
+	protected Resource myGMFGenModelResource;
+
+	protected TransformOptions myOptions;
 	protected IProgressMonitor monitor;
 	protected Diagnostic myGMFGenValidationResult;
-
+	
 	protected URI myGMFGenModelURI;
 	protected Mapping myMapping;
 	protected GenModel myGenModel;
 	protected GenEditorGenerator genEditor;
-	protected Resource myGMFGenModelResource;
 
 	public void setMonitor(IProgressMonitor monitor){
 		this.monitor = monitor;
@@ -161,16 +162,17 @@ public class SimplifiedGmfMap2GmfGen {
 			final VisualIdentifierDispenserProvider idDispenser = new VisualIdentifierDispenserProvider(getGmfGenURI());
 			idDispenser.acquire();
 
-			GenModelProducer t = createGenModelProducer(idDispenser);
+			GenModelProducer producer = createGenModelProducer(idDispenser);
 
 			monitor.subTask(Messages.TransformToGenModelOperation_task_generate);
-			genEditor = t.process(getMapping(), new SubProgressMonitor(monitor, 20));
+			genEditor = producer.process(getMapping(), new SubProgressMonitor(monitor, 20));
 			monitor.subTask(Messages.TransformToGenModelOperation_task_reconcile);
 			if (Plugin.needsReconcile()) {
 				handlePreReconcileHooks(genEditor);
-				reconcile(genEditor);
+				//reconcile(genEditor);
 				handlePostReconcileHooks(genEditor);
 			}
+		
 			if (hasExtensionTransformation(getMapping().eResource().getURI())) {
 				executeExtensionTransformation(getMapping().eResource().getURI(), genEditor);
 			}
@@ -369,7 +371,7 @@ public class SimplifiedGmfMap2GmfGen {
 
 	// FIXME do not save twice
 	protected Resource save(GenEditorGenerator genBurdern) throws IOException {
-		HashMap<String, Object> saveOptions = new HashMap<String, Object>();
+		HashMap<String, Object> saveOptions = new HashMap<>();
 		saveOptions.put(XMLResource.OPTION_ENCODING, "UTF-8"); //$NON-NLS-1$
 		Resource gmfgenRes = getResourceSet().getResource(getGmfGenURI(), false);
 		//gmfgenRes.getDefaultSaveOptions().putAll(saveOptions);
@@ -416,7 +418,7 @@ public class SimplifiedGmfMap2GmfGen {
 				if (gmfgenRes.getContents().size() > 1) {
 					// chances there are other content eobjects that reference 
 					// some parts of old GenEditorGenerator, hence need update
-					LinkedList<EObject> rest = new LinkedList<EObject>(gmfgenRes.getContents());
+					LinkedList<EObject> rest = new LinkedList<>(gmfgenRes.getContents());
 					GenEditorGenerator oldEditorGenerator = (GenEditorGenerator) rest.remove(i);
 					updateExternalReferences(genBurden, oldEditorGenerator, rest);
 				}
@@ -449,12 +451,12 @@ public class SimplifiedGmfMap2GmfGen {
 
 			@Override
 			protected void handleNotMatchedCurrent(EObject current) {/* no-op */
-			};
+			}
 
 			@Override
 			protected EObject handleNotMatchedOld(EObject currentParent, EObject notMatchedOld) {
 				return null; /* no-op */
-			};
+			}
 
 			@Override
 			protected void reconcileVertex(EObject current, EObject old) {
