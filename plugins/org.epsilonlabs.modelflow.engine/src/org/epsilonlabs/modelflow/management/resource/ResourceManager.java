@@ -170,16 +170,22 @@ public class ResourceManager implements IResourceManager {
 			IAbstractResourceNode value = e;
 			// If of type ModelResourceNode
 			if (value instanceof IModelResourceNode) {
-				handleModelResourceAfterExecution(tExec, kind, value);
+				handleModelResourceAfterExecution(kind, value);
 			}
 			// If type DerivedResource
 			else if (value instanceof DerivedResourceNode) {
 				handleDerivedResourceAfterExecution(kind, value);
 			}
 		}
+		for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
+			ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
+			IAbstractResourceNode value = e;
+			if (value instanceof IModelResourceNode) {
+				handleModelResourceAfterExecutionPost(tExec, kind, value);
+			}		}
 	}
 
-	protected void handleModelResourceAfterExecution(TaskExecution tExec, ResourceKind kind,
+	protected void handleModelResourceAfterExecution(ResourceKind kind,
 			IAbstractResourceNode value) throws MFRuntimeException {
 		IModelResourceNode resourceNode = (IModelResourceNode) value;
 		ResourceRepository repo = ctx.getTaskRepository().getResourceRepository();
@@ -195,7 +201,25 @@ public class ResourceManager implements IResourceManager {
 				// Save output model between tasks. This is ignored for readOnly ones
 				LOG.debug("Saving {}", resourceNode.getName());
 				resource.save();
+			}
+		} else {
+			throw new IllegalStateException(
+					"resource " + resourceNode.getName() + " should have been created previously");
+		}
+	}
+	
+	protected void handleModelResourceAfterExecutionPost(TaskExecution tExec, ResourceKind kind,
+			IAbstractResourceNode value) throws MFRuntimeException {
+		IModelResourceNode resourceNode = (IModelResourceNode) value;
+		ResourceRepository repo = ctx.getTaskRepository().getResourceRepository();
+		IModelResourceInstance<?> resource = null;
+		// Get resource from resource repository
+		Optional<IModelResourceInstance<?>> opResource = repo.get(resourceNode);
+		if (opResource.isPresent()) {
+			resource = opResource.get();
 
+			// If output or in/out
+			if (kind.isOutput() || kind.isInout()) {
 				// Store output model hash in execution trace
 				final Optional<Object> loadedHash = resource.loadedHash();
 				if (loadedHash.isPresent()) {					

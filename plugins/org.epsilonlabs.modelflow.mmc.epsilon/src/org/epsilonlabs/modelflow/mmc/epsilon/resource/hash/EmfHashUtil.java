@@ -16,18 +16,22 @@ import java.nio.file.Paths;
 import java.security.DigestOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.epsilon.emc.emf.EmfModel;
 import org.eclipse.epsilon.eol.exceptions.models.EolModelLoadingException;
 
@@ -70,7 +74,7 @@ public class EmfHashUtil {
 		// Dealing with fragmented models DONE
 		// TODO : expanded resources toggle
 
-		Map<String, Resource> dependencies = getResourceDependencies(resource, file);
+		/*Map<String, Resource> dependencies = getResourceDependencies(resource, file);
 
 		HashSet<String> res = new HashSet<>();
 		HashSet<String> files = new HashSet<>();
@@ -86,7 +90,7 @@ public class EmfHashUtil {
 			files.add(hash);
 			System.out.println(">>F: " + hash);
 		});
-		System.out.println(files.equals(res));
+		System.out.println(files.equals(res));*/
 	}
 	
 	public static void testWorkflowNoExpand(String modelFile, String metamodel, boolean expanded) throws EolModelLoadingException {
@@ -144,44 +148,63 @@ public class EmfHashUtil {
 		HashMap<String, String> res = new HashMap<>();
 		res.put(URI.createFileURI(root.getAbsolutePath()).toFileString(), computeHashForFile(root));
 		if (expanded) {
-			Map<String, Resource> dependencies = getResourceDependencies(resource, root);
-			dependencies.entrySet().forEach(r -> {
-				String hash = computeHashForResource(r.getValue());
-				res.put(r.getKey(), hash);
+			Set<String> dependencies = getResourceDependencies(resource, root);
+			dependencies.stream().map(File::new).forEach(r -> {
+				String hash = computeHashForFile(r);
+				res.put(URI.createFileURI(r.getAbsolutePath()).toFileString(), hash);
 			});
 		}
 		return res;
 	}
 
-	public static Map<String, Resource> getResourceDependencies(Resource resource, File root) {
-		Map<String, Resource> dependencies = new HashMap<>();
-		ResourceSet rs = resource.getResourceSet();
-		TreeIterator<EObject> allContents = resource.getAllContents();
-		while (allContents.hasNext()) {
-			EObject c = allContents.next();
-			if (c.eIsProxy()) {
-				URI eProxyURI = ((InternalEObject) c).eProxyURI();
-				String path = eProxyURI.toFileString();
-				final File file = new File(path);
-				if (!(file.isAbsolute() && file.exists())) {
-					path= Paths.get(root.getParent(), path).toFile().getAbsolutePath();
-				}
-				URI uri = URI.createFileURI(path);					
-				Resource resource2 = rs.getResource(uri, true);
-				try {
-					resource2.load(null);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				dependencies.put(path, resource2);
-			}
+	public static Set<String> getResourceDependencies(Resource resource, File root) {
+		final Map<EObject, Collection<Setting>> externalCrossReferencer = EcoreUtil.ExternalCrossReferencer.find(resource);
+		final Map<EObject, Collection<Setting>> proxies = EcoreUtil.ProxyCrossReferencer.find(resource);
+		final Map<EObject, Collection<Setting>> unresolved = EcoreUtil.UnresolvedProxyCrossReferencer.find(resource);
+
+		Set<String> deps = new HashSet<>();
+		for (Collection<Setting> settings : externalCrossReferencer.values()) {
+			deps.addAll(processSettings(root, settings));
 		}
-		return dependencies;
+		for (Collection<Setting> settings : proxies.values()) {
+			deps.addAll(processSettings(root, settings));
+		}
+		for (Collection<Setting> settings : unresolved.values()) {
+			deps.addAll(processSettings(root, settings));
+		}
+		return deps;
 	}
 
-	public static Map<String, Resource> getResourceDependencies(Resource resource, String rootModelFile) {
-		File root = new File(rootModelFile);
-		return getResourceDependencies(resource, root);
+	/**
+	 * @param root
+	 * @param settings
+	 * @return
+	 */
+	protected static Set<String> processSettings(File root, Collection<Setting> settings) {
+		return settings.stream()
+			.map(setting -> {
+				final EStructuralFeature eStructuralFeature = setting.getEStructuralFeature();
+				final EObject eObject = setting.getEObject();
+				final Object obj = eObject.eGet(eStructuralFeature);
+				if (obj instanceof EObject) {
+					EObject eObj = (EObject) obj;
+					return eObj.eResource();
+				}
+				return null;
+			})
+			.filter(Objects::nonNull)
+			.peek(System.out::println)
+			.map(Resource::getURI)
+			.filter(URI::isFile)
+			.map(URI::toFileString)
+			.map(path-> {
+				final File file = new File(path);
+				if (!(file.isAbsolute())) {
+					return Paths.get(root.getParent(), path).toFile().getAbsolutePath();
+				}
+				return path;
+			})
+			.collect(Collectors.toSet());
 	}
 
 	private static String computeHashForResource(Resource r) {
@@ -189,9 +212,6 @@ public class EmfHashUtil {
 			MessageDigest md5 = MessageDigest.getInstance(MD5_ALGORITHM);
 			try (DigestOutputStream dos = new DigestOutputStream(os, md5)) {
 				r.save(dos, null);
-				// ByteArrayOutputStream os2 = new ByteArrayOutputStream();
-				// r.save(os2, null);
-				// System.out.println(new String(os2.toByteArray(), StandardCharsets.UTF_8));
 				byte[] digest = dos.getMessageDigest().digest();
 				return DatatypeConverter.printHexBinary(digest).toUpperCase();
 			}

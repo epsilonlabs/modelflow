@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.emf.common.util.Diagnostic;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -138,24 +139,31 @@ public class GenerateDiagramCodeTask implements ITaskInstance {
 		Arrays.asList(models).stream().forEach(m -> {
 			if (m.getModel() instanceof EmfModel) {
 				EmfModel model = (EmfModel) m.getModel();
-				EObject eObject = model.getResource().getContents().get(0);
-				if (eObject instanceof GenDiagram) {
-					myGenModel = ((GenDiagram) eObject).getEditorGen();
-				} else if (eObject instanceof GenEditorGenerator) {
-					myGenModel = (GenEditorGenerator) eObject;
+				final EList<EObject> contents = model.getResource().getContents();
+				if (!contents.isEmpty()) {					
+					EObject eObject = contents.get(0);
+					if (eObject instanceof GenDiagram) {
+						myGenModel = ((GenDiagram) eObject).getEditorGen();
+					} else if (eObject instanceof GenEditorGenerator) {
+						myGenModel = (GenEditorGenerator) eObject;
+					}
+					
+					if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
+						myGenModel.getDomainGenModel().reconcile();
+						resourceName = m.getResourceNode().getName();
+						modelFileUri = model.getModelFileUri();
+					}
+					EcoreUtil.resolveAll(model.getResource());
 				}
-				
-				if (myGenModel != null && myGenModel.getDomainGenModel() != null) {
-					myGenModel.getDomainGenModel().reconcile();
-					resourceName = m.getResourceNode().getName();
-					modelFileUri = model.getModelFileUri();
-				}
-				EcoreUtil.resolveAll(model.getResource());
 			}
 		});
-		Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);
-		if (!ValidationHelper.isOK(isGenModelValid)) {
-			throw new MFInvalidModelException(isGenModelValid.getMessage(),  isGenModelValid.getException());
+		if (myGenModel != null) {			
+			Diagnostic isGenModelValid = ValidationHelper.validate(myGenModel, true);
+			if (!ValidationHelper.isOK(isGenModelValid)) {
+				throw new MFInvalidModelException(isGenModelValid.getMessage(),  isGenModelValid.getException());
+			}
+		} else {			
+			throw new MFInvalidModelException("Invalid models. Expecting GmfGen with contents");
 		}
 	}
 

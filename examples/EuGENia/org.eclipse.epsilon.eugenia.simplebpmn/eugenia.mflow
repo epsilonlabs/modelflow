@@ -29,6 +29,7 @@ model GmfGen is epsilon:emf {
 model GmfMap is epsilon:emf {
 	src :  base + ".gmfmap"
 	metamodelUri : "http://www.eclipse.org/gmf/2008/mappings"
+	expand : true
 }
 model GmfTool is epsilon:emf {
 	src : base + ".gmftool"

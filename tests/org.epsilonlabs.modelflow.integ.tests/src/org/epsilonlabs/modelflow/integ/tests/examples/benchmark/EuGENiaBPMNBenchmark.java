@@ -94,7 +94,7 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 	}
 
 	@Override
-	protected ModelFlowModule createModule(boolean tracing, Boolean protect, Path outputPath) {
+	protected ModelFlowModule createModule(Boolean tracing, Boolean protect, Path outputPath) {
 		final ModelFlowModule module = super.createModule(tracing, protect, outputPath);
 		
 		// Execution parameters

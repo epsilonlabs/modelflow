@@ -116,9 +116,9 @@ public enum EugeniaScenarios implements IScenario {
 		case NO_MODIFICATION:
 			return expect(false, false, false, false, false, false, false, false, false, false, false);
 		case EMF_GMF_ANNOTATION:
-			return expect(true, true, true, true, true, false, true, false, true, true, true);	
+			return expect(true, true, true, true, true, false, true, true, true, true, true);	
 		case POLISH_ECORE2GMF: 
-			return expect(false, false, false, false, true, false, false, false, true, true, true);
+			return expect(false, false, false, false, true, false, true, false, true, true, true);
 		default:
 			throw new IllegalStateException("We shouldnt have to arrive to this line");
 		}
