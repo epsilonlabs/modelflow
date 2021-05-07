@@ -112,11 +112,10 @@ public enum EugeniaScenarios implements IScenario {
 		case FIRST_TIME_EXECUTION:
 		case EMF_RENAME_CLASS:
 		case EMF_GENMODEL_ANNOTATION:
+		case EMF_GMF_ANNOTATION:
 			return expect(true, true, true, true, true, false, true, true, true, true, true);
 		case NO_MODIFICATION:
 			return expect(false, false, false, false, false, false, false, false, false, false, false);
-		case EMF_GMF_ANNOTATION:
-			return expect(true, true, true, true, true, false, true, true, true, true, true);	
 		case POLISH_ECORE2GMF: 
 			return expect(false, false, false, false, true, false, true, false, true, true, true);
 		default:

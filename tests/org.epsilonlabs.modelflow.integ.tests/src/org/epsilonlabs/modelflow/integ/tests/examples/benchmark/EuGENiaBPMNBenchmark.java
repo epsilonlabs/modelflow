@@ -14,13 +14,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.epsilon.eol.execute.context.FrameStack;
 import org.eclipse.epsilon.eol.execute.context.Variable;
 import org.epsilonlabs.modelflow.ModelFlowModule;
@@ -64,6 +64,8 @@ public class EuGENiaBPMNBenchmark extends AbstractBenchmark {
 		final String diagramProjectName = String.format("%s.%s.diagram.custom", base, metamodelName);
 		this.diagramProjectOutputPath = TestUtils.copyExampleProjectToTempLocation(eugeniaSource.resolve(diagramProjectName), diagramProjectName);
 		importProject(diagramProjectOutputPath);
+		
+		TimeUnit.SECONDS.sleep(5);
 		
 		testExecution(scenario, tracing, iteration, eugeniaOutputProjectPath, buildScript, MAX_ITER);
 	}

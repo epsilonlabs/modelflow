@@ -110,6 +110,12 @@
 		<repository location="https://download.eclipse.org/mmt/atl/updates/releases/4.2.1"/>
 		<unit id="org.eclipse.m2m.atl.sdk.feature.group" version="4.2.1.v202006221222"/>
 	</location>
+	<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+		<repository location="http://download.eclipse.org/technology/swtbot/releases/latest/"/>
+		<unit id="org.eclipse.swtbot.eclipse.feature.group" version="3.0.0.202006031738"/>
+		<unit id="org.eclipse.swtbot.eclipse.test.junit.feature.group" version="3.0.0.202006031738"/>
+		<unit id="org.eclipse.swtbot.feature.group" version="3.0.0.202006031738"/>
+	</location>
 	<!--<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 		<unit id="org.eclipse.hawk.core.feature.feature.group" version="0.0.0"/>		
 		<unit id="org.eclipse.hawk.emf.feature.feature.group" version="0.0.0"/>

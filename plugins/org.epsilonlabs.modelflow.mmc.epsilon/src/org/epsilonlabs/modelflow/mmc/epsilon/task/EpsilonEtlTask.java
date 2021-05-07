@@ -37,7 +37,6 @@ public class EpsilonEtlTask extends AbstractEpsilonTask {
 		List<Trace> traces = trace.stream()
 				.map(transformation -> new EtlTaskTrace(transformation, this).init().getTrace())
 				.collect(Collectors.toList());
-		trace.clear();
 		return Optional.of(traces);
 	}
 }

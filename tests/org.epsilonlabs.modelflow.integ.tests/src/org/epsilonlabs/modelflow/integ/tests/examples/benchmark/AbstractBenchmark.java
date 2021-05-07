@@ -60,20 +60,24 @@ public abstract class AbstractBenchmark {
 	protected static ResourceFactoryRegistry resourceFactoryRegistry;
 
 	public void setupClass() {
+		setupClass("", false);
+	}
+	public void setupClass(String prefix, boolean ui) {
 		if (overheadFile ==null) {			
 			final Date time = new Date();
-			overheadFile = BenchmarkUtils.getResultsFile("overhead", time);
-			invocationsFile = BenchmarkUtils.getResultsFile("invocations", time);
-			detailsFile = BenchmarkUtils.getResultsFile("details", time);
+			overheadFile = BenchmarkUtils.getResultsFile(prefix + "overhead", time);
+			if (!ui) invocationsFile = BenchmarkUtils.getResultsFile(prefix +"invocations", time);
+			if (!ui) detailsFile = BenchmarkUtils.getResultsFile(prefix +"details", time);
 			String[] detailsHeaders = new String[] { "scenario", "tracing", "iteration", "task", "parentStage", "stage", "state", "startTime", "endTime", "startFreeMemory", "endFreeMemory"};
 			List<String> headersList = new ArrayList<>();
 			headersList.addAll(Arrays.asList("scenario", "tracing", "iteration"));
 			headersList.addAll(ExecutionStage.names());
 			String[] overheadHeaders = headersList.toArray(new String[0]);
 			try {
-				BenchmarkUtils.prepareResultFile(overheadFile, overheadHeaders);
-				BenchmarkUtils.prepareResultFile(invocationsFile, overheadHeaders);
-				BenchmarkUtils.prepareResultFile(detailsFile, detailsHeaders);
+				if (!ui) BenchmarkUtils.prepareResultFile(overheadFile, overheadHeaders);
+				if (ui) BenchmarkUtils.prepareResultFile(overheadFile, new String[] {"scenario", "tracing", "iteration", "EXECUTION"});
+				if (!ui) BenchmarkUtils.prepareResultFile(invocationsFile, overheadHeaders);
+				if (!ui) BenchmarkUtils.prepareResultFile(detailsFile, detailsHeaders);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -111,19 +115,7 @@ public abstract class AbstractBenchmark {
 		if (scenario.isFirstTimeExecution()) {
 			System.out.println("Skipping modifications and second execution");
 		} else {			
-			// Run modifications
-			System.out.println("Performing modifications");
-			try {
-				final Runnable modifications = scenario.getModifications(outputPath);
-				modifications.run();
-				ResourcesPlugin.getWorkspace().getRoot().refreshLocal(-1, new NullProgressMonitor());
-				TimeUnit.SECONDS.sleep(1);
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-				cleanup(outputPath);
-				fail("Unable to perform modifications");
-			}
+			modifications(scenario, outputPath);
 			
 			module = createModule(tracing, protect, outputPath);
 			
@@ -164,6 +156,26 @@ public abstract class AbstractBenchmark {
 		TimeUnit.SECONDS.sleep(2);
 	}
 
+	/**
+	 * @param scenario
+	 * @param outputPath
+	 */
+	protected void modifications(IScenario scenario, Path outputPath) {
+		// Run modifications
+		System.out.println("Performing modifications");
+		try {
+			final Runnable modifications = scenario.getModifications(outputPath);
+			modifications.run();
+			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(-1, new NullProgressMonitor());
+			TimeUnit.SECONDS.sleep(1);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			cleanup(outputPath);
+			fail("Unable to perform modifications");
+		}
+	}
+
 	protected void cleanup(Path outputPath) {
 		TestUtils.clearExecutionFiles(outputPath);
 	}
@@ -183,12 +195,13 @@ public abstract class AbstractBenchmark {
 		configuration.setExecutionTraceLocation(executionTraceFile);
 		module.getContext().setEndToEndTracing(tracing);
 		if (tracing) {
-			configuration.setEndToEndTraceLocation(endToEndTraceFile);	
+			configuration.setEndToEndTraceLocation(endToEndTraceFile);
+			configuration.setSaveEndToEndTraces(true);
 		}
 		return module;
 	}
 
-	protected void storeResults(IScenario scenario, Boolean tracing, Integer iteration, ModelFlowModule module, int maxIter) {
+	protected void storeResults(IScenario scenario, Object tracing, Integer iteration, ModelFlowModule module, int maxIter) {
 		IModelFlowExecutionProfiler profiler = (IModelFlowExecutionProfiler) module.getContext().getProfiler();
 		
 		StageProfilerMap profiledStages = profiler.getProfiledStages();
@@ -197,8 +210,14 @@ public abstract class AbstractBenchmark {
 		saveDetails(scenario, tracing, iteration, profiledStages);
 		//saveTrackedDetails(scenario, tracing, iteration, maxIter, profiler);
 	}
+	
+	protected void storeResults(IScenario scenario, Object tracing, Integer iteration, StageProfilerMap profiledStages) {
+		saveOverhead(scenario, tracing, iteration, profiledStages);
+		saveDetails(scenario, tracing, iteration, profiledStages);
+		//saveTrackedDetails(scenario, tracing, iteration, maxIter, profiler);
+	}
 
-	protected void saveOverhead(IScenario scenario, Boolean tracing, Integer iteration,
+	protected void saveOverhead(IScenario scenario, Object tracing, Integer iteration,
 			StageProfilerMap profiledStages) {
 		List<Object> values = new ArrayList<>();
 		List<Object> invocations = new ArrayList<>();
@@ -221,7 +240,7 @@ public abstract class AbstractBenchmark {
 	}
 
 
-	protected void saveDetails(IScenario scenario, Boolean tracing, Integer iteration,
+	protected void saveDetails(IScenario scenario, Object tracing, Integer iteration,
 			StageProfilerMap profiledStages) {
 		profiledStages.entrySet().forEach(s -> {
 			ProfiledStage stage = s.getValue();

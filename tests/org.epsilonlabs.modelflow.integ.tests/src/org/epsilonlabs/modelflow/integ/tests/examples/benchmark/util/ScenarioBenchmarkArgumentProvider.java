@@ -23,7 +23,7 @@ import io.reactivex.Observable;
  */
 public class ScenarioBenchmarkArgumentProvider implements ArgumentsProvider, AnnotationConsumer<ScenarioSource> {
 	
-	public static final Observable<?> trueFalse = Observable.fromArray(false, true);
+	public static final Observable<?> trueFalse = Observable.fromArray(true, false);
 
 	protected ScenarioSource scenarioSource;
 
