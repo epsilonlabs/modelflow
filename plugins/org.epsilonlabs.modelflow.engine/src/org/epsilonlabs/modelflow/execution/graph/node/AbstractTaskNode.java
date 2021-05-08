@@ -445,12 +445,13 @@ public abstract class AbstractTaskNode implements ITaskNode {
 						ManagementTrace fullTrace = ctx.getManagementTrace();
 						ManagementTraceUpdater traceUpdater = new ManagementTraceUpdater(fullTrace, getName());
 						traceUpdater.update(traces);
-						traces.clear();
-					} finally {
+					} catch (Exception e) {
+						e.printStackTrace();
+					} 
+					finally {
 						ctx.getProfiler().stop(ExecutionStage.END_TO_END_TRACES, this, ctx);
 					}
-				});
-				
+				});				
 			} else {
 				// Should remain the same
 			}

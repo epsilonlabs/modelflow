@@ -195,7 +195,7 @@ public abstract class AbstractEpsilonTask implements ITaskInstance {
 	
 	@Override
 	public void execute(IModelFlowContext ctx) throws MFExecutionException {
-		beforeExecute();
+		beforeExecute(ctx);
 		getModule().getContext().setOutputStream(ctx.getOutputStream());
 		getModule().getContext().setErrorStream(ctx.getErrorStream());
 		if (Platform.isRunning()) {			
