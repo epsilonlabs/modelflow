@@ -196,7 +196,7 @@ public abstract class AbstractBenchmark {
 		module.getContext().setEndToEndTracing(tracing);
 		if (tracing) {
 			configuration.setEndToEndTraceLocation(endToEndTraceFile);
-			configuration.setSaveEndToEndTraces(true);
+			//configuration.setSaveEndToEndTraces(true);
 		}
 		return module;
 	}

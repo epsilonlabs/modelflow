@@ -19,6 +19,7 @@ import org.epsilonlabs.modelflow.exception.MFInvalidFactoryException;
 import org.epsilonlabs.modelflow.exception.MFResourceInstantiationException;
 import org.epsilonlabs.modelflow.exception.MFRuntimeException;
 import org.epsilonlabs.modelflow.execution.context.IModelFlowContext;
+import org.epsilonlabs.modelflow.execution.control.ExecutionStage;
 import org.epsilonlabs.modelflow.execution.graph.node.IDerivedResourceNode;
 import org.epsilonlabs.modelflow.execution.graph.node.IModelResourceNode;
 import org.epsilonlabs.modelflow.registry.ResourceFactoryRegistry;
@@ -87,9 +88,16 @@ public class ResourceRepository {
 		return iResource;
 	}
 
-	public void clear() {
+	public void clear(IModelFlowContext ctx) {
 		LOG.info("Clearing Resource Repository");
-		this.resources.values().stream().filter(IModelResourceInstance::isLoaded).forEach(IModelResourceInstance::dispose);
+		this.resources.values().stream().filter(IModelResourceInstance::isLoaded).forEach(
+				resource-> {
+					if (resource.isLoaded()) {
+						ctx.getProfiler().start(ExecutionStage.DISPOSE, null, ctx);
+						resource.dispose();
+						ctx.getProfiler().stop(ExecutionStage.DISPOSE, null, ctx);
+					}
+				});
 		this.resources.clear();
 		this.derivedResources.clear();
 	}
@@ -122,8 +130,8 @@ public class ResourceRepository {
 		clearNonInputModels();		
 	}
 	
-	public void dispose() {
-		clear();
+	public void dispose(IModelFlowContext ctx) {
+		clear(ctx);
 		this.derivedResources = null;
 		this.resources = null;
 		this.factoryRegistry = null;

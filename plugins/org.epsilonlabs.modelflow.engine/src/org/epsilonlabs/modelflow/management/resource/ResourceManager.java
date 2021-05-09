@@ -155,34 +155,55 @@ public class ResourceManager implements IResourceManager {
 
 
 	private void processResourcesAfterExecution() throws MFRuntimeException {
-		// Prepare task execution trace
-		final TaskExecution tExec = updater.getCurrentTaskExecution(taskInstanceName);
-		tExec.getOutputModels().clear();
+		ctx.getProfiler().start(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, taskNode, ctx);
+		IDependencyGraph dg;
+		ITaskNode graphNode;
+		TaskExecution tExec ;
+		try {			
+			// Prepare task execution trace
+			tExec = updater.getCurrentTaskExecution(taskInstanceName);
+			tExec.getOutputModels().clear();
+	
+			// For all the resources connected to this task node
+			dg = ctx.getScheduler().getDependencyGraph();
+			graphNode = taskNode;
+			if (taskNode.getParentNode() != null) {
+				graphNode = taskNode.getParentNode();
+			}
+			for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
+				ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
+				IAbstractResourceNode value = e;
+				// If of type ModelResourceNode
+				if (value instanceof IModelResourceNode) {
+					handleModelResourceAfterExecution(kind, value);
+				}
+				// If type DerivedResource
+				else if (value instanceof DerivedResourceNode) {
+					handleDerivedResourceAfterExecution(kind, value);
+				}
+			}
+			for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
+				ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
+				IAbstractResourceNode value = e;
+				if (value instanceof IModelResourceNode) {
+					handleModelResourceAfterExecutionPost(tExec, kind, value);
+				}		
+			}
+		} finally {
+			ctx.getProfiler().stop(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, taskNode, ctx);
+		}
+		for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
+			ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
+			IAbstractResourceNode value = e;
+			if (value instanceof IModelResourceNode) {
+				IModelResourceNode node =(IModelResourceNode) value;
+				final Optional<IModelResourceInstance<?>> optional = ctx.getTaskRepository().getResourceRepository().get(node);
+				if (optional.isPresent()) {					
+					shouldDispose(node, optional.get());
+				}
+			}
+		}
 
-		// For all the resources connected to this task node
-		final IDependencyGraph dg = ctx.getScheduler().getDependencyGraph();
-		ITaskNode graphNode = taskNode;
-		if (taskNode.getParentNode() != null) {
-			graphNode = taskNode.getParentNode();
-		}
-		for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
-			ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
-			IAbstractResourceNode value = e;
-			// If of type ModelResourceNode
-			if (value instanceof IModelResourceNode) {
-				handleModelResourceAfterExecution(kind, value);
-			}
-			// If type DerivedResource
-			else if (value instanceof DerivedResourceNode) {
-				handleDerivedResourceAfterExecution(kind, value);
-			}
-		}
-		for (IAbstractResourceNode e : dg.getResourceNodes(graphNode)) {
-			ResourceKind kind = dg.getResourceKindForTask(e, graphNode);
-			IAbstractResourceNode value = e;
-			if (value instanceof IModelResourceNode) {
-				handleModelResourceAfterExecutionPost(tExec, kind, value);
-			}		}
 	}
 
 	protected void handleModelResourceAfterExecution(ResourceKind kind,
@@ -230,7 +251,6 @@ public class ResourceManager implements IResourceManager {
 				}
 			}
 			resource.afterTask();
-			shouldDispose(resourceNode, resource);
 		} else {
 			throw new IllegalStateException(
 					"resource " + resourceNode.getName() + " should have been created previously");

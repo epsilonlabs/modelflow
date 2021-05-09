@@ -55,12 +55,12 @@ public class TaskRepository {
 		}
 	}
 	
-	public void clear() {
-		this.resourceRepository.clear();
+	public void clear(IModelFlowContext ctx) {
+		this.resourceRepository.clear(ctx);
 	}
 	
-	public void dispose() {
-		this.resourceRepository.dispose();
+	public void dispose(IModelFlowContext ctx) {
+		this.resourceRepository.dispose(ctx);
 		this.resourceRepository = null;
 		taskFactoryRegistry = null;
 	}

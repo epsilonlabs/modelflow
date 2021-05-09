@@ -103,7 +103,7 @@ public class TopologicalSequentialScheduler extends AbstractScheduler {
 		}
 		
 		/* Clean in-memory repository */
-		ctx.getTaskRepository().clear();
+		ctx.getTaskRepository().clear(ctx);
 		
 		LOG.info("Finished Execution");
 		/* Return this execution */

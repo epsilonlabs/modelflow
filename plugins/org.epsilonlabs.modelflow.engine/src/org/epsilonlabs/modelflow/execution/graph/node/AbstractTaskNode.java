@@ -417,12 +417,8 @@ public abstract class AbstractTaskNode implements ITaskNode {
 		processManagementTraces(ctx);
 		
 		// Process Models After Execution
-		try {
-			ctx.getProfiler().start(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-			manager.processResourcesAfterExecution(this, ctx);
-		} finally {
-			ctx.getProfiler().stop(ExecutionStage.PROCESS_MODELS_AFTER_EXECUTION, this, ctx);
-		}
+		// THE PROFILER IS INSIDE THE METHOD
+		manager.processResourcesAfterExecution(this, ctx);
 		
 		// Cleanup if necessary 
 		this.taskInstance.afterExecute();		

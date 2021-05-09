@@ -580,8 +580,7 @@ public class ModelFlowModule extends ErlModule implements IModelFlowModule {
 		ctx.setManagementTrace(mTrace);
 
 		// Model Manager
-		ctx.getTaskRepository().getResourceRepository().clear();
-		ctx.getTaskRepository().clear();
+		ctx.getTaskRepository().clear(ctx);
 	}
 
 	@Override

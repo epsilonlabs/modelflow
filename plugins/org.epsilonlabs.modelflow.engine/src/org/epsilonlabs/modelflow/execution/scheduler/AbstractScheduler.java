@@ -146,7 +146,7 @@ public abstract class AbstractScheduler implements IScheduler {
 		ctx.getErrorStream().println(exception.getMessage());
 		
 		/* Clean in-memory repository */
-		ctx.getTaskRepository().clear();
+		ctx.getTaskRepository().clear(ctx);
 
 		
 		ModuleElement moduleElement = node.getModuleElement();
