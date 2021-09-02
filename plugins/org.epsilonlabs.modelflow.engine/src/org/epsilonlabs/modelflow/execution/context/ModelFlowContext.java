@@ -7,8 +7,6 @@
  ******************************************************************************/
 package org.epsilonlabs.modelflow.execution.context;
 
-import java.util.Optional;
-
 import org.eclipse.epsilon.common.module.IModule;
 import org.eclipse.epsilon.erl.execute.context.ErlContext;
 import org.epsilonlabs.modelflow.IModelFlowModule;
@@ -194,7 +192,7 @@ public class ModelFlowContext extends ErlContext implements IModelFlowContext {
 	public void dispose() {
 		super.dispose();
 
-		getTaskRepository().dispose();
+		getTaskRepository().dispose(this);
 		this.taskRepository = null;
 
 		getProfiler().dispose();
