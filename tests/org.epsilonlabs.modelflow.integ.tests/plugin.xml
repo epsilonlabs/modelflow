@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.epsilonlabs.modelflow.integ.tests.examples.benchmark.EuGENiaBPMN_UI_Benchmark"
+            id="org.epsilonlabs.modelflow.mmc.integ.tests.eugenia.run"
+            name="name">
+      </command>
+   </extension>
+   <extension
+         id="eugenia.test"
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu">
+         <menu
+               label="Test">
+            <command
+                  commandId="org.epsilonlabs.modelflow.mmc.integ.tests.eugenia.run"
+                  label="Run EuGENia Original in UI"
+                  style="push">
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+
+</plugin>
